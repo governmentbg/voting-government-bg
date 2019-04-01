@@ -23,7 +23,7 @@ class CreateFilesTable extends Migration
             $table->foreign('org_id')->references('id')->on('organisations');
             $table->integer('voting_tour_id')->unsigned();
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');
-            $table->datetime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->useCurrent();
             $table->integer('created_by')->unsigned();
             $table->foreign('created_by')->references('id')->on('users');
         });

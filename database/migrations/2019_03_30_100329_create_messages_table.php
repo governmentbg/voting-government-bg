@@ -26,8 +26,8 @@ class CreateMessagesTable extends Migration
             $table->datetime('read')->nullable();
             $table->integer('parent_id')->unsigned()->nullable();
             $table->foreign('parent_id')->references('id')->on('messages');
-            $table->integer('recepient_org_id')->unsigned()->nullable();
-            $table->foreign('recepient_org_id')->references('id')->on('organisations');
+            $table->integer('recipient_org_id')->unsigned()->nullable();
+            $table->foreign('recipient_org_id')->references('id')->on('organisations');
             $table->integer('voting_tour_id')->unsigned();
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');
             $table->datetime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
@@ -74,11 +74,11 @@ class CreateMessagesTable extends Migration
     private function checkMessageFieldConsistency()
     {
         return "
-            IF (NEW.sender_org_id IS NULL AND (NEW.sender_user_id IS NULL OR NEW.recepient_org_id IS NULL)) THEN
-                SIGNAL SQLSTATE '45000' SET message_text = 'If sender_org_id is null, the sender_user_id and recepient_org_id fields are required!';
+            IF (NEW.sender_org_id IS NULL AND (NEW.sender_user_id IS NULL OR NEW.recipient_org_id IS NULL)) THEN
+                SIGNAL SQLSTATE '45000' SET message_text = 'If sender_org_id is null, the sender_user_id and recipient_org_id fields are required!';
             ELSE
-                IF (NEW.sender_org_id IS NOT NULL AND (NEW.sender_user_id IS NOT NULL OR NEW.recepient_org_id IS NOT NULL)) THEN
-                    SIGNAL SQLSTATE '45000' SET message_text = 'If sender_org_id is not null, the sender_user_id and recepient_org_id fields must be null!';
+                IF (NEW.sender_org_id IS NOT NULL AND (NEW.sender_user_id IS NOT NULL OR NEW.recipient_org_id IS NOT NULL)) THEN
+                    SIGNAL SQLSTATE '45000' SET message_text = 'If sender_org_id is not null, the sender_user_id and recipient_org_id fields must be null!';
                 END IF;
             END IF;
         ";

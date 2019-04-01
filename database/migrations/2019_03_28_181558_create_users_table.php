@@ -23,12 +23,12 @@ class CreateUsersTable extends Migration
             $table->unique(['username', 'org_id']);
             $table->string('password');
             $table->tinyInteger('active')->nullable();
-            $table->string('pw_reset_hash')->nullable();
+            $table->string('pw_reset_hash',  32)->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->nullable()->unique();
-            $table->datetime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->datetime('updated_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
             $table->integer('created_by')->unsigned();

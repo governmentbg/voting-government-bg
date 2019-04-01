@@ -27,6 +27,18 @@ class CreateVotingTourTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
         });
 
+        DB::unprepared("
+            CREATE TRIGGER check_insert_voting_tour BEFORE INSERT ON voting_tour
+            FOR EACH ROW
+            BEGIN
+                DECLARE t INT;
+                SET t = (SELECT count(*) from voting_tour where status != 6);
+                IF (t > 0) THEN
+                    SIGNAL SQLSTATE '45000' SET message_text = 'Can not create new voting tour, when there is active one.';
+                END IF;
+            END;
+        ");
+        
         Schema::enableForeignKeyConstraints();
     }
 
@@ -40,6 +52,8 @@ class CreateVotingTourTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::dropIfExists('voting_tour');
+        
+        DB::unprepared("DROP TRIGGER IF EXISTS check_insert_voting_tour");
 
         Schema::enableForeignKeyConstraints();
     }

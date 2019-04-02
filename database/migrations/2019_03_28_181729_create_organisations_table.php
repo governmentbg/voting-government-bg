@@ -22,7 +22,8 @@ class CreateOrganisationsTable extends Migration
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');
             $table->unique(['eik', 'voting_tour_id']);
             $table->string('name');
-            $table->string('representative');
+            $table->string('address', 512);
+            $table->string('representative', 512);
             $table->string('email');
             $table->boolean('in_ap');
             $table->boolean('is_candidate');
@@ -30,8 +31,8 @@ class CreateOrganisationsTable extends Migration
             $table->text('reference')->nullable();
             $table->tinyInteger('status');
             $table->tinyInteger('status_hint');
-            $table->datetime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->datetime('updated_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
             $table->integer('created_by')->unsigned();

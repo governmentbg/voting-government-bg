@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware(['api'])->group(function () {
+    Route::post('votingTours/add', 'Api\VotingTourController@add');
+    Route::post('votingTours/changeStatus', 'Api\VotingTourController@changeStatus');
+    Route::post('votingTours/rename', 'Api\VotingTourController@rename');
+    Route::post('votingTours/getLatestVotingTour', 'Api\VotingTourController@getLatestVotingTour');
+    Route::post('votingTours/list', 'Api\VotingTourController@list');
+    Route::post('votingTours/getData', 'Api\VotingTourController@getData');
+    Route::post('votingTours/listStatuses', 'Api\VotingTourController@listStatuses');
+
 });

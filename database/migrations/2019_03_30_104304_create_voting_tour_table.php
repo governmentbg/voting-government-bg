@@ -1,5 +1,6 @@
 <?php
 
+use App\VotingTour;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -32,13 +33,22 @@ class CreateVotingTourTable extends Migration
             FOR EACH ROW
             BEGIN
                 DECLARE t INT;
-                SET t = (SELECT count(*) from voting_tour where status != 6);
+                SET t = (SELECT count(*) FROM voting_tour WHERE status != ". VotingTour::STATUS_FINISHED .");
                 IF (t > 0) THEN
                     SIGNAL SQLSTATE '45000' SET message_text = 'Can not create new voting tour, when there is active one.';
                 END IF;
             END;
+            CREATE TRIGGER check_update_voting_tour BEFORE UPDATE ON voting_tour
+            FOR EACH ROW
+            BEGIN
+                DECLARE v INT;
+                SET v = (SELECT id FROM voting_tour WHERE status != ". VotingTour::STATUS_FINISHED .");
+                IF (NEW.id != v) THEN
+                    SIGNAL SQLSTATE '45000' SET message_text = 'Can not update voting tour, when there is active one.';
+                END IF;
+            END;
         ");
-        
+
         Schema::enableForeignKeyConstraints();
     }
 
@@ -52,8 +62,9 @@ class CreateVotingTourTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::dropIfExists('voting_tour');
-        
+
         DB::unprepared("DROP TRIGGER IF EXISTS check_insert_voting_tour");
+        DB::unprepared("DROP TRIGGER IF EXISTS check_update_voting_tour");
 
         Schema::enableForeignKeyConstraints();
     }

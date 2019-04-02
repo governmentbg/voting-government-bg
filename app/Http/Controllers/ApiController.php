@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
+    const ERROR_GENERAL = 'custom.general';
+
     /**
      * Return error response
      *
-     * @return json/xml - response data
+     * @return json - response data
      */
     public static function errorResponse($message = null, $errors = [], $code = 500, $type = self::ERROR_GENERAL)
     {

@@ -8,23 +8,58 @@ use App\Traits\RecordSignature;
 class VotingTour extends Model
 {
     use RecordSignature;
-    
+
+    const STATUS_UPCOMING = 0;
+    const STATUS_OPENED_REG = 1;
+    const STATUS_CLOSED_REG = 2;
+    const STATUS_VOTING = 3;
+    const STATUS_RANKING = 4;
+    const STATUS_BALLOTAGE = 5;
+    const STATUS_FINISHED = 6;
+
+    const DEFAULT_RECORDS_PER_PAGE = 50;
+    const DEFAULT_ORDER_FIELD = 'created_at';
+
     /**
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
     protected $guarded = ['id'];
-    
+
     protected $table = 'voting_tour';
-    
+
     public function votes()
     {
         return $this->hasMany('App\Vote', 'voting_tour_id');
     }
-    
+
     public function organisations()
     {
         return $this->hasMany('App\Vote', 'voting_tour_id');
+    }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_UPCOMING,
+            self::STATUS_OPENED_REG,
+            self::STATUS_CLOSED_REG,
+            self::STATUS_VOTING,
+            self::STATUS_RANKING,
+            self::STATUS_BALLOTAGE,
+            self::STATUS_FINISHED
+        ];
+    }
+
+    public static function getLatestTour()
+    {
+        $latestTour = self::where('status', '!=', self::STATUS_FINISHED)->first();
+
+        if (empty($latestTour)) {
+            $latestTour = self::orderBy('updated_at', 'DESC')->first();
+        }
+
+        return $latestTour;
     }
 }

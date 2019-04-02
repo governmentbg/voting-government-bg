@@ -23,4 +23,11 @@ Route::middleware(['api'])->group(function () {
     Route::post('votingTours/getData', 'Api\VotingTourController@getData');
     Route::post('votingTours/listStatuses', 'Api\VotingTourController@listStatuses');
 
+    Route::post('vote/getLatestVote', 'Api\VoteController@getLatestVote');
+    Route::post('vote/isBlockChainValid', 'Api\VoteController@isBlockChainValid');
+    Route::post('vote/ranking', 'Api\VoteController@ranking');
+    Route::post('vote/vote', 'Api\VoteController@vote');
+    Route::post('vote/getVoteStatus', 'Api\VoteController@getVoteStatus');
+    Route::post('vote/listVoters', 'Api\VoteController@listVoters');
+
 });

@@ -17,4 +17,5 @@ return [
     'ballotage' => 'Балотаж',
     'finished' => 'Приключил',
     'status_list_not_found' => 'Не е открит списък със статуси',
+    'vote_failed' => 'Неуспешно гласуване',
 ];

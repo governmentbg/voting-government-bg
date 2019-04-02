@@ -13,6 +13,25 @@ class VotingTourTest extends TestCase
     use WithFaker;
     use DatabaseTransactions;
 
+    private $votingTour;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->votingTour = VotingTour::where('status', '!=', VotingTour::STATUS_FINISHED)->first();
+
+        if (!$this->votingTour) {
+            $this->votingTour = VotingTour::orderBy('created_at', 'DESC')->first();
+        }
+
+        if (!$this->votingTour) {
+            $this->votingTour = VotingTour::create([
+                'name'              => $this->faker->name(),
+                'status'            => $this->faker->name()
+            ]);
+        }
+    }
+
     /**
      * Test voting tour creation
      *
@@ -20,9 +39,17 @@ class VotingTourTest extends TestCase
      */
     public function testAddVotingTour()
     {
-        $this->post(url('api/votingTours/add'), ['name' => $this->faker->name()])
-            ->assertStatus(200)
-            ->assertJson(['success' => true]);
+        $votingTour = VotingTour::where('status', '!=', VotingTour::STATUS_FINISHED)->first();
+
+        if (!$votingTour) {
+            $this->post(url('api/votingTours/add'), ['name' => $this->faker->name()])
+                ->assertStatus(200)
+                ->assertJson(['success' => true]);
+        } else {
+            $this->post(url('api/votingTours/add'), ['name' => $this->faker->name()])
+                ->assertStatus(500)
+                ->assertJson(['success' => false]);
+        }
     }
 
     /**
@@ -82,7 +109,7 @@ class VotingTourTest extends TestCase
     {
         $votingTour = VotingTour::select('id')->first();
 
-        $this->post(url('api/votingTours/getData'), ['id' => $votingTour->id])
+        $this->post(url('api/votingTours/getData'), ['id' => $this->votingTour->id])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }

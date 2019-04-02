@@ -84,20 +84,22 @@ class VotingTourController extends ApiController
         if (!$validator->fails()) {
             $editVotingTour = VotingTour::getLatestTour();
 
-            try {
-                DB::beginTransaction();
+            if ($editVotingTour) {
+                try {
+                    DB::beginTransaction();
 
-                $editVotingTour->status = $post['new_status'];
+                    $editVotingTour->status = $post['new_status'];
 
-                $changed = $editVotingTour->save();
+                    $changed = $editVotingTour->save();
 
-                DB::commit();
-            } catch (QueryException $e) {
-                DB::rollback();
-                Log::error($e->getMessage());
+                    DB::commit();
+                } catch (QueryException $e) {
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                }
+
+                return $this->successResponse();
             }
-
-            return $this->successResponse();
         }
 
         return $this->errorResponse(__('custom.error_changing_status'), $validator->errors()->messages());
@@ -122,20 +124,22 @@ class VotingTourController extends ApiController
         if (!$validator->fails()) {
             $editVotingTour = VotingTour::getLatestTour();
 
-            try {
-                DB::beginTransaction();
+            if ($editVotingTour) {
+                try {
+                    DB::beginTransaction();
 
-                $editVotingTour->name = $post['new_name'];
+                    $editVotingTour->name = $post['new_name'];
 
-                $changed = $editVotingTour->save();
+                    $changed = $editVotingTour->save();
 
-                DB::commit();
-            } catch (QueryException $e) {
-                DB::rollback();
-                Log::error($e->getMessage());
+                    DB::commit();
+                } catch (QueryException $e) {
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                }
+
+                return $this->successResponse();
             }
-
-            return $this->successResponse();
         }
 
         return $this->errorResponse(__('custom.error_changing_status'), $validator->errors()->messages());
@@ -199,7 +203,7 @@ class VotingTourController extends ApiController
 
         $tourList = VotingTour::orderBy($orderField, $orderType)->get();
 
-        if (!empty($tourList)) {
+        if ($tourList->first()) {
             return $this->successResponse($tourList);
         } else {
             return $this->errorResponse(__('custom.tour_list_not_found'));
@@ -227,6 +231,24 @@ class VotingTourController extends ApiController
             return $this->successResponse($votingTourData);
         } else {
             return $this->errorResponse(__('custom.no_data_found'));
+        }
+    }
+
+    public function listStatuses(Request $request)
+    {
+        $statuses = VotingTour::getStatuses();
+
+        foreach ($statuses as $statusId => $statusName) {
+            $results[] = [
+                'id'     => $statusId,
+                'name'   => $statusName
+            ];
+        }
+
+        if ($results) {
+            return $this->successResponse($results);
+        } else {
+            return $this->errorResponse('custom.status_list_not_found');
         }
     }
 }

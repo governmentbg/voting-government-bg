@@ -42,13 +42,13 @@ class VotingTour extends Model
     public static function getStatuses()
     {
         return [
-            self::STATUS_UPCOMING,
-            self::STATUS_OPENED_REG,
-            self::STATUS_CLOSED_REG,
-            self::STATUS_VOTING,
-            self::STATUS_RANKING,
-            self::STATUS_BALLOTAGE,
-            self::STATUS_FINISHED
+            self::STATUS_UPCOMING => __('custom.upcoming'),
+            self::STATUS_OPENED_REG => __('custom.opened_for_reg'),
+            self::STATUS_CLOSED_REG => __('custom.closed_for_reg'),
+            self::STATUS_VOTING => __('custom.voting'),
+            self::STATUS_RANKING => __('custom.ranking'),
+            self::STATUS_BALLOTAGE => __('custom.ballotage'),
+            self::STATUS_FINISHED => __('custom.finished')
         ];
     }
 
@@ -58,6 +58,10 @@ class VotingTour extends Model
 
         if (empty($latestTour)) {
             $latestTour = self::orderBy('updated_at', 'DESC')->first();
+        }
+
+        if (empty($latestTour)) {
+            return false;
         }
 
         return $latestTour;

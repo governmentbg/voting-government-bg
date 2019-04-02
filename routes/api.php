@@ -21,4 +21,6 @@ Route::middleware(['api'])->group(function () {
     Route::post('votingTours/getLatestVotingTour', 'Api\VotingTourController@getLatestVotingTour');
     Route::post('votingTours/list', 'Api\VotingTourController@list');
     Route::post('votingTours/getData', 'Api\VotingTourController@getData');
+    Route::post('votingTours/listStatuses', 'Api\VotingTourController@listStatuses');
+
 });

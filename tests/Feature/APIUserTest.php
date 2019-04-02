@@ -50,7 +50,7 @@ class APIUserTest extends TestCase
         $data['first_name'] = $this->faker->firstName;
         $data['last_name'] = $this->faker->lastName;
 
-        $response = $this->json('PUT', '/api/user/edit', [
+        $response = $this->json('POST', '/api/user/edit', [
             'id'   => $user->id,
             'data' => $data,
         ]);
@@ -91,11 +91,42 @@ class APIUserTest extends TestCase
      */
     public function testGeneratePasswordHash()
     {
-        $response = $this->json('GET', '/api/user/generateHash');
+        $response = $this->json('POST', '/api/user/generateHash');
 
         $response->assertStatus(200)
                     ->assertJson([
                         'success' => true,
                     ]);
+    }
+    
+    /**
+     * Test get user by id.
+     *
+     * @return void
+     */
+    public function testGetUserByID()
+    {
+        $user = factory(\App\User::class)->create();
+        
+        $response = $this->json('POST', '/api/user/getData', ['id' => $user->id]);
+
+        $response->assertStatus(200)
+                    ->assertJson([
+                        'success' => true,
+                    ]);
+    }
+    
+    /**
+     * Test get list of users.
+     *
+     * @return void
+     */
+    public function testlist()
+    {
+        $users = factory(\App\User::class, 10)->create();
+        
+        $response = $this->json('POST', '/api/user/list', ['order_field' => 'first_name', 'order_type' => 'DESC']);
+
+        $response->assertStatus(200)->assertJson(['success' => true]);
     }
 }

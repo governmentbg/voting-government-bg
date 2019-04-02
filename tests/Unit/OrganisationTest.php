@@ -10,22 +10,20 @@ use Illuminate\Support\Facades\Schema;
 class OrganisationTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
     
     private $org;
     
     private $orgId;
-    
-    private $faker;
 
     public function setUp()
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
         
-        $faker = \Faker\Factory::create();   
-        $this->faker = $faker;
+        $this->be(factory(\App\User::class)->create());
         
-        $this->orgId = $faker->ean8;
+        $this->orgId = $this->faker->ean8;
         
         $this->org = factory(\App\Organisation::class)->create([
             'eik' => $this->orgId,
@@ -34,10 +32,9 @@ class OrganisationTest extends TestCase
     
     public function tearDown()
     {
-        Schema::enableForeignKeyConstraints();       
-        parent::tearDown();      
+        Schema::enableForeignKeyConstraints();
+        parent::tearDown();
     }
-    
     
     /**
      * Test Organisation creation in DB.
@@ -45,9 +42,9 @@ class OrganisationTest extends TestCase
      * @return void
      */
     public function testCreateOrganisation()
-    {       
+    {
         $this->assertDatabaseHas('organisations', [
-            'eik' => $this->orgId
+            'eik' => $this->orgId,
         ]);
     }
     
@@ -57,14 +54,14 @@ class OrganisationTest extends TestCase
      * @return void
      */
     public function testUpdateOrganisation()
-    {      
+    {
         $newOrgId = $this->faker->ean8;
         
         $this->org->update(['eik' => $newOrgId]);
         
         $this->assertDatabaseHas('organisations', [
-            'eik' => $newOrgId
-        ]);      
+            'eik' => $newOrgId,
+        ]);
     }
     
     /**
@@ -73,11 +70,11 @@ class OrganisationTest extends TestCase
      * @return void
      */
     public function testDeleteOrganisation()
-    {      
+    {
         $this->org->delete();
         
         $this->assertDatabaseMissing('organisations', [
-            'eik' => $this->orgId
-        ]);  
+            'eik' => $this->orgId,
+        ]);
     }
 }

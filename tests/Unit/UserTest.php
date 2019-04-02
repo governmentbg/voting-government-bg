@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 
@@ -22,7 +21,7 @@ class UserTest extends TestCase
         parent::setUp();
         Schema::disableForeignKeyConstraints();
         
-        $faker = \Faker\Factory::create();   
+        $faker = \Faker\Factory::create();
         $this->faker = $faker;
         
         $this->username = $faker->name;
@@ -31,7 +30,6 @@ class UserTest extends TestCase
             'username' => $this->username,
         ]);
     }
-    
 
     /**
      * Test User creation in DB.
@@ -39,9 +37,9 @@ class UserTest extends TestCase
      * @return void
      */
     public function testCreateUser()
-    {      
+    {
         $this->assertDatabaseHas('users', [
-            'username' => $this->username
+            'username' => $this->username,
         ]);
     }
     
@@ -51,13 +49,13 @@ class UserTest extends TestCase
      * @return void
      */
     public function testUpdateUser()
-    {      
+    {
         $newUsername = $this->faker->name;
         $this->user->update(['username' => $newUsername]);
         
         $this->assertDatabaseHas('users', [
-            'username' => $newUsername
-        ]);      
+            'username' => $newUsername,
+        ]);
     }
     
     /**
@@ -66,17 +64,17 @@ class UserTest extends TestCase
      * @return void
      */
     public function testDeleteUser()
-    {      
+    {
         $this->user->delete();
         
         $this->assertDatabaseMissing('users', [
-            'username' => $this->username
-        ]);  
+            'username' => $this->username,
+        ]);
     }
     
     public function tearDown()
     {
-        Schema::enableForeignKeyConstraints();       
-        parent::tearDown();      
+        Schema::enableForeignKeyConstraints();
+        parent::tearDown();
     }
 }

@@ -3,9 +3,7 @@ namespace Tests\Unit\Api;
 
 use App\VotingTour;
 use Tests\TestCase;
-use App\Http\Controllers\ApiController;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class VotingTourTest extends TestCase
@@ -18,6 +16,8 @@ class VotingTourTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->be(factory(\App\User::class)->create());
+        
         $this->votingTour = VotingTour::where('status', '!=', VotingTour::STATUS_FINISHED)->first();
 
         if (!$this->votingTour) {
@@ -26,8 +26,8 @@ class VotingTourTest extends TestCase
 
         if (!$this->votingTour) {
             $this->votingTour = VotingTour::create([
-                'name'              => $this->faker->name(),
-                'status'            => $this->faker->name()
+                'name'   => $this->faker->name(),
+                'status' => $this->faker->name(),
             ]);
         }
     }

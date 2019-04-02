@@ -22,4 +22,6 @@ return [
     'password_reset_fail' => '',
     'password_hash_generation_fail' => 'Проблем при генериране на софтуерен токън.',
     'password_reset_token_invalid' => 'Предоставения софтуерен токън е невалиден.',
+    'user_not_found' => 'Потребителят не е намерен',
+    'ordering_error' => 'Грешка при подредба на записите',
 ];

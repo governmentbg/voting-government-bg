@@ -10,26 +10,23 @@ use Illuminate\Support\Facades\Schema;
 class FileTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
     
     private $object;
     
     private $objectKey;
-    
-    private $faker;
 
     public function setUp()
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
         
-        $faker = \Faker\Factory::create();   
-        $this->faker = $faker;
+        $this->be(factory(\App\User::class)->create());
         
         //$this->objectKey = $faker->name;
         
         $this->object = factory(\App\File::class)->create();
     }
-    
 
     /**
      * Test File creation in DB.
@@ -37,9 +34,9 @@ class FileTest extends TestCase
      * @return void
      */
     public function testCreateFile()
-    {      
+    {
         $this->assertDatabaseHas('files', [
-            'id' => $this->object->id
+            'id' => $this->object->id,
         ]);
     }
     
@@ -49,13 +46,13 @@ class FileTest extends TestCase
      * @return void
      */
     public function testUpdateFile()
-    {      
+    {
         $newType = $this->faker->mimeType;
         $this->object->update(['mime_type' => $newType]);
         
         $this->assertDatabaseHas('files', [
-            'mime_type' => $newType
-        ]);      
+            'mime_type' => $newType,
+        ]);
     }
     
     /**
@@ -64,17 +61,17 @@ class FileTest extends TestCase
      * @return void
      */
     public function testDeleteFile()
-    {      
+    {
         $this->object->delete();
         
         $this->assertDatabaseMissing('files', [
-            'id' => $this->object->id
-        ]);  
+            'id' => $this->object->id,
+        ]);
     }
     
     public function tearDown()
     {
-        Schema::enableForeignKeyConstraints();       
-        parent::tearDown();      
+        Schema::enableForeignKeyConstraints();
+        parent::tearDown();
     }
 }

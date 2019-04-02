@@ -166,8 +166,6 @@ class UserController extends ApiController
             try {
                 DB::beginTransaction();
                 
-                $data['password'] = Hash::make($data['password']);
-                
                 $user = User::findOrFail($id);
                 $user->first_name = $data['first_name'];
                 $user->last_name = $data['last_name'];
@@ -184,5 +182,55 @@ class UserController extends ApiController
         }
 
         return $this->errorResponse(__('custom.edit_user_fail'), $validator->errors()->messages());
+    }
+    
+    /**
+     * List all user in specific order.
+     *
+     * @param string $order_field - required
+     * @param string $order_type  - required
+     *
+     * @return json $response - response with status and collection of user models if successful
+     */
+    public function list(Request $request)
+    {
+        $field = $request->get('order_field', null);
+        $order = $request->get('order_type', 'ASC');
+             
+        try {
+            $users = User::sort($field, $order)->get();
+
+            return $this->successResponse(['users' => $users]);
+        } catch (QueryException $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.user_not_found'), $e->getMessage());
+        }
+    
+        
+        return $this->errorResponse(__('custom.user_not_found'));
+    }
+    
+    /**
+     * Get user model by id.
+     *
+     * @param integer id - required
+     *
+     * @return json $response - response with status and user model if successful
+     */
+    public function getData(Request $request)
+    {
+        $id = $request->get('id', null);
+        
+        $validator = \Validator::make(['id' => $id], ['id' => 'required']);
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.user_not_found'), $validator->errors()->messages());
+        }
+        
+        $user = User::findOrFail($id);
+        if ($user) {
+            return $this->successResponse(['user' => $user]);
+        }
+        
+        return $this->errorResponse(__('custom.user_not_found'));
     }
 }

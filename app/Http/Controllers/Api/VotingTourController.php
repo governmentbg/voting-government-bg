@@ -56,7 +56,9 @@ class VotingTourController extends ApiController
                 Log::error($e->getMessage());
             }
 
-            return $this->successResponse(['voting_tour_id' => $saved->id]);
+            if (isset($saved)) {
+                return $this->successResponse(['voting_tour_id' => $saved->id]);
+            }
         }
 
         return $this->errorResponse(__('custom.error_adding_tour'), $validator->errors()->messages());

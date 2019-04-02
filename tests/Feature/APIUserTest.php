@@ -21,8 +21,8 @@ class APIUserTest extends TestCase
     {
         $password = $this->faker->password(6, 10);
         $user = factory(\App\User::class)->make([
-            'password' => $password, 
-            'password_confirm' => $password
+            'password'         => $password,
+            'password_confirm' => $password,
         ]);
         
         $response = $this->json('POST', '/api/user/add', ['data' => $user->toArray()]);
@@ -43,7 +43,7 @@ class APIUserTest extends TestCase
     {
         $password = $this->faker->password(6, 10);
         $user = factory(\App\User::class)->create([
-            'password' => Hash::make($password), 
+            'password' => Hash::make($password),
         ]);
         
         $data = $user->toArray();
@@ -51,15 +51,15 @@ class APIUserTest extends TestCase
         $data['last_name'] = $this->faker->lastName;
 
         $response = $this->json('PUT', '/api/user/edit', [
-            'id' => $user->id, 
-            'data' => $data
+            'id'   => $user->id,
+            'data' => $data,
         ]);
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'id' => $user->id
+                'id'      => $user->id,
             ]);
     }
     
@@ -74,8 +74,8 @@ class APIUserTest extends TestCase
         $hash = Hash::make(str_random(60));
         
         $user = factory(\App\User::class)->create([
-            'password' => Hash::make($password), 
-            'pw_reset_hash' => $hash
+            'password'      => Hash::make($password),
+            'pw_reset_hash' => $hash,
         ]);
 
         $response = $this->json('POST', '/api/user/passwordReset', ['new_password' => 'secret', 'hash' => $hash, 'id' => $user->id]);

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +11,7 @@ use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 
 class UserController extends ApiController
-{ 
+{
     /**
      * Generate password reset hash.
      *
@@ -20,10 +19,9 @@ class UserController extends ApiController
      */
     public function generatePasswordHash()
     {
-        try{
-            $password = Hash::make(str_random(60));           
-        }
-        catch(\Exception $e){
+        try {
+            $password = Hash::make(str_random(60));
+        } catch (\Exception $e) {
             logger()->errror($e->getMessage());
             return $this->errorResponse(__('custom.password_hash_generation_fail'), $e->getMessage());
         }
@@ -45,29 +43,27 @@ class UserController extends ApiController
         $hash = $request->get('hash');
 
         $rules = [
-            'hash' => 'required',
+            'hash'     => 'required',
             'password' => 'required|min:6',
         ];
         
         $validator = \Validator::make(['password' => $new_password, 'hash' => $hash], $rules);
         
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->errorResponse(__('custom.password_reset_fail'), $validator->errors()->messages());
         }
         
         $user = User::where('pw_reset_hash', $hash)->first();
 
-        if($user){
-            try{
+        if ($user) {
+            try {
                 $user->update(['password' => Hash::make($new_password)]);
 
                 return $this->successResponse(['id' => $user->id], true);
-            }
-            catch(QueryException $e){
+            } catch (QueryException $e) {
                 logger()->error($e->getMessage());
                 return $this->errorResponse(__('custom.database_error'));
             }
-            
         }
         
         return $this->errorResponse(__('custom.password_reset_token_invalid'));
@@ -92,17 +88,17 @@ class UserController extends ApiController
         $data = $request->get('data', []);
 
         $rules = [
-            'org_id'            => 'nullable',
-            'first_name'        => 'nullable|string',
-            'last_name'         => 'nullable|string',
-            'username'          => 'required|string|unique:users',
-            'email'             => '',
-            'active'            => 'nullable|bool',
-            'password'          => 'required|string|min:6',
-            'password_confirm'  => 'required|string|same:password',
+            'org_id'           => 'nullable',
+            'first_name'       => 'nullable|string',
+            'last_name'        => 'nullable|string',
+            'username'         => 'required|string|unique:users',
+            'email'            => '',
+            'active'           => 'nullable|bool',
+            'password'         => 'required|string|min:6',
+            'password_confirm' => 'required|string|same:password',
         ];
         
-        if(!isset($data['org_id'])){
+        if (!isset($data['org_id'])) {
             $rules['email'] = 'required|email|unique:users';
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
@@ -111,7 +107,7 @@ class UserController extends ApiController
         
         $validator = \Validator::make($data, $rules);
         
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->errorResponse(__('custom.add_user_fail'), $validator->errors()->messages());
         }
         
@@ -129,12 +125,12 @@ class UserController extends ApiController
         } catch (QueryException $ex) {
             DB::rollback();
             Log::error($ex->getMessage());
-        }       
+        }
     }
     
     /**
      * Edit user record
-     * 
+     *
      * @param integer id - required
      * @param array data - required
      * @param string data[firs_tname] - optional
@@ -151,13 +147,13 @@ class UserController extends ApiController
         $id = $request->get('id', null);
 
         $rules = [
-            'org_id'            => 'nullable',
-            'first_name'        => 'nullable|string',
-            'last_name'         => 'nullable|string',
-            'active'            => 'nullable|bool',          
+            'org_id'     => 'nullable',
+            'first_name' => 'nullable|string',
+            'last_name'  => 'nullable|string',
+            'active'     => 'nullable|bool',
         ];
         
-        if(!isset($data['org_id'])){
+        if (!isset($data['org_id'])) {
             //$rules['email'] = 'required|email|unique:users';
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
@@ -166,7 +162,7 @@ class UserController extends ApiController
         
         $validator = \Validator::make($data, $rules);
         
-        if(!$validator->fails()){
+        if (!$validator->fails()) {
             try {
                 DB::beginTransaction();
                 
@@ -190,4 +186,3 @@ class UserController extends ApiController
         return $this->errorResponse(__('custom.edit_user_fail'), $validator->errors()->messages());
     }
 }
-

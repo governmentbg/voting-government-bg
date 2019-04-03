@@ -11,20 +11,18 @@ use Illuminate\Support\Facades\Schema;
 class VotingTourTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     private $object;
 
     private $objectKey;
 
-    private $faker;
-
     public function setUp()
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
-
-        $faker = \Faker\Factory::create();
-        $this->faker = $faker;
+        
+        $this->be(factory(\App\User::class)->create());
 
         //$this->objectKey = $faker->name;
 
@@ -45,7 +43,7 @@ class VotingTourTest extends TestCase
     public function testCreateVotingTour()
     {
         $this->assertDatabaseHas('voting_tour', [
-            'id' => $this->object->id
+            'id' => $this->object->id,
         ]);
     }
 
@@ -60,7 +58,7 @@ class VotingTourTest extends TestCase
         $this->object->update(['status' => $newStatus]);
 
         $this->assertDatabaseHas('voting_tour', [
-            'status' => $newStatus
+            'status' => $newStatus,
         ]);
     }
 
@@ -74,7 +72,7 @@ class VotingTourTest extends TestCase
         $this->object->delete();
 
         $this->assertDatabaseMissing('voting_tour', [
-            'id' => $this->object->id
+            'id' => $this->object->id,
         ]);
     }
 

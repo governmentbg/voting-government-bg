@@ -3,9 +3,9 @@
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
+class OrganisationsSeeder extends Seeder
 {
-    const USER_RECORDS = 100;
+    const ORGANISATION_RECORDS = 100;
 
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, self::USER_RECORDS)->create()->each(function ($u) {
+        factory(App\Organisation::class, self::ORGANISATION_RECORDS)->create()->each(function ($u) {
             $u->save();
         });
     }

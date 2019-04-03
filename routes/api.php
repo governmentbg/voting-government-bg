@@ -15,6 +15,13 @@ use Illuminate\Http\Request;
 
 
 Route::middleware(['api'])->group(function () {
+    Route::post('user/add', 'Api\UserController@addUser');
+    Route::post('user/edit', 'Api\UserController@editUser');
+    Route::post('user/generateHash', 'Api\UserController@generatePasswordHash');
+    Route::post('user/passwordReset', 'Api\UserController@resetPassword');
+    Route::post('user/getData', 'Api\UserController@getData');
+    Route::post('user/list', 'Api\UserController@list');
+    
     Route::post('votingTours/add', 'Api\VotingTourController@add');
     Route::post('votingTours/changeStatus', 'Api\VotingTourController@changeStatus');
     Route::post('votingTours/rename', 'Api\VotingTourController@rename');

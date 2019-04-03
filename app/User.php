@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\RecordSignature;
 use Awobaz\Compoships\Compoships;
@@ -14,7 +13,7 @@ class User extends Authenticatable
     use Compoships;
     use RecordSignature;
     
-    protected $guarded = ['id']; 
+    protected $guarded = ['id'];
 
     /**
      * The attributes that are mass assignable.
@@ -45,5 +44,14 @@ class User extends Authenticatable
     public function organisation()
     {
         return $this->hasOne('App\Organisation', ['org_id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
-    }   
+    }
+    
+    public function scopeSort($query, $field, $order)
+    {
+        if (isset($field)) {
+            return $query->orderBy($field, $order);
+        }
+        
+        return $query;
+    }
 }

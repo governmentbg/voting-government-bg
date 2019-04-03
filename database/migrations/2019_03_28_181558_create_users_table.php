@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->unique(['username', 'org_id']);
             $table->string('password');
             $table->tinyInteger('active')->nullable();
-            $table->string('pw_reset_hash',  32)->nullable();
+            $table->string('pw_reset_hash')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->nullable()->unique();
@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
-            $table->integer('created_by')->unsigned();
+            $table->integer('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');
         });
 

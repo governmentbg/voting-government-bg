@@ -17,7 +17,7 @@ class CreateOrganisationsTable extends Migration
 
         Schema::create('organisations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('eik');
+            $table->bigInteger('eik');
             $table->integer('voting_tour_id')->unsigned();
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');
             $table->unique(['eik', 'voting_tour_id']);

@@ -29,7 +29,7 @@ class CreateFilesTable extends Migration
         });
 
         DB::unprepared("
-            ALTER TABLE files ADD COLUMN data MEDIUMBLOB AFTER name;
+            ALTER TABLE files ADD COLUMN data MEDIUMBLOB NOT NULL AFTER name;
         ");
     }
 

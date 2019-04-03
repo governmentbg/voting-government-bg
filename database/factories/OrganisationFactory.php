@@ -7,7 +7,7 @@ $factory->define(App\Organisation::class, function (Faker $faker) {
         'eik' => $faker->ean8,
         'voting_tour_id' => $faker->numberBetween(1, 10),
         'name' => $faker->name,
-        //'address' => $faker->address,
+        'address' => $faker->address,
         'representative' => $faker->name,
         'email' => $faker->email,
         'in_ap' => 1,

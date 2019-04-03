@@ -52,6 +52,15 @@ class VotingTour extends Model
         ];
     }
 
+    public static function getRegStatuses()
+    {
+        return [
+            self::STATUS_UPCOMING,
+            self::STATUS_OPENED_REG,
+            self::STATUS_CLOSED_REG
+        ];
+    }
+
     public static function getLatestTour()
     {
         $latestTour = self::where('status', '!=', self::STATUS_FINISHED)->first();

@@ -10,6 +10,13 @@ class APIOrganisationTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->be(factory(\App\User::class)->create());
+    }
 
     /**
      * Test API organisation creation.
@@ -76,7 +83,7 @@ class APIOrganisationTest extends TestCase
         $response = $this->json('POST', '/api/organisation/search', [
             'filters'     => ['reg_date_from' => '2019-04-01'],
             'order_field' => 'created_at',
-            'order_type'  => 'DESC'
+            'order_type'  => 'DESC',
         ]);
 
         $response->assertStatus(200)->assertJson(['success' => true]);

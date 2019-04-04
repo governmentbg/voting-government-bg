@@ -196,9 +196,11 @@ class UserController extends ApiController
     {
         $field = $request->get('order_field', null);
         $order = $request->get('order_type', 'ASC');
+        $page = $request->get('page_number');
+        $request->request->add(['page' => $page]);
              
         try {
-            $users = User::sort($field, $order)->get();
+            $users = User::sort($field, $order)->paginate();
 
             return $this->successResponse(['users' => $users]);
         } catch (QueryException $e) {

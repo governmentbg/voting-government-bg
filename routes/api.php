@@ -29,6 +29,14 @@ Route::middleware(['api'])->group(function () {
     Route::post('votingTours/list', 'Api\VotingTourController@list');
     Route::post('votingTours/getData', 'Api\VotingTourController@getData');
     Route::post('votingTours/listStatuses', 'Api\VotingTourController@listStatuses');
+    
+    Route::post('message/markAsRead', 'Api\MessageController@markAsRead');
+    Route::post('message/listByOrg', 'Api\MessageController@listByOrg');
+    Route::post('message/listByParentId', 'Api\MessageController@listByParentId');
+    Route::post('message/search', 'Api\MessageController@search');
+    Route::post('message/listStatuses', 'Api\MessageController@listStatuses');
+    Route::post('message/sendMessageToOrg', 'Api\MessageController@sendMessageToOrg');
+    Route::post('message/sendMessageFromOrg', 'Api\MessageController@sendMessageFromOrg');    
 
     Route::post('organisation/register', 'Api\OrganisationController@register');
     Route::post('organisation/edit', 'Api\OrganisationController@edit');

@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\DB;
 class ApiController extends Controller
 {
     const ERROR_GENERAL = 'custom.general';
+    const ERROR_MISSING = 'custom.unknown_error';
+
+    /**
+     * Handle 404 errors
+     *
+     * @return json
+     */
+    public function handleMissingRoutes(Request $request)
+    {
+        return $this->errorResponse(null, [], 404, self::ERROR_MISSING);
+    }
 
     /**
      * Return error response

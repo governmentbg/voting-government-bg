@@ -21,7 +21,7 @@ Route::middleware(['api'])->group(function () {
     Route::post('user/passwordReset', 'Api\UserController@resetPassword');
     Route::post('user/getData', 'Api\UserController@getData');
     Route::post('user/list', 'Api\UserController@list');
-    
+
     Route::post('votingTours/add', 'Api\VotingTourController@add');
     Route::post('votingTours/changeStatus', 'Api\VotingTourController@changeStatus');
     Route::post('votingTours/rename', 'Api\VotingTourController@rename');
@@ -37,4 +37,14 @@ Route::middleware(['api'])->group(function () {
     Route::post('vote/getVoteStatus', 'Api\VoteController@getVoteStatus');
     Route::post('vote/listVoters', 'Api\VoteController@listVoters');
 
+    Route::post('organisation/register', 'Api\OrganisationController@register');
+    Route::post('organisation/edit', 'Api\OrganisationController@edit');
+    Route::post('organisation/search', 'Api\OrganisationController@search');
+    Route::post('organisation/getData', 'Api\OrganisationController@getData');
+    Route::post('organisation/getFileList', 'Api\OrganisationController@getFileList');
+    Route::post('organisation/listStatuses', 'Api\OrganisationController@listStatuses');
+    Route::post('organisation/listCandidateStatuses', 'Api\OrganisationController@listCandidateStatuses');
+
 });
+
+Route::any('{catchall}', 'ApiController@handleMissingRoutes')->where('catchall', '(.*)');

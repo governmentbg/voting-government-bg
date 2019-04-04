@@ -11,3 +11,6 @@ npm-debug.log
 yarn-error.log
 /nbproject
 .history
+.project
+.buildpath
+/.settings

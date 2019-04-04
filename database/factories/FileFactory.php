@@ -9,6 +9,6 @@ $factory->define(App\File::class, function (Faker $faker) {
         'mime_type' => $faker->mimeType,
         'message_id' => $faker->numberBetween(1, 100),
         'org_id' => $faker->numberBetween(1, 100),
-        'voting_tour_id' => $faker->numberBetween(1, 100),
+        'voting_tour_id' => $faker->numberBetween(1, 10),
     ];
 });

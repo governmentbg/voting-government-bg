@@ -29,7 +29,7 @@ class APIOrganisationTest extends TestCase
         $response = $this->json('POST', '/api/organisation/register', ['org_data' => $org->toArray()]);
 
         $votingTour = \App\VotingTour::getLatestTour();
-        if (!empty($votingTour) && $votingTour->status == VotingTour::STATUS_OPENED_REG) {
+        if (!empty($votingTour) && $votingTour->status == \App\VotingTour::STATUS_OPENED_REG) {
             $response->assertStatus(200)->assertJson(['success' => true]);
         } else {
             $response->assertStatus(500)->assertJson(['success' => false]);
@@ -48,13 +48,19 @@ class APIOrganisationTest extends TestCase
         $data = $org->toArray();
         $data['name'] = $this->faker->name;
         $data['email'] = $this->faker->email;
+        $data['status_hint'] = null;
 
         $response = $this->json('POST', '/api/organisation/edit', [
             'org_id'   => $org->id,
             'org_data' => $data,
         ]);
 
-        $response->assertStatus(200)->assertJson(['success' => true]);
+        $votingTour = \App\VotingTour::getLatestTour();
+        if (!empty($votingTour) && in_array($votingTour->status, \App\VotingTour::getRegStatuses())) {
+            $response->assertStatus(200)->assertJson(['success' => true]);
+        } else {
+            $response->assertStatus(500)->assertJson(['success' => false]);
+        }
     }
 
     /**
@@ -65,10 +71,14 @@ class APIOrganisationTest extends TestCase
     public function testGetOrgData()
     {
         $org = factory(\App\Organisation::class)->create();
-
         $response = $this->json('POST', '/api/organisation/getData', ['org_id' => $org->id]);
 
-        $response->assertStatus(200)->assertJson(['success' => true]);
+        $votingTour = \App\VotingTour::getLatestTour();
+        if (!empty($votingTour) && $org->voting_tour_id == $votingTour->id) {
+            $response->assertStatus(200)->assertJson(['success' => true]);
+        } else {
+            $response->assertStatus(500)->assertJson(['success' => false]);
+        }
     }
 
     /**

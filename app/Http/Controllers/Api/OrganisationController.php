@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 use App\Organisation;
 use App\VotingTour;
-use App\User;
 use App\File;
 
 class OrganisationController extends ApiController
@@ -23,9 +21,10 @@ class OrganisationController extends ApiController
      * @param string org_data[address] - required
      * @param string org_data[representative] - required
      * @param string org_data[email] - required
-     * @param boolean org_data[in_ap] - optional
+     * @param string org_data[phone] - required
+     * @param boolean org_data[in_av] - optional
      * @param boolean org_data[is_candidate] - optional
-     * @param string org_data[description] - optional
+     * @param string org_data[description] - required if is_candidate
      * @param string org_data[references] - optional
      * @param array files - optional
      * @param string files[name] - required
@@ -46,10 +45,11 @@ class OrganisationController extends ApiController
                 'name'              => 'required|string|max:255',
                 'address'           => 'required|string|max:512',
                 'representative'    => 'required|string|max:512',
-                'email'             => 'required|string|max:255',
-                'in_ap'             => 'bool',
+                'email'             => 'required|email',
+                'phone'             => 'required|string|max:40',
+                'in_av'             => 'bool',
                 'is_candidate'      => 'bool',
-                'description'       => 'nullable|max:8000',
+                'description'       => 'required_if:is_candidate,'. Organisation::IS_CANDIDATE_TRUE .'|nullable|max:8000',
                 'references'        => 'nullable|max:8000',
                 'files'             => 'nullable|array',
                 'files.*.name'      => 'required|string|max:255',
@@ -68,10 +68,11 @@ class OrganisationController extends ApiController
                     $organisation->address = $data['address'];
                     $organisation->representative = $data['representative'];
                     $organisation->email = $data['email'];
-                    if (isset($data['in_ap'])) {
-                        $organisation->in_ap = $data['in_ap'];
+                    $organisation->phone = $data['phone'];
+                    if (isset($data['in_av'])) {
+                        $organisation->in_av = $data['in_av'];
                     } else {
-                        $organisation->in_ap = Organisation::IN_AP_FALSE;
+                        $organisation->in_av = Organisation::IN_AV_FALSE;
                     }
                     if (isset($data['is_candidate'])) {
                         $organisation->is_candidate = $data['is_candidate'];
@@ -83,6 +84,8 @@ class OrganisationController extends ApiController
                     }
                     if (isset($data['references'])) {
                         $organisation->references = $data['references'];
+                    } elseif ($organisation->is_candidate == Organisation::IS_CANDIDATE_TRUE) {
+                        $organisation->references = '';
                     }
 
                     $organisation->save();
@@ -124,7 +127,8 @@ class OrganisationController extends ApiController
      * @param string org_data[address] - optional
      * @param string org_data[representative] - optional
      * @param string org_data[email] - optional
-     * @param boolean org_data[in_ap] - optional
+     * @param string org_data[phone] - optional
+     * @param boolean org_data[in_av] - optional
      * @param boolean org_data[is_candidate] - optional
      * @param string org_data[description] - optional
      * @param string org_data[references] - optional
@@ -145,8 +149,9 @@ class OrganisationController extends ApiController
                 'name'           => 'string|max:255',
                 'address'        => 'string|max:512',
                 'representative' => 'string|max:512',
-                'email'          => 'string|max:255',
-                'in_ap'          => 'bool',
+                'email'          => 'string|email',
+                'phone'          => 'string|max:40',
+                'in_av'          => 'bool',
                 'is_candidate'   => 'bool',
                 'description'    => 'nullable|max:8000',
                 'references'     => 'nullable|max:8000',
@@ -161,6 +166,12 @@ class OrganisationController extends ApiController
                     $organisation = Organisation::findOrFail($data['org_id']);
 
                     if ($organisation) {
+                        $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
+                        $description = (isset($data['description']) ? $data['description'] : $organisation->description);
+                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE && empty($description)) {
+                            return $this->errorResponse(__('custom.edit_org_fail'), [__('custom.org_descr_required')]);
+                        }
+
                         $orgData = [];
                         if (!empty($data['name'])) {
                             $orgData['name'] = $data['name'];
@@ -171,8 +182,14 @@ class OrganisationController extends ApiController
                         if (!empty($data['representative'])) {
                             $orgData['representative'] = $data['representative'];
                         }
-                        if (isset($data['in_ap'])) {
-                            $orgData['in_ap'] = $data['in_ap'];
+                        if (!empty($data['email'])) {
+                            $orgData['email'] = $data['email'];
+                        }
+                        if (!empty($data['phone'])) {
+                            $orgData['phone'] = $data['phone'];
+                        }
+                        if (isset($data['in_av'])) {
+                            $orgData['in_av'] = $data['in_av'];
                         }
                         if (isset($data['is_candidate'])) {
                             $orgData['is_candidate'] = $data['is_candidate'];
@@ -221,7 +238,7 @@ class OrganisationController extends ApiController
      * @param big integer filters[eik] - optional
      * @param string filters[name] - optional
      * @param string filters[email] - optional
-     * @param boolean filters[in_ap] - optional
+     * @param boolean filters[in_av] - optional
      * @param boolean filters[is_candidate] - optional
      * @param string filters[status] - optional
      * @param string filters[reg_date_from] - optional
@@ -237,13 +254,14 @@ class OrganisationController extends ApiController
         $filters = $request->get('filters', []);
         $orderField = $request->get('order_field', Organisation::DEFAULT_ORDER_FIELD);
         $orderType = strtoupper($request->get('order_type', Organisation::DEFAULT_ORDER_TYPE));
-        $pageNumber = $request->get('page_number', 1);
+        $page = $request->get('page_number');
+        $request->request->add(['page' => $page]);
 
         $validator = \Validator::make($filters, [
             'eik'           => 'nullable|digits_between:1,19',
             'name'          => 'nullable|string|max:255',
             'email'         => 'nullable|string|max:255',
-            'in_ap'         => 'nullable|bool',
+            'in_av'         => 'nullable|bool',
             'is_candidate'  => 'nullable|bool',
             'status'        => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
             'reg_date_from' => 'nullable|date|date_format:Y-m-d',
@@ -271,8 +289,8 @@ class OrganisationController extends ApiController
                     if (isset($filters['email'])) {
                         $query->where('email', 'LIKE', '%'. trim($filters['email']) .'%');
                     }
-                    if (isset($filters['in_ap'])) {
-                        $query->where('in_ap', $filters['in_ap']);
+                    if (isset($filters['in_av'])) {
+                        $query->where('in_av', $filters['in_av']);
                     }
                     if (isset($filters['is_candidate'])) {
                         $query->where('is_candidate', $filters['is_candidate']);
@@ -289,12 +307,7 @@ class OrganisationController extends ApiController
 
                     $count = $query->count();
 
-                    $query->orderBy($orderField, $orderType);
-
-                    $query->forPage(
-                       (intval($pageNumber) > 0 ? intval($pageNumber) : 1),
-                        Organisation::DEFAULT_RECORDS_PER_PAGE
-                    );
+                    $query->orderBy($orderField, $orderType)->paginate();
 
                     foreach ($query->get() as $organisation) {
                         $results[] = [
@@ -305,7 +318,8 @@ class OrganisationController extends ApiController
                             'address'        => $organisation->address,
                             'representative' => $organisation->representative,
                             'email'          => $organisation->email,
-                            'in_ap'          => $organisation->in_ap,
+                            'phone'          => $organisation->phone,
+                            'in_av'          => $organisation->in_av,
                             'is_candidate'   => $organisation->is_candidate,
                             'description'    => $organisation->description,
                             'references'     => $organisation->references,
@@ -370,7 +384,8 @@ class OrganisationController extends ApiController
                         'address'        => $organisation->address,
                         'representative' => $organisation->representative,
                         'email'          => $organisation->email,
-                        'in_ap'          => $organisation->in_ap,
+                        'phone'          => $organisation->phone,
+                        'in_av'          => $organisation->in_av,
                         'is_candidate'   => $organisation->is_candidate,
                         'description'    => $organisation->description,
                         'references'     => $organisation->references,

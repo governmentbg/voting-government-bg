@@ -46,6 +46,8 @@ Route::middleware(['api'])->group(function () {
     Route::post('organisation/listStatuses', 'Api\OrganisationController@listStatuses');
     Route::post('organisation/listCandidateStatuses', 'Api\OrganisationController@listCandidateStatuses');
 
+    Route::post('file/getData', 'Api\FileController@getData');
+
 });
 
 Route::any('{catchall}', 'ApiController@handleMissingRoutes')->where('catchall', '(.*)');

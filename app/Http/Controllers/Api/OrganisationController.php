@@ -87,13 +87,6 @@ class OrganisationController extends ApiController
 
                     $organisation->save();
 
-                    $orgUser = new User;
-                    $orgUser->username = $organisation->eik;
-                    $orgUser->org_id = $organisation->id;
-                    $orgUser->password = Hash::make(str_random(60));
-
-                    $orgUser->save();
-
                     foreach ($data['files'] as $newFile) {
                         $file = new File;
                         $file->name = $newFile['name'];

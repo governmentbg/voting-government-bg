@@ -17,7 +17,7 @@ class VotingTourTest extends TestCase
     {
         parent::setUp();
         $this->be(factory(\App\User::class)->create());
-        
+
         $this->votingTour = VotingTour::where('status', '!=', VotingTour::STATUS_FINISHED)->first();
 
         if (!$this->votingTour) {
@@ -42,11 +42,11 @@ class VotingTourTest extends TestCase
         $votingTour = VotingTour::where('status', '!=', VotingTour::STATUS_FINISHED)->first();
 
         if (!$votingTour) {
-            $this->post(url('api/votingTours/add'), ['name' => $this->faker->name()])
+            $this->post(url('api/votingTour/add'), ['name' => $this->faker->name()])
                 ->assertStatus(200)
                 ->assertJson(['success' => true]);
         } else {
-            $this->post(url('api/votingTours/add'), ['name' => $this->faker->name()])
+            $this->post(url('api/votingTour/add'), ['name' => $this->faker->name()])
                 ->assertStatus(500)
                 ->assertJson(['success' => false]);
         }
@@ -59,7 +59,7 @@ class VotingTourTest extends TestCase
      */
     public function testChangeTourStatus()
     {
-        $this->post(url('api/votingTours/changeStatus'), ['new_status' => rand(0, 6)])
+        $this->post(url('api/votingTour/changeStatus'), ['new_status' => rand(0, 6)])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }
@@ -71,7 +71,7 @@ class VotingTourTest extends TestCase
      */
     public function testRenameTour()
     {
-        $this->post(url('api/votingTours/rename'), ['new_name' => $this->faker->name()])
+        $this->post(url('api/votingTour/rename'), ['new_name' => $this->faker->name()])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }
@@ -83,7 +83,7 @@ class VotingTourTest extends TestCase
      */
     public function testGetLatestVotingTour()
     {
-        $this->post(url('api/votingTours/getLatestVotingTour'), [])
+        $this->post(url('api/votingTour/getLatestVotingTour'), [])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }
@@ -95,7 +95,7 @@ class VotingTourTest extends TestCase
      */
     public function testListVotingTours()
     {
-        $this->post(url('api/votingTours/list'), ['order_by' => 'status', 'order_type' => 'ASC'])
+        $this->post(url('api/votingTour/list'), ['order_by' => 'status', 'order_type' => 'ASC'])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }
@@ -109,7 +109,7 @@ class VotingTourTest extends TestCase
     {
         $votingTour = VotingTour::select('id')->first();
 
-        $this->post(url('api/votingTours/getData'), ['id' => $this->votingTour->id])
+        $this->post(url('api/votingTour/getData'), ['id' => $this->votingTour->id])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }

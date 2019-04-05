@@ -11,7 +11,7 @@ class APIUserTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-    
+
     /**
      * Test API user creation.
      *
@@ -24,7 +24,7 @@ class APIUserTest extends TestCase
             'password'         => $password,
             'password_confirm' => $password,
         ]);
-        
+
         $response = $this->json('POST', '/api/user/add', ['data' => $user->toArray()]);
 
         $response
@@ -33,7 +33,7 @@ class APIUserTest extends TestCase
                 'success' => true,
             ]);
     }
-    
+
     /**
      * Test API user update
      *
@@ -45,7 +45,7 @@ class APIUserTest extends TestCase
         $user = factory(\App\User::class)->create([
             'password' => Hash::make($password),
         ]);
-        
+
         $data = $user->toArray();
         $data['first_name'] = $this->faker->firstName;
         $data['last_name'] = $this->faker->lastName;
@@ -62,7 +62,7 @@ class APIUserTest extends TestCase
                 'id'      => $user->id,
             ]);
     }
-    
+
     /**
      * Test reset password for user.
      *
@@ -72,7 +72,7 @@ class APIUserTest extends TestCase
     {
         $password = $this->faker->password(6, 10);
         $hash = Hash::make(str_random(60));
-        
+
         $user = factory(\App\User::class)->create([
             'password'      => Hash::make($password),
             'pw_reset_hash' => $hash,
@@ -83,7 +83,7 @@ class APIUserTest extends TestCase
         $response->assertStatus(200)->assertJson(['success' => true]);
         $this->assertTrue(Hash::check($password, $user->password));
     }
-    
+
     /**
      * Test generate password hash.
      *
@@ -98,7 +98,7 @@ class APIUserTest extends TestCase
                         'success' => true,
                     ]);
     }
-    
+
     /**
      * Test get user by id.
      *
@@ -107,7 +107,7 @@ class APIUserTest extends TestCase
     public function testGetUserByID()
     {
         $user = factory(\App\User::class)->create();
-        
+
         $response = $this->json('POST', '/api/user/getData', ['id' => $user->id]);
 
         $response->assertStatus(200)
@@ -115,7 +115,7 @@ class APIUserTest extends TestCase
                         'success' => true,
                     ]);
     }
-    
+
     /**
      * Test get list of users.
      *
@@ -124,7 +124,7 @@ class APIUserTest extends TestCase
     public function testlist()
     {
         $users = factory(\App\User::class, 10)->create();
-        
+
         $response = $this->json('POST', '/api/user/list', ['order_field' => 'first_name', 'order_type' => 'DESC']);
 
         $response->assertStatus(200)->assertJson(['success' => true]);

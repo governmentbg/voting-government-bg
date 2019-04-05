@@ -1,6 +1,8 @@
 <?php
 
 use App\User;
+use App\VotingTour;
+use App\Organisation;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -16,6 +18,9 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    $votingTours = VotingTour::select('id')->get();
+    $orgIds = Organisation::select('id')->get();
+
     return [
         'first_name' => $faker->name,
         'last_name' => $faker->name,
@@ -23,6 +28,8 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'active' => 1,
         'username' => $faker->name,
-        'org_id' => null
+        'voting_tour_id' => $this->faker->randomElement($votingTours)['id'],
+        'org_id' => $this->faker->unique()->randomElement($orgIds)['id'],
+        'created_by' => 1
     ];
 });

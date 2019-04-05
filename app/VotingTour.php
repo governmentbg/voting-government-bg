@@ -39,6 +39,11 @@ class VotingTour extends Model
         return $this->hasMany('App\Vote', 'voting_tour_id');
     }
 
+    public function setUpdatedAtAttribute($value)
+    {
+        // to Disable updated_at
+    }
+
     public static function getStatuses()
     {
         return [
@@ -74,5 +79,13 @@ class VotingTour extends Model
         }
 
         return $latestTour;
+    }
+
+    public static function getActiveStatuses()
+    {
+        return [
+            self::STATUS_VOTING => __('custom.voting'),
+            self::STATUS_BALLOTAGE => __('custom.ballotage')
+        ];
     }
 }

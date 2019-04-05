@@ -54,4 +54,14 @@ class User extends Authenticatable
         
         return $query;
     }
+    
+    public function isAdmin()
+    {
+        return !isset($this->org_id);
+    }
+    
+    public function isSuperAdmin()
+    {
+        return !isset($this->org_id) && $this->name == config('auth.system.user');
+    }
 }

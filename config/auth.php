@@ -46,6 +46,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        
+        'backend' => [
+            'driver' => 'session',
+            'provider' => 'backend_users'
+        ]
     ],
 
     /*
@@ -69,6 +74,12 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+        
+        
+        'backend_users' => [
+            'driver' => 'eloquent.backend_user',
+            'model' => App\User::class
         ],
 
         // 'users' => [
@@ -99,5 +110,13 @@ return [
             'expire' => 60,
         ],
     ],
+    
+    /**
+     * Super admin user credentials.
+     */
+    'system' => [
+        'user'     => env('AUTH_SYSTEM_USER', 'system'),
+        'password' => env('AUTH_SYSTEM_PASSWORD')
+    ]
 
 ];

@@ -18,9 +18,12 @@ class APIFileTest extends TestCase
      */
     public function testGetFileData()
     {
+        $this->be(factory(\App\User::class)->create());
+        
         $file = factory(\App\File::class)->create([
-            'message_id' => null,
-            'org_id'     => \App\Organisation::first(),
+            'message_id'     => null,
+            'org_id'         => factory(\App\Organisation::class)->create()->id,
+            'voting_tour_id' => factory(\App\VotingTour::class)->create()->id,
         ]);
 
         $response = $this->json('POST', '/api/file/getData', ['file_id' => $file->id]);

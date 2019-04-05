@@ -21,25 +21,8 @@ class VoteTest extends TestCase
     {
         parent::setUp();
 
-        $this->votingTourId = VotingTour::select('id')->first()->id;
-        $this->organisation = Organisation::select('id')->first()->id;
-
-        if (!$this->votingTourId) {
-            $this->organisation = factory(App\Organisation::class, 1)->create()->each(function ($u) {
-                $u->save();
-            });
-        }
-
-        $this->organisation = Organisation::select('id')->first()->id;
-
-        if (!$this->votingTourId) {
-            $this->votingTourId = VotingTour::create([
-                'name'   => $this->faker->name(),
-                'status' => VotingTour::STATUS_VOTING,
-            ]);
-
-            $this->votingTourId = VotingTour::select('id')->first()->id;
-        }
+        $this->votingTourId = factory(VotingTour::class)->create()->id;
+        $this->organisation = factory(Organisation::class)->create()->id;
 
         $t = microtime(true);
         $micro = sprintf('%06d',($t - floor($t)) * 1000000);

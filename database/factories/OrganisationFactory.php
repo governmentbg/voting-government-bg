@@ -2,13 +2,18 @@
 
 use Faker\Generator as Faker;
 use App\VotingTour;
+use App\User;
 
 $factory->define(App\Organisation::class, function (Faker $faker) {
     $tourIds = VotingTour::select('id')->get();
+    $tourId = $tourIds->isNotEmpty() ? $this->faker->randomElement($tourIds)['id'] : factory(VotingTour::class)->create()->id;
+    
+    $userIds = User::select('id')->get();
+    $userId = $userIds->isNotEmpty() ? $this->faker->randomElement($userIds)['id'] : factory(User::class)->create()->id;
 
     return [
         'eik' => $faker->ean8,
-        'voting_tour_id' =>  $this->faker->unique()->randomElement($tourIds)['id'],
+        'voting_tour_id' =>  $tourId,
         'name' => $faker->name,
         'address' => $faker->address,
         'representative' => $faker->name,
@@ -20,6 +25,6 @@ $factory->define(App\Organisation::class, function (Faker $faker) {
         'references' => $faker->text,
         'status' => $faker->numberBetween(0, 5),
         'status_hint' => $faker->numberBetween(0, 10),
-        'created_by' => 1
+        'created_by' => $userId
     ];
 });

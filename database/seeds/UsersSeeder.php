@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    const USER_RECORDS = 100;
+    const USER_RECORDS = 20;
 
     /**
      * Run the database seeds.
@@ -14,8 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, self::USER_RECORDS)->create()->each(function ($u) {
-            $u->save();
-        });
+        factory(App\User::class, self::USER_RECORDS)->create();
     }
 }

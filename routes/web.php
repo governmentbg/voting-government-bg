@@ -21,10 +21,10 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 // Admin
-Route::group(['namespace' => 'Extranet', 'prefix' => 'extranet'], function () {
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     // Admin login routes
-    Route::get('/login', ['as' => 'extranet.showLoginForm', 'uses' => 'AuthController@showLoginForm']);
-    Route::post('/login', ['as' => 'extranet.login', 'uses' => 'AuthController@login']);
+    Route::get('/login', ['as' => 'admin.showLoginForm', 'uses' => 'AuthController@showLoginForm']);
+    Route::post('/login', ['as' => 'admin.login', 'uses' => 'AuthController@login']);
 
     // All routes inside require admin privileges
     Route::group(['middleware' => ['auth.backend:backend']], function () {

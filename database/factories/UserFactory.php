@@ -20,6 +20,7 @@ use Faker\Generator as Faker;
 $factory->define(User::class, function (Faker $faker) {
     $votingTours = VotingTour::select('id')->get();
     $orgIds = Organisation::select('id')->get();
+    $orgId = $orgIds->isNotEmpty() ? $this->faker->unique()->randomElement($orgIds)['id'] : factory(Organisation::class)->create()->id;
 
     return [
         'first_name' => $faker->name,
@@ -29,7 +30,6 @@ $factory->define(User::class, function (Faker $faker) {
         'active' => 1,
         'username' => $faker->name,
         'voting_tour_id' => $this->faker->randomElement($votingTours)['id'],
-        'org_id' => $this->faker->unique()->randomElement($orgIds)['id'],
-        'created_by' => 1
+        'org_id' => $orgId,
     ];
 });

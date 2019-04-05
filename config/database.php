@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'INITIAL_HASH' => env('INITIAL_HASH'), // Initial value for the genesis vote block hash
 
     /*
     |--------------------------------------------------------------------------
@@ -53,6 +54,9 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => 'InnoDB ROW_FORMAT=DYNAMIC',
+            'options'   => [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ]
         ],
 
         'pgsql' => [

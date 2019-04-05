@@ -42,4 +42,13 @@ return [
     'org_not_found' => 'Oрганизацията не е намерена',
     'list_org_fail' => 'Грешка при извеждане на списък с организации',
     'list_org_files_fail' => 'Грешка при извеждане на списък с файлове на организация',
+    'invalid_org_in_vote_list' => 'Невалидна организация',
+    'cannot_vote_for_inactive_tour' => 'Гласуване за неактивни турове не е позволено',
+    'vote_successful' => 'Успешно гласуване',
+    'invalid_vote_id' => 'Невалиден вот',
+    'inconsistent_voting_records' => 'Грешка при валидиране на гласове',
+    'consistency_of_records_confirmed' => 'Валидация на гласове успешна',
+    'inconsistent_record' => 'Проблемен запис',
+    'vote_not_found_for_org' => 'Не е открит глас за посочената организация',
+
 ];

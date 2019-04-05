@@ -25,10 +25,10 @@ class UserController extends ApiController
             logger()->errror($e->getMessage());
             return $this->errorResponse(__('custom.password_hash_generation_fail'), $e->getMessage());
         }
-        
+
         return $this->successResponse(['hash' => $password], true);
     }
-    
+
     /**
      * Reset user password.
      *
@@ -46,13 +46,13 @@ class UserController extends ApiController
             'hash'     => 'required',
             'password' => 'required|min:6',
         ];
-        
+
         $validator = \Validator::make(['password' => $new_password, 'hash' => $hash], $rules);
-        
+
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.password_reset_fail'), $validator->errors()->messages());
         }
-        
+
         $user = User::where('pw_reset_hash', $hash)->first();
 
         if ($user) {
@@ -65,10 +65,10 @@ class UserController extends ApiController
                 return $this->errorResponse(__('custom.database_error'));
             }
         }
-        
+
         return $this->errorResponse(__('custom.password_reset_token_invalid'));
     }
-    
+
     /**
      * Add new user record
      *
@@ -97,20 +97,20 @@ class UserController extends ApiController
             'password'         => 'required|string|min:6',
             'password_confirm' => 'required|string|same:password',
         ];
-        
+
         if (!isset($data['org_id'])) {
             $rules['email'] = 'required|email|unique:users';
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
             $rules['active'] = 'required|bool';
         }
-        
+
         $validator = \Validator::make($data, $rules);
-        
+
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.add_user_fail'), $validator->errors()->messages());
         }
-        
+
         try {
             DB::beginTransaction();
             unset($data['password_confirm']);
@@ -127,7 +127,7 @@ class UserController extends ApiController
             Log::error($ex->getMessage());
         }
     }
-    
+
     /**
      * Edit user record
      *
@@ -152,27 +152,27 @@ class UserController extends ApiController
             'last_name'  => 'nullable|string',
             'active'     => 'nullable|bool',
         ];
-        
+
         if (!isset($data['org_id'])) {
             //$rules['email'] = 'required|email|unique:users';
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
             $rules['active'] = 'required|bool';
         }
-        
+
         $validator = \Validator::make($data, $rules);
-        
+
         if (!$validator->fails()) {
             try {
                 DB::beginTransaction();
-                
+
                 $user = User::findOrFail($id);
                 $user->first_name = $data['first_name'];
                 $user->last_name = $data['last_name'];
                 $user->active = $data['active'];
-                
+
                 DB::commit();
-                
+
                 return $this->successResponse(['id' => $user->id], true);
             } catch (QueryException $ex) {
                 DB::rollback();
@@ -183,7 +183,7 @@ class UserController extends ApiController
 
         return $this->errorResponse(__('custom.edit_user_fail'), $validator->errors()->messages());
     }
-    
+
     /**
      * List all user in specific order.
      *
@@ -196,7 +196,7 @@ class UserController extends ApiController
     {
         $field = $request->get('order_field', null);
         $order = $request->get('order_type', 'ASC');
-             
+
         try {
             $users = User::sort($field, $order)->get();
 
@@ -205,11 +205,11 @@ class UserController extends ApiController
             logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.user_not_found'), $e->getMessage());
         }
-    
-        
+
+
         return $this->errorResponse(__('custom.user_not_found'));
     }
-    
+
     /**
      * Get user model by id.
      *
@@ -220,17 +220,17 @@ class UserController extends ApiController
     public function getData(Request $request)
     {
         $id = $request->get('id', null);
-        
+
         $validator = \Validator::make(['id' => $id], ['id' => 'required']);
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.user_not_found'), $validator->errors()->messages());
         }
-        
+
         $user = User::findOrFail($id);
         if ($user) {
             return $this->successResponse(['user' => $user]);
         }
-        
+
         return $this->errorResponse(__('custom.user_not_found'));
     }
 }

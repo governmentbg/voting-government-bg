@@ -22,13 +22,13 @@ Route::middleware(['api'])->group(function () {
     Route::post('user/getData', 'Api\UserController@getData');
     Route::post('user/list', 'Api\UserController@list');
 
-    Route::post('votingTours/add', 'Api\VotingTourController@add');
-    Route::post('votingTours/changeStatus', 'Api\VotingTourController@changeStatus');
-    Route::post('votingTours/rename', 'Api\VotingTourController@rename');
-    Route::post('votingTours/getLatestVotingTour', 'Api\VotingTourController@getLatestVotingTour');
-    Route::post('votingTours/list', 'Api\VotingTourController@list');
-    Route::post('votingTours/getData', 'Api\VotingTourController@getData');
-    Route::post('votingTours/listStatuses', 'Api\VotingTourController@listStatuses');
+    Route::post('votingTour/add', 'Api\VotingTourController@add');
+    Route::post('votingTour/changeStatus', 'Api\VotingTourController@changeStatus');
+    Route::post('votingTour/rename', 'Api\VotingTourController@rename');
+    Route::post('votingTour/getLatestVotingTour', 'Api\VotingTourController@getLatestVotingTour');
+    Route::post('votingTour/list', 'Api\VotingTourController@list');
+    Route::post('votingTour/getData', 'Api\VotingTourController@getData');
+    Route::post('votingTour/listStatuses', 'Api\VotingTourController@listStatuses');
 
     Route::post('vote/getLatestVote', 'Api\VoteController@getLatestVote');
     Route::post('vote/isBlockChainValid', 'Api\VoteController@isBlockChainValid');

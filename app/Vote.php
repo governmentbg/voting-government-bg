@@ -12,6 +12,11 @@ class Vote extends Model
      * @var array
      */
     protected $guarded = ['id'];
-    
+
     public $timestamps = false;
+
+    const MAX_VOTES = 14;
+    const MIN_VOTES = 1;
+
+    const GENESIS_RECORD = 1;
 }

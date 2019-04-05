@@ -20,11 +20,11 @@ update () {
     php artisan migrate --force
 
     # Restart workers
-    #php artisan queue:restart
+    php artisan queue:restart
 
     # Install npm packages & compile scss files
-    #npm install
-    #npm run production
+    npm install
+    npm run production
 
     # Turn off maintenance mode
     # php artisan up

@@ -22,21 +22,28 @@ Route::middleware(['api'])->group(function () {
     Route::post('user/getData', 'Api\UserController@getData');
     Route::post('user/list', 'Api\UserController@list');
 
-    Route::post('votingTours/add', 'Api\VotingTourController@add');
-    Route::post('votingTours/changeStatus', 'Api\VotingTourController@changeStatus');
-    Route::post('votingTours/rename', 'Api\VotingTourController@rename');
-    Route::post('votingTours/getLatestVotingTour', 'Api\VotingTourController@getLatestVotingTour');
-    Route::post('votingTours/list', 'Api\VotingTourController@list');
-    Route::post('votingTours/getData', 'Api\VotingTourController@getData');
-    Route::post('votingTours/listStatuses', 'Api\VotingTourController@listStatuses');
-    
+    Route::post('votingTour/add', 'Api\VotingTourController@add');
+    Route::post('votingTour/changeStatus', 'Api\VotingTourController@changeStatus');
+    Route::post('votingTour/rename', 'Api\VotingTourController@rename');
+    Route::post('votingTour/getLatestVotingTour', 'Api\VotingTourController@getLatestVotingTour');
+    Route::post('votingTour/list', 'Api\VotingTourController@list');
+    Route::post('votingTour/getData', 'Api\VotingTourController@getData');
+    Route::post('votingTour/listStatuses', 'Api\VotingTourController@listStatuses');
+
+    Route::post('vote/getLatestVote', 'Api\VoteController@getLatestVote');
+    Route::post('vote/isBlockChainValid', 'Api\VoteController@isBlockChainValid');
+    Route::post('vote/ranking', 'Api\VoteController@ranking');
+    Route::post('vote/vote', 'Api\VoteController@vote');
+    Route::post('vote/getVoteStatus', 'Api\VoteController@getVoteStatus');
+    Route::post('vote/listVoters', 'Api\VoteController@listVoters');
+
     Route::post('message/markAsRead', 'Api\MessageController@markAsRead');
     Route::post('message/listByOrg', 'Api\MessageController@listByOrg');
     Route::post('message/listByParentId', 'Api\MessageController@listByParentId');
     Route::post('message/search', 'Api\MessageController@search');
     Route::post('message/listStatuses', 'Api\MessageController@listStatuses');
     Route::post('message/sendMessageToOrg', 'Api\MessageController@sendMessageToOrg');
-    Route::post('message/sendMessageFromOrg', 'Api\MessageController@sendMessageFromOrg');    
+    Route::post('message/sendMessageFromOrg', 'Api\MessageController@sendMessageFromOrg');
 
     Route::post('organisation/register', 'Api\OrganisationController@register');
     Route::post('organisation/edit', 'Api\OrganisationController@edit');

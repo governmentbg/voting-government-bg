@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
+use App\VotingTour;
 
 class UserController extends ApiController
 {
@@ -103,6 +104,14 @@ class UserController extends ApiController
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
             $rules['active'] = 'required|bool';
+        }
+        else{
+            $votingTour = VotingTour::getLatestTour();
+            if (!$votingTour) {
+                return $this->errorResponse(__('custom.message_not_send'), __('custom.voting_tour_not_found'));
+            }
+            
+            $data['voting_tour_id'] = $votingTour->id;
         }
         
         $validator = \Validator::make($data, $rules);

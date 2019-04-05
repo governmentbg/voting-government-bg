@@ -45,15 +45,15 @@ class FileTest extends TestCase
      *
      * @return void
      */
-    public function testUpdateFile()
-    {
-        $newType = $this->faker->mimeType;
-        $this->object->update(['mime_type' => $newType]);
-        
-        $this->assertDatabaseHas('files', [
-            'mime_type' => $newType,
-        ]);
-    }
+//    public function testUpdateFile()
+//    {
+//        $newType = $this->faker->mimeType;
+//        $this->object->update(['mime_type' => $newType]);
+//
+//        $this->assertDatabaseHas('files', [
+//            'mime_type' => $newType,
+//        ]);
+//    }
     
     /**
      * Test File deletion in DB.

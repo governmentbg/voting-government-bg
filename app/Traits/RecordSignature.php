@@ -8,7 +8,7 @@ trait RecordSignature
     protected static function bootRecordSignature()
     {
         static::updating(function ($model) {
-            if (empty($model->updated_by)) {
+            if (array_key_exists('updated_by', $model->attributes) && empty($model->updated_by)) {
                 $model->updated_by = \Auth::check() ? \Auth::user()->id : null;
             }
         });

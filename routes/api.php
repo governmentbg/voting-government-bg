@@ -37,6 +37,14 @@ Route::middleware(['api'])->group(function () {
     Route::post('vote/getVoteStatus', 'Api\VoteController@getVoteStatus');
     Route::post('vote/listVoters', 'Api\VoteController@listVoters');
 
+    Route::post('message/markAsRead', 'Api\MessageController@markAsRead');
+    Route::post('message/listByOrg', 'Api\MessageController@listByOrg');
+    Route::post('message/listByParentId', 'Api\MessageController@listByParentId');
+    Route::post('message/search', 'Api\MessageController@search');
+    Route::post('message/listStatuses', 'Api\MessageController@listStatuses');
+    Route::post('message/sendMessageToOrg', 'Api\MessageController@sendMessageToOrg');
+    Route::post('message/sendMessageFromOrg', 'Api\MessageController@sendMessageFromOrg');
+
     Route::post('organisation/register', 'Api\OrganisationController@register');
     Route::post('organisation/edit', 'Api\OrganisationController@edit');
     Route::post('organisation/search', 'Api\OrganisationController@search');
@@ -44,6 +52,8 @@ Route::middleware(['api'])->group(function () {
     Route::post('organisation/getFileList', 'Api\OrganisationController@getFileList');
     Route::post('organisation/listStatuses', 'Api\OrganisationController@listStatuses');
     Route::post('organisation/listCandidateStatuses', 'Api\OrganisationController@listCandidateStatuses');
+
+    Route::post('file/getData', 'Api\FileController@getData');
 
 });
 

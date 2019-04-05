@@ -18,15 +18,21 @@ class Organisation extends Model
     const STATUS_BALLOTAGE = 4;
     const STATUS_REJECTED = 5;
 
-    const IN_AP_FALSE = 0;
-    const IN_AP_TRUE = 1;
+    const IN_AV_FALSE = 0;
+    const IN_AV_TRUE = 1;
     const IS_CANDIDATE_FALSE = 0;
     const IS_CANDIDATE_TRUE = 1;
 
     const DEFAULT_ORDER_FIELD = 'eik';
     const DEFAULT_ORDER_TYPE = 'ASC';
-    const DEFAULT_RECORDS_PER_PAGE = 50;
 
+    protected $perPage = 50;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
     protected $guarded = ['id'];
 
     public function user()

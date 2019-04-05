@@ -32,4 +32,9 @@ class File extends Model
     {
         return $this->belongsTo('App\VotingTour', 'voting_tour_id');
     }
+    
+    public function setUpdatedAtAttribute($value)
+    {
+        // to disable updated_at
+    }
 }

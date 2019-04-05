@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
             OrganisationsSeeder::class,
             UserSeeder::class
         ]);
+        $this->call(SystemUserSeeder::class);
     }
 }

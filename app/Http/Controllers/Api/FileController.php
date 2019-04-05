@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 use App\File;
 use App\VotingTour;
@@ -19,6 +18,11 @@ class FileController extends ApiController
      */
     public function getData(Request $request)
     {
+        $votingTour = VotingTour::getLatestTour();
+        if (empty($votingTour)) {
+            return $this->errorResponse(__('custom.file_not_found'));
+        }
+
         $fileId = $request->get('file_id', null);
 
         $validator = \Validator::make(['file_id' => $fileId], [
@@ -27,29 +31,13 @@ class FileController extends ApiController
 
         if (!$validator->fails()) {
             try {
-                $result = [];
-
-                $votingTour = VotingTour::getLatestTour();
-                if (!empty($votingTour)) {
-                    $file = File::where('id', $fileId)->where('voting_tour_id', $votingTour->id)->first();
-
-                    if ($file) {
-                        $result = [
-                            'id'         => $file->id,
-                            'name'       => $file->name,
-                            'data'       => base64_encode($file->data),
-                            'mime_type'  => $file->mime_type,
-                            'message_id' => $file->message_id,
-                            'org_id'     => $file->org_id,
-                            'created_at' => $file->created_at,
-                        ];
-                    }
-
-                    return $this->successResponse($result);
+                $file = File::where('id', $fileId)->where('voting_tour_id', $votingTour->id)->first();
+                if ($file) {
+                    return $this->successResponse($file);
                 }
-            } catch (QueryException $e) {
+            } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.get_file_fail'));
+                return $this->errorResponse(__('custom.get_file_fail'), $e->getMessage());
             }
         }
 

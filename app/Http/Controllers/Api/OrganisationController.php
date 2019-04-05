@@ -104,10 +104,10 @@ class OrganisationController extends ApiController
                     DB::commit();
 
                     return $this->successResponse(['org_id' => $organisation->id], true);
-                } catch (QueryException $e) {dd($e);
+                } catch (QueryException $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                } catch (\Exception $e) {dd($e);
+                } catch (\Exception $e) {
                     logger()->error($e->getMessage());
                 }
             }
@@ -222,6 +222,8 @@ class OrganisationController extends ApiController
                 } catch (QueryException $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
+                } catch (\Exception $e) {
+                    logger()->error($e->getMessage());
                 }
             }
 
@@ -251,6 +253,11 @@ class OrganisationController extends ApiController
      */
     public function search(Request $request)
     {
+        $votingTour = VotingTour::getLatestTour();
+        if (empty($votingTour)) {
+            return $this->errorResponse(__('custom.org_list_not_found'));
+        }
+
         $filters = $request->get('filters', []);
         $orderField = $request->get('order_field', Organisation::DEFAULT_ORDER_FIELD);
         $orderType = strtoupper($request->get('order_type', Organisation::DEFAULT_ORDER_TYPE));
@@ -273,73 +280,45 @@ class OrganisationController extends ApiController
                 return $this->errorResponse(__('custom.invalid_sort_field'));
             }
 
-            $results = [];
-            $count = 0;
-
             try {
-                $votingTour = VotingTour::getLatestTour();
-                if (!empty($votingTour)) {
-                    $query = Organisation::where('voting_tour_id', $votingTour->id);
-                    if (isset($filters['eik'])) {
-                        $query->where('eik', $filters['eik']);
-                    }
-                    if (isset($filters['name'])) {
-                        $query->where('name', 'LIKE', '%'. trim($filters['name']) .'%');
-                    }
-                    if (isset($filters['email'])) {
-                        $query->where('email', 'LIKE', '%'. trim($filters['email']) .'%');
-                    }
-                    if (isset($filters['in_av'])) {
-                        $query->where('in_av', $filters['in_av']);
-                    }
-                    if (isset($filters['is_candidate'])) {
-                        $query->where('is_candidate', $filters['is_candidate']);
-                    }
-                    if (isset($filters['status'])) {
-                        $query->where('status', $filters['status']);
-                    }
-                    if (isset($filters['reg_date_from'])) {
-                        $query->where('created_at', '>=', $filters['reg_date_from'] .' 00:00:00');
-                    }
-                    if (isset($filters['reg_date_to'])) {
-                        $query->where('created_at', '<=', $filters['reg_date_to'] .' 23:59:59');
-                    }
-
-                    $count = $query->count();
-
-                    $query->orderBy($orderField, $orderType)->paginate();
-
-                    foreach ($query->get() as $organisation) {
-                        $results[] = [
-                            'id'             => $organisation->id,
-                            'eik'            => $organisation->eik,
-                            'voting_tour_id' => $organisation->voting_tour_id,
-                            'name'           => $organisation->name,
-                            'address'        => $organisation->address,
-                            'representative' => $organisation->representative,
-                            'email'          => $organisation->email,
-                            'phone'          => $organisation->phone,
-                            'in_av'          => $organisation->in_av,
-                            'is_candidate'   => $organisation->is_candidate,
-                            'description'    => $organisation->description,
-                            'references'     => $organisation->references,
-                            'status'         => $organisation->status,
-                            'status_hint'    => $organisation->status_hint,
-                            'created_at'     => $organisation->created_at->toDateTimeString(),
-                            'updated_at'     => isset($organisation->updated_at) ? $organisation->updated_at->toDateTimeString() : null,
-                            'created_by'     => isset($organisation->created_by) ? $organisation->created_by : null,
-                            'updated_by'     => isset($organisation->updated_by) ? $organisation->updated_by : null,
-                        ];
-                    }
+                $organisations = Organisation::where('voting_tour_id', $votingTour->id);
+                if (isset($filters['eik'])) {
+                    $organisations->where('eik', $filters['eik']);
+                }
+                if (isset($filters['name'])) {
+                    $organisations->where('name', 'LIKE', '%'. trim($filters['name']) .'%');
+                }
+                if (isset($filters['email'])) {
+                    $organisations->where('email', 'LIKE', '%'. trim($filters['email']) .'%');
+                }
+                if (isset($filters['in_av'])) {
+                    $organisations->where('in_av', $filters['in_av']);
+                }
+                if (isset($filters['is_candidate'])) {
+                    $organisations->where('is_candidate', $filters['is_candidate']);
+                }
+                if (isset($filters['status'])) {
+                    $organisations->where('status', $filters['status']);
+                }
+                if (isset($filters['reg_date_from'])) {
+                    $organisations->where('created_at', '>=', $filters['reg_date_from'] .' 00:00:00');
+                }
+                if (isset($filters['reg_date_to'])) {
+                    $organisations->where('created_at', '<=', $filters['reg_date_to'] .' 23:59:59');
                 }
 
-                return $this->successResponse(['organisations' => $results, 'total_records' => $count], true);
-            } catch (QueryException $e) {
+                $count = $organisations->count();
+
+                $organisations->orderBy($orderField, $orderType)->paginate();
+
+                return $this->successResponse(['organisations' => $organisations->get(), 'total_records' => $count], true);
+            } catch (\Exception $e) {
                 logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.list_org_fail'), $e->getMessage());
             }
         }
 
-        return $this->errorResponse(__('custom.list_org_fail'), $validator->errors()->messages());
+        return $this->errorResponse(__('custom.org_list_not_found'), $validator->errors()->messages());
     }
 
     /**
@@ -374,34 +353,12 @@ class OrganisationController extends ApiController
                     $orgVal = $data['eik'];
                 }
                 $organisation = Organisation::where($orgKey, $orgVal)->where('voting_tour_id', $votingTour->id)->first();
-
                 if ($organisation) {
-                    $result = [
-                        'id'             => $organisation->id,
-                        'eik'            => $organisation->eik,
-                        'voting_tour_id' => $organisation->voting_tour_id,
-                        'name'           => $organisation->name,
-                        'address'        => $organisation->address,
-                        'representative' => $organisation->representative,
-                        'email'          => $organisation->email,
-                        'phone'          => $organisation->phone,
-                        'in_av'          => $organisation->in_av,
-                        'is_candidate'   => $organisation->is_candidate,
-                        'description'    => $organisation->description,
-                        'references'     => $organisation->references,
-                        'status'         => $organisation->status,
-                        'status_hint'    => $organisation->status_hint,
-                        'created_at'     => $organisation->created_at->toDateTimeString(),
-                        'updated_at'     => isset($organisation->updated_at) ? $organisation->updated_at->toDateTimeString() : null,
-                        'created_by'     => isset($organisation->created_by) ? $organisation->created_by : null,
-                        'updated_by'     => isset($organisation->updated_by) ? $organisation->updated_by : null,
-                    ];
-
-                    return $this->successResponse($result);
+                    return $this->successResponse($organisation);
                 }
-            } catch (QueryException $e) {
+            } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.get_org_fail'));
+                return $this->errorResponse(__('custom.get_org_fail'), $e->getMessage());
             }
         }
 
@@ -417,6 +374,11 @@ class OrganisationController extends ApiController
      */
     public function getFileList(Request $request)
     {
+        $votingTour = VotingTour::getLatestTour();
+        if (empty($votingTour)) {
+            return $this->errorResponse(__('custom.org_files_not_found'));
+        }
+
         $orgId = $request->get('org_id', null);
 
         $validator = \Validator::make(['org_id' => $orgId], [
@@ -424,33 +386,20 @@ class OrganisationController extends ApiController
         ]);
 
         if (!$validator->fails()) {
-            $results = [];
-
             try {
-                $votingTour = VotingTour::getLatestTour();
-                if (!empty($votingTour)) {
-                    $files = File::select('id', 'name', 'mime_type', 'created_at')
-                                ->where('org_id', $orgId)
-                                ->where('voting_tour_id', $votingTour->id)
-                                ->orderBy('id')->get();
+                $files = File::select('id', 'name', 'mime_type', 'created_at')
+                            ->where('org_id', $orgId)
+                            ->where('voting_tour_id', $votingTour->id)
+                            ->orderBy('id')->get();
 
-                    foreach ($files as $file) {
-                        $results[] = [
-                            'id'         => $file->id,
-                            'name'       => $file->name,
-                            'mime_type'  => $file->mime_type,
-                            'created_at' => $file->created_at,
-                        ];
-                    }
-                }
-
-                return $this->successResponse(['files' => $results]);
-            } catch (QueryException $e) {
+                return $this->successResponse($files);
+            } catch (\Exception $e) {
                 logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.list_org_files_fail'), $e->getMessage());
             }
         }
 
-        return $this->errorResponse(__('custom.list_org_files_fail'), $validator->errors()->messages());
+        return $this->errorResponse(__('custom.org_files_not_found'), $validator->errors()->messages());
     }
 
     /**

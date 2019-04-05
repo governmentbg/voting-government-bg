@@ -26,7 +26,7 @@ class Organisation extends Model
     const DEFAULT_ORDER_FIELD = 'eik';
     const DEFAULT_ORDER_TYPE = 'ASC';
 
-    protected $perPage = 2;
+    protected $perPage = 50;
 
     /**
      * The attributes that aren't mass assignable.

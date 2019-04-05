@@ -25,10 +25,11 @@ class CreateOrganisationsTable extends Migration
             $table->string('address', 512);
             $table->string('representative', 512);
             $table->string('email');
-            $table->boolean('in_ap');
+            $table->string('phone', 40);
+            $table->boolean('in_av');
             $table->boolean('is_candidate');
             $table->text('description')->nullable();
-            $table->text('reference')->nullable();
+            $table->text('references')->nullable();
             $table->tinyInteger('status');
             $table->tinyInteger('status_hint');
             $table->timestamp('created_at')->useCurrent();
@@ -75,8 +76,8 @@ class CreateOrganisationsTable extends Migration
     private function checkFieldConsistency()
     {
         return "
-            IF (NEW.is_candidate != 0 AND (NEW.description IS NULL OR NEW.reference IS NULL)) THEN
-                SIGNAL SQLSTATE '45000' SET message_text = 'If is_candidate is not null, the description and reference fields are required!';
+            IF (NEW.is_candidate != 0 AND (NEW.description IS NULL OR NEW.description = '' OR NEW.references IS NULL)) THEN
+                SIGNAL SQLSTATE '45000' SET message_text = 'If is_candidate is not null, the description and references fields are required!';
             END IF;
         ";
     }

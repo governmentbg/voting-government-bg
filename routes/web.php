@@ -14,3 +14,20 @@
 Route::get('/', function () {
     return response('Welcome to AMS Voting System');
 });
+
+//Frontend routes that needs user athorisation
+Route::group(['middleware' => ['auth']], function () {
+    //
+});
+
+// Admin
+Route::group(['namespace' => 'Extranet', 'prefix' => 'extranet'], function () {
+    // Admin login routes
+    Route::get('/login', ['as' => 'extranet.showLoginForm', 'uses' => 'AuthController@showLoginForm']);
+    Route::post('/login', ['as' => 'extranet.login', 'uses' => 'AuthController@login']);
+
+    // All routes inside require admin privileges
+    Route::group(['middleware' => ['auth.backend:backend']], function () {
+        //
+    });
+});

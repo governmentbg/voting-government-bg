@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return response('Welcome to AMS Voting System');
+    return view('home.index');
+});
+
+Route::get('/register', function () {
+    return view('organisation.register');
 });
 
 //Frontend routes that needs user athorisation
@@ -31,3 +35,4 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         //
     });
 });
+

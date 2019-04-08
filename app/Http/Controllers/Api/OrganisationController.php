@@ -26,6 +26,8 @@ class OrganisationController extends ApiController
      * @param boolean org_data[is_candidate] - optional
      * @param string org_data[description] - required if is_candidate
      * @param string org_data[references] - optional
+     * @param integer org_data[status] - optional
+     * @param integer org_data[status_hint] - optional
      * @param array files - optional
      * @param string files[name] - required
      * @param string files[mime_type] - required
@@ -51,7 +53,9 @@ class OrganisationController extends ApiController
                 'is_candidate'      => 'bool',
                 'description'       => 'required_if:is_candidate,'. Organisation::IS_CANDIDATE_TRUE .'|nullable|max:8000',
                 'references'        => 'nullable|max:8000',
-                'files'             => 'nullable|array',
+                'status'            => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
+                'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
+                'files'             => 'required_if:in_av,'. Organisation::IN_AV_TRUE .'|nullable|array',
                 'files.*.name'      => 'required|string|max:255',
                 'files.*.mime_type' => 'required|string|max:255',
                 'files.*.data'      => 'required|string|max:16777215',
@@ -86,6 +90,16 @@ class OrganisationController extends ApiController
                         $organisation->references = $data['references'];
                     } elseif ($organisation->is_candidate == Organisation::IS_CANDIDATE_TRUE) {
                         $organisation->references = '';
+                    }
+                    if (isset($data['status'])) {
+                        $organisation->status = $data['status'];
+                    } else {
+                        $organisation->status = Organisation::STATUS_NEW;
+                    }
+                    if (isset($data['status_hint'])) {
+                        $organisation->status_hint = $data['status_hint'];
+                    } else {
+                        $organisation->status_hint = Organisation::STATUS_HINT_NONE;
                     }
 
                     $organisation->save();

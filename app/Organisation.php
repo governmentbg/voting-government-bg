@@ -18,6 +18,8 @@ class Organisation extends Model
     const STATUS_BALLOTAGE = 4;
     const STATUS_REJECTED = 5;
 
+    const STATUS_HINT_NONE = 0;
+
     const IN_AV_FALSE = 0;
     const IN_AV_TRUE = 1;
     const IS_CANDIDATE_FALSE = 0;
@@ -97,6 +99,8 @@ class Organisation extends Model
 
     public static function getStatusHints()
     {
-        return [];
+        return [
+            self::STATUS_HINT_NONE => ''
+        ];
     }
 }

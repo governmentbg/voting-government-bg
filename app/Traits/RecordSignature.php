@@ -17,13 +17,13 @@ trait RecordSignature
             $userId = null;
         }
 
-        static::updating(function ($model) {
+        static::updating(function ($model) use ($userId) {
             if (array_key_exists('updated_by', $model->attributes) && empty($model->updated_by)) {
                 $model->updated_by = $userId;
             }
         });
 
-        static::creating(function ($model) {
+        static::creating(function ($model) use ($userId) {
             if (empty($model->created_by)) {
                 $model->created_by = $userId;
             }

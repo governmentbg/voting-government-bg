@@ -88,4 +88,9 @@ class VotingTour extends Model
             self::STATUS_BALLOTAGE => __('custom.ballotage')
         ];
     }
+    
+    public function scopeActive($query)
+    {
+        return $query->where('status', '!=', self::STATUS_FINISHED);
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Auth;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 class EloquentBackendUserProvider extends EloquentUserProvider
 {

@@ -15,55 +15,34 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+@import 'components/table';
+
+@import 'components/textinput';
+
+@import 'components/textarea';
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .color-black {
     color: black;
 }
 
-.color-dark {
-    color: #3e7ea9;
+h3, h2 {
+    color: $darkBlue;
 }
 
-.color-light {
-    color: #cddee9;
+button {
+    background-color:  $darkBlue !important;
 }
 
-.color-lightest {
-    color: #f9f9f9;
-}
-
-.color-red {
-    color: #e9103e;
-}
-
-/* Background colors */
-.b-c-dark {
-    background-color: #3e7ea9;
-}
-
-.b-c-light {
-    background-color: #cddee9;
-}
-
-.b-c-lightest {
-    background-color: #f9f9f9;
-}
-
-.b-c-red {
-    background-color: #e9103e;
+.color-black {
+    color: black;
 }
 
 .p-l-none {
     padding-left: 0px;
-}
-
-.input-box {
-    border: 0;
-    outline: 0;
-    background: transparent;
-    border-bottom: 1px solid #3e7ea9;
-    border-radius: 0;
-    text-decoration: none;
-    width: 100%;
 }
 
 .m-b-none {
@@ -75,7 +54,7 @@ body {
 }
 
 .login-btn {
-    width: 100px;
+    width: 10%;
     height: 25px;
     padding-top: 2px;
     font-size: 12px;
@@ -147,26 +126,6 @@ body {
     }
 }
 
-#frnt-tbl.rounded-top-15 {
-    border-top-left-radius: 15px !important;
-    border-top-right-radius: 15px !important;
-}
-
-#frnt-tbl.t-border-bot {
-    border-bottom: 7px solid #3e7ea9;
-    border-radius: 7px;
-}
-
-#frnt-tbl.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-    background-color: #cddee9;
-}
-
-#frnt-tbl.table.table tbody tr td,
-table.table thead tr th,
-table.table thead {
-    border-left: 1px solid #3e7ea9;
-}
-
 .flex-nav-items {
     display: flex;
     justify-content: flex-end;
@@ -198,9 +157,42 @@ table.table thead {
     color: #3e7ea9;
 }
 
-.txt-area {
-    border: 1px solid #3e7ea9;
-    border-radius: 6px;
-    text-decoration: none;
-    width: 100%;
+.m-l-5 {
+    margin-left: -5px;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.m-t-12 {
+    margin-top: -12px;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.w-15 {
+    width: 15%;
+}
+
+.w-5 {
+    width: 5%;
+}
+
+.w-30 {
+    width: 30%;
+}
+
+.w-25 {
+    width: 25%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+.w-1 {
+    width: 1%;
 }

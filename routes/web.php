@@ -19,6 +19,14 @@ Route::get('/register', function () {
     return view('organisation.register');
 });
 
+Route::get('/view', function () {
+    return view('organisation.view');
+});
+
+Route::get('/list', function () {
+    return view('tours.list');
+});
+
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
     //

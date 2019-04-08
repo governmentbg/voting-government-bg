@@ -92,7 +92,19 @@ return [
     'request_for_candidacy' => 'Заявление за кандидатиране',
     'experience_info' => 'Описание опит',
     'reference_materials' => 'Референтни материали',
-    'register_clean' => 'Регистрация'
+    'register_clean' => 'Регистрация',
+    'votingmenu' => 'Гласуване',
+    'settings' => 'Настройки',
+    'data_for' => 'Данни за',
+    'status' => 'Статус',
+    'messages' => 'Съобщения',
+    'title' => 'Заглавие',
+    'date' => 'Дата',
+    'operations' => 'Операции',
+    'new_message' => 'Ново съобщение',
+    'applied_files' => 'Приложения',
+    'end_date' => 'Дата на приключване',
+    'user' => 'Потребител',
 
     'voting_tour_finished' => 'избраният изборен тур е приключил'
 ];

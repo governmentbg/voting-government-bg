@@ -1,0 +1,25 @@
+.ams-table {
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    border-bottom: 7px solid #3e7ea9;
+    border-radius: 7px;
+    table-layout:fixed;
+
+    thead {
+        text-align: center;
+        color: $lightGrey;
+        background-color: $darkBlue;
+    }
+
+    &.table-striped {
+        tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+            background-color: #cddee9;
+        }
+    }
+
+    tbody tr td,
+    thead tr th,
+    thead {
+        border-left: 1px solid #3e7ea9;
+    }
+}

@@ -21,10 +21,10 @@ class VotingTourController extends BaseAdminController
     
     public function index()
     {
-        $this->addBreadcrumb(__('breadcrumbs.settings'), '');
+        $this->addBreadcrumb(__('breadcrumbs.voting_tour'), '');
         list($votingTours, $errors) = api_result(ApiVotingTour::class, 'list');
         
-        return view('placeholder', ['votingTours' => $votingTours, 'errors' => $errors]);
+        return view('tours.list', ['votingTours' => $votingTours, 'errors' => $errors]);
     }
     
     public function create()

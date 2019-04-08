@@ -1,4 +1,4 @@
-@if(count($breadcrumbs))
+@if(isset($breadcrumbs) && count($breadcrumbs))
 <ol class="breadcrumb">
   @php 
   $last_crumb = array_pop($breadcrumbs); 

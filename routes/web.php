@@ -40,9 +40,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
 
     // All routes inside require admin privileges
     Route::group(['middleware' => ['auth.backend:backend']], function () {
-        Route::get('/votingTours', 'VotingTourController@index');
+        Route::get('/votingTours', 'VotingTourController@index')->name('admin.voting_tour.list');
         Route::get('/votingTours/create','VotingTourController@create');
-        Route::get('/votingTours/{id}/edit','VotingTourController@edit');
+        Route::get('/votingTours/{id}/edit','VotingTourController@edit')->name('admin.voting_tour.edit');
         Route::post('/votingTours','VotingTourController@store');
         Route::put('/votingTours/{id}','VotingTourController@update');
         

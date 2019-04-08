@@ -62,4 +62,6 @@ return [
     'org_files_not_found' => 'Не е намерен списък с файлове на организацията',
     'get_file_fail' => 'Грешка при вземане на дaнни на файл',
     'file_not_found' => 'Файлът не е намерен',
+    'incorrect_password' => 'Невалидна парола',
+    'change_password_error' => 'Грешка при промяна на парола'
 ];

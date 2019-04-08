@@ -21,6 +21,7 @@ Route::middleware(['api'])->group(function () {
     Route::post('user/passwordReset', 'Api\UserController@resetPassword');
     Route::post('user/getData', 'Api\UserController@getData');
     Route::post('user/list', 'Api\UserController@list');
+    Route::post('user/changePassword', 'Api\UserController@changePassword');
 
     Route::post('votingTour/add', 'Api\VotingTourController@add');
     Route::post('votingTour/changeStatus', 'Api\VotingTourController@changeStatus');

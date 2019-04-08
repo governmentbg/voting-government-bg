@@ -18,12 +18,33 @@ class UserController extends ApiController
      *
      * @return json $response - response with status and the generated hash if successful
      */
-    public function generatePasswordHash()
+    public function generatePasswordHash(Request $request)
     {
+        $username = $request->get('username');
+        $email = $request->get('email');
+        
+        $rules = [
+            'username' => 'required|string',
+            'email'    => 'required|email',
+        ];
+
+        $validator = \Validator::make(['username' => $username, 'email' => $email], $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.password_hash_generation_fail'), $validator->errors()->messages());
+        }
+        
         try {
             $password = Hash::make(str_random(60));
+            $user = User::where('username', $username)->where('email', $email)->first();
+            
+            if ($user) {
+                $user->update(['pw_reset_hash' => $password]);
+            } else {
+                return $this->errorResponse(__('custom.user_not_found'));
+            }
         } catch (\Exception $e) {
-            logger()->errror($e->getMessage());
+            logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.password_hash_generation_fail'), $e->getMessage());
         }
 
@@ -69,6 +90,53 @@ class UserController extends ApiController
 
         return $this->errorResponse(__('custom.password_reset_token_invalid'));
     }
+    
+    /**
+     * Change user password.
+     *
+     * @param int user_id - required
+     * @param string new_password - required
+     * @param string password - required
+     *
+     * @return json $response - response with status and user id if successful
+     */
+    public function changePassword(Request $request)
+    {
+        $data = $request->only('new_password', 'user_id', 'password');
+
+        $rules = [
+            'user_id'      => 'required',
+            'password'     => 'required|min:6',
+            'new_password' => 'required|min:6',
+        ];
+
+        $validator = \Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.change_password_error'), $validator->errors()->messages());
+        }
+
+        $user = User::where('id', $data['user_id'])->first();
+
+        if ($user) {
+            try {
+                if (Hash::check($data['password'], $user->password)) {
+                    $user->update(['password' => Hash::make($data['new_password'])]);
+                } else {
+                    return $this->errorResponse(__('custom.incorrect_password'));
+                }
+
+                return $this->successResponse();
+            } catch (QueryException $e) {
+                logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.database_error'));
+            }
+        } else {
+            return $this->errorResponse(__('custom.user_not_found'));
+        }
+
+        return $this->errorResponse(__('custom.change_password_error'));
+    }
 
     /**
      * Add new user record
@@ -86,7 +154,7 @@ class UserController extends ApiController
      */
     public function addUser(Request $request)
     {
-        $data = $request->get('data', []);
+        $data = $request->get('user_data', []);
 
         $rules = [
             'org_id'           => 'nullable',
@@ -104,11 +172,10 @@ class UserController extends ApiController
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
             $rules['active'] = 'required|bool';
-        }
-        else{
+        } else {
             $votingTour = VotingTour::getLatestTour();
             if (!$votingTour) {
-                return $this->errorResponse(__('custom.message_not_send'), __('custom.voting_tour_not_found'));
+                return $this->errorResponse(__('custom.add_user_fail'), __('custom.voting_tour_not_found'));
             }
 
             $data['voting_tour_id'] = $votingTour->id;
@@ -130,10 +197,11 @@ class UserController extends ApiController
 
             DB::commit();
 
-            return $this->successResponse(['id' => $user->id], true);
+            return $this->successResponse(['user_id' => $user->id], true);
         } catch (QueryException $ex) {
             DB::rollback();
             Log::error($ex->getMessage());
+            return $this->errorResponse(__('custom.add_user_fail'), $ex->getMessage());
         }
     }
 
@@ -152,37 +220,38 @@ class UserController extends ApiController
      */
     public function editUser(Request $request)
     {
-        $data = $request->get('data', []);
-        $id = $request->get('id', null);
+        $data = $request->get('user_data', []);
+        $id = $request->get('user_id', null);
+        
+        $data['user_id'] = $id;
 
-        $rules = [
-            'org_id'     => 'nullable',
-            'first_name' => 'nullable|string',
-            'last_name'  => 'nullable|string',
-            'active'     => 'nullable|bool',
-        ];
-
-        if (!isset($data['org_id'])) {
-            //$rules['email'] = 'required|email|unique:users';
-            $rules['first_name'] = 'required|string';
-            $rules['last_name'] = 'required|string';
-            $rules['active'] = 'required|bool';
-        }
-
+        $rules['email'] = 'required|email|unique:users';
+        $rules['first_name'] = 'required|string';
+        $rules['last_name'] = 'required|string';
+        $rules['active'] = 'required|bool';
+        $rules['user_id'] = 'required';
+        
         $validator = \Validator::make($data, $rules);
 
         if (!$validator->fails()) {
             try {
                 DB::beginTransaction();
 
-                $user = User::findOrFail($id);
-                $user->first_name = $data['first_name'];
-                $user->last_name = $data['last_name'];
-                $user->active = $data['active'];
+                $user = User::where('id', $id)->whereNull('org_id')->first();
+                if ($user) {
+                    $user->first_name = $data['first_name'];
+                    $user->last_name = $data['last_name'];
+                    $user->active = $data['active'];
+                    $user->email = $data['email'];
+                    
+                    $user->save();
+                } else {
+                    return $this->errorResponse(__('custom.user_not_found'));
+                }
 
                 DB::commit();
 
-                return $this->successResponse(['id' => $user->id], true);
+                return $this->successResponse();
             } catch (QueryException $ex) {
                 DB::rollback();
                 Log::error($ex->getMessage());
@@ -230,14 +299,14 @@ class UserController extends ApiController
      */
     public function getData(Request $request)
     {
-        $id = $request->get('id', null);
+        $id = $request->get('user_id', null);
 
         $validator = \Validator::make(['id' => $id], ['id' => 'required']);
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.user_not_found'), $validator->errors()->messages());
         }
 
-        $user = User::findOrFail($id);
+        $user = User::where('id', $id)->first();
         if ($user) {
             return $this->successResponse(['user' => $user]);
         }

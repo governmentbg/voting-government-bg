@@ -9,7 +9,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/nbproject
+nbproject/
 .history
 .project
 .buildpath

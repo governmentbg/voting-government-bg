@@ -25,7 +25,7 @@ class APIUserTest extends TestCase
             'password_confirm' => $password,
         ]);
 
-        $response = $this->json('POST', '/api/user/add', ['data' => $user->toArray()]);
+        $response = $this->json('POST', '/api/user/add', ['user_data' => $user->toArray()]);
 
         $response
             ->assertStatus(200)
@@ -43,23 +43,25 @@ class APIUserTest extends TestCase
     {
         $password = $this->faker->password(6, 10);
         $user = factory(\App\User::class)->create([
-            'password' => Hash::make($password),
+            'password'       => Hash::make($password),
+            'org_id'         => null,
+            'voting_tour_id' => null,
         ]);
 
         $data = $user->toArray();
         $data['first_name'] = $this->faker->firstName;
         $data['last_name'] = $this->faker->lastName;
+        $data['email'] = $this->faker->email;
 
         $response = $this->json('POST', '/api/user/edit', [
-            'id'   => $user->id,
-            'data' => $data,
+            'user_id'   => $user->id,
+            'user_data' => $data,
         ]);
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'id'      => $user->id,
             ]);
     }
 
@@ -74,8 +76,10 @@ class APIUserTest extends TestCase
         $hash = Hash::make(str_random(60));
 
         $user = factory(\App\User::class)->create([
-            'password'      => Hash::make($password),
-            'pw_reset_hash' => $hash,
+            'password'       => Hash::make($password),
+            'pw_reset_hash'  => $hash,
+            'org_id'         => null,
+            'voting_tour_id' => null,
         ]);
 
         $response = $this->json('POST', '/api/user/passwordReset', ['new_password' => 'secret', 'hash' => $hash, 'id' => $user->id]);
@@ -91,7 +95,14 @@ class APIUserTest extends TestCase
      */
     public function testGeneratePasswordHash()
     {
-        $response = $this->json('POST', '/api/user/generateHash');
+        $user = factory(\App\User::class)->create([
+            'username'       => $this->faker->username,
+            'email'          => $this->faker->email,
+            'org_id'         => null,
+            'voting_tour_id' => null,
+        ]);
+        
+        $response = $this->json('POST', '/api/user/generateHash', ['username' => $user->username, 'email' => $user->email]);
 
         $response->assertStatus(200)
                     ->assertJson([
@@ -106,9 +117,9 @@ class APIUserTest extends TestCase
      */
     public function testGetUserByID()
     {
-        $user = factory(\App\User::class)->create();
+        $user = factory(\App\User::class)->create(['org_id' => null, 'voting_tour_id' => null]);
 
-        $response = $this->json('POST', '/api/user/getData', ['id' => $user->id]);
+        $response = $this->json('POST', '/api/user/getData', ['user_id' => $user->id]);
 
         $response->assertStatus(200)
                     ->assertJson([
@@ -123,10 +134,33 @@ class APIUserTest extends TestCase
      */
     public function testlist()
     {
-        $users = factory(\App\User::class, 10)->create();
+        $users = factory(\App\User::class, 10)->create(['org_id' => null, 'voting_tour_id' => null]);
 
         $response = $this->json('POST', '/api/user/list', ['order_field' => 'first_name', 'order_type' => 'DESC']);
 
         $response->assertStatus(200)->assertJson(['success' => true]);
+    }
+    
+    /**
+     * Test user change password fumctionality.
+     *
+     * @return void
+     */
+    public function testChangePassword()
+    {
+        $user = factory(\App\User::class)->create([
+            'password'       => Hash::make('secret'),
+            'org_id'         => null,
+            'voting_tour_id' => null,
+            ]);
+
+        $response = $this->json('POST', '/api/user/changePassword', [
+            'user_id'      => $user->id,
+            'password'     => 'secret',
+            'new_password' => 'notSecret',
+            ]);
+
+        $response->assertStatus(200)->assertJson(['success' => true]);
+        $this->assertTrue(Hash::check('notSecret', $user->fresh()->password));
     }
 }

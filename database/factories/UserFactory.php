@@ -19,7 +19,7 @@ use Faker\Generator as Faker;
 
 $factory->define(User::class, function (Faker $faker) {
     $votingTours = VotingTour::select('id')->get();
-    $orgIds = Organisation::select('id')->get();
+    $orgIds = Organisation::doesntHave('user')->select('id')->get();
     $orgId = $orgIds->isNotEmpty() ? $this->faker->unique()->randomElement($orgIds)['id'] : factory(Organisation::class)->create()->id;
 
     return [

@@ -39,7 +39,7 @@ class Organisation extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User', ['org_id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
+        return $this->belongsTo('App\User', ['id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
     }
 
     public function files()

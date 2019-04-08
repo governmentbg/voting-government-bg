@@ -8,7 +8,199 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+/*– components/ */
+@import 'components/checkbox';
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.color-black {
+    color: black;
+}
+
+.color-dark {
+    color: #3e7ea9;
+}
+
+.color-light {
+    color: #cddee9;
+}
+
+.color-lightest {
+    color: #f9f9f9;
+}
+
+.color-red {
+    color: #e9103e;
+}
+
+/* Background colors */
+.b-c-dark {
+    background-color: #3e7ea9;
+}
+
+.b-c-light {
+    background-color: #cddee9;
+}
+
+.b-c-lightest {
+    background-color: #f9f9f9;
+}
+
+.b-c-red {
+    background-color: #e9103e;
+}
+
+.p-l-none {
+    padding-left: 0px;
+}
+
+.input-box {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid #3e7ea9;
+    border-radius: 0;
+    text-decoration: none;
+    width: 100%;
+}
+
+.m-b-none {
+    margin-bottom: 0;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.login-btn {
+    width: 100px;
+    height: 25px;
+    padding-top: 2px;
+    font-size: 12px;
+}
+
+.p-r-none {
+    padding-right: 0px;
+}
+
+.f-s-14 {
+    font-size: 14px;
+}
+
+.f-s-21 {
+    font-size: 21px;
+}
+
+.p-t-15 {
+    padding-top: 15px;
+}
+
+.p-l-40 {
+    padding-left: 40px;
+}
+
+.p-l-60 {
+    padding-left: 60px;
+}
+
+.p-l-25 {
+    padding-left: 25px;
+}
+
+.p-r-5 {
+    padding-right: 5px;
+}
+
+.p-r-15 {
+    padding-right: 15px;
+}
+
+.p-b-15 {
+    padding-bottom: 15px;
+}
+
+.hr-thick {
+    border: 3px solid #3e7ea9;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 35px;
+    margin-top: 0px;
+}
+
+.hr-thin {
+    border: 2px solid #3e7ea9;
+    margin-right: 45px;
+    margin-left: 45px;
+    margin-bottom: 35px;
+}
+
+.row > .hr-thin  {
+    width: 100%;
+}
+
+@media (max-width:991px) {
+    .p-l-25 {
+        margin-left: -15px;
+        padding-left: 0px;
+    }
+}
+
+#frnt-tbl.rounded-top-15 {
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+}
+
+#frnt-tbl.t-border-bot {
+    border-bottom: 7px solid #3e7ea9;
+    border-radius: 7px;
+}
+
+#frnt-tbl.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #cddee9;
+}
+
+#frnt-tbl.table.table tbody tr td,
+table.table thead tr th,
+table.table thead {
+    border-left: 1px solid #3e7ea9;
+}
+
+.flex-nav-items {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.v-align-top {
+    vertical-align: top;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.center-flex {
+    justify-content: center;
+    display: flex;
+}
+
+.form-group.required > label:before {
+    content: "*";
+    color: #3e7ea9;
+}
+
+.txt-area {
+    border: 1px solid #3e7ea9;
+    border-radius: 6px;
+    text-decoration: none;
+    width: 100%;
 }

@@ -8,6 +8,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+/*– components/ */
+@import 'components/checkbox';
+
 body {
     font-family: 'Roboto', sans-serif;
 }

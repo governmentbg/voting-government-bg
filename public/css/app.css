@@ -10655,6 +10655,61 @@ a.text-dark:focus {
   }
 }
 
+/*– components/ */
+
+.checkbox-container label {
+  position: relative;
+}
+
+.checkbox-container input[type=checkbox].checkbox-ams {
+  display: none;
+}
+
+.checkbox-container input[type=checkbox].checkbox-ams:checked + label span.checkbox::after {
+  visibility: visible;
+}
+
+.checkbox-container span::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.checkbox-container span::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.checkbox-container span.checkbox::before {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 2px solid #3e7ea9;
+  transition: border-color 0.2s;
+}
+
+.checkbox-container span.checkbox::before:hover {
+  border: 2px solid #3e7ea9;
+}
+
+.checkbox-container span.checkbox::after {
+  content: url(/img/tick.svg);
+  left: -7px;
+  top: 38px;
+  visibility: hidden;
+  transition: color 0.2s;
+  font-size: 14px;
+  height: 48px;
+  width: 48px;
+}
+
 body {
   font-family: "Roboto", sans-serif;
 }

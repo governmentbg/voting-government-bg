@@ -102,11 +102,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.request_for_candidacy') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            <input
-                                type="checkbox"
-                                class=""
-                                name=""
-                            >
+                            @include('components.checkbox', ['name' => 'test'])
                         </div>
                     </div>
                     <div class="form-group row">

@@ -266,7 +266,7 @@ class OrganisationController extends ApiController
     {
         $votingTour = VotingTour::getLatestTour();
         if (empty($votingTour)) {
-            return $this->errorResponse(__('custom.org_list_not_found'));
+            return $this->errorResponse(__('custom.voting_tour_not_found'));
         }
 
         $filters = $request->get('filters', []);
@@ -345,7 +345,7 @@ class OrganisationController extends ApiController
     {
         $votingTour = VotingTour::getLatestTour();
         if (empty($votingTour)) {
-            return $this->errorResponse(__('custom.org_not_found'));
+            return $this->errorResponse(__('custom.voting_tour_not_found'));
         }
 
         $data = $request->all();
@@ -388,7 +388,7 @@ class OrganisationController extends ApiController
     {
         $votingTour = VotingTour::getLatestTour();
         if (empty($votingTour)) {
-            return $this->errorResponse(__('custom.org_files_not_found'));
+            return $this->errorResponse(__('custom.voting_tour_not_found'));
         }
 
         $orgId = $request->get('org_id', null);

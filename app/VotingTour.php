@@ -71,7 +71,7 @@ class VotingTour extends Model
         $latestTour = self::where('status', '!=', self::STATUS_FINISHED)->first();
 
         if (empty($latestTour)) {
-            $latestTour = self::orderBy('updated_at', 'DESC')->first();
+            $latestTour = self::orderBy('updated_at', 'DESC')->orderBy('id', 'DESC')->first();
         }
 
         if (empty($latestTour)) {

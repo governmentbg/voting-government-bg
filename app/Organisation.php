@@ -103,4 +103,24 @@ class Organisation extends Model
             self::STATUS_HINT_NONE => ''
         ];
     }
+
+    public static function getApprovedStatuses()
+    {
+        return [
+            self::STATUS_PARTICIPANT,
+            self::STATUS_CANDIDATE,
+            self::STATUS_BALLOTAGE,
+        ];
+    }
+
+    public static function hasOrgsForBallotage($votingTourId)
+    {
+        $orgs = self::where('voting_tour_id', $votingTourId)->where('status', self::STATUS_BALLOTAGE);
+
+        if ($orgs->count() > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

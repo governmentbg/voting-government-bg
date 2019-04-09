@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Awobaz\Compoships\Compoships;
 
 class Vote extends Model
 {
+    use Compoships;
+
     /**
      * The attributes that aren't mass assignable.
      *

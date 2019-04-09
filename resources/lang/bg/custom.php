@@ -114,6 +114,7 @@ return [
     'enter_text' => 'Въведете текст',
     'select_file' => 'Избери файл',
     'send' => 'Изпрати',
-
-    'voting_tour_finished' => 'избраният изборен тур е приключил'
+    'voting_tour_finished' => 'избраният изборен тур е приключил',
+    'new_voting_tour' => 'Създай нов изборен тур',
+    'create_voting_tour' => 'Създаване на изборен тур',
 ];

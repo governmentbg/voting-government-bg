@@ -22,3 +22,7 @@ $lighterBlue: #cddee9;
 $lightGrey: #f9f9f9;
 $darkBlue: #3e7ea9;
 $darkRed: #e9103e;
+
+/*--------------override bootstrap variables-----------------*/
+$primary: $darkBlue;
+$btn-border-radius: 8px;

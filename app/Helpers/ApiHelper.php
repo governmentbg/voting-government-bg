@@ -44,10 +44,14 @@ if(!function_exists('api_result')){
         
         $data = $errors = [];
         if($result->success){
-            $data = $result->data;
+            if(isset($result->data)){
+                $data = $result->data;
+            }else{
+                $data = (object)[];
+            }
         }
         else{
-            $errors = !empty($result->errors)? $result->erros : [$result->error];
+            $errors = !empty($result->errors)? $result->errors : $result->error;
         }
         
         return [$data , $errors];

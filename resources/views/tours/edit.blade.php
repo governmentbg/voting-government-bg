@@ -8,14 +8,18 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-10 offset-lg-2 col-md-11 offset-md-1 col-sm-12">
-            <h2 class="color-dark"><b>{{ 'име на организацията' }}</b></h2>
-            <form method="POST">
+            <h2 class="color-dark"><b>{{ $votingTour->name }}</b></h2>
+            <form method="POST" action="{{route('admin.voting_tour.update', ['id' => $votingTour->id])}}">
+                {{ method_field('PUT') }}
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @include('components.errors')
+                
                 <div class="form-group row">
                     <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
                     <div class="col-sm-8">
                         <select name="status" class="ams-dropdown custom-select">
                             @foreach(\App\VotingTour::getStatuses() as $key => $status)
-                                <option value="{{$key}}">{{$status}}</option>
+                            <option value="{{$key}}" {{$votingTour->status == $key? 'selected' : '' }}>{{$status}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -24,14 +28,14 @@
                 <div class="form-group row">
                     <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.updated_at') }}:</label>
                     <div class="col-sm-8">
-                        <span>{{ date('Y-m-d H:i:s') }}</span>
+                        <span>{{ date('Y-m-d H:i:s', strtotime($votingTour->updated_at)) }}</span>
                     </div>
                 </div>
                 
                 <div class="form-group row">
                     <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.updated_by') }}:</label>
                     <div class="col-sm-8">
-                        {{ 'име на потребител направил промяната' }}
+                        {{ $votingTour->updated_by }}
                     </div>
                 </div>
                 

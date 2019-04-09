@@ -9,14 +9,14 @@ use App\VotingTour;
 
 class VotingTourController extends BaseAdminController
 {
-    protected $redirectTo = 'votingTour';
+    protected $redirectTo = 'admin/votingTours';
     
     public function __construct()
     {
         parent::__construct();
         
-        $this->addBreadcrumb(__('breadcrumbs.start'), '');
-        $this->addBreadcrumb(__('breadcrumbs.settings'), '');
+        $this->addBreadcrumb(__('breadcrumbs.start'), '#');
+        $this->addBreadcrumb(__('breadcrumbs.settings'), '#');
     }
     
     public function index()
@@ -29,13 +29,15 @@ class VotingTourController extends BaseAdminController
     
     public function create()
     {
-        list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+//        list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+//
+//        if($votingTour && $votingTour->status != VotingTour::STATUS_FINISHED){
+//            return redirect()->back()->withErrors(['messsage' => __('custom.active_tour_exists')]);
+//        }
         
-        if(!empty($errors)&& $votingTour && $votingTour->status != VotingTour::STATUS_FINISHED){
-            return redirect()->back()->with(['error' => __('custom.active_tour_exists')]);
-        }
+        $this->addBreadcrumb(__('custom.create_voting_tour'), '');
         
-        return view('placeholder');
+        return view('tours.create');
     }
     
     public function edit($id)
@@ -43,12 +45,12 @@ class VotingTourController extends BaseAdminController
         list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getData', ['id' => $id]);
         
         if($votingTour->status == VotingTour::STATUS_FINISHED){
-            return redirect()->back()->with(['error' => __('custom.voting_tour_finished')]);
+            return redirect()->back()->withErrors(['message' => __('custom.voting_tour_finished')]);
         }
         
         $this->addBreadcrumb($votingTour->name, '');
                 
-        return view('placeholder', ['votingTour' => $votingTour, 'errors' => $errors]);
+        return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors]);
     }
     
     public function update($id)
@@ -56,7 +58,7 @@ class VotingTourController extends BaseAdminController
         $status = request()->get('status');
         list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
         $oldStatus = $votingTour ? $votingTour->status : VotingTour::STATUS_FINISHED;
-        
+
         list($data, $errors) = api_result(ApiVotingTour::class, 'changeStatus', ['new_status' => $status]);          
         
         if(empty($errors)){
@@ -67,17 +69,17 @@ class VotingTourController extends BaseAdminController
             return redirect($this->redirectTo);
         }
                 
-        return redirect()->back()->with(['errors' => $errors])->withInput();
+        return redirect()->back()->withErrors($errors)->withInput();
     }
     
     public function store()
     {
-        list($id, $errors) = api_result(ApiVotingTour::class, 'add', [request()->all()]);
-        
+        list($id, $errors) = api_result(ApiVotingTour::class, 'add', request()->all());
+
         if(empty($errors)){
             return redirect($this->redirectTo);
         }
                 
-        return redirect()->back()->with(['errors' => $errors])->withInput();
+        return redirect()->back()->withErrors($errors)->withInput();
     }
 }

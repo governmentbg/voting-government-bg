@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="col-lg-12 text-right">
-        @include('components.button', ['buttonLabel' => __('custom.new_message')])
+        <a class="btn btn-primary" href="{{ route('admin.voting_tour.create') }}">{{ __('custom.new_voting_tour') }}</a>
     </div>
 </div>
 @endsection

@@ -13,7 +13,7 @@
                 <div class="form-group row">
                     <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
                     <div class="col-sm-8">
-                        <select name="status">
+                        <select name="status" class="ams-dropdown custom-select">
                             @foreach(\App\VotingTour::getStatuses() as $key => $status)
                                 <option value="{{$key}}">{{$status}}</option>
                             @endforeach

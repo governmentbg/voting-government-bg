@@ -3,6 +3,6 @@
 @endphp
 <div class="checkbox-container">
     <input id="{{$id}}" type="checkbox" class="checkbox-ams" name="{{isset($name) ? $name : ''}}">
-    <label for="{{$id}}"><span class="checkbox"></span></label>
+    <label for="{{$id}}"><span class="checkbox">{{ isset($label)? $label : '' }}</span></label>
 </div>
 

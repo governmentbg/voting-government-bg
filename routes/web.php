@@ -27,6 +27,10 @@ Route::get('/list', function () {
     return view('tours.list');
 });
 
+Route::get('/edit', function () {
+    return view('tours.edit');
+});
+
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
     //

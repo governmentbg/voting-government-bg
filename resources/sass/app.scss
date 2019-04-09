@@ -186,6 +186,10 @@ button {
     width: 50%;
 }
 
+.w-10 {
+    width: 10%;
+}
+
 .w-15 {
     width: 15%;
 }
@@ -208,6 +212,18 @@ button {
 
 .w-1 {
     width: 1%;
+}
+
+.w-60 {
+    width: 60%;
+}
+
+.w-70 {
+    width: 70%;
+}
+
+.w-100 {
+    width: 100%;
 }
 
 .border-chat-sender {
@@ -293,4 +309,43 @@ input[type='file'] {
 
 .c-darkRed {
     color: $darkRed;
+}
+
+.search-box {
+    border: 2px solid $darkBlue;
+    border-radius: 7px;
+    padding-left: 5px;
+    background: url(/img/lupa.svg) no-repeat right 0.5rem center/20px 22px;
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.date-box {
+    border: 2px solid $darkBlue;
+    border-radius: 7px;
+    margin-right: 5px;
+    width: 30%;
+}
+
+.m-r-20 {
+    margin-right: 20px;
+}
+
+.m-t-20 {
+    margin-top: 20px;
+}
+
+.m-r-10 {
+    margin-right: 10px;
+}
+
+.m-t-10 {
+    margin-top: 10px;
+}
+
+.p-t-10 {
+    padding-top: 10px;
 }

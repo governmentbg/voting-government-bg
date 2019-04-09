@@ -39,6 +39,18 @@ Route::get('admin/organisations', function () {
     return view('admin.orglist');
 });
 
+Route::get('/admin/committeeAdd', function () {
+    return view('admin.committeeAdd');
+});
+
+Route::get('/admin/committeeEdit', function () {
+    return view('admin.committeeEdit');
+});
+
+Route::get('/admin/committeeList', function () {
+    return view('admin.committeeList');
+});
+
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
     //

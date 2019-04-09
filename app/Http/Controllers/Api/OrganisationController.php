@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 use App\Organisation;
 use App\VotingTour;
@@ -118,11 +117,10 @@ class OrganisationController extends ApiController
                     DB::commit();
 
                     return $this->successResponse(['org_id' => $organisation->id], true);
-                } catch (QueryException $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                } catch (\Exception $e) {
-                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.reg_org_fail'));
                 }
             }
 
@@ -233,11 +231,10 @@ class OrganisationController extends ApiController
 
                         return $this->successResponse();
                     }
-                } catch (QueryException $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                } catch (\Exception $e) {
-                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.edit_org_fail'));
                 }
             }
 
@@ -256,7 +253,7 @@ class OrganisationController extends ApiController
      * @param string filters[email] - optional
      * @param boolean filters[in_av] - optional
      * @param boolean filters[is_candidate] - optional
-     * @param string filters[status] - optional
+     * @param array filters[statuses] - optional
      * @param string filters[reg_date_from] - optional
      * @param string filters[reg_date_to] - optional
      * @param string order_field - optional
@@ -284,7 +281,8 @@ class OrganisationController extends ApiController
             'email'         => 'nullable|string|max:255',
             'in_av'         => 'nullable|bool',
             'is_candidate'  => 'nullable|bool',
-            'status'        => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
+            'statuses'      => 'nullable|array',
+            'statuses.*'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
             'reg_date_from' => 'nullable|date|date_format:Y-m-d',
             'reg_date_to'   => 'nullable|date|date_format:Y-m-d'. (!empty($filters['reg_date_from']) ? '|after_or_equal:reg_date_from' : ''),
         ]);
@@ -311,8 +309,8 @@ class OrganisationController extends ApiController
                 if (isset($filters['is_candidate'])) {
                     $organisations->where('is_candidate', $filters['is_candidate']);
                 }
-                if (isset($filters['status'])) {
-                    $organisations->where('status', $filters['status']);
+                if (isset($filters['statuses'])) {
+                    $organisations->whereIn('status', $filters['statuses']);
                 }
                 if (isset($filters['reg_date_from'])) {
                     $organisations->where('created_at', '>=', $filters['reg_date_from'] .' 00:00:00');

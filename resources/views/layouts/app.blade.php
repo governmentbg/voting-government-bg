@@ -21,7 +21,7 @@
         <div class="container-fluid">
             @yield('content')
         </div>
-        <footer>
+        <footer class="p-t-15">
             <div >
 
             </div>

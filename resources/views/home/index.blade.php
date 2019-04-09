@@ -2,6 +2,7 @@
 
 @section('content')
 @include('partials.public-nav-bar')
+@include('components.breadcrumbs')
 <div class="row">
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
@@ -37,10 +38,7 @@
                 </div>
                 <div class="form-group row p-t-15">
                     <div class="col-lg-9 text-right">
-                        <button
-                            type="submit"
-                            class="btn btn-primary login-btn"
-                        >{{ __('custom.login') }}</button>
+                        @include('components.button', ['buttonLabel' => __('custom.login')])
                     </div>
                 </div>
             </form>
@@ -72,43 +70,47 @@
     <div class="col-lg-6 inline-block">
         <div class="p-l-60">
             <div><h3 class="p-b-15"><b>{{ __('custom.registered') }}</b></h3></div>
-            <table class="table table-striped table-responsive ams-table">
-                <thead>
-                    <tr>
-                        <th class="w-50">{{ __('custom.organisation') }}</th>
-                        <th class="w-5">{{ __('custom.candidate') }}</th>
-                        <th class="w-15">{{ __('custom.eik') }}</th>
-                        <th class="w-30">{{ __('custom.registered_at') }}</th>
-                </tr>
-                </thead>
-                <tbody class="text-center">
-                    <tr>
-                        <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 1</td>
-                        <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
-                        <td>123123123123</td>
-                        <td>2019-03-03 </td>
-                    </tr>
+            <div class="table-wrapper">
+                <div class="table-responsive">
+                    <table class="table table-striped ams-table">
+                        <thead>
+                            <tr>
+                                <th class="w-50">{{ __('custom.organisation') }}</th>
+                                <th class="w-5">{{ __('custom.candidate') }}</th>
+                                <th class="w-15">{{ __('custom.eik') }}</th>
+                                <th class="w-30">{{ __('custom.registered_at') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr>
+                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 1</td>
+                                <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
+                                <td>123123123123</td>
+                                <td>2019-03-03 </td>
+                            </tr>
 
-                    <tr>
-                        <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 2</td>
-                        <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
-                        <td>123123123123</td>
-                        <td>2019-03-03 </td>
-                    </tr>
-                    <tr>
-                        <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 3</td>
-                        <td></td>
-                        <td>123123123123</td>
-                        <td>2019-03-03 </td>
-                    </tr>
-                    <tr>
-                        <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 4</td>
-                        <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
-                        <td>123123123123</td>
-                        <td>2019-03-03 </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <tr>
+                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 2</td>
+                                <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
+                                <td>123123123123</td>
+                                <td>2019-03-03 </td>
+                            </tr>
+                            <tr>
+                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 3</td>
+                                <td></td>
+                                <td>123123123123</td>
+                                <td>2019-03-03 </td>
+                            </tr>
+                            <tr>
+                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 4</td>
+                                <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
+                                <td>123123123123</td>
+                                <td>2019-03-03 </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-lg-3 inline-block">

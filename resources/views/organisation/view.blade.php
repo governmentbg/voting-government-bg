@@ -2,7 +2,7 @@
 
 @section('content')
 @include('partials.user-nav-bar')
-
+@include('components.breadcrumbs')
 <div class="row">
     <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} Организация 1</h3></div>
 </div>
@@ -107,38 +107,42 @@
 </div>
 <div class="col-lg-12">
     <div class="col-lg-12">
-        <table class="table table-striped table-responsive ams-table">
-            <thead>
-                <tr>
-                    <th class="w-50">{{ __('custom.title') }}</th>
-                    <th class="w-30">{{ __('custom.date') }}</th>
-                    <th class="w-1">{{ __('custom.operations') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 1 </td>
-                    <td class="text-center">2019-04-08</td>
-                    <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                </tr>
+        <div class="table-wrapper">
+            <div class="table-responsive">
+                <table class="table table-striped ams-table">
+                    <thead>
+                        <tr>
+                            <th class="w-50">{{ __('custom.title') }}</th>
+                            <th class="w-30">{{ __('custom.date') }}</th>
+                            <th class="w-20">{{ __('custom.operations') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 1 </td>
+                            <td class="text-center">2019-04-08</td>
+                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
+                        </tr>
 
-                <tr>
-                    <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 2</td>
-                    <td class="text-center">2019-04-08</td>
-                    <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                </tr>
-                <tr>
-                    <td><img src="{{ asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 3</td>
-                    <td class="text-center">2019-04-08</td>
-                    <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                </tr>
-                <tr>
-                    <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 4</td>
-                    <td class="text-center">2019-04-08</td>
-                    <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                </tr>
-            </tbody>
-        </table>
+                        <tr>
+                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 2</td>
+                            <td class="text-center">2019-04-08</td>
+                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
+                        </tr>
+                        <tr>
+                            <td><img src="{{ asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 3</td>
+                            <td class="text-center">2019-04-08</td>
+                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
+                        </tr>
+                        <tr>
+                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 4</td>
+                            <td class="text-center">2019-04-08</td>
+                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="col-lg-12 text-right">
         <button

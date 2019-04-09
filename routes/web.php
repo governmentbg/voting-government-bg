@@ -31,6 +31,14 @@ Route::get('/edit', function () {
     return view('tours.edit');
 });
 
+Route::get('/request', function () {
+    return view('organisation.request');
+});
+
+Route::get('admin/organisations', function () {
+    return view('admin.orglist');
+});
+
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
     //

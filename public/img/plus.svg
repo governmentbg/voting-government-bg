@@ -1,0 +1,19 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3e7ea9;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <title>PLUS</title>
+  <g>
+    <circle class="cls-1" cx="25" cy="25" r="25"/>
+    <rect class="cls-2" x="7.55" y="22.41" width="34.9" height="5.17" rx="2.59" transform="translate(0 50) rotate(-90)"/>
+    <rect class="cls-2" x="7.55" y="22.41" width="34.9" height="5.17" rx="2.59" transform="translate(50 50) rotate(180)"/>
+  </g>
+</svg>

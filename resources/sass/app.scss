@@ -21,6 +21,12 @@ body {
 
 @import 'components/textarea';
 
+@import 'components/breadcrumbs';
+
+@import 'components/form_group';
+
+@import 'components/dropdown';
+
 body {
     font-family: 'Roboto', sans-serif;
 }
@@ -54,7 +60,6 @@ button {
 }
 
 .login-btn {
-    width: 10%;
     height: 25px;
     padding-top: 2px;
     font-size: 12px;
@@ -66,6 +71,14 @@ button {
 
 .f-s-14 {
     font-size: 14px;
+}
+
+.p-l-5 {
+    padding-left: 5px;
+}
+
+.m-b-8 {
+    margin-bottom: 8px;
 }
 
 .f-s-21 {
@@ -195,4 +208,89 @@ button {
 
 .w-1 {
     width: 1%;
+}
+
+.border-chat-sender {
+    border: 2px solid $lighterBlue;
+    border-radius: 14px;
+    padding-left: 15px;
+}
+
+.border-chat-receiver {
+    border: 2px solid $darkBlue;
+    border-radius: 14px;
+    padding-left: 15px;
+}
+
+.p-t-5 {
+    padding-top: 5px;
+}
+
+.file-container {
+    background: $lightGrey;
+    padding-left: 5px;
+    border-radius: 7px;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+
+    a {
+        text-decoration: underline;
+    }
+}
+
+.msg-time {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5px;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.hide-vis {
+    visibility: hidden;
+}
+
+input[type='file'] {
+    color: transparent;
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.input-f {
+    border: 2px solid $darkBlue;
+    border-radius: 8px;
+}
+
+.front-z {
+    z-index: 100;
+}
+
+.back-z {
+    z-index: 0;
+    position: absolute;
+}
+
+.c-lightBlue {
+    color: $lighterBlue;
+}
+
+.c-lightGrey {
+    color: $lightGrey;
+}
+
+.c-darkBlue {
+    color: $darkBlue;
+}
+
+.c-darkBlue {
+    color: $darkBlue;
+}
+
+.c-darkRed {
+    color: $darkRed;
 }

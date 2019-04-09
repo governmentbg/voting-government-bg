@@ -1,0 +1,22 @@
+select.ams-dropdown{
+    border: solid 2px;
+    border-radius: 8px;
+    border-color: $darkBlue;
+    height: 35px;
+    width: auto;
+
+    background: url(/img/arrow_down.svg) no-repeat right 0.5rem center/20px 22px;
+
+/*    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background:  no-repeat scroll 0 0; */
+
+    &:focus{
+        border: solid 2px;
+        border-radius: 8px;
+        border-color: $darkBlue;
+        height: 35px;
+    }
+}
+

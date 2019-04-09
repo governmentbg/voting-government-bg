@@ -18,7 +18,7 @@
 
     </head>
     <body>
-        <div>
+        <div class="container-fluid">
             @yield('content')
         </div>
         <footer>
@@ -27,8 +27,8 @@
             </div>
         </footer>
 
-        <!-- <script src="{{ asset('js/app.js') }}"></script>
-        <script src="{{ asset('js/jquery.smartmenus.min.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        <!-- <script src="{{ asset('js/jquery.smartmenus.min.js') }}"></script>
         <script src="{{ asset('js/jquery.smartmenus.bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery.nanoscroller.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-colorpicker.js') }}"></script>

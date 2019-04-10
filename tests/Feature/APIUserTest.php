@@ -52,6 +52,7 @@ class APIUserTest extends TestCase
         $data['first_name'] = $this->faker->firstName;
         $data['last_name'] = $this->faker->lastName;
         $data['email'] = $this->faker->email;
+        //unset($data['email']);
 
         $response = $this->json('POST', '/api/user/edit', [
             'user_id'   => $user->id,

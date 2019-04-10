@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $loginView = 'extranet.pages.login';
+    protected $loginView = 'auth.login';
 
     public function showLoginForm()
     {
@@ -41,7 +41,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest:backend', ['except' => 'logout']);
-        $this->redirectTo = route('extranet.home');
+        $this->redirectTo = route('admin.home');
     }
 
     protected function guard()

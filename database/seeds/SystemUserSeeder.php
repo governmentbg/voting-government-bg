@@ -21,6 +21,8 @@ class SystemUserSeeder extends Seeder
                 'first_name' => config('auth.system.user'),
                 'last_name' => config('auth.system.user'),
                 'email' => config('auth.system.user'),
+                'voting_tour_id' => null,
+                'org_id' => null
             ]);
         }
         else{

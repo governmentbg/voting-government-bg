@@ -12,7 +12,23 @@
 */
 
 Route::get('/', function () {
-    return response('Welcome to AMS Voting System');
+    return view('home.index');
+});
+
+Route::get('/register', function () {
+    return view('organisation.register');
+});
+
+Route::get('/view', function () {
+    return view('organisation.view');
+});
+
+Route::get('/request', function () {
+    return view('organisation.request');
+});
+
+Route::get('admin/organisations', function () {
+    return view('admin.orglist');
 });
 
 //Frontend routes that needs user athorisation
@@ -28,6 +44,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
 
     // All routes inside require admin privileges
     Route::group(['middleware' => ['auth.backend:backend']], function () {
-        //
+        Route::get('/votingTours', 'VotingTourController@index')->name('admin.voting_tour.list');
+        Route::get('/votingTours/create','VotingTourController@create')->name('admin.voting_tour.create');
+        Route::get('/votingTours/{id}/edit','VotingTourController@edit')->name('admin.voting_tour.edit');
+        Route::post('/votingTours','VotingTourController@store')->name('admin.voting_tour.store');
+        Route::put('/votingTours/{id}','VotingTourController@update')->name('admin.voting_tour.update');
+        
+        Route::get('/home', function(){ return 'OK';})->name('admin.home');// TODO for testing only
     });
 });
+

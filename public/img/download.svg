@@ -1,0 +1,21 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3e7ea9;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <title>Download</title>
+  <g>
+    <circle class="cls-1" cx="25" cy="25" r="25"/>
+    <path class="cls-2" d="M19.5,33.61l4.44,7.71a1.13,1.13,0,0,0,2.13,0l4.45-7.71c.59-1,.11-1.84-1.06-1.84H28.1v-8.1a3.09,3.09,0,1,0-6.18,0v8.1H20.56C19.39,31.77,18.91,32.6,19.5,33.61Z" transform="translate(0 0)"/>
+    <rect class="cls-2" x="13.06" y="11.14" width="23.9" height="5.17" rx="2.59" transform="translate(50.02 27.45) rotate(-180)"/>
+    <rect class="cls-2" x="28.22" y="15.16" width="12.31" height="5.17" rx="2.59" transform="translate(16.62 52.12) rotate(-90)"/>
+    <rect class="cls-2" x="9.49" y="15.16" width="12.31" height="5.17" rx="2.59" transform="translate(-2.1 33.4) rotate(-90)"/>
+  </g>
+</svg>

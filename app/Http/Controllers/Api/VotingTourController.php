@@ -159,7 +159,7 @@ class VotingTourController extends ApiController
         $votingTour = VotingTour::getLatestTour();
 
         if ($votingTour) {
-            return $this->successResponse(['voting_tour' => $votingTour]);
+            return $this->successResponse($votingTour);
         } else {
             return $this->errorResponse(__('custom.voting_tour_not_found'));
         }

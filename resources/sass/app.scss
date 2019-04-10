@@ -8,7 +8,289 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+/*– components/ */
+@import 'components/checkbox';
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+@import 'components/table';
+
+@import 'components/textinput';
+
+@import 'components/textarea';
+
+@import 'components/breadcrumbs';
+
+@import 'components/form_group';
+
+@import 'components/dropdown';
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.color-black {
+    color: black;
+}
+
+h3, h2 {
+    color: $darkBlue;
+}
+
+.color-black {
+    color: black;
+}
+
+.p-l-none {
+    padding-left: 0px;
+}
+
+.m-b-none {
+    margin-bottom: 0;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.login-btn {
+    height: 45px;
+    font-size: 12px;
+}
+
+.p-r-none {
+    padding-right: 0px;
+}
+
+.f-s-14 {
+    font-size: 14px;
+}
+
+.p-l-5 {
+    padding-left: 5px;
+}
+
+.m-b-8 {
+    margin-bottom: 8px;
+}
+
+.f-s-21 {
+    font-size: 21px;
+}
+
+.p-t-15 {
+    padding-top: 15px;
+}
+
+.p-l-40 {
+    padding-left: 40px;
+}
+
+.p-l-60 {
+    padding-left: 60px;
+}
+
+.p-l-25 {
+    padding-left: 25px;
+}
+
+.p-r-5 {
+    padding-right: 5px;
+}
+
+.p-r-15 {
+    padding-right: 15px;
+}
+
+.p-b-15 {
+    padding-bottom: 15px;
+}
+
+.hr-thick {
+    border: 3px solid #3e7ea9;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 35px;
+    margin-top: 0px;
+}
+
+.hr-thin {
+    border: 2px solid #3e7ea9;
+    margin-right: 45px;
+    margin-left: 45px;
+    margin-bottom: 35px;
+}
+
+.row > .hr-thin  {
+    width: 100%;
+}
+
+@media (max-width:991px) {
+    .p-l-25 {
+        margin-left: -15px;
+        padding-left: 0px;
+    }
+}
+
+.flex-nav-items {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.v-align-top {
+    vertical-align: top;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.center-flex {
+    justify-content: center;
+    display: flex;
+}
+
+.form-group.required > label:before {
+    content: "*";
+    color: #3e7ea9;
+}
+
+.m-l-5 {
+    margin-left: -5px;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.m-t-12 {
+    margin-top: -12px;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.w-15 {
+    width: 15%;
+}
+
+.w-5 {
+    width: 5%;
+}
+
+.w-30 {
+    width: 30%;
+}
+
+.w-25 {
+    width: 25%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+.w-1 {
+    width: 1%;
+}
+
+.border-chat-sender {
+    border: 2px solid $lighterBlue;
+    border-radius: 14px;
+    padding-left: 15px;
+}
+
+.border-chat-receiver {
+    border: 2px solid $darkBlue;
+    border-radius: 14px;
+    padding-left: 15px;
+}
+
+.p-t-5 {
+    padding-top: 5px;
+}
+
+.file-container {
+    background: $lightGrey;
+    padding-left: 5px;
+    border-radius: 7px;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+
+    a {
+        text-decoration: underline;
+    }
+}
+
+.msg-time {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5px;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.hide-vis {
+    visibility: hidden;
+}
+
+input[type='file'] {
+    color: transparent;
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.input-f {
+    border: 2px solid $darkBlue;
+    border-radius: 8px;
+}
+
+.front-z {
+    z-index: 100;
+}
+
+.back-z {
+    z-index: 0;
+    position: absolute;
+}
+
+.c-lightBlue {
+    color: $lighterBlue;
+}
+
+.c-lightGrey {
+    color: $lightGrey;
+}
+
+.c-darkBlue {
+    color: $darkBlue;
+}
+
+.c-darkBlue {
+    color: $darkBlue;
+}
+
+.c-darkRed {
+    color: $darkRed;
+}
+
+.alert-error{
+    color: $darkRed;
+    border-color: $darkRed;
 }

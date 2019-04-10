@@ -1,0 +1,16 @@
+.form-group{
+    label{
+        font-family: Roboto Regular;
+    }
+    span{
+        font-family: Roboto Light;
+        &.error{
+            font-family: Roboto Light Italic;
+            color: $darkRed;
+        }
+    }
+    input, select{
+        font-family: Roboto Light;
+    }
+}
+

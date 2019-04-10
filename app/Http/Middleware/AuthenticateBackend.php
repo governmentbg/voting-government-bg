@@ -19,8 +19,8 @@ class AuthenticateBackend
         if (Auth::guard($guard)->guest() || !Auth::guard($guard)->user()->isAdmin()) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
-            }
-            return redirect('extranet/login');
+            }           
+            return redirect('admin/login');
         }
         return $next($request);
     }

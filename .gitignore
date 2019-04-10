@@ -16,3 +16,4 @@ nbproject/
 /.settings
 /public/css/
 /public/js/
+/.php_cs.cache

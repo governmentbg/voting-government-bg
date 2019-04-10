@@ -17,8 +17,8 @@ use Illuminate\Http\Request;
 Route::middleware(['api'])->group(function () {
     Route::post('user/add', 'Api\UserController@add');
     Route::post('user/edit', 'Api\UserController@edit');
-    Route::post('user/generateHash', 'Api\UserController@generatePasswordHash');
-    Route::post('user/passwordReset', 'Api\UserController@resetPassword');
+    Route::post('user/generatePasswordHash', 'Api\UserController@generatePasswordHash');
+    Route::post('user/resetPassword', 'Api\UserController@resetPassword');
     Route::post('user/getData', 'Api\UserController@getData');
     Route::post('user/list', 'Api\UserController@list');
     Route::post('user/changePassword', 'Api\UserController@changePassword');

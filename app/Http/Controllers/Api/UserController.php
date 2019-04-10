@@ -202,7 +202,7 @@ class UserController extends ApiController
 
             DB::commit();
 
-            return $this->successResponse(['user_id' => $user->id], true);
+            return $this->successResponse(['id' => $user->id]);
         } catch (QueryException $ex) {
             DB::rollback();
             Log::error($ex->getMessage());
@@ -290,7 +290,7 @@ class UserController extends ApiController
         try {
             $users = User::whereNull('org_id')->sort($field, $order)->paginate();
 
-            return $this->successResponse(['users' => $users]);//no key
+            return $this->successResponse($users);
         } catch (QueryException $e) {
             logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.user_not_found'), $e->getMessage());
@@ -318,7 +318,7 @@ class UserController extends ApiController
 
         $user = User::where('id', $id)->first();
         if ($user) {
-            return $this->successResponse(['user' => $user]);
+            return $this->successResponse($user);
         }
 
         return $this->errorResponse(__('custom.user_not_found'));

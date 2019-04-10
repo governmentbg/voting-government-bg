@@ -138,7 +138,7 @@ class MessageController extends ApiController
                 $message->update(['read' => date('Y-m-d H:i:s')]);
             }
             
-            return $this->successResponse(['id' => $id], true);
+            return $this->successResponse();
         }
 
         return $this->errorResponse(__('custom.message_not_found'));

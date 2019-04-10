@@ -83,7 +83,7 @@ class APIUserTest extends TestCase
             'voting_tour_id' => null,
         ]);
 
-        $response = $this->json('POST', '/api/user/passwordReset', ['new_password' => 'secret', 'hash' => $hash, 'id' => $user->id]);
+        $response = $this->json('POST', '/api/user/resetPassword', ['new_password' => 'secret', 'hash' => $hash, 'id' => $user->id]);
 
         $response->assertStatus(200)->assertJson(['success' => true]);
         $this->assertTrue(Hash::check($password, $user->password));
@@ -103,7 +103,7 @@ class APIUserTest extends TestCase
             'voting_tour_id' => null,
         ]);
         
-        $response = $this->json('POST', '/api/user/generateHash', ['username' => $user->username, 'email' => $user->email]);
+        $response = $this->json('POST', '/api/user/generatePasswordHash', ['username' => $user->username, 'email' => $user->email]);
 
         $response->assertStatus(200)
                     ->assertJson([

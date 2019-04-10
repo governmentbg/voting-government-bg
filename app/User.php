@@ -13,6 +13,8 @@ class User extends Authenticatable
     use Compoships;
     use RecordSignature;
     
+    const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
+    
     protected $guarded = ['id'];
 
     /**

@@ -37,6 +37,11 @@ class UserController extends ApiController
         try {
             $password = Hash::make(str_random(60));
             $user = User::where('username', $username)->where('email', $email)->first();
+            if (!$user) {
+                $user = User::where('username', $username)->whereHas('organisation', function ($query) use ($email) {
+                    $query->where('email', $email);
+                })->first();
+            }
             
             if ($user) {
                 $user->update(['pw_reset_hash' => $password]);
@@ -223,12 +228,21 @@ class UserController extends ApiController
         $data = $request->get('user_data', []);
         $id = $request->get('user_id', null);
         
+        $data = array_intersect_key($data, array_flip(User::EDITABLE_FIELDS));
+        
+        if (isset($id) && !empty($id)) {
+            $user = User::where('id', $id)->whereNull('org_id')->first();
+            if ($user && isset($data['email']) && $user->email == $data['email']) {
+                unset($data['email']); //email is not changed
+            }
+        }
+
         $data['user_id'] = $id;
 
-        $rules['email'] = 'required|email|unique:users';
-        $rules['first_name'] = 'required|string';
-        $rules['last_name'] = 'required|string';
-        $rules['active'] = 'required|bool';
+        $rules['email'] = 'sometimes|required|email|unique:users';
+        $rules['first_name'] = 'sometimes|required|string';
+        $rules['last_name'] = 'sometimes|required|string';
+        $rules['active'] = 'sometimes|required|bool';
         $rules['user_id'] = 'required';
         
         $validator = \Validator::make($data, $rules);
@@ -237,14 +251,10 @@ class UserController extends ApiController
             try {
                 DB::beginTransaction();
 
-                $user = User::where('id', $id)->whereNull('org_id')->first();
                 if ($user) {
-                    $user->first_name = $data['first_name'];
-                    $user->last_name = $data['last_name'];
-                    $user->active = $data['active'];
-                    $user->email = $data['email'];
+                    unset($data['user_id']);
                     
-                    $user->save();
+                    $user->update($data);
                 } else {
                     return $this->errorResponse(__('custom.user_not_found'));
                 }

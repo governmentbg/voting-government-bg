@@ -6,8 +6,6 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Foundation\Auth\RedirectsUsers;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -27,15 +25,15 @@ class AuthController extends Controller
     
     /**
      * The maximum number of attempts to allow.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     protected $maxAttempts = 5;
     
     /**
      * The number of minutes to throttle for.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     protected $decayMinutes = 15;
 
@@ -53,7 +51,7 @@ class AuthController extends Controller
     /**
      * Attempt to log the user into the extranet.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return bool
      */
     protected function attemptLogin(Request $request)

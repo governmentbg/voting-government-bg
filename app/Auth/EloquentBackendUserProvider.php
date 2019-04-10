@@ -26,8 +26,8 @@ class EloquentBackendUserProvider extends EloquentUserProvider
     public function validateCredentials(UserContract $user, array $credentials)
     {
         $plain = $credentials['password'];
-        
-        if($user->getAuthIdentifier() == config('auth.system.user')){
+
+        if($this->retrieveById($user->getAuthIdentifier())->username == config('auth.system.user')){
             logger()->info('System user login attempt: ' . date('Y-m-d H:i:s'));
             $hash = config('auth.system.password', Hash::make(str_random(60)));
         }

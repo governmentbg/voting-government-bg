@@ -349,3 +349,30 @@ input[type='file'] {
 .p-t-10 {
     padding-top: 10px;
 }
+
+.display-flex {
+    display: flex;
+}
+
+.m-t-45 {
+    margin-top: 45px;
+}
+
+.arrow-right {
+    transform: rotate(-90deg);
+
+}
+
+.arrow-left {
+    transform: rotate(90deg);
+}
+
+.arrows-position {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.m-l-85 {
+    margin-left: -85px;
+}

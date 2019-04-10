@@ -204,6 +204,7 @@ class VoteController extends ApiController
                     AND v.tour_status = '. $post['status'] .'
                     AND v.vote_time = innerv.voteTime
                     AND v.id != '. Vote::GENESIS_RECORD .'
+                    GROUP BY v.voter_id
                 ');
 
                 $listOfCandidates = Organisation::select('id', 'eik', 'name', DB::raw('0 as votes'))

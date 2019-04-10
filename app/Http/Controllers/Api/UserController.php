@@ -290,7 +290,7 @@ class UserController extends ApiController
         try {
             $users = User::whereNull('org_id')->sort($field, $order)->paginate();
 
-            return $this->successResponse(['users' => $users]);
+            return $this->successResponse(['users' => $users]);//no key
         } catch (QueryException $e) {
             logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.user_not_found'), $e->getMessage());

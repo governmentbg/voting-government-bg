@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $loginView = 'auth.login';
+    protected $loginView = 'admin.index';
 
     public function showLoginForm()
     {
@@ -41,7 +42,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest:backend', ['except' => 'logout']);
-        $this->redirectTo = route('admin.home');
+        $this->redirectTo = route('admin.index');
     }
 
     protected function guard()
@@ -105,6 +106,6 @@ class AuthController extends Controller
 
         $request->session()->invalidate();
 
-        return redirect('/');
+        return redirect('admin/');
     }
 }

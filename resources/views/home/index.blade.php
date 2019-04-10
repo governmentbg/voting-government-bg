@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.public-nav-bar')
+@if(!auth()->check())
+    @include('partials.public-nav-bar')
+@else
+    @include('partials.user-nav-bar')
+@endif
 @include('components.breadcrumbs')
 <div class="row">
     <div class="col-lg-7 p-l-25">
@@ -14,8 +18,9 @@
         </div>
     </div>
     <div class="col-lg-5 p-l-40">
+        @if(!auth()->check())
         <div>
-            <form method="POST">
+            <form method="POST" action="{{route('login')}}">
                 {{ csrf_field() }}
                 <div class="form-group row">
                     <h3><b>{{ __('custom.login_into_platform') }}</b></h3>
@@ -26,6 +31,7 @@
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
                         <input type="text" class="input-box" name="username">
+                        <span class="error">{{ $errors->first('username') }}</span>
                     </div>
                 </div>
                 <div class="form-group row m-b-none">
@@ -34,6 +40,7 @@
                 <div class="form-group row">
                 <div class="col-lg-9 p-l-none">
                         <input type="password" class="input-box" name="password">
+                        <span class="error">{{ $errors->first('password') }}</span>
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
@@ -60,7 +67,7 @@
                 </div>
             </div>
         </div>
-
+        @endif
     </div>
 </div>
 

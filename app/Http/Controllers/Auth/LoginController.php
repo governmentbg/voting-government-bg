@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
     
     /**
      * The maximum number of attempts to allow.

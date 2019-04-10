@@ -16,6 +16,8 @@ class User extends Authenticatable
     const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
     
     protected $guarded = ['id'];
+    
+    protected $rememberTokenName = false;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +34,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        'password'
     ];
 
     /**
@@ -45,7 +48,7 @@ class User extends Authenticatable
     
     public function organisation()
     {
-        return $this->hasOne('App\Organisation', ['org_id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
+        return $this->hasOne('App\Organisation', ['id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
     }
     
     public function scopeSort($query, $field, $order)
@@ -68,5 +71,10 @@ class User extends Authenticatable
     public function isSuperAdmin()
     {
         return !isset($this->org_id) && $this->name == config('auth.system.user');
+    }
+    
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

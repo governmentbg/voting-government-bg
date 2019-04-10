@@ -51,6 +51,9 @@ class User extends Authenticatable
     public function scopeSort($query, $field, $order)
     {
         if (isset($field)) {
+            if($field == 'name'){
+                return $query->orderBy('first_name', $order)->orderBy('last_name', $order);
+            }
             return $query->orderBy($field, $order);
         }
         

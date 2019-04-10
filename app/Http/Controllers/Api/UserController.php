@@ -157,7 +157,7 @@ class UserController extends ApiController
      *
      * @return json $response - response with status and api key if successful
      */
-    public function addUser(Request $request)
+    public function add(Request $request)
     {
         $data = $request->get('user_data', []);
 
@@ -223,7 +223,7 @@ class UserController extends ApiController
      *
      * @return json $response - response with status and api key if successful
      */
-    public function editUser(Request $request)
+    public function edit(Request $request)
     {
         $data = $request->get('user_data', []);
         $id = $request->get('user_id', null);
@@ -288,7 +288,7 @@ class UserController extends ApiController
         $request->request->add(['page' => $page]);
 
         try {
-            $users = User::sort($field, $order)->paginate();
+            $users = User::whereNull('org_id')->sort($field, $order)->paginate();
 
             return $this->successResponse(['users' => $users]);
         } catch (QueryException $e) {

@@ -31,6 +31,34 @@ Route::get('admin/organisations', function () {
     return view('admin.orglist');
 });
 
+Route::get('/admin/committeeAdd', function () {
+    return view('admin.committeeAdd');
+});
+
+Route::get('/admin/committeeEdit', function () {
+    return view('admin.committeeEdit');
+});
+
+Route::get('/admin/committeeList', function () {
+    return view('admin.committeeList');
+});
+
+Route::get('/admin/passwordChange', function () {
+    return view('admin.passwordChange');
+});
+
+Route::get('/admin/tour/add', function () {
+    return view('tours.add');
+});
+
+Route::get('/organisation/settings', function () {
+    return view('organisation.settings');
+});
+
+Route::get('/organisation/vote', function () {
+    return view('organisation.vote');
+});
+
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
     //

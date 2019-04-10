@@ -28,14 +28,16 @@
                 <div class="form-group row">
                     <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.updated_at') }}:</label>
                     <div class="col-sm-8">
-                        <span>{{ date('Y-m-d H:i:s', strtotime($votingTour->updated_at)) }}</span>
+                        <label class="col-form-label">
+                            {{ isset($votingTour->updated_at) ? date('Y-m-d H:i:s', strtotime($votingTour->updated_at)) : '' }}
+                        </label>
                     </div>
                 </div>
                 
                 <div class="form-group row">
                     <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.updated_by') }}:</label>
                     <div class="col-sm-8">
-                        {{ $votingTour->updated_by }}
+                        <label class="col-form-label">{{ $votingTour->updated_by_name }}</label>
                     </div>
                 </div>
                 

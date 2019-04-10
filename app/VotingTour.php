@@ -4,11 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\RecordSignature;
+use App\Traits\MetaData;
 
 class VotingTour extends Model
 {
     use RecordSignature;
-
+    use MetaData;
+  
     const STATUS_UPCOMING = 0;
     const STATUS_OPENED_REG = 1;
     const STATUS_CLOSED_REG = 2;

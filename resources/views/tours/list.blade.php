@@ -29,7 +29,7 @@
                                     @endif
                                 </td>
                                 <td class="text-left">{{$tour->name}}</td>
-                                <td>{{date('Y-m-d H:i', strtotime($tour->updated_at))}}</td>
+                                <td>{{isset($tour->updated_at) ? date('Y-m-d H:i', strtotime($tour->updated_at)) : ''}}</td>
                                 <td> 
                                     @if($tour->status == App\VotingTour::STATUS_FINISHED)
                                         <a href="#"><img src="{{ asset('img/star.svg') }}" height="30px" width="50px"/></a>

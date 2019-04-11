@@ -87,6 +87,55 @@ class OrganisationController extends BaseAdminController
 
     public function edit(Request $request)
     {
-        return view('admin.org_edit');
+        $id = $request->offsetGet('id');
+        list($org_data, $errors) = api_result(ApiOrganisation::class, 'getData', [
+            'org_id' => $id
+        ]);
+
+        list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses' );
+        $candidateStatuses = collect($statuses)->pluck('name', 'id')->toArray();
+
+        if ($request->has('edit')) {
+            $name = $request->offsetGet('name') ? $request->offsetGet('name') : '';
+            $address = $request->offsetGet('address') ? $request->offsetGet('address') : '';
+            $representative = $request->offsetGet('representative') ? $request->offsetGet('representative') : '';
+            $phone = $request->offsetGet('phone') ? $request->offsetGet('phone') : '';
+            $email = $request->offsetGet('email') ? $request->offsetGet('email') : '';
+            $in_av = $request->offsetGet('in_av') ? $request->offsetGet('in_av') : false;
+            $is_candidate = $request->offsetGet('is_candidate') ? $request->offsetGet('is_candidate') : false;
+            $references = $request->offsetGet('references') ? $request->offsetGet('references') : '';
+            $description = $request->offsetGet('description') ? $request->offsetGet('description') : '';
+            $status = $request->offsetGet('status');
+
+            list($edit, $editErrors) = api_result(ApiOrganisation::class, 'edit', [
+                'org_id'   => $id,
+                'org_data' => [
+                    'name'           => $name,
+                    'email'          => $email,
+                    'representative' => $representative,
+                    'address'        => $address,
+                    'phone'          => $phone,
+                    'email'          => $email,
+                    'in_av'          => $in_av,
+                    'is_candidate'   => $is_candidate,
+                    'references'     => $references,
+                    'description'    => $description,
+                    'status'         => $status
+                ]
+            ]);
+
+            if (empty($editErrors)) {
+                $request->session()->flash('alert-success', __('custom.edit_success'));
+                return back();
+            } else {
+                $request->session()->flash('alert-danger', __('custom.edit_error'));
+                return back()->withErrors(isset($editErrors) ? $editErrors : []);
+            }
+        }
+
+        return view('admin.org_edit', [
+            'org_data'          => $org_data,
+            'candidateStatuses' => $candidateStatuses
+        ]);
     }
 }

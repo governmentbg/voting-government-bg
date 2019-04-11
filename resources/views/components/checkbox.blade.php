@@ -9,6 +9,7 @@
         name="{{isset($name) ? $name : ''}}"
         {{ isset($checked) && $checked ? ' checked' : '' }}
         {{ isset($readonly) && $readonly ? ' disabled' : '' }}
+        value="1"
     >
     <label for="{{$id}}"><span class="checkbox">{{ isset($label) ? $label : '' }}</span></label>
 </div>

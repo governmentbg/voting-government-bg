@@ -91,7 +91,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
                
         Route::get('/logout', 'AuthController@logout')->name('admin.logout');
         Route::get('/organisations', 'OrganisationController@list')->name('admin.org_list');
-        Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
+        Route::match(['post', 'get'], '/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
         Route::get('/organisations/view/{id}', 'OrganisationController@view')->name('admin.org_view');
 
         Route::get('/home', function(){ return 'OK';})->name('admin.home');// TODO for testing only

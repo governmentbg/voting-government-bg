@@ -90,7 +90,7 @@ return [
     'org_name' => 'Наименование',
     'eik_bulstat' => 'ЕИК / БУЛСТАТ',
     'management_address' => 'Адрес на управление',
-    'in_ap' => 'Вписан в АП',
+    'in_av' => 'Вписан в АВ',
     'phone_number' => 'Телефонен номер',
     'email' => 'e-mail',
     'committee_member_request' => 'Заявление за кандидатиране като член на Съвета',
@@ -156,4 +156,6 @@ return [
     'selected_participants' => 'Избрани участници',
     'max_14' => '(макс. 14)',
     'all' => 'Всички',
+    'edit_error' => 'Грешка при редакция',
+    'edit_success' => 'Успешна редакция',
 ];

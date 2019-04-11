@@ -3,103 +3,139 @@
 @section('content')
 @include('partials.admin-nav-bar')
 @include('components.breadcrumbs')
-<div class="row">
-    <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} Организация 1</h3></div>
-</div>
-<div class="row m-l-5">
-    <div class="col-lg-6">
-        <div class="col-md-10">
-            {{ csrf_field() }}
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.org_name') }}:</label>
-                <div class="col-sm-4">
-                    <span>Организация 1</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.eik_bulstat') }}:</label>
-                <div class="col-sm-4">
-                    <span>123123123</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.management_address') }}:</label>
-                <div class="col-sm-4">
-                    <span>ул.Незабравка 123</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.representative') }}:</label>
-                <div class="col-sm-4">
-                    <span>Иван Иванов Иванов</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.registered_at') }}:</label>
-                <div class="col-sm-4">
-                    <span>01 Януари 2019</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.phone_number') }}:</label>
-                <div class="col-sm-4">
-                    <span>1231231231</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.email') }}:</label>
-                <div class="col-sm-4">
-                    <span>ivan@ivan.bg</span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.in_ap') }}:</label>
-                <div class="col-sm-4">
-                    @include('components.checkbox', ['name' => 'test'])
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.candidate') }}:</label>
-                <div class="col-sm-4">
-                    @include('components.checkbox', ['name' => 'test'])
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="col-md-10">
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
-                <div class="col-sm-8 col-xs-6 p-r-none">
-                    <textarea
-                        class="txt-area"
-                        name=""
-                        rows="3"
-                        cols="40"
-                    ></textarea>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
-                <div class="col-sm-8 col-xs-6 p-r-none">
-                    <textarea
-                        class="txt-area"
-                        name=""
-                        rows="3"
-                        cols="40"
-                    ></textarea>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-xs-1">{{ __('custom.status') }}:</label>
-                <div class="col-sm-8 col-xs-6 p-r-none">
-                    <h3 class="display-inline">Потвърден кандидат</h3> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-t-12"/>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
+@include('components.status')
+<div class="row">
+    <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} {{$org_data->name}}</h3></div>
+</div>
+<form method="POST" action="{{ url('/admin/organisations/edit/'. $org_data->id)}}">
+    <div class="row m-l-5">
+        <div class="col-lg-6">
+            <div class="col-md-10">
+                {{ csrf_field() }}
+                @include('components.errors')
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.org_name') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="name" value="{{$org_data->name}}">
+                            <span class="error">{{ $errors->first('name') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.eik_bulstat') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="eik" value="{{$org_data->eik}}" disabled>
+                            <span class="error">{{ $errors->first('eik') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.management_address') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="address" value="{{$org_data->address}}">
+                            <span class="error">{{ $errors->first('address') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.representative') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="representative" value="{{$org_data->representative}}">
+                            <span class="error">{{ $errors->first('representative') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.registered_at') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="created_at" value="{{$org_data->created_at}}" disabled>
+                            <span class="error">{{ $errors->first('created_at') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.phone_number') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="phone" value="{{$org_data->phone}}">
+                            <span class="error">{{ $errors->first('phone') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.email') }}:</label>
+                    <div class="row w-50">
+                        <div class="col-lg-12">
+                            <input type="text" class="input-box" name="email" value="{{$org_data->email}}">
+                            <span class="error">{{ $errors->first('email') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.in_av') }}:</label>
+                    <div class="col-sm-4 p-l-none">
+                        @include('components.checkbox', ['name' => 'in_av', 'checked' => $org_data->in_av])
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12"> {{ __('custom.candidate') }}:</label>
+                    <div class="col-sm-4 p-l-none">
+                        @include('components.checkbox', ['name' => 'is_candidate', 'checked' => $org_data->is_candidate])
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="col-md-10">
+                <div class="form-group row">
+                    <label class="col-lg-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
+                    <div class="col-sm-8 col-xs-6 p-r-none">
+                        <textarea
+                            class="txt-area"
+                            name="description"
+                            rows="3"
+                            cols="40"
+                        >{{$org_data->description}}</textarea>
+                        <span class="error">{{ $errors->first('description') }}</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
+                    <div class="col-sm-8 col-xs-6 p-r-none">
+                        <textarea
+                            class="txt-area"
+                            name="references"
+                            rows="3"
+                            cols="40"
+                        >{{$org_data->references}}</textarea>
+                        <span class="error">{{ $errors->first('references') }}</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-1">{{ __('custom.status') }}:</label>
+                    <div class="col-sm-8 col-xs-6 p-r-none">
+                        <select name="status" class="ams-dropdown custom-select w-100">
+                            @if (isset($candidateStatuses))
+                                @foreach($candidateStatuses as $candidateIndex => $candidateStatuses)
+                                    <option value="{{$candidateIndex}}" {{$org_data->status == $candidateIndex ? 'selected' : ''}}>{{$candidateStatuses}}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 text-center">
+            @include('components.button', ['buttonLabel' => __('custom.save'), 'name' => 'edit'])
+        </div>
+    </div>
+</form>
 <hr class="hr-thin">
 
 <div class="row">

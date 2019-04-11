@@ -18,9 +18,6 @@ Route::get('/', function () {
 })->name('home');
 
 //================START test routes
-Route::get('/register', function () {
-    return view('organisation.register');
-});
 
 Route::get('/view', function () {
     return view('organisation.view');
@@ -50,6 +47,9 @@ Route::get('/organisation/vote', function () {
     return view('organisation.vote');
 });
 //================END test routes
+
+Route::get('/register','OrganisationController@register')->name('organisation.register');
+Route::post('/organisations','OrganisationController@store')->name('organisation.store');
 
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {

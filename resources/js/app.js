@@ -43,7 +43,7 @@ function checkVoteSize() {
     }
 }
 
-$('#filter_org').on('keyup', function(){
+$('#filter_org').on('keyup', function() {
     var input = document.getElementById('filter_org').value.toLowerCase();
     var output = document.getElementById('vote_organisations').options;
 
@@ -58,13 +58,31 @@ $('#filter_org').on('keyup', function(){
     }
 });
 
-$('.js-drop-filter').on('change', function(){
+$('.js-drop-filter').on('change', function() {
     $('.js-drop-filter').closest('form').submit();
 });
 
-$('.js-search').on('keydown', function(e){
+$('.js-search').on('keydown', function(e) {
     if (e.which == 13) {
         $('.js-search').closest('form').submit();
     }
 });
 
+$('[name="is_candidate"].checkbox-ams').on('change', function() {
+    $('.for_org_candidates').toggle($(this).is(':checked'));
+});
+
+$('.js-file-upl').on('click', function (e) {
+    e.preventDefault();
+
+    var input = $(this).parent().prev().find('.js-file-input');
+
+    input.trigger('click');
+});
+
+$('.js-plus-file-upl').on('click', function (e) {
+    e.preventDefault();
+
+    var html = $(this).parent().parent().prev().prop('outerHTML');
+    $('.plus-file-container').before(html);
+});

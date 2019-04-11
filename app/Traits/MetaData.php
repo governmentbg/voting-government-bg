@@ -6,7 +6,15 @@ trait MetaData
 {
     protected function getArrayableAppends()
     {
-        $this->appends = array_unique(array_merge($this->appends, ['updated_by_name', 'created_by_name']));
+        $userFields = [];
+        if (array_key_exists('updated_by', $this->attributes)) {
+            $userFields = array_merge($userFields, ['updated_by_name', 'updated_by_username']);
+        }
+        if (array_key_exists('created_by', $this->attributes)) {
+            $userFields = array_merge($userFields, ['created_by_name', 'created_by_username']);
+        }
+
+        $this->appends = array_unique(array_merge($this->appends, $userFields));
 
         return parent::getArrayableAppends();
     }
@@ -20,19 +28,19 @@ trait MetaData
                 return $this->organisation->name;
             }
         }
-        
+
         return '';
     }
-    
+
     public function getUpdatedByUsernameAttribute()
     {
         if ($this->updater) {
             return $this->updater->username;
         }
-        
+
         return '';
     }
-    
+
     public function getCreatedByNameAttribute()
     {
         if ($this->creator) {
@@ -42,24 +50,24 @@ trait MetaData
                 return $this->organisation->name;
             }
         }
-        
+
         return '';
     }
-    
+
     public function getCreatedByUsernameAttribute()
     {
         if ($this->creator) {
-            return $this->creator->first_name . ' ' . $this->creator->last_name;
+            return $this->creator->username;
         }
-        
+
         return '';
     }
-    
+
     public function updater()
     {
         return $this->belongsTo('App\User', 'updated_by');
     }
-    
+
     public function creator()
     {
         return $this->belongsTo('App\User', 'created_by');

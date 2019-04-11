@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\RecordSignature;
 use Awobaz\Compoships\Compoships;
+use App\Traits\MetaData;
 
 class Organisation extends Model
 {
     use Compoships;
     use RecordSignature;
+    use MetaData;
 
     const STATUS_NEW = 0;
     const STATUS_PARTICIPANT = 1;
@@ -29,6 +31,8 @@ class Organisation extends Model
     const DEFAULT_ORDER_TYPE = 'ASC';
 
     protected $perPage = 50;
+
+    protected $hidden = ['updater', 'creator'];
 
     /**
      * The attributes that aren't mass assignable.

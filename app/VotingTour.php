@@ -10,7 +10,7 @@ class VotingTour extends Model
 {
     use RecordSignature;
     use MetaData;
-  
+
     const STATUS_UPCOMING = 0;
     const STATUS_OPENED_REG = 1;
     const STATUS_CLOSED_REG = 2;
@@ -21,6 +21,8 @@ class VotingTour extends Model
 
     const DEFAULT_RECORDS_PER_PAGE = 50;
     const DEFAULT_ORDER_FIELD = 'created_at';
+
+    protected $hidden = ['updater', 'creator'];
 
     /**
      * The attributes that aren't mass assignable.
@@ -90,7 +92,7 @@ class VotingTour extends Model
             self::STATUS_BALLOTAGE => __('custom.ballotage')
         ];
     }
-    
+
     public function scopeActive($query)
     {
         return $query->where('status', '!=', self::STATUS_FINISHED);

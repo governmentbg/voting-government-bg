@@ -54,7 +54,7 @@ class OrganisationController extends ApiController
                 'references'        => 'nullable|max:8000',
                 'status'            => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
-                'files'             => 'required_if:in_av,'. Organisation::IN_AV_TRUE .'|nullable|array',
+                'files'             => 'required_unless:in_av,'. Organisation::IN_AV_TRUE .'|nullable|array',
                 'files.*.name'      => 'required|string|max:255',
                 'files.*.mime_type' => 'required|string|max:255',
                 'files.*.data'      => 'required|string|max:16777215',
@@ -116,7 +116,7 @@ class OrganisationController extends ApiController
 
                     DB::commit();
 
-                    return $this->successResponse(['org_id' => $organisation->id], true);
+                    return $this->successResponse(['id' => $organisation->id], true);
                 } catch (\Exception $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
@@ -258,6 +258,7 @@ class OrganisationController extends ApiController
      * @param string filters[reg_date_to] - optional
      * @param string order_field - optional
      * @param string order_type - optional
+     * @param boolean with_pagination - optional
      * @param integer page_number - optional
      *
      * @return json - response with status code and list of organisations or errors
@@ -272,7 +273,7 @@ class OrganisationController extends ApiController
         $filters = $request->get('filters', []);
         $orderField = $request->get('order_field', Organisation::DEFAULT_ORDER_FIELD);
         $orderType = strtoupper($request->get('order_type', Organisation::DEFAULT_ORDER_TYPE));
-        $withPagination = $request->get('with_pagination');
+        $withPagination = $request->get('with_pagination', false);
 
         $validator = \Validator::make($filters, [
             'eik'           => 'nullable|digits_between:1,19',
@@ -317,7 +318,6 @@ class OrganisationController extends ApiController
                 if (isset($filters['reg_date_to'])) {
                     $organisations->where('created_at', '<=', $filters['reg_date_to'] .' 23:59:59');
                 }
-
                 $organisations->orderBy($orderField, $orderType);
 
                 if ($withPagination) {

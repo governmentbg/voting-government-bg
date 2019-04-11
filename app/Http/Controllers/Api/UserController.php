@@ -22,7 +22,7 @@ class UserController extends ApiController
     {
         $username = $request->get('username');
         $email = $request->get('email');
-        
+
         $rules = [
             'username' => 'required|string',
             'email'    => 'required|email',
@@ -33,7 +33,7 @@ class UserController extends ApiController
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.password_hash_generation_fail'), $validator->errors()->messages());
         }
-        
+
         try {
             $password = hash_hmac('sha256', str_random(40), config('app.key'));
             $user = User::where('username', $username)->where('email', $email)->first();
@@ -42,7 +42,7 @@ class UserController extends ApiController
                     $query->where('email', $email);
                 })->first();
             }
-            
+
             if ($user) {
                 $user->update(['pw_reset_hash' => $password]);
             } else {
@@ -95,7 +95,7 @@ class UserController extends ApiController
 
         return $this->errorResponse(__('custom.password_reset_token_invalid'));
     }
-    
+
     /**
      * Change user password.
      *
@@ -202,7 +202,7 @@ class UserController extends ApiController
 
             DB::commit();
 
-            return $this->successResponse(['id' => $user->id]);
+            return $this->successResponse(['id' => $user->id], true);
         } catch (QueryException $ex) {
             DB::rollback();
             Log::error($ex->getMessage());
@@ -227,9 +227,9 @@ class UserController extends ApiController
     {
         $data = $request->get('user_data', []);
         $id = $request->get('user_id', null);
-        
+
         $data = array_intersect_key($data, array_flip(User::EDITABLE_FIELDS));
-        
+
         if (isset($id) && !empty($id)) {
             $user = User::where('id', $id)->whereNull('org_id')->first();
             if ($user && isset($data['email']) && $user->email == $data['email']) {
@@ -244,7 +244,7 @@ class UserController extends ApiController
         $rules['last_name'] = 'sometimes|required|string';
         $rules['active'] = 'sometimes|required|bool';
         $rules['user_id'] = 'required';
-        
+
         $validator = \Validator::make($data, $rules);
 
         if (!$validator->fails()) {
@@ -253,7 +253,7 @@ class UserController extends ApiController
 
                 if ($user) {
                     unset($data['user_id']);
-                    
+
                     $user->update($data);
                 } else {
                     return $this->errorResponse(__('custom.user_not_found'));

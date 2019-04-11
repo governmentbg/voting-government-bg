@@ -7,10 +7,7 @@ use App\Vote;
 use App\VotingTour;
 use App\Organisation;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 
 class VoteController extends ApiController
@@ -43,50 +40,55 @@ class VoteController extends ApiController
             ]);
 
             if (!$validator->fails()) {
-                // Ensures the string consists of integers
-                if (ctype_digit(str_replace(',', '', str_replace(' ', '', $post['org_list'])))) {
-                    $votedForOrgArray = explode(',', str_replace(' ', '', $post['org_list']));
+                try {
+                    // Ensures the string consists of integers
+                    if (ctype_digit(str_replace(',', '', str_replace(' ', '', $post['org_list'])))) {
+                        $votedForOrgArray = explode(',', str_replace(' ', '', $post['org_list']));
 
-                    $votedForListSize = sizeof($votedForOrgArray);
+                        $votedForListSize = sizeof($votedForOrgArray);
 
-                    if ($votedForListSize <= Vote::MAX_VOTES || ($votedForListSize >= Vote::MIN_VOTES)) {
-                        $currentTourOrgList = Organisation::where('voting_tour_id', VotingTour::getLatestTour()->id)
-                            ->whereIn('id', $votedForOrgArray)
-                            ->whereIn('status', [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE])
-                            ->get()->toArray();
+                        if ($votedForListSize <= Vote::MAX_VOTES || ($votedForListSize >= Vote::MIN_VOTES)) {
+                            $currentTourOrgList = Organisation::where('voting_tour_id', VotingTour::getLatestTour()->id)
+                                ->whereIn('id', $votedForOrgArray)
+                                ->whereIn('status', [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE])
+                                ->get()->toArray();
 
-                        if (sizeof($currentTourOrgList) != $votedForListSize) {
-                            return $this->errorResponse(__('custom.invalid_org_in_vote_list'));
+                            if (sizeof($currentTourOrgList) != $votedForListSize) {
+                                return $this->errorResponse(__('custom.invalid_org_in_vote_list'));
+                            }
+
+                            $vote = new Vote;
+                            $prevRecord = Vote::orderBy('vote_time', 'DESC')->first();
+
+                            $t = microtime(true);
+                            $micro = sprintf('%06d',($t - floor($t)) * 1000000);
+                            $d = new \DateTime(date('Y-m-d H:i:s.'. $micro, $t));
+
+                            $vote->vote_time = $d->format('Y-m-d H:i:s.u');
+                            $vote->voter_id = $post['org_id'];
+                            $vote->voting_tour_id = $votingTour->id;
+                            $vote->vote_data = $post['org_list'];
+                            $vote->tour_status = $votingTour->status;
+
+                            if (!is_null($prevRecord)) {
+                                $vote->prev_hash = hash('sha256',
+                                    $prevRecord->vote_time .
+                                    $prevRecord->voter_id .
+                                    $prevRecord->voting_tour_id .
+                                    $prevRecord->vote_data .
+                                    $prevRecord->tour_status .
+                                    $prevRecord->prev_hash
+                                );
+                            }
+
+                            $vote->save();
+
+                            return $this->successResponse(['id' => $vote->id], true);
                         }
-
-                        $vote = new Vote;
-                        $prevRecord = Vote::orderBy('vote_time', 'DESC')->first();
-
-                        $t = microtime(true);
-                        $micro = sprintf('%06d',($t - floor($t)) * 1000000);
-                        $d = new \DateTime(date('Y-m-d H:i:s.'. $micro, $t));
-
-                        $vote->vote_time = $d->format('Y-m-d H:i:s.u');
-                        $vote->voter_id = $post['org_id'];
-                        $vote->voting_tour_id = $votingTour->id;
-                        $vote->vote_data = $post['org_list'];
-                        $vote->tour_status = $votingTour->status;
-
-                        if (!is_null($prevRecord)) {
-                            $vote->prev_hash = hash('sha256',
-                                $prevRecord->vote_time .
-                                $prevRecord->voter_id .
-                                $prevRecord->voting_tour_id .
-                                $prevRecord->vote_data .
-                                $prevRecord->tour_status .
-                                $prevRecord->prev_hash
-                            );
-                        }
-
-                        $vote->save();
-
-                        return $this->successResponse(__('custom.vote_successful'));
                     }
+                } catch (\Exception $e) {
+                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.vote_failed'));
                 }
             }
         }
@@ -276,10 +278,10 @@ class VoteController extends ApiController
                           ->whereIn('status', Organisation::getApprovedStatuses())
                           ->whereHas('votes', function($query) use ($voteStatus) {
                               $query->where('tour_status', $voteStatus);
-                          });
-            $voters->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
+                          })
+                          ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
 
-            return $this->successResponse($voters->get());
+            return $this->successResponse($voters);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.list_voters_fail'), $e->getMessage());

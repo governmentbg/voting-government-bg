@@ -52,7 +52,7 @@
             <div class="row p-t-15">
                 <div class="col-lg-4 p-l-none p-r-none">
                     <a
-                        href="{{ url('/registration') }}"
+                        href="{{ route('organisation.register') }}"
                     ><h3 class="f-s-14">{{ __('custom.register') }}</h3></a>
                 </div>
                 <div class="col-lg-5 text-right p-l-none">                  

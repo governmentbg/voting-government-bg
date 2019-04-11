@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use \Validator;
 use App\VotingTour;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
@@ -57,7 +56,7 @@ class VotingTourController extends ApiController
             }
 
             if (isset($saved)) {
-                return $this->successResponse(['voting_tour_id' => $saved->id]);
+                return $this->successResponse(['id' => $saved->id], true);
             }
         }
 
@@ -67,7 +66,6 @@ class VotingTourController extends ApiController
     /**
      * Change the voting tour status for the active tour
      *
-     * @param integer id - required
      * @param integer new_status - required
      *
      * @return true on success, false on failure
@@ -75,7 +73,6 @@ class VotingTourController extends ApiController
     public function changeStatus(Request $request)
     {
         $post = $request->all();
-        $countActive = 0;
 
         $validator = Validator::make($post, [
             'new_status'    => 'required|int|in:'. implode(',', array_keys(VotingTour::getStatuses())),
@@ -222,16 +219,20 @@ class VotingTourController extends ApiController
         $post = $request->all();
 
         $validator = Validator::make($post, [
-            'id'    => 'required|integer|exists:voting_tour,id'
+            'tour_id'    => 'required|integer|exists:voting_tour,id'
         ]);
 
-        $votingTourData = VotingTour::where('id', $post['id'])->first();
+        if (!$validator->fails()) {
+            $votingTourData = VotingTour::where('id', $post['tour_id'])->first();
 
-        if ($votingTourData) {
-            return $this->successResponse($votingTourData);
-        } else {
-            return $this->errorResponse(__('custom.no_data_found'));
+            if ($votingTourData) {
+                return $this->successResponse($votingTourData);
+            } else {
+                return $this->errorResponse(__('custom.no_data_found'));
+            }
         }
+
+        return $this->errorResponse(__('custom.no_data_found'), $validator->errors()->messages());
     }
 
     public function listStatuses(Request $request)

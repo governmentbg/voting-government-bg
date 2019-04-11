@@ -11,10 +11,6 @@
 /*– components/ */
 @import 'components/checkbox';
 
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
 @import 'components/table';
 
 @import 'components/textinput';
@@ -375,4 +371,8 @@ input[type='file'] {
 
 .m-l-85 {
     margin-left: -85px;
+}
+
+.justify-center {
+    justify-content: center;
 }

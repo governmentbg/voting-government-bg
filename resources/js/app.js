@@ -55,3 +55,14 @@ $('#filter_org').on('keyup', function(){
         }
     }
 });
+
+$('.js-drop-filter').on('change', function(){
+    $('.js-drop-filter').closest('form').submit();
+});
+
+$('.js-search').on('keydown', function(e){
+    if (e.which == 13) {
+        $('.js-search').closest('form').submit();
+    }
+});
+

@@ -2,6 +2,7 @@
 
 @section('content')
 @include('partials.public-nav-bar')
+@include('components.breadcrumbs')
 
 <div class="container center-flex">
     @include('components.modal', [
@@ -13,6 +14,7 @@
     ])
     <form method="POST" enctype="multipart/form-data" action="{{ route('organisation.store') }}" class="m-t-lg p-sm">
         <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">
+        @include('components.status')
             <div class="row justify-center">
                 <div class="col-md-10">
                     <div>

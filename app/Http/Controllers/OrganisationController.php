@@ -6,18 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\UserController as ApiUser;
-use App\Organisation;
 
 class OrganisationController extends Controller
 {
     public function __construct()
     {
-        $this->addBreadcrumb(__('breadcrumbs.start'), '#');
-        $this->addBreadcrumb(__('breadcrumbs.settings'), '#');
+        $this->addBreadcrumb(__('breadcrumbs.start'), '/');
     }
 
     public function register(Request $request)
     {
+        $this->addBreadcrumb(__('breadcrumbs.register'), '');
+
         return view('organisation.register');
     }
 
@@ -72,9 +72,9 @@ class OrganisationController extends Controller
 
                     session()->flash('alert-success', __('custom.register_success'));
                     if (sendEmail('mails/registrationConfirm', $userData, $orgData['email'], __('custom.register_subject'))) {
-                        session()->flash('alert-success', __('custom.register_send_mail_success'));
+                        session()->flash('alert-info', __('custom.register_send_mail_success'));
                     } else {dd(__('custom.register_send_mail_failed'));
-                        session()->flash('alert-danger', __('custom.register_send_mail_failed'));
+                        session()->flash('alert-info', __('custom.register_send_mail_failed'));
                     }
 
                     return redirect('/');

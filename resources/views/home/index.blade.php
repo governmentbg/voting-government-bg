@@ -8,6 +8,7 @@
 @endif
 @include('components.breadcrumbs')
 <div class="row">
+    @include('components.status')
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
             <h3><b>{{ __('custom.online_voting_system') }}</b></h3>
@@ -55,10 +56,10 @@
                         href="{{ route('organisation.register') }}"
                     ><h3 class="f-s-14">{{ __('custom.register') }}</h3></a>
                 </div>
-                <div class="col-lg-5 text-right p-l-none">                  
+                <div class="col-lg-5 text-right p-l-none">
                     <a href="{{ route('password.request') }}">
                         <h3 class="f-s-14">{{ __('custom.forgotten_password') }}</h3>
-                    </a>         
+                    </a>
                 </div>
             </div>
             <div class="form-group row text-center p-t-15">
@@ -97,10 +98,10 @@
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
-                    <div class="col-lg-4 text-right p-l-none">                  
+                    <div class="col-lg-4 text-right p-l-none">
                         <a href="{{ route('home') }}">
                             <h3 class="f-s-14">{{ __('custom.login') }}</h3>
-                        </a>         
+                        </a>
                     </div>
                     <div class="col-lg-5 text-right">
                         @include('components.button', ['buttonLabel' => __('custom.send')])

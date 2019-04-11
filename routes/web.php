@@ -42,10 +42,6 @@ Route::get('/admin/committeeList', function () {
     return view('admin.committeeList');
 });
 
-Route::get('/admin/passwordChange', function () {
-    return view('admin.passwordChange');
-});
-
 Route::get('/admin/tour/add', function () {
     return view('tours.add');
 });
@@ -60,6 +56,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/organisation/settings', function () {
         return view('organisation.settings');
     })->name('organisation.settings');
+    
+    Route::get('/passwordChange', function () {
+            return view('auth.password_change');
+        })->name('organisation.change_password');
+        
+    Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
 });
 
 // Admin
@@ -77,6 +79,16 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/votingTours/{id}/edit','VotingTourController@edit')->name('admin.voting_tour.edit');
         Route::post('/votingTours','VotingTourController@store')->name('admin.voting_tour.store');
         Route::put('/votingTours/{id}','VotingTourController@update')->name('admin.voting_tour.update');
+        
+        Route::get('/settings', function () {
+            return view('organisation.settings');
+        })->name('admin.settings');
+        
+        Route::get('/passwordChange', function () {
+            return view('auth.password_change');
+        })->name('admin.change_password');
+        Route::post('/passwordChange', 'AuthController@changePassword');
+               
         Route::get('/logout', 'AuthController@logout')->name('admin.logout');
         Route::get('/organisations', 'OrganisationController@list')->name('admin.org_list');
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');

@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@php
+    if(request()->segment(1) == 'admin'){
+        $changePasswordRoute = route('admin.change_password');
+    }
+    else{
+        $changePasswordRoute = route('organisation.change_password');
+    }   
+@endphp
+
 @section('content')
 @include('partials.admin-nav-bar')
 @include('components.breadcrumbs')
@@ -13,7 +22,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-8">
-                        <a href="/admin/passwordChange">{{__('custom.password_change')}}</a>
+                        <a href="{{$changePasswordRoute}}">{{__('custom.password_change')}}</a>
                     </div>
                 </div>
                 <div class="form-group row">

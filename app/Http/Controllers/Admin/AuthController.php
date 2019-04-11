@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Http\Controllers\Api\UserController;
 
 class AuthController extends Controller
 {
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest:backend', ['except' => 'logout']);
+        $this->middleware('guest:backend', ['except' => ['logout', 'changePassword']]);
         $this->redirectTo = route('admin.index');
     }
 
@@ -91,7 +92,7 @@ class AuthController extends Controller
     {
         return 'username';
     }
-
+   
     /**
      * Log the user out of the application.
      *
@@ -105,5 +106,37 @@ class AuthController extends Controller
         $request->session()->invalidate();
 
         return redirect('admin/');
+    }
+    
+    public function changePassword(Request $request)
+    {
+        $user = auth()->guard('backend')->user();
+        $password = $request->get('password');
+        $newPassword = $request->get('new_password');
+        
+        $data = [
+            'user_id' => $user->id,
+            'password' => $password,
+            'new_password' => $newPassword,
+        ];
+
+        $rules = [
+            'new_password' => 'confirmed'          
+        ];
+                
+        $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+                
+        
+        list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
+        
+        if(!empty($errors)){
+            return redirect()->back()->withErrors((array)$errors);
+        }
+
+        return redirect($this->redirectTo);
     }
 }

@@ -1,7 +1,22 @@
 @extends('layouts.app')
 
+@php
+    if(request()->segment(1) == 'admin'){
+        $changePasswordRoute = route('admin.change_password');
+    }
+    else{
+        $changePasswordRoute = route('organisation.change_password');
+    }   
+@endphp
+
 @section('content')
-@include('partials.admin-nav-bar')
+
+@if(request()->segment(1) == 'admin')
+    @include('partials.admin-nav-bar')
+@else
+    @include('partials.user-nav-bar')
+@endif
+
 @include('components.breadcrumbs')
 
 <div class="container center-flex">
@@ -10,16 +25,18 @@
             <div class="col-md-10">
                 <div>
                     <h2 class="color-dark"><b>{{ __('custom.password_change') }}</b></h2>
+                    
                 </div>
-                <form method="POST" class="m-t-20">
+                <form method="POST" class="m-t-20" action="{{$changePasswordRoute}}">
                     {{ csrf_field() }}
+                    @include('components.errors')
                     <div class="form-group row required">
-                        <label for="old_password" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.old_password') }}:</label>
+                        <label for="password" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.old_password') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="password"
                                 class="input-box"
-                                name="old_password"
+                                name="password"
                                 value=""
                             >
                             <span class="error">{{ $errors->first('old_password') }}</span>
@@ -43,7 +60,7 @@
                             <input
                                 type="password"
                                 class="input-box"
-                                name="new_password_repeat"
+                                name="new_password_confirmation"
                                 value=""
                             >
                             <span class="error">{{ $errors->first('new_password_repeat') }}</span>

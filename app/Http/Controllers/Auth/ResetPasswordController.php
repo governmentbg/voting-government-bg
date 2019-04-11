@@ -41,7 +41,7 @@ class ResetPasswordController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest', ['except' => 'changePassword']);
     }
     
     /**
@@ -77,7 +77,7 @@ class ResetPasswordController extends Controller
             ]);
         
         if(!empty($errors)){
-            return back()->withErrors((array)$errors);;
+            return back()->withErrors((array)$errors);
         }
         
         return $this->sendResetResponse(Password::PASSWORD_RESET);
@@ -95,5 +95,37 @@ class ResetPasswordController extends Controller
             //'email' => 'required|email',
             'password' => 'required|confirmed|min:6',
         ];
+    }
+    
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+        $password = $request->get('password');
+        $newPassword = $request->get('new_password');
+        
+        $data = [
+            'user_id' => $user->id,
+            'password' => $password,
+            'new_password' => $newPassword,
+        ];
+
+        $rules = [
+            'new_password' => 'confirmed'          
+        ];
+                
+        $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+                
+        
+        list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
+        
+        if(!empty($errors)){
+            return redirect()->back()->withErrors((array)$errors);
+        }
+
+        return redirect($this->redirectTo);
     }
 }

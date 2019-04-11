@@ -120,6 +120,7 @@ return [
         'username' => 'потребителско име',
         'password' => 'парола',
         'password_confirm' => 'потвърди парола',
+        'new_password' => 'нова парола',
         'first_name' => 'име',
         'last_name' => 'фамилия',
         'email' => 'имейл адрес',

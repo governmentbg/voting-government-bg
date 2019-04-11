@@ -8,6 +8,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@import 'node_modules/bootstrap-table/src/bootstrap-table';
+//@import 'datepicker';
+
 /*– components/ */
 @import 'components/checkbox';
 

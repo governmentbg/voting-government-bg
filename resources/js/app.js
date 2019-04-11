@@ -6,6 +6,8 @@
  */
 
 require('./bootstrap');
+require('bootstrap-table');
+require('bootstrap-datepicker');
 
 $('#vote_organisations').dblclick(function() {
     $('#vote_organisations option:selected').remove().appendTo($('#votefor'));

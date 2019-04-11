@@ -7,12 +7,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title></title>
         <!-- Styles -->
-        <link rel="stylesheet" href="/css/app.css">
-
-
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" rel="stylesheet">
-        <link href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css" rel="stylesheet">
-
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/datepicker.min.css') }}">
 
         <!-- <link href="{{ asset('fonts/vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">-->
@@ -34,10 +30,8 @@
         </footer>
 
         <script src="{{ asset('js/app.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.bg.min.js"></script>
-        <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
-        <!-- <script src="{{ asset('js/jquery.smartmenus.min.js') }}"></script>
+    <!-- <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+        <script src="{{ asset('js/jquery.smartmenus.min.js') }}"></script>
         <script src="{{ asset('js/jquery.nanoscroller.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap-colorpicker.js') }}"></script>
         <script src="{{ asset('js/bootstrap-clockpicker.min.js') }}"></script>

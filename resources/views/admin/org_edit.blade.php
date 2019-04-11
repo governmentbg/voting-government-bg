@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} {{$org_data->name}}</h3></div>
 </div>
-<form method="POST" action="{{ url('/admin/organisations/edit/'. $org_data->id)}}">
+<form method="POST" action="{{ url('/admin/organisations/update/'. $org_data->id)}}">
     <div class="row m-l-5">
         <div class="col-lg-6">
             <div class="col-md-10">

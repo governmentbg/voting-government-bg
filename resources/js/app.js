@@ -72,7 +72,7 @@ $('[name="is_candidate"].checkbox-ams').on('change', function() {
     $('.for_org_candidates').toggle($(this).is(':checked'));
 });
 
-$('.js-file-upl').on('click', function (e) {
+$(document).on('click', '.js-file-upl', function (e) {
     e.preventDefault();
 
     var input = $(this).parent().prev().find('.js-file-input');
@@ -80,9 +80,13 @@ $('.js-file-upl').on('click', function (e) {
     input.trigger('click');
 });
 
-$('.js-plus-file-upl').on('click', function (e) {
+$(document).on('click', '.js-plus-file-upl', function (e) {
     e.preventDefault();
 
     var html = $(this).parent().parent().prev().prop('outerHTML');
     $('.plus-file-container').before(html);
+});
+
+$('.js-showTerms').on('click', function() {
+    $('#info').modal('show');
 });

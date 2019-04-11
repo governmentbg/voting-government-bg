@@ -272,8 +272,7 @@ class OrganisationController extends ApiController
         $filters = $request->get('filters', []);
         $orderField = $request->get('order_field', Organisation::DEFAULT_ORDER_FIELD);
         $orderType = strtoupper($request->get('order_type', Organisation::DEFAULT_ORDER_TYPE));
-        $page = $request->get('page_number');
-        $request->request->add(['page' => $page]);
+        $withPagination = $request->get('with_pagination');
 
         $validator = \Validator::make($filters, [
             'eik'           => 'nullable|digits_between:1,19',
@@ -319,11 +318,16 @@ class OrganisationController extends ApiController
                     $organisations->where('created_at', '<=', $filters['reg_date_to'] .' 23:59:59');
                 }
 
-                $count = $organisations->count();
+                $organisations->orderBy($orderField, $orderType);
 
-                $organisations->orderBy($orderField, $orderType)->paginate();
+                if ($withPagination) {
+                    $request->request->add(['page' => $request->get('page_number')]);
+                    $organisations = $organisations->paginate();
+                } else {
+                    $organisations = $organisations->get();
+                }
 
-                return $this->successResponse(['organisations' => $organisations->get(), 'total_records' => $count], true);
+                return $this->successResponse($organisations);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
                 return $this->errorResponse(__('custom.list_org_fail'), $e->getMessage());

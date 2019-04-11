@@ -19,17 +19,17 @@ class AuthController extends Controller
     }
 
     protected $guard = 'backend';
-    
+
     //path to redirect to after login
     protected $redirectTo = null;
-    
+
     /**
      * The maximum number of attempts to allow.
      *
      * @var int
      */
     protected $maxAttempts = 5;
-    
+
     /**
      * The number of minutes to throttle for.
      *
@@ -86,12 +86,12 @@ class AuthController extends Controller
 
         return $this->sendFailedLoginResponse($request);
     }
-    
+
     public function username()
     {
         return 'username';
     }
-    
+
     /**
      * Log the user out of the application.
      *

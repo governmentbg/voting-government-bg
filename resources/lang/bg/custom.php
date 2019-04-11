@@ -155,5 +155,5 @@ return [
     'registered_participants' => 'Регистрирани участници',
     'selected_participants' => 'Избрани участници',
     'max_14' => '(макс. 14)',
-
+    'all' => 'Всички',
 ];

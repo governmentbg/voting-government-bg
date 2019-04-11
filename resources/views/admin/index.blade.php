@@ -40,12 +40,12 @@
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
-                    <div class="col-lg-6 p-l-none">
+                    {{--<div class="col-lg-6 p-l-none">
                         <a href="{{ url('/password/forgotten') }}">
                             <h3 class="f-s-14">{{ __('custom.forgotten_password') }}</h3>
                         </a>
-                    </div>
-                    <div class="col-lg-4 text-right">
+                    </div>--}}
+                    <div class="col-lg-9 text-right">
                         @include('components.button', ['buttonLabel' => __('custom.login')])
                     </div>
                 </div>

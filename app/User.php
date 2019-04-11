@@ -6,12 +6,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\RecordSignature;
 use Awobaz\Compoships\Compoships;
+use App\Http\Controllers\Traits\CanResetPassword;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use Compoships;
     use RecordSignature;
+    use CanResetPassword;
     
     const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
     
@@ -34,7 +36,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'updater', 'creator', 'org_id', 'voting_tour_id'
+        'password', 'updater', 'creator', 'org_id', 'voting_tour_id',
     ];
 
     /**
@@ -54,7 +56,7 @@ class User extends Authenticatable
     public function scopeSort($query, $field, $order)
     {
         if (isset($field)) {
-            if($field == 'name'){
+            if ($field == 'name') {
                 return $query->orderBy('first_name', $order)->orderBy('last_name', $order);
             }
             return $query->orderBy($field, $order);

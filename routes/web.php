@@ -15,8 +15,9 @@ Auth::routes();
 
 Route::get('/', function () {
     return view('home.index');
-});
+})->name('home');
 
+//================START test routes
 Route::get('/register', function () {
     return view('organisation.register');
 });
@@ -53,17 +54,16 @@ Route::get('/admin/tour/add', function () {
     return view('tours.add');
 });
 
-Route::get('/organisation/settings', function () {
-    return view('organisation.settings');
-});
-
 Route::get('/organisation/vote', function () {
     return view('organisation.vote');
 });
+//================END test routes
 
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
-    //
+    Route::get('/organisation/settings', function () {
+        return view('organisation.settings');
+    })->name('organisation.settings');
 });
 
 // Admin

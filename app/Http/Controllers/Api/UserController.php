@@ -35,7 +35,7 @@ class UserController extends ApiController
         }
         
         try {
-            $password = Hash::make(str_random(60));
+            $password = hash_hmac('sha256', str_random(40), config('app.key'));
             $user = User::where('username', $username)->where('email', $email)->first();
             if (!$user) {
                 $user = User::where('username', $username)->whereHas('organisation', function ($query) use ($email) {

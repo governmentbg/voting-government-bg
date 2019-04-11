@@ -39,15 +39,20 @@ if(!function_exists('api_result')){
      * @param string $httpMethod
      * @return array
      */
-    function api_result($class, $method_name, $params = true, $httpMethod = 'POST'){
+    function api_result($class, $method_name, $params = true, $resultKey = null, $httpMethod = 'POST'){
         $result = api($class, $method_name, $params , $httpMethod);
-        
+
         $data = $errors = [];
         if($result->success){
             if(isset($result->data)){
                 $data = $result->data;
             }else{
-                $data = (object)[];
+                if(isset($resultKey) && isset($result->{$resultKey})){
+                    $data = $result->{$resultKey};
+                }
+                else{
+                    $data = (object)[];
+                }
             }
         }
         else{

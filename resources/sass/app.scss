@@ -307,6 +307,11 @@ input[type='file'] {
     border-color: $darkRed;
 }
 
+.alert-status{
+    color: $darkBlue;
+    border-color: $darkBlue;
+}
+
 .search-box {
     border: 2px solid $darkBlue;
     border-radius: 7px;

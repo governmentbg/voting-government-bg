@@ -39,7 +39,8 @@
             "database/factories"
         ],
         "files": [
-            "app/Helpers/ApiHelper.php"
+            "app/Helpers/ApiHelper.php",
+            "app/Helpers/LangHelper.php"
         ]
     },
     "autoload-dev": {

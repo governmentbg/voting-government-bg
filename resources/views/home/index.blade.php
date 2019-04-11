@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="col-lg-5 p-l-40">
-        @if(!auth()->check())
+        @if(!auth()->check() && !isset($reset_password))
         <div>
             <form method="POST" action="{{route('login')}}">
                 {{ csrf_field() }}
@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                        <input type="text" class="input-box" name="username">
+                        <input type="text" class="input-box" name="username" value="{{old('username')}}">
                         <span class="error">{{ $errors->first('username') }}</span>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group row">
                 <div class="col-lg-9 p-l-none">
-                        <input type="password" class="input-box" name="password">
+                        <input type="password" class="input-box" name="password" autocomplete="off">
                         <span class="error">{{ $errors->first('password') }}</span>
                     </div>
                 </div>
@@ -55,10 +55,10 @@
                         href="{{ url('/registration') }}"
                     ><h3 class="f-s-14">{{ __('custom.register') }}</h3></a>
                 </div>
-                <div class="col-lg-5 text-right p-l-none">
-                <a
-                        href="{{ url('/password/forgotten') }}"
-                    ><h3 class="f-s-14">{{ __('custom.forgotten_password') }}</h3></a>
+                <div class="col-lg-5 text-right p-l-none">                  
+                    <a href="{{ route('password.request') }}">
+                        <h3 class="f-s-14">{{ __('custom.forgotten_password') }}</h3>
+                    </a>         
                 </div>
             </div>
             <div class="form-group row text-center p-t-15">
@@ -67,6 +67,46 @@
                 </div>
             </div>
         </div>
+        @elseif(!auth()->check())
+            <!-- Forgotten password form -->
+            <form method="POST" action="{{ route('password.email') }}">
+                {{ csrf_field() }}
+                <div class="form-group row">
+                    <div class="col-lg-9">@include('components.errors')</div>
+                    <div class="col-lg-9">@include('components.status')</div>
+                </div>
+                <div class="form-group row">
+                    <h3><b>{{ __('custom.forgotten_password') }}</b></h3>
+                </div>
+                <div class="form-group row m-b-none">
+                    <label for="username" class="col-xs-12 col-form-label">{{ __('custom.user_name') }}:</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-9 p-l-none">
+                        <input type="text" class="input-box" name="username">
+                        <span class="error">{{ $errors->first('username') }}</span>
+                    </div>
+                </div>
+                <div class="form-group row m-b-none">
+                    <label for="email" class="col-xs-12 col-form-label">{{ __('custom.email') }}:</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-9 p-l-none">
+                        <input type="text" class="input-box" name="email">
+                        <span class="error">{{ $errors->first('email') }}</span>
+                    </div>
+                </div>
+                <div class="form-group row p-t-15">
+                    <div class="col-lg-4 text-right p-l-none">                  
+                        <a href="{{ route('home') }}">
+                            <h3 class="f-s-14">{{ __('custom.login') }}</h3>
+                        </a>         
+                    </div>
+                    <div class="col-lg-5 text-right">
+                        @include('components.button', ['buttonLabel' => __('custom.send')])
+                    </div>
+                </div>
+            </form>
         @endif
     </div>
 </div>

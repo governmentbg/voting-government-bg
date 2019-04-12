@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @php
-    if(request()->segment(1) == 'admin'){
+    if(request()->segment(1) == 'admin'){    
         $changePasswordRoute = route('admin.change_password');
+        $votingToursRoute = route('admin.voting_tour.list');
     }
     else{
         $changePasswordRoute = route('organisation.change_password');
+        $votingToursRoute = route('home');
     }   
 @endphp
 
@@ -27,7 +29,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-8">
-                        <a href="/list">{{__('custom.elections')}}</a>
+                        <a href="{{ $votingToursRoute }}">{{__('custom.elections')}}</a>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\RecordSignature;
 use Awobaz\Compoships\Compoships;
 use App\Http\Controllers\Traits\CanResetPassword;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -78,5 +79,27 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+    
+    /**
+     * Get the notification routing information for the given driver.
+     *
+     * @param  string  $driver
+     * @return mixed
+     */
+    public function routeNotificationFor($driver)
+    {
+        if (method_exists($this, $method = 'routeNotificationFor'.Str::studly($driver))) {
+            return $this->{$method}();
+        }
+
+        switch ($driver) {
+            case 'database':
+                return $this->notifications();
+            case 'mail':
+                return $this->getEmailForPasswordReset();
+            case 'nexmo':
+                return $this->phone_number;
+        }
     }
 }

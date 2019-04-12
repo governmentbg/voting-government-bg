@@ -14,6 +14,10 @@ trait CanResetPassword
      */
     public function getEmailForPasswordReset()
     {
+        if(!$this->email){
+            return $this->organisation->email;
+        }
+        
         return $this->email;
     }
     

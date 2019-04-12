@@ -37,7 +37,7 @@
 @endphp
 
 @section('content')
-    @include('partials.org-nav-bar')
+    @include('partials.user-nav-bar')
         @include('components.breadcrumbs')
         <div class="row p-b-15">
             <div class="col-lg-12 p-l-40"><h3>{{ __('custom.request_for_resolution') }}</h3></div>

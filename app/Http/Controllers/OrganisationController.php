@@ -94,9 +94,9 @@ class OrganisationController extends BaseFrontendController
         return redirect()->back()->withErrors($errors)->withInput();
     }
     
-    public function view($id)
+    public function view()
     {       
-        $this->authorize('view', Organisation::where('id', $id)->first());
+        $id = auth()->user()->org_id;
         
         list($org, $errors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
 

@@ -45,7 +45,7 @@ Route::post('/organisations','OrganisationController@store')->name('organisation
 
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/organisations/settings', function () {
+    Route::get('/settings', function () {
         return view('organisation.settings');
     })->name('organisation.settings');
 
@@ -55,9 +55,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
     
-    Route::get('/organisations/{id}', 'OrganisationController@view');
+    Route::get('/view', 'OrganisationController@view')->name('organisation.view');
     
-    Route::get('/organisations/{org_id}/messages/{id}', function () { return view('organisation.request'); })->name('organisation.messages');
+    Route::get('/messages/{id}', function () { return view('organisation.request'); })->name('organisation.messages');
 });
 
 // Admin

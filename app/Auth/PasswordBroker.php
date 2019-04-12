@@ -29,6 +29,7 @@ class PasswordBroker extends \Illuminate\Auth\Passwords\PasswordBroker  implemen
             return (array)$errors;
         }
         
+        unset($credentials['email']);
         $user = $this->getUser($credentials);
 
         if (is_null($user)) {

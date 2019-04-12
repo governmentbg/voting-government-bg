@@ -10,6 +10,7 @@
             <form method="POST" action="{{route('password.reset', ['token' => null])}}">
                 {{ csrf_field() }}
                 @include('components.errors')
+                @include('components.status')
                 <input type="hidden" value="{{ $token }}" name="token">
                 <div class="form-group row">
                     <h3><b>{{ __('custom.forgotten_password') }}</b></h3>

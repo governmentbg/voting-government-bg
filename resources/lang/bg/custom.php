@@ -174,4 +174,6 @@ return [
     'terms_and_conditions' => 'Общи условия',
     'required_mgs' => 'Моля попълнете това поле',
     'registered_orgs' => 'Регистрирани организации',
+    'last_updated_by' => 'Последно променил',
+    'last_updated_at' => 'Последна промяна',
 ];

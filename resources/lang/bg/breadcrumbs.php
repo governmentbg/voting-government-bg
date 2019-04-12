@@ -6,5 +6,6 @@ return [
     'voting_tour' => 'Изборен тур',
     'organisations' => 'Организации',
     'register' => 'Регистрация',
+    'voting_tours' => 'Изборни турове',
 ];
 

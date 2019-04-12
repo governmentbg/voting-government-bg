@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\UserController as ApiUser;
+use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Organisation;
 use App\Message;
 
@@ -93,31 +94,30 @@ class OrganisationController extends BaseFrontendController
 
         return redirect()->back()->withErrors($errors)->withInput();
     }
-    
-    public function view($id)
-    {       
-        $this->authorize('view', Organisation::where('id', $id)->first());
-        
+
+    public function view()
+    {
+        $id = auth()->user()->org_id;
         list($org, $errors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
 
         if(!empty($errors)){
            return back()->withErrors($errors);
         }
-        
+
 //        list($messages, $errors) = api_result(APIMessage::class, 'listByOrg', ['org_id' => $id]);
-//        
+//
 //        if(!empty($errors)){
 //           return back()->withErrors($errors);
 //        }
-        
+
         $messages = Message::where('sender_org_id', $org->id)->whereNull('parent_id')->get();
-        
+
         list($files, $errors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
-                
+
         if(!empty($errors)){
            return back()->withErrors($errors);
         }
-                   
+
         $data = [
             'organisation' => $org,
             'status' => (Organisation::getStatuses())[$org->status],
@@ -127,5 +127,27 @@ class OrganisationController extends BaseFrontendController
         ];
 
         return view('organisation.view', $data);
+    }
+
+    public function downloadFile(Request $request)
+    {
+        $id = $request->offsetGet('id');
+        list($file, $filesErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
+
+        if (!empty($file->data)) {
+            $file->data = base64_decode($file->data);
+            return response($file->data, 200, [
+                'Content-Type'          => $file->mime_type,
+                'Content-Disposition'   => 'attachment; filename="'. $file->name .'"',
+            ]);
+        }
+
+        if ($filesErrors) {
+            $request->session()->flash('alert-danger', __('custom.edit_error'));
+            return redirect()->back()->withErrors(isset($filesErrors) ? $filesErrors : []);
+        }
+
+        $request->session()->flash('alert-danger', __('custom.file_not_found'));
+        return redirect()->back();
     }
 }

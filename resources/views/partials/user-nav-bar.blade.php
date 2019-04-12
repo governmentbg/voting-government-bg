@@ -1,6 +1,6 @@
 <div class="flex-nav-items p-t-15">
     @if(auth()->check())
-    <div class="p-r-15"><a href="#" class="f-s-21 color-black text-decoration-none">{{ auth()->user()->organisation->name }}</a></div>
+    <div class="p-r-15 f-s-21">{{ auth()->user()->organisation->name }}</div>
     @endif
     <div class="p-r-15"><a href="#" class="f-s-21 color-black text-decoration-none">{{ __('custom.votingmenu') }}</a></div>
     <div class="p-r-15"><a href="{{ route('organisation.settings')}}" class="f-s-21 color-black text-decoration-none">{{ __('custom.settings') }}</a></div>

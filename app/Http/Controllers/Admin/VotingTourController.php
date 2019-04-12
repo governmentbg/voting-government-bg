@@ -15,7 +15,7 @@ class VotingTourController extends BaseAdminController
     {
         parent::__construct();
 
-        $this->addBreadcrumb(__('breadcrumbs.start'), '#');
+        $this->addBreadcrumb(__('breadcrumbs.start'), 'organisations');
         $this->addBreadcrumb(__('breadcrumbs.settings'), 'settings');
     }
 

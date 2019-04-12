@@ -102,8 +102,8 @@
                                     <td>{{$singleOrg->created_at}}</td>
                                     <td>{{$singleOrg->email}}</td>
                                     <td>
-                                        <a href="{{ url('admin/organisations/view/' . $singleOrg->id) }}"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px"/></a>
-                                        <a href="{{ url('admin/organisations/edit/' . $singleOrg->id) }}" class="p-l-25"><img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/></a>
+                                        <!-- <a href="{{ url('admin/organisations/view/' . $singleOrg->id) }}"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px"/></a> -->
+                                        <a href="{{ url('admin/organisations/edit/' . $singleOrg->id) }}"><img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/></a>
                                     </td>
                                 </tr>
                             @endforeach

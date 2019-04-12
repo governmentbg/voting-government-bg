@@ -27,7 +27,7 @@
                     <h3><b>{{ __('custom.login_into_platform') }}</b></h3>
                 </div>
                 <div class="form-group row m-b-none">
-                    <label for="username" class="col-xs-12 col-form-label">{{ __('custom.user_name') }}:</label>
+                    <label for="username" class="col-xs-12">{{ __('custom.user_name') }}:</label>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="form-group row m-b-none">
-                    <label for="password" class="col-xs-12 col-form-label">{{ __('custom.password') }}:</label>
+                    <label for="password" class="col-xs-12">{{ __('custom.password') }}:</label>
                 </div>
                 <div class="form-group row">
                 <div class="col-lg-9 p-l-none">
@@ -98,12 +98,7 @@
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
-                    <div class="col-lg-4 text-right p-l-none">
-                        <a href="{{ route('home') }}">
-                            <h3 class="f-s-14">{{ __('custom.login') }}</h3>
-                        </a>
-                    </div>
-                    <div class="col-lg-5 text-right">
+                    <div class="col-lg-9 text-right">
                         @include('components.button', ['buttonLabel' => __('custom.send')])
                     </div>
                 </div>

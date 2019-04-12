@@ -1,18 +1,28 @@
 @extends('layouts.app')
 
 @php
-    if(request()->segment(1) == 'admin'){    
+    if(request()->segment(1) == 'admin'){
         $changePasswordRoute = route('admin.change_password');
-        $votingToursRoute = route('admin.voting_tour.list');
+        $registeredOrgs = route('admin.voting_tour.list');
+        $route = route('admin.org_list');
     }
-    else{
+    else {
         $changePasswordRoute = route('organisation.change_password');
-        $votingToursRoute = route('home');
-    }   
+        $registeredOrgs='';
+        $route = route('organisation.view');
+    }
 @endphp
 
 @section('content')
-@include('partials.admin-nav-bar')
+@if(request()->segment(1) == 'admin')
+    @include('partials.admin-nav-bar')
+@else
+    @include('partials.user-nav-bar')
+@endif
+@php
+    $breadcrumbs[] = (object) ['label' => 'Начало', 'link' => $route];
+    $breadcrumbs[] = (object) ['label' => 'Настройки'];
+@endphp
 @include('components.breadcrumbs')
 
 <div class="container center-flex">
@@ -27,11 +37,13 @@
                         <a href="{{$changePasswordRoute}}">{{__('custom.password_change')}}</a>
                     </div>
                 </div>
+                @if (request()->segment(1) == 'admin')
                 <div class="form-group row">
                     <div class="col-sm-8">
-                        <a href="{{ $votingToursRoute }}">{{__('custom.elections')}}</a>
+                        <a href="{{$registeredOrgs}}">{{__('custom.elections')}}</a>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

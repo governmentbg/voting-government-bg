@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @php
-    if(request()->segment(1) == 'admin'){
+    if (request()->segment(1) == 'admin'){
         $changePasswordRoute = route('admin.change_password');
-    }
-    else{
+        $breadRoute = route('admin.org_list');
+        $breadSettings = url('admin/settings');
+    } else{
         $changePasswordRoute = route('organisation.change_password');
-    }   
+        $breadRoute = route('organisation.view');
+        $breadSettings = url('settings');
+    }
 @endphp
 
 @section('content')
@@ -16,8 +19,12 @@
 @else
     @include('partials.user-nav-bar')
 @endif
-
-@include('components.breadcrumbs')
+@php
+    $breadcrumbs[] = (object) ['label' => 'Начало', 'link' => $breadRoute];
+    $breadcrumbs[] = (object) ['label' => 'Настройки', 'link' => $breadSettings];
+    $breadcrumbs[] = (object) ['label' => 'Смяна на паролата'];
+@endphp
+@include('components.breadcrumbs', $breadcrumbs)
 
 <div class="container center-flex">
     <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">
@@ -25,7 +32,6 @@
             <div class="col-md-10">
                 <div>
                     <h2 class="color-dark"><b>{{ __('custom.password_change') }}</b></h2>
-                    
                 </div>
                 <form method="POST" class="m-t-20" action="{{$changePasswordRoute}}">
                     {{ csrf_field() }}

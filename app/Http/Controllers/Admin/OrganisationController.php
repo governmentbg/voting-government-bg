@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
+use App\Http\Controllers\Api\FileController as ApiFile;
 
 class OrganisationController extends BaseAdminController
 {
@@ -13,7 +14,7 @@ class OrganisationController extends BaseAdminController
     {
         parent::__construct();
 
-        $this->addBreadcrumb(__('breadcrumbs.start'), '#');
+        $this->addBreadcrumb(__('breadcrumbs.start'), route('admin.org_list'));
     }
 
     public function list(Request $request)
@@ -65,7 +66,6 @@ class OrganisationController extends BaseAdminController
         list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses' );
         list($candidateStatuses, $candidateErrors) = api_result(ApiOrganisation::class, 'listCandidateStatuses');
 
-        $this->addBreadcrumb(__('breadcrumbs.organisations'), $votingTour->name);
         $statuses = collect($statuses)->pluck('name', 'id')->toArray();
         $candidateStatuses = collect($candidateStatuses)->pluck('name', 'id')->toArray();
 
@@ -80,11 +80,6 @@ class OrganisationController extends BaseAdminController
         ]);
     }
 
-    public function view(Request $request)
-    {
-        return view('admin.org_view');
-    }
-
     public function edit(Request $request)
     {
         $id = $request->offsetGet('id');
@@ -92,12 +87,15 @@ class OrganisationController extends BaseAdminController
             'org_id' => $id
         ]);
 
-        list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses' );
+        $this->addBreadcrumb($org_data->name);
+        list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
+        list($files, $filesErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
         $candidateStatuses = collect($statuses)->pluck('name', 'id')->toArray();
 
         return view('admin.org_edit', [
             'org_data'          => $org_data,
-            'candidateStatuses' => $candidateStatuses
+            'candidateStatuses' => $candidateStatuses,
+            'files'             => $files
         ]);
     }
 
@@ -139,5 +137,27 @@ class OrganisationController extends BaseAdminController
             $request->session()->flash('alert-danger', __('custom.edit_error'));
             return redirect()->back()->withErrors(isset($editErrors) ? $editErrors : []);
         }
+    }
+
+    public function downloadFile(Request $request)
+    {
+        $id = $request->offsetGet('id');
+        list($file, $filesErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
+
+        if (!empty($file->data)) {
+            $file->data = base64_decode($file->data);
+            return response($file->data, 200, [
+                'Content-Type'          => $file->mime_type,
+                'Content-Disposition'   => 'attachment; filename="'. $file->name .'"',
+            ]);
+        }
+
+        if ($filesErrors) {
+            $request->session()->flash('alert-danger', __('custom.edit_error'));
+            return redirect()->back()->withErrors(isset($filesErrors) ? $filesErrors : []);
+        }
+
+        $request->session()->flash('alert-danger', __('custom.file_not_found'));
+        return redirect()->back();
     }
 }

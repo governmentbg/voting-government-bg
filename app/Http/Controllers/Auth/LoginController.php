@@ -25,19 +25,19 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
-    
+    protected $redirectTo = '/view';
+
     /**
      * The maximum number of attempts to allow.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     protected $maxAttempts = 5;
-    
+
     /**
      * The number of minutes to throttle for.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     protected $decayMinutes = 15;
 
@@ -50,7 +50,7 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-    
+
     public function username()
     {
         return 'username';

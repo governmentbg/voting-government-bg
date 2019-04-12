@@ -41,7 +41,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest:backend', ['except' => ['logout', 'changePassword']]);
-        $this->redirectTo = route('admin.index');
+        $this->redirectTo = route('admin.org_list');
     }
 
     protected function guard()
@@ -92,7 +92,7 @@ class AuthController extends Controller
     {
         return 'username';
     }
-   
+
     /**
      * Log the user out of the application.
      *
@@ -107,13 +107,15 @@ class AuthController extends Controller
 
         return redirect('admin/');
     }
-    
+
     public function changePassword(Request $request)
     {
         $user = auth()->guard('backend')->user();
         $password = $request->get('password');
         $newPassword = $request->get('new_password');
-        
+
+        $this->addBreadcrumb(__('breadcrumbs.start'), route('admin'));
+
         $data = [
             'user_id' => $user->id,
             'password' => $password,
@@ -121,18 +123,17 @@ class AuthController extends Controller
         ];
 
         $rules = [
-            'new_password' => 'confirmed'          
+            'new_password' => 'confirmed'
         ];
-                
+
         $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
         }
-                
-        
+
         list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
-        
+
         if(!empty($errors)){
             return redirect()->back()->withErrors((array)$errors);
         }

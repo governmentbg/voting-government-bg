@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.admin-nav-bar')
+@if(!auth()->guard('backend')->check())
+    @include('partials.public-nav-bar')
+@else
+    @include('partials.admin-nav-bar')
+@endif
 @include('components.breadcrumbs')
 <div class="row">
     <div class="col-lg-7 p-l-25">

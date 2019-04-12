@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-4 col-xs-12"> {{ __('custom.in_ap') }}:</label>
+                <label class="col-sm-4 col-xs-12"> {{ __('custom.in_av') }}:</label>
                 <div class="col-sm-4">
                     @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->in_av])
                 </div>
@@ -167,7 +167,7 @@
         <div class="col-lg-6 p-l-40">
             <label class="col-md-6 col-xs-12">{{ $file->name }}</label>
             <div class="col-md-6 display-inline">
-                <a href="#"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
+                <a href="{{route('fileDowload', $file->id)}}"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
             </div>
         </div>
     @endforeach

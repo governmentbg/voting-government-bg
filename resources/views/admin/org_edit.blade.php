@@ -187,23 +187,19 @@
         >{{ __('custom.new_message') }}</button>
     </div>
 </div>
-
+@if (!empty($files))
 <hr class="hr-thin">
+    <div class="row">
+        <div class="col-lg-12 p-l-40"><h2>{{ __('custom.applied_files') }}</h2></div>
+    </div>
 
-<div class="row">
-    <div class="col-lg-12 p-l-40"><h2>{{ __('custom.applied_files') }}</h2></div>
-</div>
-<div class="col-lg-6">
-    <label class="col-md-6 col-xs-12">Удостоверение за удостоверено удостоверение.pdf</label>
-    <div class="col-md-6 display-inline">
-        <a href="#"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
-    </div>
-</div>
-<div class="col-lg-6">
-    <label class="col-md-6 col-xs-12">Удостоверение за удостоверено удостоверение.pdf</label>
-    <div class="col-md-6 display-inline">
-        <a href="#"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
-    </div>
-</div>
-</div>
+    @foreach ($files as $singleFile)
+        <div class="col-lg-6">
+            <label class="col-md-6 col-xs-12">{{$singleFile->name}}</label>
+            <div class="col-md-6 display-inline">
+                <a href="{{route('admin.fileDowload', $singleFile->id)}}"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
+            </div>
+        </div>
+    @endforeach
+@endif
 @endsection

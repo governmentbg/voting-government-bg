@@ -1,8 +1,8 @@
 @if(isset($breadcrumbs) && count($breadcrumbs))
 <div class="breadcrumbs-container">
     <ol class="breadcrumb">
-        @php 
-        $last_crumb = array_pop($breadcrumbs); 
+        @php
+            $last_crumb = array_pop($breadcrumbs);
         @endphp
         @foreach($breadcrumbs as $crumb)
             @if(isset($crumb->link))

@@ -45,7 +45,7 @@ Route::post('/organisations','OrganisationController@store')->name('organisation
 
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/organisations/settings', function () {
+    Route::get('/settings', function () {
         return view('organisation.settings');
     })->name('organisation.settings');
 
@@ -54,10 +54,11 @@ Route::group(['middleware' => ['auth']], function () {
         })->name('organisation.change_password');
 
     Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
-    
-    Route::get('/organisations/{id}', 'OrganisationController@view');
-    
-    Route::get('/organisations/{org_id}/messages/{id}', function () { return view('organisation.request'); })->name('organisation.messages');
+
+    Route::get('/view', 'OrganisationController@view')->name('organisation.view');
+
+    Route::get('/messages/{id}', function () { return view('organisation.request'); })->name('organisation.messages');
+    Route::get('/files/download/{id}', 'OrganisationController@downloadFile')->name('fileDowload');
 });
 
 // Admin
@@ -89,6 +90,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/organisations', 'OrganisationController@list')->name('admin.org_list');
         Route::post('/organisations/update/{id}', 'OrganisationController@update')->name('admin.org_edit');
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
+        Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
 
         Route::get('/home', function(){ return 'OK';})->name('admin.home');// TODO for testing only
     });

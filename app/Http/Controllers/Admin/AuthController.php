@@ -114,8 +114,6 @@ class AuthController extends Controller
         $password = $request->get('password');
         $newPassword = $request->get('new_password');
 
-        $this->addBreadcrumb(__('breadcrumbs.start'), route('admin'));
-
         $data = [
             'user_id' => $user->id,
             'password' => $password,

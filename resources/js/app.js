@@ -90,3 +90,13 @@ $(document).on('click', '.js-plus-file-upl', function (e) {
 $('.js-showTerms').on('click', function() {
     $('#info').modal('show');
 });
+
+$('#refresh').click(function(){
+    $.ajax({
+       type:'GET',
+       url:'refreshcaptcha',
+       success:function(data){
+          $(".captcha span").html(data);
+       }
+    });
+});

@@ -195,6 +195,7 @@
                             <span class="error">{{ $errors->first('terms_accepted') }}</span>
                         </div>
                     </div>
+                    @include('components.captchaCreate')
                     <div class="form-group row">
                         <div class="col-sm-8 col-xs-6 p-r-none offset-sm-4 text-center">
                             @include('components.button', ['buttonLabel' => __('custom.register_action')])

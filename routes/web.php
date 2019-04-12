@@ -41,6 +41,8 @@ Route::get('/organisation/vote', function () {
 //================END test routes
 
 Route::get('/register','OrganisationController@register')->name('organisation.register');
+Route::get('createcaptcha', 'CaptchaController@create');
+Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
 Route::post('/organisations','OrganisationController@store')->name('organisation.store');
 
 //Frontend routes that needs user athorisation

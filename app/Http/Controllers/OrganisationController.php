@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\UserController as ApiUser;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Organisation;
 use App\Message;
+use \Validator;
 
 class OrganisationController extends BaseFrontendController
 {
@@ -29,6 +30,14 @@ class OrganisationController extends BaseFrontendController
         $errors = [];
         if (!$request->get('terms_accepted', null)) {
             $errors = ['terms_accepted' => __('custom.terms_not_accepted')];
+        }
+
+        $validator = Validator::make(['captcha' => $request->captcha], [
+            'captcha' => 'required|captcha'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = ['captcha' => __('custom.chaptcha_fail')];
         }
 
         if (empty($errors)) {

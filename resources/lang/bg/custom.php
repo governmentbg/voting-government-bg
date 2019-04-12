@@ -174,4 +174,6 @@ return [
     'terms_and_conditions' => 'Общи условия',
     'required_mgs' => 'Моля попълнете това поле',
     'registered_orgs' => 'Регистрирани организации',
+    'chaptcha_fail' => 'Въведеният сбор е неверен',
+    'refresh' => 'Обнови',
 ];

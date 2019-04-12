@@ -98,12 +98,7 @@
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
-                    <div class="col-lg-4 text-right p-l-none">
-                        <a href="{{ route('home') }}">
-                            <h3 class="f-s-14">{{ __('custom.login') }}</h3>
-                        </a>
-                    </div>
-                    <div class="col-lg-5 text-right">
+                    <div class="col-lg-9 text-right">
                         @include('components.button', ['buttonLabel' => __('custom.send')])
                     </div>
                 </div>

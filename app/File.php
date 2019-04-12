@@ -9,6 +9,8 @@ class File extends Model
 {
     use RecordSignature;
 
+    const MAX_SIZE = 16777215;  // 16 MB
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -36,5 +38,17 @@ class File extends Model
     public function setUpdatedAtAttribute($value)
     {
         // to disable updated_at
+    }
+
+    public static function getSupportedFormats()
+    {
+        return [
+            'application/pdf',
+            'image/tiff',
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+            'image/bmp',
+        ];
     }
 }

@@ -12,6 +12,8 @@ use App\Message;
 
 class OrganisationController extends BaseFrontendController
 {
+    protected $redirectTo = '/';
+
     public function __construct()
     {
         $this->addBreadcrumb(__('breadcrumbs.start'), '/');
@@ -76,11 +78,11 @@ class OrganisationController extends BaseFrontendController
                     session()->flash('alert-success', __('custom.register_success'));
                     if (sendEmail('mails/registrationConfirm', $userData, $orgData['email'], __('custom.register_subject'))) {
                         session()->flash('alert-info', __('custom.register_send_mail_success'));
-                    } else {dd(__('custom.register_send_mail_failed'));
+                    } else {
                         session()->flash('alert-info', __('custom.register_send_mail_failed'));
                     }
 
-                    return redirect('/');
+                    return redirect($this->redirectTo);
                 } else {
                     DB::rollback();
                     $errors = !empty($result->errors) ? $result->errors : [$result->error->message];

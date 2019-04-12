@@ -243,12 +243,24 @@ class VoteController extends ApiController
         ]);
 
         if (!$validator->fails()) {
-            $voteTour = VotingTour::where('id', $post['tour_id'])->first();
+            try {
+                $votingTour = VotingTour::where('id', $post['tour_id'])->first();
 
-            return $this->successResponse([
-                'id' => $voteTour->status,
-                'name' => VotingTour::getStatuses()[$voteTour->status]
-            ]);
+                if ($votingTour) {
+                    $voteStatus = $this->prepareVoteStatus($votingTour->id, $votingTour->status);
+                    if (is_null($voteStatus)) {
+                        return $this->errorResponse(__('custom.vote_status_not_found'));
+                    }
+
+                    return $this->successResponse([
+                        'id' => $voteStatus,
+                        'name' => VotingTour::getStatuses()[$voteStatus]
+                    ]);
+                }
+            } catch (\Exception $e) {
+                logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.get_vote_status_fail'), $e->getMessage());
+            }
         }
 
         return $this->errorResponse(__('custom.voting_tour_not_found'), $validator->errors()->messages());

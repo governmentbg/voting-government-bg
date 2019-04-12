@@ -32,7 +32,9 @@
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
                         <input type="text" class="input-box" name="username" value="{{old('username')}}">
-                        <span class="error">{{ $errors->first('username') }}</span>
+                        @if (!empty($errors) && $errors->has('username'))
+                            <span class="error">{{ $errors->first('username') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="form-group row m-b-none">
@@ -41,7 +43,9 @@
                 <div class="form-group row">
                 <div class="col-lg-9 p-l-none">
                         <input type="password" class="input-box" name="password" autocomplete="off">
-                        <span class="error">{{ $errors->first('password') }}</span>
+                        @if (!empty($errors) && $errors->has('password'))
+                            <span class="error">{{ $errors->first('password') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
@@ -109,80 +113,12 @@
 
 <hr class="hr-thin">
 
-<div class="col-lg-12">
-    <div class="col-lg-6 inline-block">
-        <div class="p-l-60">
-            <div><h3 class="p-b-15"><b>{{ __('custom.registered') }}</b></h3></div>
-            <div class="table-wrapper">
-                <div class="table-responsive">
-                    <table class="table table-striped ams-table">
-                        <thead>
-                            <tr>
-                                <th class="w-50">{{ __('custom.organisation') }}</th>
-                                <th class="w-5">{{ __('custom.candidate') }}</th>
-                                <th class="w-15">{{ __('custom.eik') }}</th>
-                                <th class="w-30">{{ __('custom.registered_at') }}</th>
-                        </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            <tr>
-                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 1</td>
-                                <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
-                                <td>123123123123</td>
-                                <td>2019-03-03 </td>
-                            </tr>
+@if (isset($listData))
+    @if (isset($isRanking) && $isRanking)
+        @include('partials.public-ranking')
+    @else
+        @include('partials.public-list')
+    @endif
+@endif
 
-                            <tr>
-                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 2</td>
-                                <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
-                                <td>123123123123</td>
-                                <td>2019-03-03 </td>
-                            </tr>
-                            <tr>
-                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 3</td>
-                                <td></td>
-                                <td>123123123123</td>
-                                <td>2019-03-03 </td>
-                            </tr>
-                            <tr>
-                                <td><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>Organisation 4</td>
-                                <td class="text-center"> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" /></td>
-                                <td>123123123123</td>
-                                <td>2019-03-03 </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 inline-block">
-        <div class="v-align-top">
-            <table>
-                <thead>
-                    <tr>
-                        <th width="55%">{{ __('custom.organisationNameData') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ __('custom.name') }}</td><td>Organisation 1</td>
-                    </tr>
-                    <tr>
-                        <td>{{ __('custom.eik') }}</td><td>123123123123</td>
-                    </tr>
-                    <tr>
-                        <td>{{ __('custom.address') }}</td><td>ул. Незабравка 123</td>
-                    </tr>
-                    <tr>
-                        <td>{{ __('custom.representative') }}</td><td>Ivan Ivanov</td>
-                    </tr>
-                    <tr>
-                        <td>{{ __('custom.reg_date') }}</td><td>2019-03-03 </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 @endsection

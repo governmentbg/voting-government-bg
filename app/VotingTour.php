@@ -70,6 +70,15 @@ class VotingTour extends Model
         ];
     }
 
+    public static function getRankingStatuses()
+    {
+        return [
+            self::STATUS_RANKING,
+            self::STATUS_BALLOTAGE,
+            self::STATUS_FINISHED
+        ];
+    }
+
     public static function getLatestTour()
     {
         $latestTour = self::where('status', '!=', self::STATUS_FINISHED)->first();

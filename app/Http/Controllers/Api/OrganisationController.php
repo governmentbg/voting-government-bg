@@ -56,8 +56,8 @@ class OrganisationController extends ApiController
                 'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
                 'files'             => 'required_unless:in_av,'. Organisation::IN_AV_TRUE .'|nullable|array',
                 'files.*.name'      => 'required|string|max:255',
-                'files.*.mime_type' => 'required|string|max:255',
-                'files.*.data'      => 'required|string|max:16777215',
+                'files.*.mime_type' => 'required|string|in:'. implode(',', File::getSupportedFormats()),
+                'files.*.data'      => 'required|string|max:'. File::MAX_SIZE,
             ]);
 
             if (!$validator->fails()) {

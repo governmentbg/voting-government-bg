@@ -163,11 +163,7 @@
                 <div class="col-md-10">
                     <h5>{{ __('custom.applied_files') }}</h5>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.as_document_applied') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none">
-                            @include('components.checkbox', ['name' => 'as_doc_applied'])
-                            <span class="error">{{ $errors->first('has_as_doc') }}</span>
-                        </div>
+                        <label class="col-sm-12 col-xs-12 col-form-label">{{ __('custom.files_info') }}</label>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-4 col-xs-12 p-r-none">
@@ -185,6 +181,16 @@
                                 <img class="display-inline rotate-180" src="{{ asset('img/plus.svg') }}" height="35px" width="30px" />
                             </div>
                         </div>
+                        <span class="error">{{ $errors->first('files') }}</span>
+                        @if ($errors->has('files.*.name'))
+                            <span class="error">{{ $errors->first('files.*.name') }}</span>
+                        @endif
+                        @if ($errors->has('files.*.mime_type'))
+                            <span class="error">{{ $errors->first('files.*.mime_type') }}</span>
+                        @endif
+                        @if ($errors->has('files.*.data'))
+                            <span class="error">{{ $errors->first('files.*.data') }}</span>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12 col-form-label">

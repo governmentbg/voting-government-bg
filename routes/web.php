@@ -13,9 +13,11 @@
 
 Auth::routes();
 
-Route::get('/', function () {
-    return view('home.index');
-})->name('home');
+Route::get('/','PublicController@index')->name('list.registered')->name('home');
+Route::get('/publicLists/registered/{id?}','PublicController@listRegistered')->name('list.registered');
+Route::get('/publicLists/candidates/{id?}','PublicController@listCandidates')->name('list.candidates');
+Route::get('/publicLists/voted/{id?}','PublicController@listVoted')->name('list.voted');
+Route::get('/publicLists/ranking/{id?}','PublicController@listRanking')->name('list.ranking');
 
 //================START test routes
 

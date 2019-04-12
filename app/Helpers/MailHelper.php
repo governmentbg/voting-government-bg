@@ -17,7 +17,7 @@ function sendEmail($template, $mailData, $to, $subject) {
             $m->to($to);
             $m->subject($subject);
         });
-     } catch (\Exception $e) {dd($e->getMessage());
+     } catch (\Exception $e) {
         logger()->error('Send email error: '. $e->getMessage());
         return false;
      }

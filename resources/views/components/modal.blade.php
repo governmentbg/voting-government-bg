@@ -9,7 +9,7 @@
                {{$body}}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary login-btn" data-dismiss="modal">{{ __('Cancel') }}</button>
+                <button type="button" class="btn btn-primary login-btn" data-dismiss="modal">{{ __('custom.close') }}</button>
             </div>
         </div>
     </div>

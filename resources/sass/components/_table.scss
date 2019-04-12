@@ -34,3 +34,8 @@
         border-left: 1px solid #3e7ea9;
     }
 }
+
+.ams-table-scrollable {
+  max-height: 600px;
+  overflow-y: auto;
+}

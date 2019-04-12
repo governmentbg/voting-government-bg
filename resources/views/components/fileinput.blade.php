@@ -7,6 +7,7 @@
                 title="Select File"
                 class="opacity-0 front-z js-file-input"
                 name="{{ isset($name) ? $name : '' }}"
+                accept="application/pdf, image/tiff, image/jpg, image/jpeg, image/png, image/bmp"
             >
         </div>
     </div>

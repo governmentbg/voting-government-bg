@@ -55,15 +55,15 @@
                         href="{{ url('/registration') }}"
                     ><h3 class="f-s-14">{{ __('custom.register') }}</h3></a>
                 </div>
-                <div class="col-lg-5 text-right p-l-none">                  
+                <div class="col-lg-5 text-right p-l-none">
                     <a href="{{ route('password.request') }}">
                         <h3 class="f-s-14">{{ __('custom.forgotten_password') }}</h3>
-                    </a>         
+                    </a>
                 </div>
             </div>
             <div class="form-group row text-center p-t-15">
                 <div class="col-xs-12">
-                    <a href="{{ url('/committee') }}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
+                    <a href="mailto:{{config('mail.MAILTO')}}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
                 </div>
             </div>
         </div>
@@ -97,10 +97,10 @@
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
-                    <div class="col-lg-4 text-right p-l-none">                  
+                    <div class="col-lg-4 text-right p-l-none">
                         <a href="{{ route('home') }}">
                             <h3 class="f-s-14">{{ __('custom.login') }}</h3>
-                        </a>         
+                        </a>
                     </div>
                     <div class="col-lg-5 text-right">
                         @include('components.button', ['buttonLabel' => __('custom.send')])

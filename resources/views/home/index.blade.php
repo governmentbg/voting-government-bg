@@ -64,7 +64,7 @@
             </div>
             <div class="form-group row text-center p-t-15">
                 <div class="col-xs-12">
-                    <a href="{{ url('/committee') }}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
+                    <a href="mailto:{{config('mail.MAILTO')}}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
                 </div>
             </div>
         </div>

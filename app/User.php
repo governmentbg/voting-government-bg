@@ -15,11 +15,11 @@ class User extends Authenticatable
     use Compoships;
     use RecordSignature;
     use CanResetPassword;
-    
+
     const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
-    
+
     protected $guarded = ['id'];
-    
+
     protected $rememberTokenName = false;
 
     /**
@@ -28,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        
+
     ];
 
     /**
@@ -46,14 +46,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        
+
     ];
-    
+
     public function organisation()
     {
         return $this->hasOne('App\Organisation', ['id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
     }
-    
+
     public function scopeSort($query, $field, $order)
     {
         if (isset($field)) {
@@ -62,20 +62,20 @@ class User extends Authenticatable
             }
             return $query->orderBy($field, $order);
         }
-        
+
         return $query;
     }
-    
+
     public function isAdmin()
     {
         return !isset($this->org_id);
     }
-    
+
     public function isSuperAdmin()
     {
         return !isset($this->org_id) && $this->name == config('auth.system.user');
     }
-    
+
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;

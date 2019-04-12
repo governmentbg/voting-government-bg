@@ -15,13 +15,13 @@ class VotingTourController extends BaseAdminController
     {
         parent::__construct();
 
-        $this->addBreadcrumb(__('breadcrumbs.start'), 'organisations');
-        $this->addBreadcrumb(__('breadcrumbs.settings'), 'settings');
+        $this->addBreadcrumb(__('breadcrumbs.start'), route('admin.org_list'));
     }
 
     public function index()
     {
-        $this->addBreadcrumb(__('breadcrumbs.voting_tour'), '');
+        $this->addBreadcrumb(__('breadcrumbs.settings'), 'settings');
+        $this->addBreadcrumb(__('breadcrumbs.voting_tours'), '');
         list($votingTours, $errors) = api_result(ApiVotingTour::class, 'list');
 
         return view('tours.list', ['votingTours' => $votingTours, 'errors' => $errors]);
@@ -35,6 +35,8 @@ class VotingTourController extends BaseAdminController
 //            return redirect()->back()->withErrors(['messsage' => __('custom.active_tour_exists')]);
 //        }
 
+        $this->addBreadcrumb(__('breadcrumbs.settings'), 'settings');
+        $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
         $this->addBreadcrumb(__('custom.create_voting_tour'), '');
 
         return view('tours.create');
@@ -48,6 +50,8 @@ class VotingTourController extends BaseAdminController
             return redirect()->back()->withErrors(['message' => __('custom.voting_tour_finished')]);
         }
 
+        $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
+        $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
         $this->addBreadcrumb($votingTour->name, '');
 
         return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors]);

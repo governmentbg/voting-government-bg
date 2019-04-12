@@ -18,7 +18,7 @@
                     <label class="col-sm-4 col-xs-12"> {{ __('custom.org_name') }}:</label>
                     <div class="row w-50">
                         <div class="col-lg-12">
-                            <input type="text" class="input-box" name="name" value="{{$org_data->name}}">
+                            <input type="text" class="input-box" name="name" value="{{$org_data->name}}" required>
                             <span class="error">{{ $errors->first('name') }}</span>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                     <label class="col-sm-4 col-xs-12"> {{ __('custom.management_address') }}:</label>
                     <div class="row w-50">
                         <div class="col-lg-12">
-                            <input type="text" class="input-box" name="address" value="{{$org_data->address}}">
+                            <input type="text" class="input-box" name="address" value="{{$org_data->address}}" required>
                             <span class="error">{{ $errors->first('address') }}</span>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                     <label class="col-sm-4 col-xs-12"> {{ __('custom.representative') }}:</label>
                     <div class="row w-50">
                         <div class="col-lg-12">
-                            <input type="text" class="input-box" name="representative" value="{{$org_data->representative}}">
+                            <input type="text" class="input-box" name="representative" value="{{$org_data->representative}}" required>
                             <span class="error">{{ $errors->first('representative') }}</span>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                     <label class="col-sm-4 col-xs-12"> {{ __('custom.phone_number') }}:</label>
                     <div class="row w-50">
                         <div class="col-lg-12">
-                            <input type="text" class="input-box" name="phone" value="{{$org_data->phone}}">
+                            <input type="text" class="input-box" name="phone" value="{{$org_data->phone}}" required>
                             <span class="error">{{ $errors->first('phone') }}</span>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                     <label class="col-sm-4 col-xs-12"> {{ __('custom.email') }}:</label>
                     <div class="row w-50">
                         <div class="col-lg-12">
-                            <input type="text" class="input-box" name="email" value="{{$org_data->email}}">
+                            <input type="text" class="input-box" name="email" value="{{$org_data->email}}" required>
                             <span class="error">{{ $errors->first('email') }}</span>
                         </div>
                     </div>
@@ -127,6 +127,18 @@
                                 @endforeach
                             @endif
                         </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-1">{{ __('custom.last_updated_by') }}:</label>
+                    <div class="col-sm-8 col-xs-6 p-r-none">
+                        {{isset($org_data->updated_by_username) ? $org_data->updated_by_username : ''}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-1">{{ __('custom.last_updated_at') }}:</label>
+                    <div class="col-sm-8 col-xs-6 p-r-none">
+                        {{$org_data->updated_at}}
                     </div>
                 </div>
             </div>

@@ -30,6 +30,9 @@
                                 class="input-box"
                                 name="name"
                                 value="{{ old('name') }}"
+                                required
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('name') }}</span>
                         </div>
@@ -42,6 +45,9 @@
                                 class="input-box"
                                 name="eik"
                                 value="{{ old('eik') }}"
+                                required
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('eik') }}</span>
                         </div>
@@ -50,10 +56,13 @@
                         <label for="address" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.management_address') }}:</label>
                         <div class="col-sm-8">
                             <input
-                                type="address"
+                                type="text"
                                 class="input-box"
                                 name="address"
                                 value="{{ old('address') }}"
+                                required
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('address') }}</span>
                         </div>
@@ -66,6 +75,9 @@
                                 class="input-box"
                                 name="representative"
                                 value="{{ old('representative') }}"
+                                required
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('representative') }}</span>
                         </div>
@@ -78,6 +90,9 @@
                                 class="input-box"
                                 name="phone"
                                 value="{{ old('phone') }}"
+                                required
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('phone') }}</span>
                         </div>
@@ -90,6 +105,9 @@
                                 class="input-box"
                                 name="email"
                                 value="{{ old('email') }}"
+                                required
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('email') }}</span>
                         </div>
@@ -112,7 +130,7 @@
                             <span class="error">{{ $errors->first('is_candidate') }}</span>
                         </div>
                     </div>
-                    <div class="form-group row for_org_candidates" style="display: none">
+                    <div class="form-group row for_org_candidates" {!! old('is_candidate') ? '' : 'style="display: none"' !!}>
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea
@@ -126,7 +144,7 @@
                             <span class="error">{{ $errors->first('description') }}</span>
                         </div>
                     </div>
-                    <div class="form-group row for_org_candidates" style="display: none">
+                    <div class="form-group row for_org_candidates"{!! old('is_candidate') ? '' : 'style="display: none"' !!}>
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea

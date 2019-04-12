@@ -19,14 +19,6 @@ Route::get('/', function () {
 
 //================START test routes
 
-Route::get('/view', function () {
-    return view('organisation.view');
-});
-
-Route::get('/request', function () {
-    return view('organisation.request');
-});
-
 Route::get('/admin/committeeAdd', function () {
     return view('admin.committeeAdd');
 });
@@ -53,7 +45,7 @@ Route::post('/organisations','OrganisationController@store')->name('organisation
 
 //Frontend routes that needs user athorisation
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/organisation/settings', function () {
+    Route::get('/organisations/settings', function () {
         return view('organisation.settings');
     })->name('organisation.settings');
 
@@ -62,6 +54,10 @@ Route::group(['middleware' => ['auth']], function () {
         })->name('organisation.change_password');
 
     Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
+    
+    Route::get('/organisations/{id}', 'OrganisationController@view');
+    
+    Route::get('/organisations/{org_id}/messages/{id}', function () { return view('organisation.request'); })->name('organisation.messages');
 });
 
 // Admin

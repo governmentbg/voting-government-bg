@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\UserController as ApiUser;
+use App\Organisation;
+use App\Message;
 
-class OrganisationController extends Controller
+class OrganisationController extends BaseFrontendController
 {
     public function __construct()
     {
@@ -90,5 +92,40 @@ class OrganisationController extends Controller
         }
 
         return redirect()->back()->withErrors($errors)->withInput();
+    }
+    
+    public function view($id)
+    {       
+        $this->authorize('view', Organisation::where('id', $id)->first());
+        
+        list($org, $errors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+
+        if(!empty($errors)){
+           return back()->withErrors($errors);
+        }
+        
+//        list($messages, $errors) = api_result(APIMessage::class, 'listByOrg', ['org_id' => $id]);
+//        
+//        if(!empty($errors)){
+//           return back()->withErrors($errors);
+//        }
+        
+        $messages = Message::where('sender_org_id', $org->id)->whereNull('parent_id')->get();
+        
+        list($files, $errors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
+                
+        if(!empty($errors)){
+           return back()->withErrors($errors);
+        }
+                   
+        $data = [
+            'organisation' => $org,
+            'status' => (Organisation::getStatuses())[$org->status],
+            'isApproved' => in_array($org->status, Organisation::getApprovedStatuses()),
+            'messages' => $messages,
+            'files' => $files
+        ];
+
+        return view('organisation.view', $data);
     }
 }

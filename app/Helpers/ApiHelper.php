@@ -25,9 +25,8 @@ if (!function_exists('api')) {
             return $api->{$methodName}($request)->getData();
         }
 
-        logger()->error('Method '. $methodName .' does not exist on class '. $class);
-
-        return ['success' => false, 'status' => 500];
+        logger()->error('Method ' . $method_name . ' does not exist on class ' . $class);
+        return (object)['succes ' => false, 'status' => 500];
     }
 }
 

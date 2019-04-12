@@ -4,7 +4,7 @@
 @include('partials.user-nav-bar')
 @include('components.breadcrumbs')
 <div class="row">
-    <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} Организация 1</h3></div>
+    <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} {{ $organisation->name }}</h3></div>
 </div>
 <div class="row m-l-5">
     <div class="col-lg-6">
@@ -13,55 +13,56 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.org_name') }}:</label>
                 <div class="col-sm-4">
-                    <span>Организация 1</span>
+                    <span>{{ $organisation->name }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.eik_bulstat') }}:</label>
                 <div class="col-sm-4">
-                    <span>123123123</span>
+                    <span>{{ $organisation->eik }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.management_address') }}:</label>
                 <div class="col-sm-4">
-                    <span>ул.Незабравка 123</span>
+                    <span>{{ $organisation->address }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.representative') }}:</label>
                 <div class="col-sm-4">
-                    <span>Иван Иванов Иванов</span>
+                    <span>{{ $organisation->representative }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.registered_at') }}:</label>
                 <div class="col-sm-4">
-                    <span>01 Януари 2019</span>
+                    <label>{{ translate_date(date('d F Y', strtotime($organisation->created_at))) }}</label>
+                    <span>{{ date('H:i', strtotime($organisation->created_at)) }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.phone_number') }}:</label>
                 <div class="col-sm-4">
-                    <span>1231231231</span>
+                    <span>{{ $organisation->phone }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.email') }}:</label>
                 <div class="col-sm-4">
-                    <span>ivan@ivan.bg</span>
+                    <span>{{ $organisation->email }}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.in_ap') }}:</label>
                 <div class="col-sm-4">
-                    @include('components.checkbox', ['name' => 'test'])
+                    @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->in_av])
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-12"> {{ __('custom.candidate') }}:</label>
                 <div class="col-sm-4">
-                    @include('components.checkbox', ['name' => 'test'])
+                    @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->is_candidate])
                 </div>
             </div>
         </div>
@@ -76,7 +77,8 @@
                         name=""
                         rows="3"
                         cols="40"
-                    ></textarea>
+                        readonly="true"
+                    >{{ $organisation->description }}</textarea>
                 </div>
             </div>
             <div class="form-group row">
@@ -87,13 +89,15 @@
                         name=""
                         rows="3"
                         cols="40"
-                    ></textarea>
+                        readonly="true"
+                    >{{ $organisation->references }}</textarea>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-xs-1">{{ __('custom.status') }}:</label>
                 <div class="col-sm-8 col-xs-6 p-r-none">
-                    <h3 class="display-inline">Потвърден кандидат</h3> <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-t-12"/>
+                    <h3 class="display-inline">{{ $status }}</h3> &nbsp;
+                    <img src="{{ $isApproved ? asset('img/tick.svg') : asset('img/cross.svg') }}" height="30px" width="30px" class="display-inline m-t-12"/>
                 </div>
             </div>
         </div>
@@ -109,6 +113,7 @@
     <div class="col-lg-12">
         <div class="table-wrapper">
             <div class="table-responsive">
+                @if($messages->isNotEmpty())
                 <table class="table table-striped ams-table">
                     <thead>
                         <tr>
@@ -118,29 +123,26 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($messages as $message)
                         <tr>
-                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 1 </td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
+                            <td>
+                                <img src="{{ $message->isRead() ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                {{ $message->subject }}
+                            </td>
+                            <td class="text-center">{{ date('Y-m-d', strtotime($message->created_at)) }}</td>
+                            <td class="text-center">
+                                <a href="{{ route('organisation.messages', ['org_id' => $organisation->id, 'id' => $message->id])}}">
+                                    <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                </a>
+                            </td>
                         </tr>
-
-                        <tr>
-                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 2</td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                        </tr>
-                        <tr>
-                            <td><img src="{{ asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 3</td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                        </tr>
-                        <tr>
-                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 4</td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                        </tr>
+                        @endforeach
                     </tbody>
+                    <tfoot>{{-- $messages->links() --}}</tfoot>
                 </table>
+                @else
+                <span>{{ __('messages.no_messages') }}</span>
+                @endif
             </div>
         </div>
     </div>
@@ -157,17 +159,20 @@
 <div class="row">
     <div class="col-lg-12 p-l-40"><h2>{{ __('custom.applied_files') }}</h2></div>
 </div>
-<div class="col-lg-6">
-    <label class="col-md-6 col-xs-12">Удостоверение за удостоверено удостоверение.pdf</label>
-    <div class="col-md-6 display-inline">
-        <a href="#"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
-    </div>
-</div>
-<div class="col-lg-6">
-    <label class="col-md-6 col-xs-12">Удостоверение за удостоверено удостоверение.pdf</label>
-    <div class="col-md-6 display-inline">
-        <a href="#"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
-    </div>
-</div>
+
+<!-- ------------FILES ------------------->
+<div class="row">
+@if(!empty($files))
+    @foreach($files as $file)
+        <div class="col-lg-6 p-l-40">
+            <label class="col-md-6 col-xs-12">{{ $file->name }}</label>
+            <div class="col-md-6 display-inline">
+                <a href="#"><img src="{{ asset('img/download.svg') }}" height="30px" width="30px" class="p-r-5"/></a>
+            </div>
+        </div>
+    @endforeach
+@else
+<div class="col-lg-12 p-l-40"><span>{{ __('messages.no_files') }}</span></div>
+@endif
 </div>
 @endsection

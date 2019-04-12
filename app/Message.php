@@ -123,4 +123,9 @@ class Message extends Model
     {
         return $this->hasMany('App\File', 'message_id');
     }
+    
+    public function isRead()
+    {
+        return $this->read != null;
+    }
 }

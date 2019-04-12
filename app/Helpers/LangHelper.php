@@ -103,3 +103,13 @@ function _hn($singular, $plural, $number)
 {
     return htmlspecialchars(ngettext($singular, $plural, $number));
 }
+
+function translate_date($select)
+{
+    $change = str_replace(
+            ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], 
+            [uctrans('dates.Jan'), uctrans('dates.Feb'), uctrans('dates.Mar'), uctrans('dates.Apr'), uctrans('dates.May'), uctrans('dates.Jun'), uctrans('dates.Jul'), uctrans('dates.Aug'), uctrans('dates.Sep'), uctrans('dates.Oct'), uctrans('dates.Nov'), uctrans('dates.Dec')]
+            , $select);
+
+    return $change;
+}

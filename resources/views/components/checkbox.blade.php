@@ -7,7 +7,7 @@
         type="checkbox"
         class="checkbox-ams"
         name="{{ isset($name) ? $name : '' }}"
-        {{ (!empty(old($name)) || isset($checked) && $checked) ? ' checked' : '' }}
+        {{ (isset($name) && !empty(old($name)) || isset($checked) && $checked) ? ' checked' : '' }}
         {{ isset($readonly) && $readonly ? ' disabled' : '' }}
         value="1"
     >

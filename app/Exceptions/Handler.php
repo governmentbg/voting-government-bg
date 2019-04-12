@@ -50,9 +50,9 @@ class Handler extends ExceptionHandler
 //            return response()->view('errors.404', [], 404);
 //        }
 //        
-//        if ($exception instanceof AuthorizationException) {
-//            return response()->view('errors.403', [], 403);
-//        }
+        if ($exception instanceof AuthorizationException) {
+            return response()->view('errors.403', [], 403);
+        }
 //        
 //        if ($exception instanceof \ErrorException && !\App::environment('local')) {
 //            logger()->error($exception);

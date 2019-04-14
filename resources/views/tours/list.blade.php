@@ -6,6 +6,7 @@
 @include('components.breadcrumbs')
 
 <div class="row">
+    @include('components.status')
     <div class="col-lg-12">
         <div class="table-wrapper">
             <div class="table-responsive">

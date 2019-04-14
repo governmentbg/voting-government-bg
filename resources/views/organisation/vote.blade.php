@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.org-nav-bar')
+@include('partials.user-nav-bar')
 @include('components.breadcrumbs')
 
 <div class="container">

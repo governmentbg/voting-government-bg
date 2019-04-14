@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-Route::get('/','PublicController@index')->name('list.registered')->name('home');
+Route::get('/','PublicController@index')->name('home');
 Route::get('/publicLists/registered/{id?}','PublicController@listRegistered')->name('list.registered');
 Route::get('/publicLists/candidates/{id?}','PublicController@listCandidates')->name('list.candidates');
 Route::get('/publicLists/voted/{id?}','PublicController@listVoted')->name('list.voted');

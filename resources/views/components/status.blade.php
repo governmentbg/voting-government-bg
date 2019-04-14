@@ -9,7 +9,7 @@
             </div>
         </div>
         @php
-            Session::forget('alert-' . $msg)
+            Session::forget('alert-' . $msg);
         @endphp
     @endif
 @endforeach

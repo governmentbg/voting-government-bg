@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\UserController;
 class AuthController extends Controller
 {
     use AuthenticatesUsers;
+    
+    const PASSWORD_CHANGED = 'passwords.changed';
 
     protected $loginView = 'admin.index';
 
@@ -136,6 +138,7 @@ class AuthController extends Controller
             return redirect()->back()->withErrors((array)$errors);
         }
 
+        session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
         return redirect($this->redirectTo);
     }
 }

@@ -91,4 +91,16 @@ class ForgotPasswordController extends Controller
             ['email' => trans($response)]
         );
     }
+    
+    /**
+     * Get the response for a successful password reset link.
+     *
+     * @param  string  $response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    protected function sendResetLinkResponse($response)
+    {
+        session()->flash('alert-success', trans($response));
+        return redirect()->route('home')->with('status', trans($response));
+    }
 }

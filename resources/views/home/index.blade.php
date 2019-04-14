@@ -68,7 +68,7 @@
             </div>
             <div class="form-group row text-center p-t-15">
                 <div class="col-xs-12">
-                    <a href="mailto:{{config('mail.MAILTO')}}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
+                    <a href="mailto:{{config('mail.mailto')}}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
                 </div>
             </div>
         </div>
@@ -78,7 +78,6 @@
                 {{ csrf_field() }}
                 <div class="form-group row">
                     <div class="col-lg-9">@include('components.errors')</div>
-                    <div class="col-lg-9">@include('components.status')</div>
                 </div>
                 <div class="form-group row">
                     <h3><b>{{ __('custom.forgotten_password') }}</b></h3>

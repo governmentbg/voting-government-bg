@@ -5,6 +5,7 @@
 @include('components.breadcrumbs')
 
 <div class="row">
+    @include('components.status')
     <div class="col-lg-10">
         <div>
             <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-b-8 p-r-5"/>

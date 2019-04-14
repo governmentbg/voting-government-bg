@@ -10,6 +10,10 @@ use App\VotingTour;
 class VotingTourController extends BaseAdminController
 {
     protected $redirectTo = 'admin/votingTours';
+    
+    const CREATE_SUCCESS = 'custom.create_success';
+    
+    const UPDATE_SUCCESS = 'custom.update_success';
 
     public function __construct()
     {
@@ -70,6 +74,7 @@ class VotingTourController extends BaseAdminController
                 //TODO send emails to all orgs - voting is open
             }
 
+            session()->flash('alert-success', trans(self::UPDATE_SUCCESS));
             return redirect($this->redirectTo);
         }
 
@@ -81,6 +86,7 @@ class VotingTourController extends BaseAdminController
         list($id, $errors) = api_result(ApiVotingTour::class, 'add', request()->all());
 
         if(empty($errors)){
+            session()->flash('alert-success', trans(self::CREATE_SUCCESS));
             return redirect($this->redirectTo);
         }
 

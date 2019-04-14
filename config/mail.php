@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'MAILTO' => env('MAILTO'),
+    'mailto' => env('MAILTO'),
     /*
     |--------------------------------------------------------------------------
     | Mail Driver

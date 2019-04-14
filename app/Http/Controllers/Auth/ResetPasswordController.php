@@ -26,6 +26,8 @@ class ResetPasswordController extends Controller
     */
 
     use ResetsPasswords;
+    
+    const PASSWORD_CHANGED = 'passwords.changed';
 
     /**
      * Where to redirect users after resetting their password.
@@ -126,6 +128,7 @@ class ResetPasswordController extends Controller
             return redirect()->back()->withErrors((array)$errors);
         }
 
+        session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
         return redirect($this->redirectTo);
     }
 }

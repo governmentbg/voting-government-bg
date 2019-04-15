@@ -8,6 +8,7 @@
                 class="opacity-0 front-z js-file-input"
                 name="{{ isset($name) ? $name : '' }}"
                 accept="application/pdf, image/tiff, image/jpg, image/jpeg, image/png, image/bmp"
+                data-consec-num="0"
             >
         </div>
     </div>

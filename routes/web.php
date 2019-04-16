@@ -21,18 +21,6 @@ Route::get('/publicLists/ranking/{id?}','PublicController@listRanking')->name('l
 
 //================START test routes
 
-Route::get('/admin/committeeAdd', function () {
-    return view('admin.committeeAdd');
-});
-
-Route::get('/admin/committeeEdit', function () {
-    return view('admin.committeeEdit');
-});
-
-Route::get('/admin/committeeList', function () {
-    return view('admin.committeeList');
-});
-
 Route::get('/admin/tour/add', function () {
     return view('tours.add');
 });
@@ -93,8 +81,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::post('/organisations/update/{id}', 'OrganisationController@update')->name('admin.org_edit');
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
         Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
-
-        Route::get('/home', function(){ return 'OK';})->name('admin.home');// TODO for testing only
+        
+        //SYSTEM user routes
+        Route::group(['middleware' => 'auth.system:backend'], function () {
+            Route::get('/committees', 'CommitteeController@list')->name('admin.committee.list');      
+            Route::get('/committee/add', 'CommitteeController@create')->name('admin.committee.add'); 
+            Route::get('/committee/edit/{id}', 'CommitteeController@edit')->name('admin.committee.edit'); 
+        });      
     });
 });
 

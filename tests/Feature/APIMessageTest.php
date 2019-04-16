@@ -133,7 +133,7 @@ class APIMessageTest extends TestCase
             'voting_tour_id'   => $this->tour->id,
         ]);
 
-        $response = $this->json('POST', '/api/message/listByParentId', ['parent_id' => $parentMessage->id]);
+        $response = $this->json('POST', '/api/message/listByParent', ['parent_id' => $parentMessage->id]);
         $data = $response->getData();
 
         $response->assertStatus(200)->assertJson(['success' => true]);

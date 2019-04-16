@@ -40,7 +40,7 @@ Route::middleware(['api'])->group(function () {
 
     Route::post('message/markAsRead', 'Api\MessageController@markAsRead');
     Route::post('message/listByOrg', 'Api\MessageController@listByOrg');
-    Route::post('message/listByParentId', 'Api\MessageController@listByParentId');
+    Route::post('message/listByParent', 'Api\MessageController@listByParent');
     Route::post('message/search', 'Api\MessageController@search');
     Route::post('message/listStatuses', 'Api\MessageController@listStatuses');
     Route::post('message/sendMessageToOrg', 'Api\MessageController@sendMessageToOrg');

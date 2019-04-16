@@ -55,13 +55,11 @@ class MessageController extends ApiController
      *
      * @return json $response - response with status and message collection if successful
      */
-    public function listByParentId(Request $request)
+    public function listByParent(Request $request)
     {
         $orgId = $request->get('parent_id');
         $field = $request->get('order_field', 'created_at');
         $order = $request->get('order_type', 'ASC');
-        $page = $request->get('page_number');
-        $request->request->add(['page' => $page]);
 
         $validator = \Validator::make(['parent_id' => $orgId], [
             'parent_id' => 'required|integer',
@@ -72,7 +70,7 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::where('parent_id', $orgId)->sort($field, $order)->paginate();
+            $messages = Message::where('parent_id', $orgId)->sort($field, $order)->get();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -92,7 +90,7 @@ class MessageController extends ApiController
      */
     public function search(Request $request)
     {
-        $filters = $request->get('filters');
+        $filters = $request->get('filters', []);
         $field = $request->get('order_field');
         $order = $request->get('order_type', 'ASC');
         $page = $request->get('page_number');

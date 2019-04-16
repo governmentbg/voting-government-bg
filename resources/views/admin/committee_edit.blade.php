@@ -6,11 +6,13 @@
 <div class="container center-flex">
     <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">
         <div class="row justify-center">
+            @include('components.errors')
             <div class="col-md-10">
                 <div>
                     <h2 class="color-dark"><b>{{ __('custom.new_member_edit') }}</b></h2>
                 </div>
-                <form method="POST" class="m-t-20">
+                <form method="POST" class="m-t-20" action="{{ route('admin.committee.update', ['id' => $user->id]) }}">
+                    {{ method_field('PUT') }}
                     {{ csrf_field() }}
                     <div class="form-group row required">
                         <label for="username" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.username') }}:</label>

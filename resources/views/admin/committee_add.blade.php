@@ -5,12 +5,13 @@
 @include('components.breadcrumbs')
 <div class="container center-flex">
     <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">
+        @include('components.errors')
         <div class="row justify-center">
             <div class="col-md-10">
                 <div>
                     <h2 class="color-dark"><b>{{ __('custom.new_member_add') }}</b></h2>
                 </div>
-                <form method="POST" class="m-t-20">
+                <form method="POST" class="m-t-20" action="{{ route('admin.committee.store') }}">
                     {{ csrf_field() }}
                     <div class="form-group row required">
                         <label for="username" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.username') }}:</label>
@@ -19,33 +20,33 @@
                                 type="text"
                                 class="input-box"
                                 name="username"
-                                value=""
+                                value="{{ old('username') }}"
                             >
                             <span class="error">{{ $errors->first('username') }}</span>
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label for="own_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.own_name') }}:</label>
+                        <label for="first_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.own_name') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
                                 class="input-box"
-                                name="own_name"
-                                value=""
+                                name="first_name"
+                                value="{{ old('username') }}"
                             >
-                            <span class="error">{{ $errors->first('own_name') }}</span>
+                            <span class="error">{{ $errors->first('first_name') }}</span>
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label for="family_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.family_name') }}:</label>
+                        <label for="last_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.family_name') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
                                 class="input-box"
-                                name="family_name"
-                                value=""
+                                name="last_name"
+                                value="{{ old('last_name') }}"
                             >
-                            <span class="error">{{ $errors->first('family_name') }}</span>
+                            <span class="error">{{ $errors->first('last_name') }}</span>
                         </div>
                     </div>
                     <div class="form-group row required">
@@ -55,7 +56,7 @@
                                 type="email"
                                 class="input-box"
                                 name="email"
-                                value=""
+                                value="{{ old('email') }}"
                             >
                             <span class="error">{{ $errors->first('email') }}</span>
                         </div>
@@ -63,7 +64,7 @@
                     <div class="form-group row required">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.active') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            @include('components.checkbox', ['name' => 'active'])
+                            @include('components.checkbox', ['name' => 'active', 'checked' => old('active')])
                         </div>
                     </div>
                     <div class="form-group row required">

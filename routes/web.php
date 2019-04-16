@@ -86,7 +86,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::group(['middleware' => 'auth.system:backend'], function () {
             Route::get('/committees', 'CommitteeController@list')->name('admin.committee.list');      
             Route::get('/committee/add', 'CommitteeController@create')->name('admin.committee.add'); 
-            Route::get('/committee/edit/{id}', 'CommitteeController@edit')->name('admin.committee.edit'); 
+            Route::get('/committee/edit/{id}', 'CommitteeController@edit')->name('admin.committee.edit');
+            Route::post('/committee', 'CommitteeController@store')->name('admin.committee.store'); 
+            Route::put('/committee/{id}', 'CommitteeController@update')->name('admin.committee.update'); 
         });      
     });
 });

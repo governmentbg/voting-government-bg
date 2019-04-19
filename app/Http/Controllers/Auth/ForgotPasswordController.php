@@ -59,7 +59,7 @@ class ForgotPasswordController extends Controller
             $request->only('email', 'username')
         );
 
-        return $response == Password::RESET_LINK_SENT
+        return isset($response['status']) && $response['status'] == Password::RESET_LINK_SENT
                     ? $this->sendResetLinkResponse($response)
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
@@ -100,7 +100,10 @@ class ForgotPasswordController extends Controller
      */
     protected function sendResetLinkResponse($response)
     {
-        session()->flash('alert-success', trans($response));
-        return redirect()->route('home')->with('status', trans($response));
+        session()->flash('alert-success', trans($response['status']));
+        
+        $route = $response['isAdmin'] ? 'admin.index' : 'home';
+        
+        return redirect()->route($route)->with('status', trans($response['status']));
     }
 }

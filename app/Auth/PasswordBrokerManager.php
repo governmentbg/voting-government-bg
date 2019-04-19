@@ -17,7 +17,7 @@ class PasswordBrokerManager extends \Illuminate\Auth\Passwords\PasswordBrokerMan
 
         return new PasswordBroker(
             $this->createTokenRepository($config),
-            $this->app['auth']->createUserProvider($config['provider'])
+            $this->app['auth']->createUserProvider($config['provider'])      //"all_users" provider
         );
     }
 

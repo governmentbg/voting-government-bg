@@ -38,7 +38,7 @@ class PasswordBroker extends \Illuminate\Auth\Passwords\PasswordBroker  implemen
 
         $user->sendPasswordResetNotification($hash);
 
-        return static::RESET_LINK_SENT;
+        return ['status' => static::RESET_LINK_SENT, 'isAdmin' => $user->isAdmin()];
     }
 }
 

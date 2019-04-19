@@ -81,6 +81,11 @@ return [
             'driver' => 'eloquent.backend_user',
             'model' => App\User::class
         ],
+        
+        'all_users' => [
+            'driver' => 'eloquent',
+            'model' => App\User::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -105,7 +110,7 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
+            'provider' => 'all_users',
             'table' => 'password_resets',
             'expire' => 60,
         ],

@@ -33,7 +33,7 @@ function uptrans($value, $count = 1, $params = [], $lang = null)
  */
 function uctrans($value, $count = 1, $params = [], $lang = null)
 {
-    return ucfirst(trans_choice($value, $count, $params, $lang));
+    return mb_ucfirst(trans_choice($value, $count, $params, $lang), 'UTF-8');
 }
 
 /**
@@ -112,4 +112,12 @@ function translate_date($select)
             , $select);
 
     return $change;
+}
+
+function mb_ucfirst($string, $encoding)
+{
+    $strlen = mb_strlen($string, $encoding);
+    $firstChar = mb_substr($string, 0, 1, $encoding);
+    $then = mb_substr($string, 1, $strlen - 1, $encoding);
+    return mb_strtoupper($firstChar, $encoding) . $then;
 }

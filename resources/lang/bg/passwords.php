@@ -17,7 +17,7 @@ return [
     'reset' => 'Your password has been reset!',
     'sent' => 'Линкът за смяна на парола беше изпратен на вашия имейл.',
     'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that e-mail address.",
+    'user' => "Не е намерен потребител с този имейл адрес.",
     'changed' => 'Вашата парола беше сменена успешно.'
 
 ];

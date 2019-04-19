@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Api\UserController;
+use App\User;
 
 class ResetPasswordController extends Controller
 {
@@ -76,10 +77,15 @@ class ResetPasswordController extends Controller
         list($result, $errors) = api_result(UserController::class, 'resetPassword', [
             'hash' => $request->get('token'),
             'new_password' => $request->get('password'),
-            ]);
+            ], 'id');
         
         if(!empty($errors)){
             return back()->withErrors((array)$errors);
+        }
+        
+        $user = User::where('id' , $result)->first();
+        if($user && $user->isAdmin()){
+            $this->redirectTo = 'admin/';
         }
         
         return $this->sendResetResponse(Password::PASSWORD_RESET);

@@ -76,7 +76,7 @@ class OrganisationController extends BaseFrontendController
                     DB::commit();
 
                     session()->flash('alert-success', __('custom.register_success'));
-                    if (sendEmail('mails/registrationConfirm', $userData, $orgData['email'], __('custom.register_subject'))) {
+                    if (sendEmail('emails/registrationConfirm', $userData, $orgData['email'], __('custom.register_subject'))) {
                         session()->flash('alert-info', __('custom.register_send_mail_success'));
                     } else {
                         session()->flash('alert-info', __('custom.register_send_mail_failed'));

@@ -9,6 +9,6 @@
 {{ __('custom.username') }}: {{ $username }}<br>
 {{ __('custom.password') }}: {{ $password }}<br><br>
 
-<a href="{{ route('home') }}"> {{ __('custom.login_into_platform') }}</a>
+<a href="{{ isset($isAdmin) && $isAdmin ? route('admin.home') : route('home') }}"> {{ __('custom.login_into_platform') }}</a>
 
 @endsection

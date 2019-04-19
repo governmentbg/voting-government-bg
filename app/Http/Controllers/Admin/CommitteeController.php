@@ -60,14 +60,23 @@ class CommitteeController extends BaseAdminController
         
         $data['password'] = $password;
         $data['password_confirm'] = $password;
-        logger($password); //TODO send email
+
         list($user, $errors) = api_result(ApiUsers::class, 'add', ['user_data' => $data]);
         
         if(!empty($errors)){
             return redirect()->back()->withErrors($errors)->withInput();
         }
-        
+       
         session()->flash('alert-success', trans('custom.create_success'));
+        
+        $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
+        $data['isAdmin'] = true;
+        if (sendEmail('emails.registrationConfirm', $data, $data['email'], __('custom.register_subject'))) {
+            session()->flash('alert-info', __('custom.register_send_mail_success'));
+        } else {
+            session()->flash('alert-info', __('custom.register_send_mail_failed'));
+        }
+        
         return redirect()->route('admin.committee.list');
     }
     

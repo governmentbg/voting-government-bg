@@ -6,4 +6,5 @@
     data-date-language="bg"
     value="{{$value}}"
     class="date-box js-datepicker js-search"
+    autocomplete="off"
 >

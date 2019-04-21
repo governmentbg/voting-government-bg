@@ -28,7 +28,7 @@
                     <div class="display-inline ">
                         <label for="eik">{{__('custom.eik')}}:</label>
                     </div>
-                    <input type="text" name="eik" placeholder="{{__('custom.search')}}" value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}" class="js-search search-box float-right w-70">
+                    <input type="text" name="eik" placeholder="{{__('custom.search')}}" value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
                 <div class="col-lg-3 display-inline">
                     <label for="is_candidate">{{__('custom.candidate')}}:</label>
@@ -47,7 +47,7 @@
                     <div class="display-inline">
                         <label for="email">{{__('custom.email')}}:</label>
                     </div>
-                    <input type="text" name="email" placeholder="{{__('custom.search')}}" value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}" class="js-search search-box float-right w-70">
+                    <input type="text" name="email" placeholder="{{__('custom.search')}}" value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
             </div>
             <div class="row m-t-10">
@@ -55,7 +55,7 @@
                     <div class="display-inline">
                         <label for="name">{{__('custom.org_name')}}:</label>
                     </div>
-                    <input type="text" name="name" placeholder="{{__('custom.search')}}" value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}" class="js-search search-box float-right w-70">
+                    <input type="text" name="name" placeholder="{{__('custom.search')}}" value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
             </div>
             <div class="row m-t-10">

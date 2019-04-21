@@ -90,3 +90,11 @@ $(document).on('click', '.js-plus-file-upl', function (e) {
 $('.js-showTerms').on('click', function() {
     $('#info').modal('show');
 });
+
+$('.js-focusout-submit').on('focusout', function() {
+    $(this).closest('form').submit();
+});
+
+$('.js-change-submit').on('change', function() {
+    $(this).closest('form').submit();
+});

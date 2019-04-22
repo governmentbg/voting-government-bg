@@ -57,11 +57,11 @@ class MessageController extends ApiController
      */
     public function listByParent(Request $request)
     {
-        $orgId = $request->get('parent_id');
+        $parentId = $request->get('parent_id');
         $field = $request->get('order_field', 'created_at');
         $order = $request->get('order_type', 'ASC');
 
-        $validator = \Validator::make(['parent_id' => $orgId], [
+        $validator = \Validator::make(['parent_id' => $parentId], [
             'parent_id' => 'required|integer',
         ]);
 
@@ -70,7 +70,7 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::where('parent_id', $orgId)->sort($field, $order)->get();
+            $messages = Message::where('parent_id', $parentId)->sort($field, $order)->get();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {

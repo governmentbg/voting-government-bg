@@ -22,6 +22,8 @@ class Message extends Model
      */
     protected $guarded = ['id'];
     
+    protected $appends = ['sender_org_name'];
+
     public function file()
     {
         return $this->hasOne('App\File', 'message_id');
@@ -81,6 +83,10 @@ class Message extends Model
     
     public function scopeSearch($query, $filters, $field = null, $order = 'ASC')
     {
+        if (array_key_exists('parent_id', $filters)) {
+            $query->where('parent_id',  $filters['parent_id']);
+        }
+        
         if ($date_from = ($filters['date_from'] ?? null)) {
             $date_from = date_format(date_create($date_from), 'Y-m-d');
             $query->where('created_at', '>=', $date_from);
@@ -127,5 +133,10 @@ class Message extends Model
     public function isRead()
     {
         return $this->read != null;
+    }
+    
+    public function getSenderOrgNameAttribute()
+    {
+        return isset($this->senderOganisation) ? $this->senderOganisation->name : '';
     }
 }

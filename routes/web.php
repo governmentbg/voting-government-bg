@@ -20,11 +20,6 @@ Route::get('/publicLists/voted/{id?}','PublicController@listVoted')->name('list.
 Route::get('/publicLists/ranking/{id?}','PublicController@listRanking')->name('list.ranking');
 
 //================START test routes
-
-Route::get('/admin/tour/add', function () {
-    return view('tours.add');
-});
-
 Route::get('/organisation/vote', function () {
     return view('organisation.vote');
 });
@@ -72,6 +67,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/settings', function () {
             return view('organisation.settings');
         })->name('admin.settings');
+        
+        Route::get('/messages', 'MessagesController@list')->name('admin.messages.list');
+        Route::get('/messages/{id}', function () { return view('organisation.request'); })->name('admin.messages');
 
         Route::get('/passwordChange', function () {
             return view('auth.password_change');

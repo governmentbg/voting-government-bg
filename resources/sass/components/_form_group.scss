@@ -1,16 +1,18 @@
-.form-group{
-    label{
-        font-family: Roboto Regular;
+.form-group {
+    label {
+        font-family: Roboto, sans-serif;
     }
-    span{
+
+    span {
         font-family: Roboto Light;
-        &.error{
+        &.error {
             font-family: Roboto Light Italic;
             color: $darkRed;
         }
     }
-    input, select{
-        font-family: Roboto Light;
+
+    input, select {
+        font-family: Roboto Light, sans-serif;
     }
 }
 

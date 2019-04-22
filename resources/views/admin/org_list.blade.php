@@ -6,16 +6,16 @@
 
 <div class="row">
     @include('components.status')
-    <div class="col-lg-10">
-        <div>
+    <div class="col-lg-12">
+        <div class="m-b-50">
             <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-b-8 p-r-5"/>
             <h3 class="display-inline">{{$tourData->name}}</h3>
         </div>
         <form method="get" action="{{ url('/admin/organisations') }}">
             <div class="row">
-                <div class="col-lg-4 display-inline">
-                    <label for="status" class="text-left">{{__('custom.status')}}:</label>
-                    <select name="status" class="ams-dropdown custom-select w-50 js-drop-filter">
+                <div class="col-lg-3 display-inline">
+                    <label for="status" class="text-left m-r-10">{{__('custom.status')}}:</label>
+                    <select name="status" class="ams-dropdown custom-select w-50 js-drop-filter m-b-5">
                         <option value="all">{{__('custom.all')}}</option>
                         @if (isset($statuses))
                             @foreach($statuses as $statIndex => $statusName)
@@ -28,12 +28,18 @@
                     <div class="display-inline ">
                         <label for="eik">{{__('custom.eik')}}:</label>
                     </div>
-                    <input type="text" name="eik" placeholder="{{__('custom.search')}}" value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}" class="js-search search-box float-right w-70">
+                    <input
+                        type="text"
+                        name="eik"
+                        placeholder="{{__('custom.search')}}"
+                        value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}"
+                        class="js-search search-box float-right w-70 no-outline"
+                    >
                 </div>
-                <div class="col-lg-3 display-inline">
-                    <label for="is_candidate">{{__('custom.candidate')}}:</label>
-                    <select name="is_candidate" class="ams-dropdown custom-select w-50 js-drop-filter">
-                        <option value="all">Виж всички</option>
+                <div class="offset-lg-1 col-lg-3 display-inline">
+                    <label for="is_candidate" class="m-r-10">{{__('custom.candidate')}}:</label>
+                    <select name="is_candidate" class="ams-dropdown custom-select w-50 js-drop-filter m-b-5">
+                        <option value="all">{{__('custom.all')}}</option>
                         @if (isset($candidateStatuses))
                             @foreach($candidateStatuses as $candidateIndex => $candidateStatuses)
                                 <option value="{{$candidateIndex}}" {{isset($filters['is_candidate']) && $filters['is_candidate'] == $candidateIndex ? 'selected' : ''}}>{{$candidateStatuses}}</option>
@@ -42,24 +48,36 @@
                     </select>
                 </div>
             </div>
-            <div class="row m-t-10">
-                <div class="offset-lg-4 col-lg-5 display-inline">
+            <div class="row">
+                <div class="offset-lg-3 col-lg-5 display-inline">
                     <div class="display-inline">
                         <label for="email">{{__('custom.email')}}:</label>
                     </div>
-                    <input type="text" name="email" placeholder="{{__('custom.search')}}" value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}" class="js-search search-box float-right w-70">
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="{{__('custom.search')}}"
+                        value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}"
+                        class="js-search search-box float-right w-70 no-outline"
+                    >
                 </div>
             </div>
             <div class="row m-t-10">
-                <div class="offset-lg-4 col-lg-5 display-inline">
+                <div class="offset-lg-3 col-lg-5 display-inline">
                     <div class="display-inline">
                         <label for="name">{{__('custom.org_name')}}:</label>
                     </div>
-                    <input type="text" name="name" placeholder="{{__('custom.search')}}" value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}" class="js-search search-box float-right w-70">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="{{__('custom.search')}}"
+                        value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}"
+                        class="js-search search-box float-right w-70 no-outline"
+                    >
                 </div>
             </div>
-            <div class="row m-t-10">
-                <div class="offset-lg-4 col-lg-6 display-inline">
+            <div class="row m-t-10 m-b-30">
+                <div class="offset-lg-3 col-lg-6 display-inline">
                     <div class="display-inline">
                         <label for="registered_period">{{__('custom.registered_period')}}:</label>
                     </div>
@@ -74,7 +92,7 @@
                 </div>
             </div>
         </form>
-        <div class="table-wrapper m-t-20">
+        <div class="table-wrapper m-t-60">
             <div class="table-responsive">
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>
@@ -88,23 +106,30 @@
                             <th class="w-10">{{ __('custom.operations') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody class="text-left">
                         @if (!empty($organisationList))
                             @foreach ($organisationList as $singleOrg)
                                 <tr>
                                     <td>{{$singleOrg->name}}</td>
                                     <td class="text-left eik">{{$singleOrg->eik}}</td>
                                     <td>{{$statuses[$singleOrg->status]}}</td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($singleOrg->is_candidate)
-                                            @include('components.checkbox', ['checked' => true, 'readonly' => true, 'name' => 'holder'])
+                                            <img src="{{ asset('img/checked.png') }}" height="30px" width="30px"/>
                                         @endif
                                     </td>
                                     <td>{{$singleOrg->created_at}}</td>
                                     <td>{{$singleOrg->email}}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <!-- <a href="{{ url('admin/organisations/view/' . $singleOrg->id) }}"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px"/></a> -->
-                                        <a href="{{ url('admin/organisations/edit/' . $singleOrg->id) }}"><img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/></a>
+                                        <a
+                                            href="{{ url('admin/organisations/edit/' . $singleOrg->id) }}"
+                                            title="{{ __('custom.edit') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                        >
+                                        <img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/>
+                                    </a>
                                     </td>
                                 </tr>
                             @endforeach

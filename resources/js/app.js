@@ -90,3 +90,19 @@ $(document).on('click', '.js-plus-file-upl', function (e) {
 $('.js-showTerms').on('click', function() {
     $('#info').modal('show');
 });
+
+var $th = $('.tableFixHead').find('thead th')
+$('.tableFixHead').on('scroll', function() {
+    $th.css('transform', 'translateY('+ this.scrollTop + 'px)');
+    $th.css('background-color', '#3e7ea9');
+});
+
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+$(document).ready(function() {
+    if ($('.flash-message').length) {
+        $('.flash-message').fadeOut(1000);
+    }
+});

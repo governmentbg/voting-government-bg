@@ -10,7 +10,7 @@
         <div class="p-l-40">
             @if (!empty($listData))
             <div class="table-wrapper">
-                <div class="table-responsive">
+                <div class="table-responsive tableFixHead">
                     <table class="table table-striped ams-table">
                         <thead>
                             <tr>
@@ -22,7 +22,7 @@
                                 @endif
                         </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody class="text-left">
                         @foreach ($listData as $organisation)
                             <tr>
                                 <td class="text-left">

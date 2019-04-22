@@ -31,11 +31,21 @@
                                 </td>
                                 <td class="text-left">{{$tour->name}}</td>
                                 <td>{{isset($tour->updated_at) ? date('Y-m-d H:i', strtotime($tour->updated_at)) : ''}}</td>
-                                <td> 
+                                <td>
                                     @if($tour->status == App\VotingTour::STATUS_FINISHED)
-                                        <a href="#"><img src="{{ asset('img/star.svg') }}" height="30px" width="50px"/></a>
+                                        <a
+                                            href="#"><img src="{{ asset('img/star.svg') }}" height="30px" width="50px"
+                                            title="{{ __('custom.inactive') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                        ></a>
                                     @else
-                                        <a href="{{route('admin.voting_tour.edit', ['id' => $tour->id])}}">
+                                        <a
+                                            href="{{route('admin.voting_tour.edit', ['id' => $tour->id])}}"
+                                            title="{{ __('custom.edit') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                        >
                                             <img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/>
                                         </a>
                                     @endif

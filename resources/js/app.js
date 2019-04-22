@@ -128,6 +128,7 @@ $(document).ready(function() {
         $('.flash-message').fadeOut(1000);
     }
 });
+
 $('#refresh').click(function(){
     $.ajax({
        type:'GET',
@@ -136,4 +137,12 @@ $('#refresh').click(function(){
           $(".captcha span").html(data);
        }
     });
+});
+
+$('.js-focusout-submit').on('focusout', function() {
+    $(this).closest('form').submit();
+});
+
+$('.js-change-submit').on('change', function() {
+    $(this).closest('form').submit();
 });

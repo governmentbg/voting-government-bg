@@ -33,7 +33,7 @@
                         name="eik"
                         placeholder="{{__('custom.search')}}"
                         value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}"
-                        class="js-search search-box float-right w-70 no-outline"
+                        class="js-search search-box float-right w-70 no-outline js-focusout-submit"
                     >
                 </div>
                 <div class="offset-lg-1 col-lg-3 display-inline">
@@ -58,7 +58,7 @@
                         name="email"
                         placeholder="{{__('custom.search')}}"
                         value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}"
-                        class="js-search search-box float-right w-70 no-outline"
+                        class="js-search search-box float-right w-70 no-outline js-focusout-submit"
                     >
                 </div>
             </div>
@@ -72,7 +72,7 @@
                         name="name"
                         placeholder="{{__('custom.search')}}"
                         value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}"
-                        class="js-search search-box float-right w-70 no-outline"
+                        class="js-search search-box float-right w-70 no-outline js-focusout-submit"
                     >
                 </div>
             </div>

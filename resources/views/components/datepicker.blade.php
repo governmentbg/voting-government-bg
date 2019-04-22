@@ -5,5 +5,6 @@
     data-date-format="yyyy-mm-dd"
     data-date-language="bg"
     value="{{$value}}"
-    class="date-box js-datepicker js-search no-outline"
+    class="date-box js-datepicker js-search no-outline js-change-submit"
+    autocomplete="off"
 >

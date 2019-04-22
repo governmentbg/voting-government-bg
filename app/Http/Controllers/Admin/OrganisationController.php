@@ -26,6 +26,8 @@ class OrganisationController extends BaseAdminController
         $is_candidate = $request->offsetGet('is_candidate');
         $reg_date_from = $request->offsetGet('reg_date_from');
         $reg_date_to = $request->offsetGet('reg_date_to');
+            
+        $this->addBreadcrumb(__('custom.registered_orgs'), '');
 
         $allFilters = [];
 

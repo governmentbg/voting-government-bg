@@ -10,6 +10,13 @@
         </div>
         <div class="p-r-20">
             <a
+                href="{{ route('admin.messages.list') }}"
+                class="f-s-21 color-black text-decoration-none {{ Route::currentRouteName() == 'admin.org_list' ? 'c-darkBlue' : 'color-black' }}"
+            >{{ __('breadcrumbs.message_list') }}
+            </a>
+        </div>
+        <div class="p-r-20">
+            <a
                 href="{{ route('admin.settings') }}"
                 class="f-s-21 color-black text-decoration-none {{ Route::currentRouteName() == 'admin.settings' ? 'c-darkBlue' : 'color-black' }}">
                 {{ __('custom.settings') }}

@@ -21,7 +21,7 @@
 @endif
 @php
     $breadcrumbs[] = (object) ['label' => 'Начало', 'link' => $breadRoute];
-    $breadcrumbs[] = (object) ['label' => 'Настройки', 'link' => $breadSettings];
+    //$breadcrumbs[] = (object) ['label' => 'Настройки', 'link' => $breadSettings];
     $breadcrumbs[] = (object) ['label' => 'Смяна на паролата'];
 @endphp
 @include('components.breadcrumbs', $breadcrumbs)
@@ -36,6 +36,7 @@
                 <form method="POST" class="m-t-20" action="{{$changePasswordRoute}}">
                     {{ csrf_field() }}
                     @include('components.errors')
+                    @include('components.status')
                     <div class="form-group row required">
                         <label for="password" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.old_password') }}:</label>
                         <div class="col-sm-8">

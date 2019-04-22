@@ -135,6 +135,6 @@ class ResetPasswordController extends Controller
         }
 
         session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
-        return redirect($this->redirectTo);
+        return redirect()->back();
     }
 }

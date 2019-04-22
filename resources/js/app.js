@@ -128,3 +128,12 @@ $(document).ready(function() {
         $('.flash-message').fadeOut(1000);
     }
 });
+$('#refresh').click(function(){
+    $.ajax({
+       type:'GET',
+       url:'refreshcaptcha',
+       success:function(data){
+          $(".captcha span").html(data);
+       }
+    });
+});

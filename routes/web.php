@@ -69,7 +69,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         })->name('admin.settings');
         
         Route::get('/messages', 'MessagesController@list')->name('admin.messages.list');
-        Route::get('/messages/{id}', function () { return view('organisation.request'); })->name('admin.messages');
+        Route::get('/messages/{id}', 'MessagesController@view')->name('admin.messages');
+        Route::post('/messages/{id}/send', 'MessagesController@send')->name('admin.messages.send');
 
         Route::get('/passwordChange', function () {
             return view('auth.password_change');

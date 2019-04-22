@@ -22,7 +22,9 @@ class Message extends Model
      */
     protected $guarded = ['id'];
     
-    protected $appends = ['sender_org_name'];
+    protected $appends = ['sender_org_name', 'sender_user_name'];
+    
+    protected $hidden = ['senderOrganisation', 'senderUser'];
 
     public function file()
     {
@@ -58,7 +60,7 @@ class Message extends Model
         return $this->belongsTo('App\User', 'sender_user_id');
     }
     
-    public function senderOganisation()
+    public function senderOrganisation()
     {
         return $this->belongsTo('App\Organisation', 'sender_org_id');
     }
@@ -137,6 +139,11 @@ class Message extends Model
     
     public function getSenderOrgNameAttribute()
     {
-        return isset($this->senderOganisation) ? $this->senderOganisation->name : '';
+        return isset($this->senderOrganisation) ? $this->senderOrganisation->name : '';
+    }
+    
+    public function getSenderUserNameAttribute()
+    {
+        return isset($this->senderUser) ? $this->senderUser->fullName : '';
     }
 }

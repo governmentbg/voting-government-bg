@@ -176,7 +176,7 @@ class UserController extends ApiController
             $rules['email'] = 'required|email|unique:users';
             $rules['first_name'] = 'required|string';
             $rules['last_name'] = 'required|string';
-            $rules['active'] = 'required|bool';
+            $rules['active'] = 'bool';
         } else {
             $votingTour = VotingTour::getLatestTour();
             if (!$votingTour) {

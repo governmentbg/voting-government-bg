@@ -32,7 +32,7 @@
                                 type="text"
                                 class="input-box"
                                 name="first_name"
-                                value="{{ old('username') }}"
+                                value="{{ old('first_name') }}"
                             >
                             <span class="error">{{ $errors->first('first_name') }}</span>
                         </div>
@@ -70,7 +70,7 @@
                     <div class="form-group row required">
                         <div class="col-sm-12 col-xs-6 p-r-none text-right">
                             @include('components.button', ['buttonLabel' => __('custom.send')])
-                            @include('components.button', ['buttonLabel' => __('custom.back')])
+                            <a class="btn btn-primary login-btn" href="{{ route('admin.committee.list') }}">{{ __('custom.back') }}</a>
                         </div>
                     </div>
                 </form>

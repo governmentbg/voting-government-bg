@@ -60,6 +60,8 @@ class CommitteeController extends BaseAdminController
         
         $data['password'] = $password;
         $data['password_confirm'] = $password;
+        
+        $data['active'] = $request->get('active', 0);
 
         list($user, $errors) = api_result(ApiUsers::class, 'add', ['user_data' => $data]);
         
@@ -83,6 +85,8 @@ class CommitteeController extends BaseAdminController
     public function update(Request $request, $id)
     {
         $data = $request->only('username', 'first_name', 'last_name', 'email', 'active');
+        
+        $data['active'] = $request->get('active', 0);
         
         list($result, $errors) = api_result(ApiUsers::class, 'edit', ['user_data' => $data, 'user_id' => $id]);
         

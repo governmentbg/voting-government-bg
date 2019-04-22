@@ -10,7 +10,7 @@
         <div class="p-l-40">
             @if (!empty($listData))
             <div class="table-wrapper">
-                <div class="table-responsive ams-table-scrollable">
+                <div class="table-responsive ams-table-scrollable tableFixHead">
                     <table class="table table-striped ams-table">
                         <thead>
                             <tr>
@@ -20,7 +20,7 @@
                                 <th class="w-30">{{ __('custom.registered_at') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody class="text-left">
                         @foreach ($listData as $organisation)
                             <tr class="{{ request()->id == $organisation->id ? 'font-weight-bold' : ''}}" >
                                 <td class="text-left">

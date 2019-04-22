@@ -6,7 +6,7 @@
 
 @include('components.status')
 <div class="row">
-    <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} {{$org_data->name}}</h3></div>
+    <div class="col-lg-12 p-l-40 m-b-30"><h3>{{ __('custom.data_for') }} {{$org_data->name}}</h3></div>
 </div>
 <form method="POST" action="{{ url('/admin/organisations/update/'. $org_data->id)}}">
     <div class="row m-l-5">
@@ -97,7 +97,7 @@
                     <label class="col-lg-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
                     <div class="col-sm-8 col-xs-6 p-r-none">
                         <textarea
-                            class="txt-area"
+                            class="txt-area no-outline p-a-5"
                             name="description"
                             rows="3"
                             cols="40"
@@ -109,7 +109,7 @@
                     <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
                     <div class="col-sm-8 col-xs-6 p-r-none">
                         <textarea
-                            class="txt-area"
+                            class="txt-area no-outline p-a-5"
                             name="references"
                             rows="3"
                             cols="40"

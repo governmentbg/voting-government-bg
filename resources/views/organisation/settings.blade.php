@@ -25,9 +25,9 @@
 @endphp
 @include('components.breadcrumbs')
 
-<div class="container center-flex">
+<div class="center-flex">
     <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">
-        <div class="row justify-center">
+        <div class="row justify-left">
             <div class="col-md-10">
                 <div>
                     <h2 class="color-dark"><b>{{ __('custom.settings') }}</b></h2>

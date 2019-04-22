@@ -8,6 +8,7 @@ use App\Traits\RecordSignature;
 use Awobaz\Compoships\Compoships;
 use App\Http\Controllers\Traits\CanResetPassword;
 use Illuminate\Support\Str;
+use App\Traits\MetaData;
 
 class User extends Authenticatable
 {
@@ -15,6 +16,7 @@ class User extends Authenticatable
     use Compoships;
     use RecordSignature;
     use CanResetPassword;
+    use MetaData;
 
     const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
 
@@ -73,7 +75,7 @@ class User extends Authenticatable
 
     public function isSuperAdmin()
     {
-        return !isset($this->org_id) && $this->name == config('auth.system.user');
+        return !isset($this->org_id) && $this->username == config('auth.system.user');
     }
 
     public function getFullNameAttribute()

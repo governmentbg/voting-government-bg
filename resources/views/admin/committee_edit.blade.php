@@ -6,11 +6,13 @@
 <div class="container center-flex">
     <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">
         <div class="row justify-center">
+            @include('components.errors')
             <div class="col-md-10">
                 <div>
                     <h2 class="color-dark"><b>{{ __('custom.new_member_edit') }}</b></h2>
                 </div>
-                <form method="POST" class="m-t-20">
+                <form method="POST" class="m-t-20" action="{{ route('admin.committee.update', ['id' => $user->id]) }}">
+                    {{ method_field('PUT') }}
                     {{ csrf_field() }}
                     <div class="form-group row required">
                         <label for="username" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.username') }}:</label>
@@ -19,33 +21,33 @@
                                 type="text"
                                 class="input-box"
                                 name="username"
-                                value="john_atanasov"
+                                value="{{ $user->username }}"
                                 readonly
                             >
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label for="own_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.own_name') }}:</label>
+                        <label for="first_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.own_name') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
                                 class="input-box"
-                                name="own_name"
-                                value=""
+                                name="first_name"
+                                value="{{ $user->first_name }}"
                             >
-                            <span class="error">{{ $errors->first('own_name') }}</span>
+                            <span class="error">{{ $errors->first('first_name') }}</span>
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label for="family_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.family_name') }}:</label>
+                        <label for="last_name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.family_name') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
                                 class="input-box"
-                                name="family_name"
-                                value=""
+                                name="last_name"
+                                value="{{ $user->last_name }}"
                             >
-                            <span class="error">{{ $errors->first('family_name') }}</span>
+                            <span class="error">{{ $errors->first('last_name') }}</span>
                         </div>
                     </div>
                     <div class="form-group row required">
@@ -55,7 +57,7 @@
                                 type="email"
                                 class="input-box"
                                 name="email"
-                                value=""
+                                value="{{ $user->email }}"
                             >
                             <span class="error">{{ $errors->first('email') }}</span>
                         </div>
@@ -63,25 +65,25 @@
                     <div class="form-group row required">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.active') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            @include('components.checkbox', ['name' => 'active'])
+                            @include('components.checkbox', ['name' => 'active', 'checked' => (bool)$user->active])
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.last_change_time') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none p-t-10">
-                            2018-10-10
+                            {{ date('Y-m-d H:i:s', strtotime($user->updated_at)) }}
                         </div>
                     </div>
                     <div class="form-group row required">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.last_change_user') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none p-t-10">
-                            system
+                            {{ $user->updated_by_username }}
                         </div>
                     </div>
                     <div class="form-group row required">
                         <div class="col-sm-12 col-xs-6 p-r-none text-right">
                             @include('components.button', ['buttonLabel' => __('custom.send')])
-                            @include('components.button', ['buttonLabel' => __('custom.back')])
+                            <a class="btn btn-primary login-btn" href="{{ route('admin.committee.list') }}">{{ __('custom.back') }}</a>
                         </div>
                     </div>
                 </form>

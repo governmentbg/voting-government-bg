@@ -43,6 +43,13 @@
                         <a href="{{$registeredOrgs}}">{{__('custom.elections')}}</a>
                     </div>
                 </div>
+                @if(auth()->guard('backend')->user()->isSuperAdmin())
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <a href="{{ route('admin.committee.list') }}">{{ __('custom.committee') }}</a>
+                        </div>
+                    </div>
+                @endif
                 @endif
             </div>
         </div>

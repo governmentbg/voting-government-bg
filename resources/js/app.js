@@ -80,11 +80,33 @@ $(document).on('click', '.js-file-upl', function (e) {
     input.trigger('click');
 });
 
+$(document).on('change', '.js-file-input', function (e) {
+    for (var i = 0; i < $('[data-consec-num]').length; i++) {
+        var $el= $('[data-consec-num]').eq(i);
+
+        if ($el.val() != '') {
+            $el.prev('span').text($el.val().split('\\').pop());
+        }
+    }
+});
+
 $(document).on('click', '.js-plus-file-upl', function (e) {
     e.preventDefault();
 
     var html = $(this).parent().parent().prev().prop('outerHTML');
+
     $('.plus-file-container').before(html);
+
+    for (var i = 0; i < $('[data-consec-num]').length; i++) {
+        $el = $('[data-consec-num]').eq(i);
+        $el.attr('data-consec-num', i);
+
+        if ($el.val() != '') {
+            $el.prev('span').text($el.val().split('\\').pop());
+        } else {
+            $el.prev('span').text('Select file');
+        }
+    }
 });
 
 $('.js-showTerms').on('click', function() {

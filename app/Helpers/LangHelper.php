@@ -21,7 +21,7 @@ function utrans($value, $count = 1, $params = [], $lang = null)
  */
 function uptrans($value, $count = 1, $params = [], $lang = null)
 {
-    return strtoupper(trans_choice($value, $count, $params, $lang));
+    return mb_strtoupper(trans_choice($value, $count, $params, $lang), 'UTF-8');
 }
 
 /**
@@ -45,7 +45,7 @@ function uctrans($value, $count = 1, $params = [], $lang = null)
  */
 function ultrans($value, $count = 1, $params = [], $lang = null)
 {
-    return strtolower(trans_choice($value, $count, $params, $lang));
+    return mb_strtolower(trans_choice($value, $count, $params, $lang), 'UTF-8');
 }
 
 /**
@@ -107,7 +107,7 @@ function _hn($singular, $plural, $number)
 function translate_date($select)
 {
     $change = str_replace(
-            ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], 
+            ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             [uctrans('dates.Jan'), uctrans('dates.Feb'), uctrans('dates.Mar'), uctrans('dates.Apr'), uctrans('dates.May'), uctrans('dates.Jun'), uctrans('dates.Jul'), uctrans('dates.Aug'), uctrans('dates.Sep'), uctrans('dates.Oct'), uctrans('dates.Nov'), uctrans('dates.Dec')]
             , $select);
 

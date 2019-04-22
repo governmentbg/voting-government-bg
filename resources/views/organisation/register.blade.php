@@ -31,7 +31,7 @@
                                 name="name"
                                 value="{{ old('name') }}"
                                 required
-                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.org_name')]) }}')"
                                 oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('name') }}</span>
@@ -46,7 +46,7 @@
                                 name="eik"
                                 value="{{ old('eik') }}"
                                 required
-                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => __('custom.eik_bulstat')]) }}')"
                                 oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('eik') }}</span>
@@ -61,7 +61,7 @@
                                 name="address"
                                 value="{{ old('address') }}"
                                 required
-                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.management_address')]) }}')"
                                 oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('address') }}</span>
@@ -76,7 +76,7 @@
                                 name="representative"
                                 value="{{ old('representative') }}"
                                 required
-                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}')"
                                 oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('representative') }}</span>
@@ -91,7 +91,7 @@
                                 name="phone"
                                 value="{{ old('phone') }}"
                                 required
-                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.phone_number')]) }}')"
                                 oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('phone') }}</span>
@@ -106,7 +106,7 @@
                                 name="email"
                                 value="{{ old('email') }}"
                                 required
-                                oninvalid="setCustomValidity('{{ __('custom.required_mgs') }}')"
+                                oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.email')]) }}')"
                                 oninput="setCustomValidity('')"
                             >
                             <span class="error">{{ $errors->first('email') }}</span>
@@ -181,16 +181,18 @@
                                 <img class="display-inline rotate-180" src="{{ asset('img/plus.svg') }}" height="35px" width="30px" />
                             </div>
                         </div>
-                        <span class="error">{{ $errors->first('files') }}</span>
-                        @if ($errors->has('files.*.name'))
-                            <span class="error">{{ $errors->first('files.*.name') }}</span>
-                        @endif
-                        @if ($errors->has('files.*.mime_type'))
-                            <span class="error">{{ $errors->first('files.*.mime_type') }}</span>
-                        @endif
-                        @if ($errors->has('files.*.data'))
-                            <span class="error">{{ $errors->first('files.*.data') }}</span>
-                        @endif
+                        <div class="col-sm-8 col-xs-6 p-r-none">
+                            <span class="error">{{ $errors->first('files') }}</span>
+                            @if ($errors->has('files.*.name'))
+                                <span class="error">{{ $errors->first('files.*.name') }}</span>
+                            @endif
+                            @if ($errors->has('files.*.mime_type'))
+                                <span class="error">{{ $errors->first('files.*.mime_type') }}</span>
+                            @endif
+                            @if ($errors->has('files.*.data'))
+                                <span class="error">{{ $errors->first('files.*.data') }}</span>
+                            @endif
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12 col-form-label">

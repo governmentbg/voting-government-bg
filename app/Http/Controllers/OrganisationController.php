@@ -13,7 +13,7 @@ use \Validator;
 
 class OrganisationController extends BaseFrontendController
 {
-    protected $redirectTo = '/';
+    protected $redirectTo = '/publicLists/registered';
 
     public function __construct()
     {
@@ -39,7 +39,7 @@ class OrganisationController extends BaseFrontendController
         ]);
 
         if ($validator->fails()) {
-            $errors = ['captcha' => __('custom.chaptcha_fail')];
+            $errors['captcha'] = __('custom.chaptcha_fail');
         }
 
         if (empty($errors)) {
@@ -94,11 +94,11 @@ class OrganisationController extends BaseFrontendController
                     return redirect($this->redirectTo);
                 } else {
                     DB::rollback();
-                    $errors = !empty($result->errors) ? $result->errors : [$result->error->message];
+                    $errors = !empty($result->errors) ? $result->errors : [];
                     session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_error'));
                 }
             } else {
-                $errors = !empty($result->errors) ? $result->errors : [$result->error->message];
+                $errors = !empty($result->errors) ? $result->errors : [];
                 session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_org_error'));
             }
         }

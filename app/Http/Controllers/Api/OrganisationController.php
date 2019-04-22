@@ -50,15 +50,26 @@ class OrganisationController extends ApiController
                 'phone'             => 'required|string|max:40',
                 'in_av'             => 'bool',
                 'is_candidate'      => 'bool',
-                'description'       => 'required_if:is_candidate,'. Organisation::IS_CANDIDATE_TRUE .'|nullable|max:8000',
+                'description'       => 'nullable|max:8000',
                 'references'        => 'nullable|max:8000',
                 'status'            => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
-                'files'             => 'required_unless:in_av,'. Organisation::IN_AV_TRUE .'|nullable|array',
+                'files'             => 'nullable|array',
                 'files.*.name'      => 'required|string|max:255',
                 'files.*.mime_type' => 'required|string|in:'. implode(',', File::getSupportedFormats()),
                 'files.*.data'      => 'required|string|max:'. File::MAX_SIZE,
             ]);
+
+            $validator->after(function ($validator) use ($data) {
+                if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE && empty($data['description'])) {
+                    $validator->errors()->add('description', __('custom.org_descr_required'));
+                }
+                if (!$validator->errors()->has('files')) {
+                    if (!(isset($data['in_av']) && $data['in_av'] == Organisation::IN_AV_TRUE) && empty($data['files'])) {
+                        $validator->errors()->add('files', __('custom.org_files_required'));
+                    }
+                }
+            });
 
             if (!$validator->fails()) {
                 try {
@@ -181,7 +192,7 @@ class OrganisationController extends ApiController
                         $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
                         $description = (isset($data['description']) ? $data['description'] : $organisation->description);
                         if ($isCandidate == Organisation::IS_CANDIDATE_TRUE && empty($description)) {
-                            return $this->errorResponse(__('custom.edit_org_fail'), [__('custom.org_descr_required')]);
+                            return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
                         }
 
                         $orgData = [];

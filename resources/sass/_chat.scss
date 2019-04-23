@@ -1,0 +1,38 @@
+.chat.chat-list{
+    .chat-sender{
+        .sender-info{
+            margin-top: 20px;
+        }
+        .border-chat-sender {
+            border: 2px solid $lighterBlue;
+            border-radius: 14px;
+            padding-left: 15px;
+        }
+    }
+
+    .chat-reciever{
+        .reciever-info{
+            text-align: right;
+            margin-top: 20px;
+            padding-right: 5px;
+        }
+        .border-chat-receiver {
+            border: 2px solid $darkBlue;
+            border-radius: 14px;
+            padding-left: 15px;
+        }
+    }
+
+    .msg-time {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 5px;
+    }
+
+    textarea[name="new_message"]{
+        margin-top: 40px;
+        padding: 5px;
+        outline: none;
+    }
+}
+

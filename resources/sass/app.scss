@@ -26,6 +26,8 @@
 
 @import 'components/dropdown';
 
+@import 'chat';
+
 body {
     font-family: 'Roboto', sans-serif !important;
 }
@@ -220,18 +222,6 @@ h3, h2 {
     width: 100%;
 }
 
-.border-chat-sender {
-    border: 2px solid $lighterBlue;
-    border-radius: 14px;
-    padding-left: 15px;
-}
-
-.border-chat-receiver {
-    border: 2px solid $darkBlue;
-    border-radius: 14px;
-    padding-left: 15px;
-}
-
 .p-t-5 {
     padding-top: 5px;
 }
@@ -247,12 +237,6 @@ h3, h2 {
     a {
         text-decoration: underline;
     }
-}
-
-.msg-time {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 5px;
 }
 
 .rotate-180 {

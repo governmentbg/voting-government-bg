@@ -131,7 +131,7 @@
                             </td>
                             <td class="text-center">{{ date('Y-m-d', strtotime($message->created_at)) }}</td>
                             <td class="text-center">
-                                <a href="{{ route('organisation.messages', ['org_id' => $organisation->id, 'id' => $message->id])}}">
+                                <a href="{{ route('organisation.messages', ['id' => $message->id])}}">
                                     <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                 </a>
                             </td>

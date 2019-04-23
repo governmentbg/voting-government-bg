@@ -26,12 +26,18 @@
         tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
             background-color: #cddee9;
         }
-    }
 
-    tbody tr td,
-    thead tr th,
-    thead {
-        border-left: 1px solid #3e7ea9;
+        tbody > tr:nth-child(2n+1):hover > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+            background-color: #aac3d3;
+        }
+
+          tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+            background-color: white;
+        }
+
+        tbody > tr:nth-child(2n):hover > td, .table-striped > tbody > tr:nth-child(2n) > th {
+            background-color: rgb(246, 246, 246);
+        }
     }
 }
 

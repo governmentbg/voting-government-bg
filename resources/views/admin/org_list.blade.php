@@ -6,11 +6,7 @@
 
 <div class="row">
     @include('components.status')
-    <div class="col-lg-12">
-        <div class="m-b-50">
-            <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-b-8 p-r-5"/>
-            <h3 class="display-inline">{{$tourData->name}}</h3>
-        </div>
+    <div class="col-lg-12 m-t-30">
         <form method="get" action="{{ url('/admin/organisations') }}">
             <div class="row">
                 <div class="col-lg-3 display-inline">
@@ -97,11 +93,11 @@
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>
                         <tr>
-                            <th class="w-20" data-field="name" data-sortable="true">{{ __('custom.organisation') }}</th>
+                            <th class="w-30" data-field="name" data-sortable="true">{{ __('custom.organisation') }}</th>
                             <th class="w-10" data-field="eik" data-sortable="true">{{ __('custom.eik') }}</th>
-                            <th class="w-10" data-field="status" data-sortable="true">{{ __('custom.status') }}</th>
+                            <th class="w-15" data-field="status" data-sortable="true">{{ __('custom.status') }}</th>
                             <th class="w-10" data-field="is_candidate" data-sortable="true">{{ __('custom.candidate') }}</th>
-                            <th class="w-25" data-field="registered_at" data-sortable="true">{{ __('custom.registered_at') }}</th>
+                            <th class="w-10" data-field="registered_at" data-sortable="true">{{ __('custom.registered_at') }}</th>
                             <th class="w-15" data-field="email" data-sortable="true">{{ __('custom.email') }}</th>
                             <th class="w-10">{{ __('custom.operations') }}</th>
                         </tr>
@@ -115,7 +111,7 @@
                                     <td>{{$statuses[$singleOrg->status]}}</td>
                                     <td class="text-center">
                                         @if ($singleOrg->is_candidate)
-                                            <img src="{{ asset('img/checked.png') }}" height="30px" width="30px"/>
+                                            <img src="{{ asset('img/checked.png') }}" height="26px" width="30px"/>
                                         @endif
                                     </td>
                                     <td>{{$singleOrg->created_at}}</td>

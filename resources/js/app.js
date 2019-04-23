@@ -29,6 +29,10 @@ $('#js-remove-org').click(function() {
     checkVoteSize();
 });
 
+$(document).ready(function() {
+    checkVoteSize();
+});
+
 function checkVoteSize() {
     if ($('#votefor option').length == 14) {
         $('#vote_organisations').attr('disabled', true);
@@ -53,7 +57,7 @@ $('#filter_org').on('keyup', function() {
             output[i].setAttribute('style', 'display:none');
         } else {
             output[i].style.display = "";
-            output[i].setAttribute('style', 'display:');
+            output[i].setAttribute('style', 'display:block');
         }
     }
 });
@@ -145,4 +149,35 @@ $('.js-focusout-submit').on('focusout', function() {
 
 $('.js-change-submit').on('change', function() {
     $(this).closest('form').submit();
+});
+
+$('#votebtn').on('click', function() {
+    $('#info').modal('show');
+});
+
+$('#votebtn').click(function(ev) {
+    var selected = $('#votefor > option');
+
+    $('#info').find('.modal-body').text('');
+    selected.each(function(index, value) {
+        $('#info').find('.modal-body').append('<div>' + value.innerHTML + '<\div>');
+    })
+
+    selected.each(function() {
+        $(this).attr('selected', true);
+    });
+
+    $('#info').modal({ show: true });
+
+    $('#dataConfirmOK').off('click').on('click', function() {
+        // On submit add select to all items in votefor select
+        // in order to submit them all (even not selected from prev vote)
+        selected.each(function() {
+            $(this).prop('selected', true);
+        });
+
+        $('#info').closest('form').submit();
+    });
+
+    return false;
 });

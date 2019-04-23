@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\UserController;
 class AuthController extends Controller
 {
     use AuthenticatesUsers;
-    
+
     const PASSWORD_CHANGED = 'passwords.changed';
 
     protected $loginView = 'admin.index';

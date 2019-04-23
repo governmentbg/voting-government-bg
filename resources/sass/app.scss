@@ -139,6 +139,11 @@ h3, h2 {
 
 .flex-nav-items {
     display: flex;
+    justify-content: space-between;
+}
+
+.flex-nav-end {
+    display: flex;
     justify-content: flex-end;
 }
 

@@ -19,10 +19,6 @@ Route::get('/publicLists/candidates/{id?}','PublicController@listCandidates')->n
 Route::get('/publicLists/voted/{id?}','PublicController@listVoted')->name('list.voted');
 Route::get('/publicLists/ranking/{id?}','PublicController@listRanking')->name('list.ranking');
 
-//================START test routes
-Route::get('/organisation/vote', function () {
-    return view('organisation.vote');
-});
 //================END test routes
 
 Route::get('/register','OrganisationController@register')->name('organisation.register');
@@ -47,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/vote/vote', 'VoteController@vote')->name('organisation.vote_action');
 
     Route::get('/files/download/{id}', 'OrganisationController@downloadFile')->name('fileDowload');
-    
+
     Route::get('/messages/{id}', 'MessagesController@view')->name('organisation.messages');
     Route::post('/messages/{id}/send', 'MessagesController@send')->name('organisation.messages.send');
 });

@@ -47,6 +47,7 @@ class PublicController extends BaseFrontendController
                     'statuses' => Organisation::getApprovedStatuses()
                 ]
             ];
+
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (isset($id)) {

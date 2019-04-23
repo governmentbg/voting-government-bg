@@ -17,6 +17,7 @@ class OrganisationController extends BaseFrontendController
 
     public function __construct()
     {
+        parent::__construct();
         $this->addBreadcrumb(__('breadcrumbs.start'), '/');
     }
 

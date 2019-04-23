@@ -24,15 +24,15 @@ class VoteController extends BaseFrontendController
         list($votingTourData, $tourErrors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
 
         if ($votingTourData->status == VotingTour::STATUS_VOTING) {
-            $memberStatus = Organisation::STATUS_CANDIDATE;
+            $memberStatus = [Organisation::STATUS_CANDIDATE];
         } else if ($votingTourData->status == VotingTour::STATUS_BALLOTAGE) {
-            $memberStatus = Organisation::STATUS_BALLOTAGE;
+            $memberStatus = [Organisation::STATUS_BALLOTAGE];
         } else {
             $memberStatus = [];
         }
 
         list($organisations, $orgErrors) = api_result(ApiOrganisation::class, 'search', [
-            'filters' => ['statuses' => [$memberStatus]]
+            'filters' => ['statuses' => $memberStatus]
         ]);
 
         list($latestVote, $latestVoteErrors) = api_result(ApiVote::class, 'getLatestVote', ['org_id' => \Auth::user()->org_id]);

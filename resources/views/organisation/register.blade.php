@@ -166,20 +166,8 @@
                         <label class="col-sm-12 col-xs-12 col-form-label">{{ __('custom.files_info') }}</label>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-4 col-xs-12 p-r-none">
-                            @include('components.fileinput', ['name' => 'files[]', 'withoutImg' => true])
-                        </div>
-                        <div class="col-sm-8 col-xs-6 p-r-none p-t-5">
-                            <div class="js-file-upl w-10">
-                                <img class="display-inline rotate-180" src="{{ asset('img/download.svg') }}" height="35px" width="30px" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row plus-file-container">
-                        <div class="col-sm-4 col-xs-12 p-r-none">
-                            <div class="js-plus-file-upl w-10">
-                                <img class="display-inline rotate-180" src="{{ asset('img/plus.svg') }}" height="35px" width="30px" />
-                            </div>
+                        <div class="col-lg-12 p-r-none">
+                            @include('components.fileinput', ['name' => 'files[]'])
                         </div>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <span class="error">{{ $errors->first('files') }}</span>

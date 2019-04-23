@@ -1,5 +1,9 @@
+@php $multiple = !isset($multiple)? true : $multiple; @endphp
+
 <h3 class="color-black">{{ isset($title) ? $title : '' }}</h3>
-    <div class="file-field">
+
+<div class="multiple-input-container">
+    <div class="file-field file-input-container">
         <div class="btn-rounded waves-effect btn-sm float-left input-f">
             <span class="back-z p-t-5 c-darkBlue">Select file</span>
             <input
@@ -8,10 +12,15 @@
                 class="opacity-0 front-z js-file-input"
                 name="{{ isset($name) ? $name : 'files[]' }}"
                 accept="application/pdf, image/tiff, image/jpg, image/jpeg, image/png, image/bmp"
-                data-consec-num="0"
             >
         </div>
+        @if (!(isset($withoutImg) && $withoutImg))
+            <img class="upload-btn js-file-upl display-inline m-b-8 rotate-180" src="{{ asset('img/download.svg') }}" height="35px" width="30px" />
+        @endif
     </div>
-@if (!(isset($withoutImg) && $withoutImg))
-    <img class="display-inline m-b-8 rotate-180 p-r-5" src="{{ asset('img/download.svg') }}" height="35px" width="30px" />
-@endif
+    @if(isset($multiple) && $multiple)
+    <div class="add-file-input">
+        <img class="add-multiple js-plus-file-upl display-inline rotate-180" src="{{ asset('img/plus.svg') }}" height="35px" width="30px" />
+    </div>
+    @endif
+</div>

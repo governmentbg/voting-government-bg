@@ -13,7 +13,7 @@ class EloquentBackendUserProvider extends EloquentUserProvider
     {
         $user = parent::retrieveByCredentials($credentials);
 
-        return $user && $user->isAdmin() === false ? null : $user;
+        return $user && $user->isAdmin() === true && $user->active ? $user : null;
     }
     
     /**

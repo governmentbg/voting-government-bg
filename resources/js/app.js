@@ -125,7 +125,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     if ($('.flash-message').length) {
-        $('.flash-message').fadeOut(1000);
+        $('.flash-message').fadeOut(10000);
     }
 });
 

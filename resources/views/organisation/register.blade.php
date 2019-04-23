@@ -134,7 +134,7 @@
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea
-                                class="txt-area"
+                                class="txt-area no-outline"
                                 name="description"
                                 placeholder="{{ __('custom.experience_info_placeholder') }}"
                                 rows="3"
@@ -148,7 +148,7 @@
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea
-                                class="txt-area"
+                                class="txt-area no-outline"
                                 name="references"
                                 placeholder="{{ __('custom.reference_materials_placeholder') }}"
                                 rows="3"

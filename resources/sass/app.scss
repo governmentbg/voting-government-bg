@@ -200,6 +200,14 @@ h3, h2 {
     width: 30%;
 }
 
+.w-35 {
+    width: 35%;
+}
+
+.w-40 {
+    width: 40%;
+}
+
 .w-25 {
     width: 25%;
 }
@@ -409,4 +417,74 @@ input[type='file'] {
 
 .m-b-50 {
     margin-bottom: 50px;
+}
+
+.p-t-13 {
+    padding-top: 13px;
+}
+
+.w-60i {
+    width: 60% !important;
+}
+
+.m-l-percent {
+    margin-left: 24.7%;
+}
+
+.hr-small {
+    border: 1px solid #3e7ea9;
+}
+
+.vote-box {
+    border: none;
+    width: 100%;
+}
+
+.vote-box-outline {
+    border: 2px solid #3e7ea9;
+    border-radius: 7px;
+}
+
+.p-l-37 {
+    padding-left: 37px;
+}
+.m-t-15 {
+    margin-top: 15px;
+}
+
+.p-b-none {
+    padding-bottom: 0px;
+}
+
+.modal-x {
+    font-weight: 100 !important;
+    font-size: 30px;
+}
+
+.border-none {
+    border: none;
+}
+
+.b-c-darkRed {
+    background-color: #a93e3e;
+    border: 0px;
+}
+
+.b-c-darkRed:hover {
+    background-color: #863131;
+}
+
+.h2-custom {
+    font-size: 3.0rem !important;
+}
+
+.m-b-15 {
+    margin-bottom: 15px;
+}
+
+.m-t-30 {
+    margin-top: 30px;
+}
+.p-t-3 {
+    padding-top: 3px;
 }

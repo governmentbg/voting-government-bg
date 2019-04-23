@@ -4,4 +4,4 @@
     id="{{ isset($id) ? $id : '' }}"
     {{isset($disabled) && $disabled ? 'disabled' : ''}}
     name="{{isset($name) && $name ? $name : ''}}"
->{{$buttonLabel}}</button>
+>{{ isset($buttonLabel) ? $buttonLabel : '' }}</button>

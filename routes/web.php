@@ -30,7 +30,7 @@ Route::get('createcaptcha', 'CaptchaController@create');
 Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
 Route::post('/organisations','OrganisationController@store')->name('organisation.store');
 
-//Frontend routes that needs user athorisation
+//Frontend routes that needs user authorisation
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/settings', function () {
         return view('organisation.settings');
@@ -43,6 +43,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
 
     Route::get('/view', 'OrganisationController@view')->name('organisation.view');
+    Route::get('/vote/view', 'VoteController@view')->name('organisation.vote');
+    Route::post('/vote/vote', 'VoteController@vote')->name('organisation.vote_action');
 
     Route::get('/files/download/{id}', 'OrganisationController@downloadFile')->name('fileDowload');
     
@@ -69,7 +71,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/settings', function () {
             return view('organisation.settings');
         })->name('admin.settings');
-        
+
         Route::get('/messages', 'MessagesController@list')->name('admin.messages.list');
         Route::get('/messages/{id}', 'MessagesController@view')->name('admin.messages');
         Route::post('/messages/{id}/send', 'MessagesController@send')->name('admin.messages.send');
@@ -84,15 +86,15 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::post('/organisations/update/{id}', 'OrganisationController@update')->name('admin.org_edit');
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
         Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
-        
+
         //SYSTEM user routes
         Route::group(['middleware' => 'auth.system:backend'], function () {
-            Route::get('/committees', 'CommitteeController@list')->name('admin.committee.list');      
-            Route::get('/committee/add', 'CommitteeController@create')->name('admin.committee.add'); 
+            Route::get('/committees', 'CommitteeController@list')->name('admin.committee.list');
+            Route::get('/committee/add', 'CommitteeController@create')->name('admin.committee.add');
             Route::get('/committee/edit/{id}', 'CommitteeController@edit')->name('admin.committee.edit');
-            Route::post('/committee', 'CommitteeController@store')->name('admin.committee.store'); 
-            Route::put('/committee/{id}', 'CommitteeController@update')->name('admin.committee.update'); 
-        });      
+            Route::post('/committee', 'CommitteeController@store')->name('admin.committee.store');
+            Route::put('/committee/{id}', 'CommitteeController@update')->name('admin.committee.update');
+        });
     });
 });
 

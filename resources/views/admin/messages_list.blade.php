@@ -4,19 +4,15 @@
 @include('partials.admin-nav-bar')
 @include('components.breadcrumbs')
 
-<div class="row">
+<div class="row m-t-30">
     @include('components.status')
     @include('components.errors')
-    <div class="col-lg-10 offset-lg-1">
-        <div>
-            <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-b-8 p-r-5"/>
-            <h3 class="display-inline">{{$tourData->name}}</h3>
-        </div>
+    <div class="col-lg-12">
         <form method="get" action="{{ url('/admin/messages') }}">
-            <div class="row">
+            <div class="row m-t-15">
                 <div class="col-lg-4 display-inline">
                     <label for="filters[status]" class="text-left">{{__('custom.status')}}:</label>
-                    <select name="filters[status]" class="ams-dropdown custom-select w-50 js-drop-filter">
+                    <select name="filters[status]" class="ams-dropdown custom-select w-50 js-drop-filter p-t-3">
                         @if (isset($statuses))
                             @foreach($statuses as $statIndex => $statusName)
                                 <option value="{{$statIndex}}" {{isset($filters['status']) && $filters['status'] == $statIndex ? 'selected' : ''}}>{{$statusName}}</option>
@@ -55,7 +51,7 @@
                 </div>
             </div>
         </form>
-        <div class="table-wrapper m-t-20">
+        <div class="table-wrapper m-t-60">
             <div class="table-responsive">
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>

@@ -15,10 +15,9 @@ class MessagesController extends BaseFrontendController
     }
     
     public function view($id)
-    {
-        $this->addBreadcrumb(__('custom.request_for_resolution'), '');
-        
+    {  
         $parent = Message::where('id', $id)->first()->toArray();
+        $this->addBreadcrumb($parent['subject'], '');
              
         list($messages, $errors) = api_result(ApiMessages::class, 'listByParent', [
             'parent_id' => $id,
@@ -49,7 +48,7 @@ class MessagesController extends BaseFrontendController
         
         $data['parent_id'] = $id;
         $data['body'] = $data['new_message'];
-        $data['sender_org_id'] = auth()->user()->organisation->id;
+        $data['sender_org_id'] = auth()->user()->org_id;
 
         //todo file type validation
         

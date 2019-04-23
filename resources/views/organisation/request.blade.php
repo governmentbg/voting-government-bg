@@ -28,14 +28,9 @@
                         <input type="hidden" name="subject" value="{{ $parent->subject }}">
 
                         <textarea class="txt-area" name="new_message" rows="5" placeholder="{{__('custom.enter_text')}}"></textarea>
-                        
-                        <div class="file-container">                            
-                            @include('components.fileinput', ['title' => __('custom.applied_files'), 'name' => 'files[]'])
-                            <div class="js-plus-file-upl">
-                                <a href="#"><img class="display-inline m-b-8 rotate-180 p-r-5" src="{{ asset('img/plus.svg') }}" height="35px" width="30px" /></a>
-                            </div>
-                        </div>
-                        
+                                                                        
+                        @include('components.fileinput', ['title' => __('custom.applied_files'), 'name' => 'files[]'])
+                                            
                         <div class="float-right p-t-5">
                             @include('components.button', ['buttonLabel' => __('custom.send')])
                         </div>

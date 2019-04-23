@@ -44,9 +44,8 @@ class MessagesController extends BaseAdminController
     
     public function view($id)
     {
-        $this->addBreadcrumb(__('custom.request_for_resolution'), '');
-        
         $parent = Message::where('id', $id)->first()->toArray();
+        $this->addBreadcrumb($parent['subject'], '');
              
         list($messages, $errors) = api_result(ApiMessages::class, 'listByParent', [
             'parent_id' => $id,

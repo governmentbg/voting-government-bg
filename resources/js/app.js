@@ -75,38 +75,29 @@ $('[name="is_candidate"].checkbox-ams').on('change', function() {
 $(document).on('click', '.js-file-upl', function (e) {
     e.preventDefault();
 
-    var input = $(this).parent().prev().find('.js-file-input');
+    var input = $(this).parents('.file-input-container').find('.js-file-input');
 
     input.trigger('click');
 });
 
 $(document).on('change', '.js-file-input', function (e) {
-    for (var i = 0; i < $('[data-consec-num]').length; i++) {
-        var $el= $('[data-consec-num]').eq(i);
+    let $el = $(this);
 
-        if ($el.val() != '') {
-            $el.prev('span').text($el.val().split('\\').pop());
-        }
+    if ($el.val() != '') {
+        $el.prev('span').text($el.val().split('\\').pop());
     }
 });
 
 $(document).on('click', '.js-plus-file-upl', function (e) {
     e.preventDefault();
 
-    var html = $(this).parent().parent().prev().prop('outerHTML');
+    let $container = $(this).parents('.multiple-input-container');
+    var html = $container.find('.file-input-container').last().prop('outerHTML');
 
-    $('.plus-file-container').before(html);
-
-    for (var i = 0; i < $('[data-consec-num]').length; i++) {
-        $el = $('[data-consec-num]').eq(i);
-        $el.attr('data-consec-num', i);
-
-        if ($el.val() != '') {
-            $el.prev('span').text($el.val().split('\\').pop());
-        } else {
-            $el.prev('span').text('Select file');
-        }
-    }
+    html = $(html);
+    html.find('span').text('Select file');
+    
+    $('.add-file-input').before(html);
 });
 
 $('.js-showTerms').on('click', function() {

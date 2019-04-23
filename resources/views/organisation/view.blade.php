@@ -73,7 +73,7 @@
                 <label class="col-sm-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
                 <div class="col-sm-8 col-xs-6 p-r-none">
                     <textarea
-                        class="txt-area"
+                        class="txt-area no-outline"
                         name=""
                         rows="3"
                         cols="40"
@@ -85,7 +85,7 @@
                 <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
                 <div class="col-sm-8 col-xs-6 p-r-none">
                     <textarea
-                        class="txt-area"
+                        class="txt-area no-outline"
                         name=""
                         rows="3"
                         cols="40"

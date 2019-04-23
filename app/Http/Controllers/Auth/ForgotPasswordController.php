@@ -31,7 +31,7 @@ class ForgotPasswordController extends Controller
     {
         $this->middleware('guest');
     }
-    
+
     /**
      * Display the form to request a password reset link.
      *
@@ -41,7 +41,7 @@ class ForgotPasswordController extends Controller
     {
         return view('home.index')->with('reset_password', true);
     }
-    
+
     /**
      * Send a reset link to the given user.
      *
@@ -63,7 +63,7 @@ class ForgotPasswordController extends Controller
                     ? $this->sendResetLinkResponse($response)
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
-    
+
     /**
      * Get the broker to be used during password reset.
      *
@@ -73,7 +73,7 @@ class ForgotPasswordController extends Controller
     {
         return Password::broker();
     }
-    
+
         /**
      * Get the response for a failed password reset link.
      *
@@ -86,12 +86,12 @@ class ForgotPasswordController extends Controller
         if(is_array($response)){
             return back()->withErrors($response);
         }
-        
+
         return back()->withErrors(
             ['email' => trans($response)]
         );
     }
-    
+
     /**
      * Get the response for a successful password reset link.
      *
@@ -101,9 +101,9 @@ class ForgotPasswordController extends Controller
     protected function sendResetLinkResponse($response)
     {
         session()->flash('alert-success', trans($response['status']));
-        
+
         $route = $response['isAdmin'] ? 'admin.index' : 'home';
-        
+
         return redirect()->route($route)->with('status', trans($response['status']));
     }
 }

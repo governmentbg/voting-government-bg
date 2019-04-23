@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    if(request()->segment(1) == 'admin'){
+    if (request()->segment(1) == 'admin') {
         $changePasswordRoute = route('admin.change_password');
         $registeredOrgs = route('admin.voting_tour.list');
         $route = route('admin.org_list');
@@ -14,7 +14,7 @@
 @endphp
 
 @section('content')
-@if(request()->segment(1) == 'admin')
+@if (request()->segment(1) == 'admin')
     @include('partials.admin-nav-bar')
 @else
     @include('partials.user-nav-bar')
@@ -34,22 +34,22 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-8">
-                        <a href="{{$changePasswordRoute}}">{{__('custom.password_change')}}</a>
+                        <a href="{{$changePasswordRoute}}">{{ __('custom.password_change') }}</a>
                     </div>
                 </div>
                 @if (request()->segment(1) == 'admin')
-                <div class="form-group row">
-                    <div class="col-sm-8">
-                        <a href="{{$registeredOrgs}}">{{__('custom.elections')}}</a>
-                    </div>
-                </div>
-                @if(auth()->guard('backend')->user()->isSuperAdmin())
                     <div class="form-group row">
                         <div class="col-sm-8">
-                            <a href="{{ route('admin.committee.list') }}">{{ __('custom.committee') }}</a>
+                            <a href="{{$registeredOrgs}}">{{ __('custom.elections') }}</a>
                         </div>
                     </div>
-                @endif
+                    @if (auth()->guard('backend')->user()->isSuperAdmin())
+                        <div class="form-group row">
+                            <div class="col-sm-8">
+                                <a href="{{ route('admin.committee.list') }}">{{ __('custom.committee') }}</a>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>

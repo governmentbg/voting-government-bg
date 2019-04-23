@@ -27,7 +27,7 @@ class ResetPasswordController extends Controller
     */
 
     use ResetsPasswords;
-    
+
     const PASSWORD_CHANGED = 'passwords.changed';
 
     /**
@@ -46,7 +46,7 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest', ['except' => 'changePassword']);
     }
-    
+
     /**
      * Display the password reset view for the given token.
      *
@@ -62,7 +62,7 @@ class ResetPasswordController extends Controller
             ['token' => $token, 'email' => $request->email]
         );
     }
-    
+
     /**
      * Reset the given user's password.
      *
@@ -78,19 +78,19 @@ class ResetPasswordController extends Controller
             'hash' => $request->get('token'),
             'new_password' => $request->get('password'),
             ], 'id');
-        
+
         if(!empty($errors)){
             return back()->withErrors((array)$errors);
         }
-        
+
         $user = User::where('id' , $result)->first();
         if($user && $user->isAdmin()){
             $this->redirectTo = 'admin/';
         }
-        
+
         return $this->sendResetResponse(Password::PASSWORD_RESET);
     }
-    
+
     /**
      * Get the password reset validation rules.
      *
@@ -104,13 +104,13 @@ class ResetPasswordController extends Controller
             'password' => 'required|confirmed|min:6',
         ];
     }
-    
+
     public function changePassword(Request $request)
     {
         $user = auth()->user();
         $password = $request->get('password');
         $newPassword = $request->get('new_password');
-        
+
         $data = [
             'user_id' => $user->id,
             'password' => $password,
@@ -118,18 +118,18 @@ class ResetPasswordController extends Controller
         ];
 
         $rules = [
-            'new_password' => 'confirmed'          
+            'new_password' => 'confirmed'
         ];
-                
+
         $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
         }
-                
-        
+
+
         list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
-        
+
         if(!empty($errors)){
             return redirect()->back()->withErrors((array)$errors);
         }

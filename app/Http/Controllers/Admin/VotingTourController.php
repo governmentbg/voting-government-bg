@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\VotingTour;
+use App\Jobs\SendAllVoteInvites;
+use App\Organisation;
 
 class VotingTourController extends BaseAdminController
 {
@@ -57,8 +59,10 @@ class VotingTourController extends BaseAdminController
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
         $this->addBreadcrumb($votingTour->name, '');
+        
+        $count = Organisation::whereIn('status', Organisation::getApprovedStatuses())->where('voting_tour_id', $votingTour->id)->count();
 
-        return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors]);
+        return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors, 'count' => $count]);
     }
 
     public function update($id)
@@ -71,7 +75,8 @@ class VotingTourController extends BaseAdminController
 
         if(empty($errors)){
             if($oldStatus != $status && ($status == VotingTour::STATUS_VOTING || $status == VotingTour::STATUS_BALLOTAGE)){
-                //TODO send emails to all orgs - voting is open
+                //send emails to all orgs - voting is open
+                $this->sendEmails();
             }
 
             session()->flash('alert-success', trans(self::UPDATE_SUCCESS));
@@ -91,5 +96,10 @@ class VotingTourController extends BaseAdminController
         }
 
         return redirect()->back()->withErrors($errors)->withInput();
+    }
+    
+    private function sendEmails()
+    {
+        SendAllVoteInvites::dispatch();
     }
 }

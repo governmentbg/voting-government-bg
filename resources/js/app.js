@@ -172,3 +172,32 @@ $('#votebtn').click(function(ev) {
 
     return false;
 });
+
+//voting tour update - send vote invites confirmation
+$('form.change-tour').submit(function(e){
+    e.preventDefault();
+    let oldValue = $('form.change-tour [name="status"]').data('old-status');
+    let status = $('form.change-tour [name="status"]').val();
+
+    if(status == 3 && status != oldValue){ //status - voting
+        let modal = $('#confirmEmailSending');
+        modal.modal();
+
+        modal.find('input[name="send_emails"]').change(function(){
+            if($(this).prop('checked')){
+                modal.find('.confirm').attr('disabled', false);
+            }
+            else{
+                modal.find('.confirm').attr('disabled', true);
+            }
+        });      
+    }
+    else{
+        $(this).unbind('submit').submit();
+    }
+});
+
+$('#confirmEmailSending .confirm').click(function(){
+    $('form.change-tour').unbind('submit').submit();
+});
+

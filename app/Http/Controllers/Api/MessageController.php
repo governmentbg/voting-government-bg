@@ -37,7 +37,7 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::where('sender_org_id', $orgId)->sort($field, $order)->paginate();
+            $messages = Message::where('sender_org_id', $orgId)->with('files')->sort($field, $order)->paginate();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -70,7 +70,7 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::where('parent_id', $parentId)->sort($field, $order)->get();
+            $messages = Message::where('parent_id', $parentId)->with('files')->sort($field, $order)->get();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {

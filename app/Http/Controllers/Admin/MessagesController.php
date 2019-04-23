@@ -56,23 +56,23 @@ class MessagesController extends BaseAdminController
             return redirect()->back()->withErrors($errors);
         }
                
-        array_unshift($messages, (object)$parent); //add parent message to the begging of the array
+        array_unshift($messages, (object) $parent); //add parent message to the begging of the array
         
         //mark as read
-        foreach($messages as $key => $message) {
-            if($message->sender_org_id && !$message->read){
+        foreach ($messages as $key => $message) {
+            if ($message->sender_org_id && !$message->read) {
                 list($res, $errors) = api_result(ApiMessages::class, 'markAsRead', ['message_id' => $message->id]);
             }
         }
 
         return view('admin.request', [
             'messages' => $messages,
-            'parent' => (object)$parent
+            'parent'   => (object) $parent,
         ]);
     }
     
     public function send(Request $request, $id)
-    {      
+    {
         $data = $request->all();
         
         $data['parent_id'] = $id;
@@ -81,7 +81,7 @@ class MessagesController extends BaseAdminController
 
         list($result, $errors) = api_result(ApiMessages::class, 'sendMessageToOrg', $data);
         
-        if(!empty($errors)){
+        if (!empty($errors)) {
             return redirect()->back()->withErrors($errors);
         }
         

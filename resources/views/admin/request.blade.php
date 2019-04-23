@@ -15,8 +15,9 @@
                     'message' => $message->body,
                     'orgname' => isset($message->sender_org_id)?  $message->sender_org_name : $message->sender_user_name,
                     'messageTime' => $message->created_at,
-                    'file' => !empty($message->file) ? $message->file : '',
-                    'read' => $message->read
+                    'files' => !empty($message->files) ? $message->files : [],
+                    'read' => $message->read,
+                    'isAdmin' => true,
                 ])
             @endforeach
         <div class="row">

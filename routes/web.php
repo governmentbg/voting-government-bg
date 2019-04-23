@@ -44,8 +44,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/view', 'OrganisationController@view')->name('organisation.view');
 
-    Route::get('/messages/{id}', function () { return view('organisation.request'); })->name('organisation.messages');
     Route::get('/files/download/{id}', 'OrganisationController@downloadFile')->name('fileDowload');
+    
+    Route::get('/messages/{id}', 'MessagesController@view')->name('organisation.messages');
+    Route::post('/messages/{id}/send', 'MessagesController@send')->name('organisation.messages.send');
 });
 
 // Admin

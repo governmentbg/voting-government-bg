@@ -11,15 +11,22 @@
                     <span class="msg-time">
                         {{$messageTime}}
                         @if ($read)
-                            <img class="display-inline m-b-8 p-l-5" src="{{ asset('img/tick.svg') }}" height="20px" width="20px"/>
+                            <img class="display-inline m-b-8 p-l-5" src="{{ asset('img/tick.svg') }}" title="{{ __('custom.status_read')}}: {{$read}}" height="20px" width="20px"/>
                         @endif</span>
                     </span>
                 </div>
             </div>
-            @if (!empty($file))
+            @if (!empty($files))
                 <div class="file-container">
-                <h3 class="color-black">{{__('custom.applied_files')}}</h3>
-                    <a href='#'>{{$file}}</a>
+                    <h3 class="color-black">{{__('custom.applied_files')}}</h3>
+                    @foreach($files as $file)
+                        <a 
+                            href="{{ $isAdmin? route('admin.fileDowload', ['id' => $file->id]) : route('fileDowload', ['id' => $file->id]) }}" 
+                            target="_blank"
+                        >
+                            {{$file->name}}
+                        </a>
+                    @endforeach
                 </div>
             @endif
         </div>
@@ -35,15 +42,22 @@
                     <span class="msg-time">
                         {{$messageTime}}
                         @if ($read)
-                            <img class="display-inline m-b-8 p-l-5" src="{{ asset('img/tick.svg') }}" height="20px" width="20px"/>
+                        <img class="display-inline m-b-8 p-l-5" src="{{ asset('img/tick.svg') }}" title="{{ __('custom.status_read')}}: {{$read}}" height="20px" width="20px"/>
                         @endif
                     </span>
                 </div>
             </div>
-            @if (!empty($file))
+            @if (!empty($files))
                 <div class="file-container">
                     <h3 class="color-black">{{__('custom.applied_files')}}</h3>
-                    <a href='#'>{{$file}}</a>
+                    @foreach($files as $file)
+                        <a 
+                            href="{{ $isAdmin ? route('admin.fileDowload', ['id' => $file->id]) : route('fileDowload', ['id' => $file->id]) }}" 
+                            target="_blank"
+                        >
+                            {{$file->name}}
+                        </a>
+                    @endforeach
                 </div>
             @endif
         </div>

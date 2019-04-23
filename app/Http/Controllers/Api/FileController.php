@@ -33,7 +33,7 @@ class FileController extends ApiController
             try {
                 $file = File::where('id', $fileId)->where('voting_tour_id', $votingTour->id)->first();
                 if ($file) {
-                    $file->data = base64_encode($file->data);
+                    //$file->data = base64_encode($file->data);
 
                     return $this->successResponse($file);
                 }

@@ -22,14 +22,9 @@ class Message extends Model
      */
     protected $guarded = ['id'];
     
-    protected $appends = ['sender_org_name', 'sender_user_name'];
+    protected $appends = ['sender_org_name', 'sender_user_name',];
     
     protected $hidden = ['senderOrganisation', 'senderUser'];
-
-    public function file()
-    {
-        return $this->hasOne('App\File', 'message_id');
-    }
     
     public function subMessages()
     {

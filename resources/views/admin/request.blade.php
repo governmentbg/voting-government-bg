@@ -6,7 +6,7 @@
         @include('components.breadcrumbs')
         <div class="container chat chat-list">    
             <div class="row">
-                <div class="col-lg-12 p-l-40"><h3>{{ __('custom.request_for_resolution') }}</h3></div>
+                <div class="col-lg-12 p-l-40"><h3>{{ $parent->subject }}</h3></div>
             </div>
 
             @foreach($messages as $index => $message)

@@ -107,13 +107,21 @@
 <hr class="hr-thin">
 
 <div class="row">
-    <div class="col-lg-12 p-l-40"><h2>{{ __('custom.messages') }}</h2></div>
+    <div class="col-md-8 p-l-40"><h2>{{ __('custom.messages') }}</h2></div>
+    <div class="col-md-4 text-right">
+    @if($messages->isEmpty())
+        <a
+            href=" {{route('organisation.messages.add')}} "
+            class="btn btn-primary login-btn"
+        >{{ __('custom.new_message') }}</a>
+    @endif
+    </div>
 </div>
+@if($messages->isNotEmpty())
 <div class="col-lg-12">
     <div class="col-lg-12">
         <div class="table-wrapper">
             <div class="table-responsive">
-                @if($messages->isNotEmpty())
                 <table class="table table-striped ams-table messages-list">
                     <thead>
                         <tr>
@@ -149,20 +157,17 @@
                     </tbody>
                     <tfoot>{{-- $messages->links() --}}</tfoot>
                 </table>
-                @else
-                <span>{{ __('messages.no_messages') }}</span>
-                @endif
             </div>
         </div>
     </div>
     <div class="col-lg-12 text-right">
-        <button
-            type="submit"
+        <a
+            href=" {{route('organisation.messages.add')}} "
             class="btn btn-primary login-btn"
-        >{{ __('custom.new_message') }}</button>
+        >{{ __('custom.new_message') }}</a>
     </div>
 </div>
-
+@endif
 <hr class="hr-thin">
 
 <div class="row">

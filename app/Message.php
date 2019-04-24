@@ -145,4 +145,9 @@ class Message extends Model
     {
         return isset($this->senderUser) ? $this->senderUser->fullName : '';
     }
+    
+    public static function getSubjectsList()
+    {
+        return __('custom.subjects');
+    }
 }

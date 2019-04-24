@@ -150,6 +150,7 @@
 </form>
 <hr class="hr-thin">
 
+@if($messages->isNotEmpty())
 <div class="row">
     <div class="col-lg-12 p-l-40"><h2>{{ __('custom.messages') }}</h2></div>
 </div>
@@ -160,45 +161,42 @@
                 <table class="table table-striped ams-table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th class="w-50">{{ __('custom.title') }}</th>
                             <th class="w-30">{{ __('custom.date') }}</th>
                             <th class="w-20">{{ __('custom.operations') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 1 </td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
+                        @foreach($messages as $message)
+                        <tr class="{{ !$message->read ? 'message-not-read' : ''}}">
+                            <td>
+                                <img 
+                                    src="{{ asset('img/arrow.svg') }}" 
+                                    height="30px" 
+                                    width="30px" 
+                                    class="p-r-5 {{ $message->recipient_org_id != null ? 'rotate-180' : ''}}"
+                                    />
+                            </td>
+                            <td>
+                                <img src="{{ !$message->read ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                {{ $message->subject }}
+                            </td>
+                            <td class="text-center">{{ date('Y-m-d', strtotime($message->created_at)) }}</td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.messages', ['id' => $message->parent_id  ? $message->parent_id : $message->id])}}">
+                                    <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                </a>
+                            </td>
                         </tr>
-
-                        <tr>
-                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 2</td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                        </tr>
-                        <tr>
-                            <td><img src="{{ asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 3</td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                        </tr>
-                        <tr>
-                            <td><img src="{{ asset('img/circle-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>Съобщение 4</td>
-                            <td class="text-center">2019-04-08</td>
-                            <td class="text-center"><a href="#"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/></a></td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <div class="col-lg-12 text-right">
-        <button
-            type="submit"
-            class="btn btn-primary login-btn"
-        >{{ __('custom.new_message') }}</button>
-    </div>
 </div>
+@endif
 @if (!empty($files))
 <hr class="hr-thin">
     <div class="row">

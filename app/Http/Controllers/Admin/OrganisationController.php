@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\FileController as ApiFile;
+use App\Message;
 
 class OrganisationController extends BaseAdminController
 {
@@ -93,11 +94,14 @@ class OrganisationController extends BaseAdminController
         list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
         list($files, $filesErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
         $candidateStatuses = collect($statuses)->pluck('name', 'id')->toArray();
+        
+        $messages = Message::where('recipient_org_id', $id)->orWhere('sender_org_id', $id)->get();
 
         return view('admin.org_edit', [
             'org_data'          => $org_data,
             'candidateStatuses' => $candidateStatuses,
-            'files'             => $files
+            'files'             => $files,
+            'messages'          => $messages
         ]);
     }
 

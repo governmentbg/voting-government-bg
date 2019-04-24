@@ -16,13 +16,13 @@
                     {{ csrf_field() }}
                     @include('components.errors')
                     <div class="form-group row required">
-                        <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.org_name') }}:</label>
+                        <label for="name" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.org_name') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
                                 class="input-box"
                                 name="name"
-                                value=""
+                                value="{{ old('name') }} "
                             >
                             <span class="error">{{ $errors->first('name') }}</span>
                         </div>
@@ -33,7 +33,7 @@
                         <div class="col-sm-8">
                             <select name="status" class="ams-dropdown custom-select">
                                 @foreach(\App\VotingTour::getStatuses() as $key => $status)
-                                <option value="{{$key}}">{{$status}}</option>
+                                <option value="{{$key}}" {{ old('status') == $key ? 'selected' : ''}}>{{$status}}</option>
                                 @endforeach
                             </select>
                         </div>

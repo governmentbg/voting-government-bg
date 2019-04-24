@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
+use App\Http\Controllers\Api\VoteController as ApiVote;
+use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\VotingTour;
 use App\Jobs\SendAllVoteInvites;
 use App\Organisation;
+use App\Vote;
 
 class VotingTourController extends BaseAdminController
 {
@@ -16,6 +19,8 @@ class VotingTourController extends BaseAdminController
     const CREATE_SUCCESS = 'custom.create_success';
     
     const UPDATE_SUCCESS = 'custom.update_success';
+    
+    private $votingTour = null;
 
     public function __construct()
     {
@@ -101,5 +106,157 @@ class VotingTourController extends BaseAdminController
     private function sendEmails()
     {
         SendAllVoteInvites::dispatch();
+    }
+    
+    public function ranking($id)
+    {
+        $this->addBreadcrumb(__('breadcrumbs.settings'), 'settings');
+        $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
+        $this->addBreadcrumb(__('custom.ranking'), '');
+        
+        $listData = [];
+        $showBallotage = false;
+        $stats = [];
+        $errors = [];
+        
+        list($this->votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getData', ['tour_id' => $id]);
+
+        if (!empty($this->votingTour) && in_array($this->votingTour->status, VotingTour::getRankingStatuses())) {
+            // get vote status
+            list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $this->votingTour->id]);
+
+            if (!empty($listErrors)) {
+                $errors = ['message' => __('custom.list_ranking_fail')];
+            } elseif (!empty($voteStatus)) {
+                // list ranking
+                $params = [
+                    'tour_id' => $this->votingTour->id,
+                    'status' => VotingTour::STATUS_VOTING
+                ];
+                list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
+
+                if (!empty($listErrors)) {
+                    $errors = ['message' => __('custom.list_ranking_fail')];
+                } elseif (!empty($listData)) {
+                    // list registered organisations
+                    $statParams = [
+                        'filters' => [
+                            'statuses' => Organisation::getApprovedStatuses()
+                        ]
+                    ];
+                    list($registered, $registeredErrors) = api_result(ApiOrganisation::class, 'search', $statParams);
+
+                    // list voted organisations
+                    list($voted, $votedErrors) = api_result(ApiVote::class, 'listVoters', $params);
+
+                    if (!empty($registeredErrors) || !empty($votedErrors)) {
+                        $errors['stat_message'] = __('custom.voter_turnout_fail');
+                    } else {
+                        // calculate voter turnout
+                        $stats['voting'] = [
+                            'all'     => count($registered),
+                            'voted'   => count($voted),
+                            'percent' => 0
+                        ];
+                        if ($stats['voting']['all'] > 0) {
+                            $stats['voting']['percent'] = round($stats['voting']['voted'] / $stats['voting']['all'] * 100, 2);
+                        }
+                    }
+
+                    // calculate votes limit
+                    $votesLimit = 0;
+                    $keys = collect($listData)->keys();
+                    if ($maxVotesKey = $keys->get(Vote::MAX_VOTES)) {
+                        if ($prevVotesKey = $keys->get(Vote::MAX_VOTES - 1)) {
+                            if ($listData->{$prevVotesKey}->votes == $listData->{$maxVotesKey}->votes) {
+                                $votesLimit = $listData->{$maxVotesKey}->votes;
+                            }
+                        }
+                    }
+
+                    // separate list data by votes limit
+                    if ($votesLimit > 0) {
+                        foreach ($listData as $data) {
+                            if ($data->votes == $votesLimit) {
+                                $data->for_ballotage = true;
+                            } elseif ($data->votes < $votesLimit) {
+                                $data->dropped_out = true;
+                            }
+                        }
+                    }
+
+                    if ($voteStatus->id == VotingTour::STATUS_BALLOTAGE) {
+                        $showBallotage = true;
+
+                        // list ballotage ranking
+                        $params['status'] = $voteStatus->id;
+                        list($ballotageData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
+
+                        if (!empty($listErrors)) {
+                            $errors['message'] = __('custom.list_ballotage_ranking_fail');
+                        } elseif (!empty($ballotageData)) {
+                            list($voted, $votedErrors) = api_result(ApiVote::class, 'listVoters', $params);
+
+                            if (empty($errors['stat_message']) && !empty($votedErrors)) {
+                                $errors['stat_message'] = __('custom.voter_turnout_ballotage_fail');
+                            } elseif (!empty($stats)) {
+                                // calculate ballotage voter turnout
+                                $stats['ballotage'] = [
+                                    'all'     => $stats['voting']['all'],
+                                    'voted'   => count($voted),
+                                    'percent' => 0
+                                ];
+                                if ($stats['ballotage']['all'] > 0) {
+                                    $stats['ballotage']['percent'] = round($stats['ballotage']['voted'] / $stats['ballotage']['all'] * 100, 2);
+                                }
+                            }
+
+                            // apply ballotage votes and reorder list data
+                            $finalList = new \stdClass();
+                            if ($votesLimit > 0) {
+                                foreach ($listData as $orgId => $data) {
+                                    if (isset($ballotageData->{$orgId})) {
+                                        $ballotageData->{$orgId}->ballotage_votes = $ballotageData->{$orgId}->votes;
+                                        $ballotageData->{$orgId}->votes = $data->votes;
+                                        $ballotageData->{$orgId}->for_ballotage = true;
+                                        $ballotageData->{$orgId}->dropped_out = false;
+                                        unset($listData->{$orgId});
+                                    } else {
+                                        if (isset($data->for_ballotage) && $data->for_ballotage ||
+                                            isset($data->dropped_out) && $data->dropped_out) {
+                                            $data->for_ballotage = false;
+                                            $data->dropped_out = true;
+                                        } else {
+                                            $finalList->{$orgId} = $data;
+                                            unset($listData->{$orgId});
+                                        }
+                                    }
+                                }
+                                foreach ($ballotageData as $orgId => $data) {
+                                    if (isset($data->ballotage_votes)) {
+                                        $finalList->{$orgId} = $data;
+                                    }
+                                }
+                                foreach ($listData as $orgId => $data) {
+                                    $finalList->{$orgId} = $data;
+                                }
+                                $listData = $finalList;
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            return redirect()->route('admin.voting_tour.list');
+        }
+      
+        return view('tours.ranking', [
+            'listTitle'     => $this->votingTour->name,
+            'listData'      => $listData,
+            'route'         => 'admin.org_edit',
+            'showBallotage' => $showBallotage,
+            'stats'         => $stats,
+            'fullWidth'     => true
+        ])->withErrors($errors);
     }
 }

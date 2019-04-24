@@ -19,8 +19,6 @@ Route::get('/publicLists/candidates/{id?}','PublicController@listCandidates')->n
 Route::get('/publicLists/voted/{id?}','PublicController@listVoted')->name('list.voted');
 Route::get('/publicLists/ranking/{id?}','PublicController@listRanking')->name('list.ranking');
 
-//================END test routes
-
 Route::get('/register','OrganisationController@register')->name('organisation.register');
 Route::get('createcaptcha', 'CaptchaController@create');
 Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
@@ -63,6 +61,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/votingTours/{id}/edit','VotingTourController@edit')->name('admin.voting_tour.edit');
         Route::post('/votingTours','VotingTourController@store')->name('admin.voting_tour.store');
         Route::put('/votingTours/{id}','VotingTourController@update')->name('admin.voting_tour.update');
+        Route::get('/votingTours/{id}/ranking','VotingTourController@ranking')->name('admin.ranking');
 
         Route::get('/settings', function () {
             return view('organisation.settings');

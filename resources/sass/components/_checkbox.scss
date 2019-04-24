@@ -12,6 +12,7 @@
         &:checked{
             & + label span.checkbox::after{
                 visibility: visible;
+                display: block;
             }
         }
     }
@@ -50,6 +51,7 @@
                 top: -2px;
                 //color: transparent;
                 visibility: hidden;
+                display: none;
                 transition: color .2s;
                 font-size: 14px;
                 height: 48px;

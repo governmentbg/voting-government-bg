@@ -267,6 +267,7 @@ class OrganisationController extends ApiController
      * @param array filters[statuses] - optional
      * @param string filters[reg_date_from] - optional
      * @param string filters[reg_date_to] - optional
+     * @param string filters[tour_id] - optional
      * @param string order_field - optional
      * @param string order_type - optional
      * @param boolean with_pagination - optional
@@ -276,11 +277,6 @@ class OrganisationController extends ApiController
      */
     public function search(Request $request)
     {
-        $votingTour = VotingTour::getLatestTour();
-        if (empty($votingTour)) {
-            return $this->errorResponse(__('custom.voting_tour_not_found'));
-        }
-
         $filters = $request->get('filters', []);
         $orderField = $request->get('order_field', Organisation::DEFAULT_ORDER_FIELD);
         $orderType = strtoupper($request->get('order_type', Organisation::DEFAULT_ORDER_TYPE));
@@ -296,14 +292,24 @@ class OrganisationController extends ApiController
             'statuses.*'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
             'reg_date_from' => 'nullable|date|date_format:Y-m-d',
             'reg_date_to'   => 'nullable|date|date_format:Y-m-d'. (!empty($filters['reg_date_from']) ? '|after_or_equal:reg_date_from' : ''),
+            'tour_id'       => 'nullable|int|exists:voting_tour,id',
         ]);
 
         if (!$validator->fails()) {
-            if (!in_array($orderField, Organisation::getOrderColumns()) || !in_array($orderType, ['ASC', 'DESC'])) {
-                return $this->errorResponse(__('custom.invalid_sort_field'));
-            }
-
             try {
+                if (!empty($filters['tour_id'])) {
+                    $votingTour = VotingTour::where('id', $filters['tour_id'])->first();
+                } else {
+                    $votingTour = VotingTour::getLatestTour();
+                }
+                if (empty($votingTour)) {
+                    return $this->errorResponse(__('custom.voting_tour_not_found'));
+                }
+
+                if (!in_array($orderField, Organisation::getOrderColumns()) || !in_array($orderType, ['ASC', 'DESC'])) {
+                    return $this->errorResponse(__('custom.invalid_sort_field'));
+                }
+
                 $organisations = Organisation::where('voting_tour_id', $votingTour->id);
                 if (isset($filters['eik'])) {
                     $organisations->where('eik', $filters['eik']);

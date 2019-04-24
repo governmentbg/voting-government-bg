@@ -61,9 +61,11 @@
                             <tr class="{{ $class . (request()->id == $organisation->id ? 'font-weight-bold' : '') }}">
                                 <td class="text-right">{{ ++$counter }}</td>
                                 <td class="text-left">
+                                    @if(!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
                                     <a href="{{ route($route, ['id' => $organisation->id]) }}#show" class="text-decoration-none">
                                         <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                     </a>
+                                    @endif
                                     {{ $organisation->name }}
                                 </td>
                                 <td>{{ $organisation->eik }}</td>

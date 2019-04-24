@@ -57,7 +57,7 @@ class VotingTourController extends BaseAdminController
     {
         list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getData', ['tour_id' => $id]);
 
-        if($votingTour->status == VotingTour::STATUS_FINISHED){
+        if ($votingTour->status == VotingTour::STATUS_FINISHED) {
             return redirect()->back()->withErrors(['message' => __('custom.voting_tour_finished')]);
         }
 
@@ -78,8 +78,8 @@ class VotingTourController extends BaseAdminController
 
         list($data, $errors) = api_result(ApiVotingTour::class, 'changeStatus', ['new_status' => $status]);
 
-        if(empty($errors)){
-            if($oldStatus != $status && ($status == VotingTour::STATUS_VOTING || $status == VotingTour::STATUS_BALLOTAGE)){
+        if (empty($errors)) {
+            if ($oldStatus != $status && ($status == VotingTour::STATUS_VOTING || $status == VotingTour::STATUS_BALLOTAGE)) {
                 //send emails to all orgs - voting is open
                 $this->sendEmails();
             }
@@ -95,7 +95,7 @@ class VotingTourController extends BaseAdminController
     {
         list($id, $errors) = api_result(ApiVotingTour::class, 'add', request()->all());
 
-        if(empty($errors)){
+        if (empty($errors)) {
             session()->flash('alert-success', trans(self::CREATE_SUCCESS));
             return redirect($this->redirectTo);
         }
@@ -131,7 +131,7 @@ class VotingTourController extends BaseAdminController
                 // list ranking
                 $params = [
                     'tour_id' => $this->votingTour->id,
-                    'status' => VotingTour::STATUS_VOTING
+                    'status'  => VotingTour::STATUS_VOTING,
                 ];
                 list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
 
@@ -141,8 +141,9 @@ class VotingTourController extends BaseAdminController
                     // list registered organisations
                     $statParams = [
                         'filters' => [
-                            'statuses' => Organisation::getApprovedStatuses()
-                        ]
+                            'statuses' => Organisation::getApprovedStatuses(),
+                            'tour_id'  => $this->votingTour->id,
+                        ],
                     ];
                     list($registered, $registeredErrors) = api_result(ApiOrganisation::class, 'search', $statParams);
 
@@ -156,7 +157,7 @@ class VotingTourController extends BaseAdminController
                         $stats['voting'] = [
                             'all'     => count($registered),
                             'voted'   => count($voted),
-                            'percent' => 0
+                            'percent' => 0,
                         ];
                         if ($stats['voting']['all'] > 0) {
                             $stats['voting']['percent'] = round($stats['voting']['voted'] / $stats['voting']['all'] * 100, 2);
@@ -204,7 +205,7 @@ class VotingTourController extends BaseAdminController
                                 $stats['ballotage'] = [
                                     'all'     => $stats['voting']['all'],
                                     'voted'   => count($voted),
-                                    'percent' => 0
+                                    'percent' => 0,
                                 ];
                                 if ($stats['ballotage']['all'] > 0) {
                                     $stats['ballotage']['percent'] = round($stats['ballotage']['voted'] / $stats['ballotage']['all'] * 100, 2);
@@ -256,7 +257,7 @@ class VotingTourController extends BaseAdminController
             'route'         => 'admin.org_edit',
             'showBallotage' => $showBallotage,
             'stats'         => $stats,
-            'fullWidth'     => true
+            'fullWidth'     => true,
         ])->withErrors($errors);
     }
 }

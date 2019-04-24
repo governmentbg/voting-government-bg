@@ -117,6 +117,7 @@
                 <table class="table table-striped ams-table messages-list">
                     <thead>
                         <tr>
+                            <th></th>
                             <th class="w-50">{{ __('custom.title') }}</th>
                             <th class="w-30">{{ __('custom.date') }}</th>
                             <th class="w-20">{{ __('custom.operations') }}</th>
@@ -125,6 +126,14 @@
                     <tbody>
                         @foreach($messages as $message)
                         <tr class="{{ !$message->read ? 'message-not-read' : ''}}">
+                            <td>
+                                <img 
+                                    src="{{ asset('img/arrow.svg') }}" 
+                                    height="30px" 
+                                    width="30px" 
+                                    class="p-r-5 {{ $message->recipient_org_id != null ? 'rotate-180' : ''}}"
+                                    />
+                            </td>
                             <td>
                                 <img src="{{ !$message->read ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                 {{ $message->subject }}

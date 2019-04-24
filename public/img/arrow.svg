@@ -1,0 +1,11 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43.63">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3e7ea9;
+      }
+    </style>
+  </defs>
+  <title>Arrow</title>
+  <path class="cls-1" d="M48.24,18.05,29.92,1.55A5.32,5.32,0,1,0,22.8,9.46l8,7.22H5.32a5.32,5.32,0,0,0,0,10.64h25.5l-8,7.22a5.32,5.32,0,0,0,7.12,7.91L48.24,26a5.31,5.31,0,0,0,0-7.9Z" transform="translate(0 -0.19)"/>
+</svg>

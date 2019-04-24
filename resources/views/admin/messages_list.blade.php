@@ -53,7 +53,7 @@
         </form>
         <div class="table-wrapper m-t-60">
             <div class="table-responsive">
-                <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
+                <table class="table table-striped ams-table messages-list" data-toggle="table">
                     <thead>
                         <tr>
                             <th class="w-20" data-field="subject" data-sortable="true">{{ __('custom.subject') }}</th>
@@ -65,12 +65,17 @@
                     <tbody class="text-center">
                         @if (!empty($messages))
                             @foreach ($messages as $message)
-                                <tr>
-                                    <td>{{ $message->subject }}</td>
+                                <tr class="{{ !$message->read ? 'message-not-read' : ''}}">
+                                    <td class="text-left">
+                                        <img src="{{ !$message->read ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                        {{ $message->subject }}
+                                    </td>
                                     <td>{{ $message->sender_org_name }}</td>
                                     <td>{{ $message->created_at }}</td>
                                     <td>
-                                        <a href="{{ route('admin.messages', ['id' => $message->id]) }}"><img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/></a>
+                                        <a href="{{ route('admin.messages', ['id' => $message->parent_id  ? $message->parent_id : $message->id]) }}">
+                                            <img src="{{ asset('img/view.svg') }}" height="30px" width="30px"/>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -19,7 +19,7 @@ class MessagesController extends BaseAdminController
     public function list(Request $request)
     {
         $filters = request('filters', []);
-        $filters['parent_id'] = null;
+        $filters['sender_user_id'] = null;
         
         $field = request('orderBy', 'created_at');
         $orderType = request('order', 'DESC');

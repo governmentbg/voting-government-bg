@@ -122,7 +122,7 @@ class OrganisationController extends BaseFrontendController
 //           return back()->withErrors($errors);
 //        }
 
-        $messages = Message::where('sender_org_id', $org->id)->whereNull('parent_id')->get();
+        $messages = Message::where('recipient_org_id', $org->id)->get();
 
         list($files, $errors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
 

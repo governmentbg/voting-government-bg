@@ -114,7 +114,7 @@
         <div class="table-wrapper">
             <div class="table-responsive">
                 @if($messages->isNotEmpty())
-                <table class="table table-striped ams-table">
+                <table class="table table-striped ams-table messages-list">
                     <thead>
                         <tr>
                             <th class="w-50">{{ __('custom.title') }}</th>
@@ -124,14 +124,14 @@
                     </thead>
                     <tbody>
                         @foreach($messages as $message)
-                        <tr>
+                        <tr class="{{ !$message->read ? 'message-not-read' : ''}}">
                             <td>
-                                <img src="{{ $message->isRead() ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                <img src="{{ !$message->read ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                 {{ $message->subject }}
                             </td>
                             <td class="text-center">{{ date('Y-m-d', strtotime($message->created_at)) }}</td>
                             <td class="text-center">
-                                <a href="{{ route('organisation.messages', ['id' => $message->id])}}">
+                                <a href="{{ route('organisation.messages', ['id' => $message->parent_id  ? $message->parent_id : $message->id])}}">
                                     <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                 </a>
                             </td>

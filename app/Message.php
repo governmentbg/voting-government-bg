@@ -84,13 +84,17 @@ class Message extends Model
             $query->where('parent_id',  $filters['parent_id']);
         }
         
+        if (array_key_exists('sender_user_id', $filters)) {
+            $query->where('sender_user_id',  $filters['sender_user_id']);
+        }
+        
         if ($date_from = ($filters['date_from'] ?? null)) {
             $date_from = date_format(date_create($date_from), 'Y-m-d');
-            $query->where('created_at', '>=', $date_from);
+            $query->whereDate('created_at', '>=', $date_from);
         }
         if ($date_to = $filters['date_to'] ?? null) {
             $date_to = date_format(date_create($date_to), 'Y-m-d');
-            $query->where('created_at', '<=', $date_to);
+            $query->whereDate('created_at', '<=', $date_to);
         }
         if ($subject = $filters['subject'] ?? null) {
             $query->where('subject', 'like', '%' . $subject . '%');

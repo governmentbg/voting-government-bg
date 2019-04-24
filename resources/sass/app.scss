@@ -493,3 +493,11 @@ input[type='file'] {
 .p-t-3 {
     padding-top: 3px;
 }
+
+table.messages-list{
+    tr{
+        &.message-not-read{
+            font-weight: bold;
+        }
+    }
+}

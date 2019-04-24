@@ -27,27 +27,25 @@
                             </tr>
                         </thead>
                         <tbody class="text-left">
-                        @php
-                            $counter = 0;
-                        @endphp
-                        @foreach ($listData as $organisation)
-                            <tr class="{{ request()->id == $organisation->id ? 'font-weight-bold' : '' }}">
-                                <td class="text-right">{{ ++$counter }}</td>
-                                <td class="text-left">
-                                    <a href="{{ route($route, ['id' => $organisation->id]) }}#show" class="text-decoration-none">
-                                        <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
-                                    </a>
-                                    {{ $organisation->name }}
-                                </td>
-                                <td class="text-center">
-                                @if ($organisation->is_candidate)
-                                    <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" />
-                                @endif
-                                </td>
-                                <td>{{ $organisation->eik }}</td>
-                                <td class="text-center">{{ date('Y-m-d', strtotime($organisation->created_at)) }}</td>
-                            </tr>
-                        @endforeach
+                            @php
+                                $counter = 0;
+                            @endphp
+                            @foreach ($listData as $organisation)
+                                <tr>
+                                    <td class="text-right">{{ ++$counter }}</td>
+                                    <td class="text-left">
+                                        <img src="{{ asset('img/view.svg') }}" class="additional-info" data-org-additional-id="{{ $organisation->id }}" height="30px" width="30px" class="p-r-5"/>
+                                        {{ $organisation->name }}
+                                    </td>
+                                    <td class="text-center">
+                                    @if ($organisation->is_candidate)
+                                        <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" />
+                                    @endif
+                                    </td>
+                                    <td>{{ $organisation->eik }}</td>
+                                    <td class="text-center">{{ date('Y-m-d', strtotime($organisation->created_at)) }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -55,8 +53,5 @@
             @endif
         </div>
     </div>
-@if (isset($orgData))
-    <a name="show"></a>
-    @include('partials.public-org-data')
-@endif
+@include('partials.public-org-data')
 </div>

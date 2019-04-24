@@ -27,11 +27,10 @@ class PublicController extends BaseFrontendController
         return view('home.index');
     }
 
-    public function listRegistered($id = null)
+    public function listRegistered()
     {
         $showLinks = [];
         $listData = [];
-        $orgData = [];
         $errors = [];
 
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
@@ -55,11 +54,6 @@ class PublicController extends BaseFrontendController
 
             if (!empty($listErrors)) {
                 $errors = ['message' => __('custom.list_reg_org_fail')];
-            } elseif (!empty($listData)) {
-                if (isset($id)) {
-                    // get organisation data by id
-                    list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
-                }
             }
         } else {
             return redirect('/');
@@ -69,16 +63,14 @@ class PublicController extends BaseFrontendController
             'showLinks' => $showLinks,
             'listTitle' => __('custom.registered'),
             'listData'  => $listData,
-            'orgData'   => $orgData,
             'route'     => 'list.registered',
         ])->withErrors($errors);
     }
 
-    public function listCandidates($id = null)
+    public function listCandidates()
     {
         $showLinks = [];
         $listData = [];
-        $orgData = [];
         $errors = [];
 
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
@@ -102,11 +94,6 @@ class PublicController extends BaseFrontendController
 
             if (!empty($listErrors)) {
                 $errors = ['message' => __('custom.list_candidates_fail')];
-            } elseif (!empty($listData)) {
-                if (isset($id)) {
-                    // get organisation data by id
-                    list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
-                }
             }
         } else {
             return redirect('/');
@@ -116,16 +103,14 @@ class PublicController extends BaseFrontendController
             'showLinks' => $showLinks,
             'listTitle' => __('custom.candidates'),
             'listData'  => $listData,
-            'orgData'   => $orgData,
             'route'     => 'list.candidates',
         ])->withErrors($errors);
     }
 
-    public function listVoted($id = null)
+    public function listVoted()
     {
         $showLinks = [];
         $listData = [];
-        $orgData = [];
         $errors = [];
 
         if (!empty($this->votingTour) && !in_array($this->votingTour->status, VotingTour::getRegStatuses())) {
@@ -142,11 +127,6 @@ class PublicController extends BaseFrontendController
 
             if (!empty($listErrors)) {
                 $errors = ['message' => __('custom.list_voted_org_fail')];
-            } elseif (!empty($listData)) {
-                if (isset($id)) {
-                    // get organisation data by id
-                    list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
-                }
             }
         } else {
             return redirect('/');
@@ -156,16 +136,14 @@ class PublicController extends BaseFrontendController
             'showLinks' => $showLinks,
             'listTitle' => __('custom.voted'),
             'listData'  => $listData,
-            'orgData'   => $orgData,
             'route'     => 'list.voted',
         ])->withErrors($errors);
     }
 
-    public function listRanking($id = null)
+    public function listRanking()
     {
         $showLinks = [];
         $listData = [];
-        $orgData = [];
         $showBallotage = false;
         $stats = [];
         $errors = [];
@@ -299,11 +277,6 @@ class PublicController extends BaseFrontendController
                             }
                         }
                     }
-
-                    if (isset($id)) {
-                        // get organisation data by id
-                        list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
-                    }
                 }
             }
         } else {
@@ -314,7 +287,6 @@ class PublicController extends BaseFrontendController
             'showLinks'     => $showLinks,
             'listTitle'     => __('custom.ranking'),
             'listData'      => $listData,
-            'orgData'       => $orgData,
             'route'         => 'list.ranking',
             'isRanking'     => true,
             'showBallotage' => $showBallotage,

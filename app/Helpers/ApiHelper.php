@@ -25,8 +25,8 @@ if (!function_exists('api')) {
             return $api->{$methodName}($request)->getData();
         }
 
-        logger()->error('Method ' . $method_name . ' does not exist on class ' . $class);
-        return (object)['succes ' => false, 'status' => 500];
+        logger()->error('Method '. $methodName .' does not exist on class '. $class);
+        return (object) ['success' => false, 'status' => 500];
     }
 }
 
@@ -44,7 +44,7 @@ if (!function_exists('api_result')) {
      *
      * @return array
      */
-    function api_result($class, $methodName, $params = true, $resultKey = null, $httpMethod = 'POST'){
+    function api_result($class, $methodName, $params = true, $resultKey = null, $httpMethod = 'POST') {
         $result = api($class, $methodName, $params, $httpMethod);
 
         $data = [];
@@ -61,7 +61,7 @@ if (!function_exists('api_result')) {
                 }
             }
         } else {
-            $errors = !empty($result->errors) ? $result->errors : $result->error;
+            $errors = !empty($result->errors) ? $result->errors : (!empty($result->error) ? $result->error : []);
         }
 
         return [$data, $errors];

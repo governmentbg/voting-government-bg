@@ -222,7 +222,15 @@ class VoteController extends ApiController
                     }
                 }
 
-                $fullResult = $fullResult->sortByDesc('votes');
+                $fullResult = $fullResult->sort(function ($a, $b) {
+                    if ($a->votes === $b->votes) {
+                        if ($a->eik === $b->eik) {
+                            return 0;
+                        }
+                        return $a->eik < $b->eik ? -1 : 1;
+                   }
+                   return $a->votes > $b->votes ? -1 : 1;
+                });
 
                 return $this->successResponse($fullResult);
             } catch (\Exception $e) {
@@ -247,8 +255,15 @@ class VoteController extends ApiController
                 $votingTour = VotingTour::where('id', $post['tour_id'])->first();
 
                 if ($votingTour) {
-                    $voteStatus = $this->prepareVoteStatus($votingTour->id, $votingTour->status);
-                    if (is_null($voteStatus)) {
+                    if (in_array($votingTour->status, [VotingTour::STATUS_RANKING, VotingTour::STATUS_BALLOTAGE])) {
+                        $voteStatus = VotingTour::STATUS_VOTING;
+                    } elseif ($votingTour->status == VotingTour::STATUS_FINISHED) {
+                        if (Organisation::hasOrgsForBallotage($votingTour->id)) {
+                            $voteStatus = VotingTour::STATUS_BALLOTAGE;
+                        } else {
+                            $voteStatus = VotingTour::STATUS_VOTING;
+                        }
+                    } else {
                         return $this->errorResponse(__('custom.vote_status_not_found'));
                     }
 
@@ -269,35 +284,56 @@ class VoteController extends ApiController
     /**
      * List already voted organisations
      *
-     * @param none
+     * @param integer tour_id - required with status
+     * @param integer status - required with tour_id
      *
      * @return json - response with status code and list of voted organisations or errors
      */
     public function listVoters(Request $request)
     {
-        $votingTour = VotingTour::getLatestTour();
-        if (empty($votingTour)) {
-            return $this->errorResponse(__('custom.voting_tour_not_found'));
-        }
+        $post = $request->all();
 
-        try {
-            $voteStatus = $this->prepareVoteStatus($votingTour->id, $votingTour->status);
-            if (is_null($voteStatus)) {
-                return $this->errorResponse(__('custom.get_vote_not_allowed'));
+        $validator = Validator::make($post, [
+            'tour_id' => 'required_with:status|int|exists:voting_tour,id',
+            'status'  => 'required_with:tour_id|int|in:'. implode(',', array_keys(VotingTour::getActiveStatuses())),
+        ]);
+
+        if (!$validator->fails()) {
+            try {
+                if (!empty($post['tour_id']) && !empty($post['status'])) {
+                    $votingTour = VotingTour::where('id', $post['tour_id'])->first();
+                    if (empty($votingTour)) {
+                        return $this->errorResponse(__('custom.voting_tour_not_found'));
+                    }
+
+                    $voteStatus = $post['status'];
+                } else {
+                    $votingTour = VotingTour::getLatestTour();
+                    if (empty($votingTour)) {
+                        return $this->errorResponse(__('custom.voting_tour_not_found'));
+                    }
+
+                    $voteStatus = $this->prepareVoteStatus($votingTour->id, $votingTour->status);
+                    if (is_null($voteStatus)) {
+                        return $this->errorResponse(__('custom.get_vote_not_allowed'));
+                    }
+                }
+
+                $voters = Organisation::where('voting_tour_id', $votingTour->id)
+                              ->whereIn('status', Organisation::getApprovedStatuses())
+                              ->whereHas('votes', function($query) use ($voteStatus) {
+                                  $query->where('tour_status', $voteStatus);
+                              })
+                              ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
+
+                return $this->successResponse($voters);
+            } catch (\Exception $e) {
+                logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.list_voters_fail'), $e->getMessage());
             }
-
-            $voters = Organisation::where('voting_tour_id', $votingTour->id)
-                          ->whereIn('status', Organisation::getApprovedStatuses())
-                          ->whereHas('votes', function($query) use ($voteStatus) {
-                              $query->where('tour_status', $voteStatus);
-                          })
-                          ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
-
-            return $this->successResponse($voters);
-        } catch (\Exception $e) {
-            logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.list_voters_fail'), $e->getMessage());
         }
+
+        return $this->errorResponse(__('custom.list_voters_fail'), $validator->errors()->messages());
     }
 
     private function prepareVoteStatus($tourId, $tourStatus)

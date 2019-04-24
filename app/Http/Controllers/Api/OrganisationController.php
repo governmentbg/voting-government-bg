@@ -23,11 +23,11 @@ class OrganisationController extends ApiController
      * @param string org_data[phone] - required
      * @param boolean org_data[in_av] - optional
      * @param boolean org_data[is_candidate] - optional
-     * @param string org_data[description] - required if is_candidate
+     * @param string org_data[description] - required if is_candidate is true
      * @param string org_data[references] - optional
      * @param integer org_data[status] - optional
      * @param integer org_data[status_hint] - optional
-     * @param array files - optional
+     * @param array files - required unless in_av is true
      * @param string files[name] - required
      * @param string files[mime_type] - required
      * @param string files[data] - optional

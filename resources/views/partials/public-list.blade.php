@@ -34,7 +34,7 @@
                             <tr class="{{ request()->id == $organisation->id ? 'font-weight-bold' : '' }}">
                                 <td class="text-right">{{ ++$counter }}</td>
                                 <td class="text-left">
-                                    <a href="{{ route($route, ['id' => $organisation->id]) }}" class="text-decoration-none">
+                                    <a href="{{ route($route, ['id' => $organisation->id]) }}#show" class="text-decoration-none">
                                         <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                     </a>
                                     {{ $organisation->name }}
@@ -56,6 +56,7 @@
         </div>
     </div>
 @if (isset($orgData))
+    <a name="show"></a>
     @include('partials.public-org-data')
 @endif
 </div>

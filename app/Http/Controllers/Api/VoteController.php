@@ -164,7 +164,7 @@ class VoteController extends ApiController
 
                 if (isset($nextVote->prev_hash)) {
                     if (!($voteHash === $nextVote->prev_hash)) {
-                        return $this->errorResponse(__('custom.inconsistent_voting_records'), [__('custom.inconsistent_record') => $singleVote->id]);
+                        return $this->errorResponse(__('custom.inconsistent_voting_records'), ['inconsistent_record' => $singleVote->id]);
                     }
                 }
             }

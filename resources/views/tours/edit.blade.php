@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-lg-10 offset-lg-2 col-md-11 offset-md-1 col-sm-12">
             <h2 class="color-dark"><b>{{ $votingTour->name }}</b></h2>
-            <form method="POST" action="{{route('admin.voting_tour.update', ['id' => $votingTour->id])}}">
+            <form method="POST" action="{{route('admin.voting_tour.update', ['id' => $votingTour->id])}}" class="change-tour">
                 {{ method_field('PUT') }}
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 @include('components.errors')
@@ -17,7 +17,7 @@
                 <div class="form-group row">
                     <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
                     <div class="col-sm-8">
-                        <select name="status" class="ams-dropdown custom-select">
+                        <select name="status" class="ams-dropdown custom-select" data-old-status="{{ $votingTour->status }}">
                             @foreach(\App\VotingTour::getStatuses() as $key => $status)
                             <option value="{{$key}}" {{$votingTour->status == $key? 'selected' : '' }}>{{$status}}</option>
                             @endforeach
@@ -59,11 +59,11 @@
                 </div>
                 <div class="modal-body">
                     <p>{{ __('messages.status_change_confirmation')}}</p>
-                    @include('components.checkbox', ['name' => 'send_emails', 'label' => __('messages.send_n_messages', ['count' => 1332])])
+                    @include('components.checkbox', ['name' => 'send_emails', 'label' => __('messages.send_n_messages', ['count' => $count])])
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('custom.cancel')}}</button>
-                    <button type="button" class="btn btn-primary">{{ __('custom.confirm')}}</button>
+                    <button type="button" class="btn btn-primary confirm" disabled="true">{{ __('custom.confirm')}}</button>
                 </div>
             </div>
         </div>

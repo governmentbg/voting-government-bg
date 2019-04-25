@@ -117,7 +117,7 @@ class OrganisationController extends ApiController
                     foreach ($data['files'] as $newFile) {
                         $file = new File;
                         $file->name = $newFile['name'];
-                        $file->data = base64_decode($newFile['data']);
+                        $file->data = $newFile['data'];
                         $file->mime_type = $newFile['mime_type'];
                         $file->org_id = $organisation->id;
                         $file->voting_tour_id = $votingTour->id;

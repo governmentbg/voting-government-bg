@@ -4,16 +4,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Queue Connection Name
+    | Default Queue Driver
     |--------------------------------------------------------------------------
     |
     | Laravel's queue API supports an assortment of back-ends via a single
     | API, giving you convenient access to each back-end using the same
-    | syntax for every one. Here you may define a default connection.
+    | syntax for each one. Here you may set the default queue driver.
+    |
+    | Supported: "sync", "database", "beanstalkd", "sqs", "redis", "null"
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_DRIVER', 'sync'),
 
     /*
     |--------------------------------------------------------------------------

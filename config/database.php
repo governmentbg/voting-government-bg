@@ -117,6 +117,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'predis'),
+            'prefix' => env('REDIS_PREFIX', 'amsvoting:'),
         ],
 
         'default' => [
@@ -124,6 +125,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DB', 0),
+            'prefix' => env('REDIS_PREFIX', 'amsvoting:'),
         ],
 
         'cache' => [
@@ -131,6 +133,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_CACHE_DB', 1),
+            'prefix' => env('REDIS_PREFIX', 'amsvoting:'),
         ],
 
     ],

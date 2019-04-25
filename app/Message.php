@@ -101,7 +101,7 @@ class Message extends Model
         }
         
         if ($name = $filters['org_name'] ?? null) {
-            $query->whereHas('senderOganisation', function ($query) use ($name) {
+            $query->whereHas('senderOrganisation', function ($query) use ($name) {
                 $query->where('name', 'like', '%' . $name . '%');
             });
         }

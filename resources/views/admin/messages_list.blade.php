@@ -24,7 +24,7 @@
                     <div class="display-inline ">
                         <label for="filters[subject]">{{__('custom.subject')}}:</label>
                     </div>
-                    <input type="text" name="filters[subject]" placeholder="{{__('custom.search')}}" value="{{isset($filters['subject']) && $filters['subject'] ? $filters['subject']: ''}}" class="js-search search-box float-right w-70">
+                    <input type="text" name="filters[subject]" placeholder="{{__('custom.search')}}" value="{{isset($filters['subject']) && $filters['subject'] ? $filters['subject']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
             </div>
             <div class="row m-t-10">
@@ -32,7 +32,7 @@
                     <div class="display-inline">
                         <label for="filters[org_name]">{{__('custom.send_from')}}:</label>
                     </div>
-                    <input type="text" name="filters[org_name]" placeholder="{{__('custom.search')}}" value="{{isset($filters['org_name']) && $filters['org_name'] ? $filters['org_name']: ''}}" class="js-search search-box float-right w-70">
+                    <input type="text" name="filters[org_name]" placeholder="{{__('custom.search')}}" value="{{isset($filters['org_name']) && $filters['org_name'] ? $filters['org_name']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
             </div>
             <div class="row m-t-10">

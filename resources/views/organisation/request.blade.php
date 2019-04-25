@@ -13,7 +13,7 @@
                 @include('components.chat', [
                     'isSender' => isset($message->sender_org_id),
                     'message' => $message->body,
-                    'orgname' => isset($message->sender_org_id)?  $message->sender_org_name : $message->sender_user_name,
+                    'orgname' => isset($message->sender_org_id)?  $message->sender_org_name : __('custom.committee'),
                     'messageTime' => $message->created_at,
                     'files' => !empty($message->files) ? $message->files : [],
                     'read' => $message->read,

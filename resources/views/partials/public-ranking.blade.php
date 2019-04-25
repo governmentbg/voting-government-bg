@@ -58,10 +58,10 @@
                                 $class = 'dropped-out ';
                             }
                             @endphp
-                            <tr>
+                            <tr class="{{ $class }}">
                                 <td class="text-right">{{ ++$counter }}</td>
                                 <td class="text-left">
-                                    @if(!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
+                                    @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
                                         <img src="{{ asset('img/view.svg') }}" class="additional-info" data-org-additional-id="{{ $organisation->id }}" height="30px" width="30px" class="p-r-5"/>
                                     @endif
                                     {{ $organisation->name }}

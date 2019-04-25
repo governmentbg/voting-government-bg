@@ -206,24 +206,24 @@ class PublicController extends BaseFrontendController
                     }
 
                     // calculate votes limit
-                    $votesLimit = 0;
+                    $votesLimit = -1;
+                    $setBallotage = false;
                     $keys = collect($listData)->keys();
                     if ($maxVotesKey = $keys->get(Vote::MAX_VOTES)) {
                         if ($prevVotesKey = $keys->get(Vote::MAX_VOTES - 1)) {
                             if ($listData->{$prevVotesKey}->votes == $listData->{$maxVotesKey}->votes) {
-                                $votesLimit = $listData->{$maxVotesKey}->votes;
+                                $setBallotage = true;
                             }
+                            $votesLimit = $listData->{$prevVotesKey}->votes;
                         }
                     }
 
                     // separate list data by votes limit
-                    if ($votesLimit > 0) {
-                        foreach ($listData as $data) {
-                            if ($data->votes == $votesLimit) {
-                                $data->for_ballotage = true;
-                            } elseif ($data->votes < $votesLimit) {
-                                $data->dropped_out = true;
-                            }
+                    foreach ($listData as $data) {
+                        if ($setBallotage && $data->votes == $votesLimit) {
+                            $data->for_ballotage = true;
+                        } elseif ($data->votes < $votesLimit) {
+                            $data->dropped_out = true;
                         }
                     }
 
@@ -255,35 +255,33 @@ class PublicController extends BaseFrontendController
 
                             // apply ballotage votes and reorder list data
                             $finalList = new \stdClass();
-                            if ($votesLimit > 0) {
-                                foreach ($listData as $orgId => $data) {
-                                    if (isset($ballotageData->{$orgId})) {
-                                        $ballotageData->{$orgId}->ballotage_votes = $ballotageData->{$orgId}->votes;
-                                        $ballotageData->{$orgId}->votes = $data->votes;
-                                        $ballotageData->{$orgId}->for_ballotage = true;
-                                        $ballotageData->{$orgId}->dropped_out = false;
-                                        unset($listData->{$orgId});
+                            foreach ($listData as $orgId => $data) {
+                                if (isset($ballotageData->{$orgId})) {
+                                    $ballotageData->{$orgId}->ballotage_votes = $ballotageData->{$orgId}->votes;
+                                    $ballotageData->{$orgId}->votes = $data->votes;
+                                    $ballotageData->{$orgId}->for_ballotage = true;
+                                    $ballotageData->{$orgId}->dropped_out = false;
+                                    unset($listData->{$orgId});
+                                } else {
+                                    if (isset($data->for_ballotage) && $data->for_ballotage ||
+                                        isset($data->dropped_out) && $data->dropped_out) {
+                                        $data->for_ballotage = false;
+                                        $data->dropped_out = true;
                                     } else {
-                                        if (isset($data->for_ballotage) && $data->for_ballotage ||
-                                            isset($data->dropped_out) && $data->dropped_out) {
-                                            $data->for_ballotage = false;
-                                            $data->dropped_out = true;
-                                        } else {
-                                            $finalList->{$orgId} = $data;
-                                            unset($listData->{$orgId});
-                                        }
-                                    }
-                                }
-                                foreach ($ballotageData as $orgId => $data) {
-                                    if (isset($data->ballotage_votes)) {
                                         $finalList->{$orgId} = $data;
+                                        unset($listData->{$orgId});
                                     }
                                 }
-                                foreach ($listData as $orgId => $data) {
+                            }
+                            foreach ($ballotageData as $orgId => $data) {
+                                if (isset($data->ballotage_votes)) {
                                     $finalList->{$orgId} = $data;
                                 }
-                                $listData = $finalList;
                             }
+                            foreach ($listData as $orgId => $data) {
+                                $finalList->{$orgId} = $data;
+                            }
+                            $listData = $finalList;
                         }
                     }
                 }

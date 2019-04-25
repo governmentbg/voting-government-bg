@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\VoteController as ApiVote;
@@ -15,12 +14,10 @@ use App\Vote;
 class VotingTourController extends BaseAdminController
 {
     protected $redirectTo = 'admin/votingTours';
-    
+
     const CREATE_SUCCESS = 'custom.create_success';
-    
+
     const UPDATE_SUCCESS = 'custom.update_success';
-    
-    private $votingTour = null;
 
     public function __construct()
     {
@@ -64,7 +61,7 @@ class VotingTourController extends BaseAdminController
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
         $this->addBreadcrumb($votingTour->name, '');
-        
+
         $count = Organisation::whereIn('status', Organisation::getApprovedStatuses())->where('voting_tour_id', $votingTour->id)->count();
 
         return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors, 'count' => $count]);
@@ -102,35 +99,35 @@ class VotingTourController extends BaseAdminController
 
         return redirect()->back()->withErrors($errors)->withInput();
     }
-    
+
     private function sendEmails()
     {
         SendAllVoteInvites::dispatch();
     }
-    
+
     public function ranking($id)
     {
         $this->addBreadcrumb(__('breadcrumbs.settings'), 'settings');
         $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
         $this->addBreadcrumb(__('custom.ranking'), '');
-        
+
         $listData = [];
         $showBallotage = false;
         $stats = [];
         $errors = [];
-        
-        list($this->votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getData', ['tour_id' => $id]);
 
-        if (!empty($this->votingTour) && in_array($this->votingTour->status, VotingTour::getRankingStatuses())) {
+        list($votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getData', ['tour_id' => $id]);
+
+        if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
             // get vote status
-            list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $this->votingTour->id]);
+            list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $votingTour->id]);
 
             if (!empty($listErrors)) {
                 $errors = ['message' => __('custom.list_ranking_fail')];
             } elseif (!empty($voteStatus)) {
                 // list ranking
                 $params = [
-                    'tour_id' => $this->votingTour->id,
+                    'tour_id' => $votingTour->id,
                     'status'  => VotingTour::STATUS_VOTING,
                 ];
                 list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
@@ -142,7 +139,7 @@ class VotingTourController extends BaseAdminController
                     $statParams = [
                         'filters' => [
                             'statuses' => Organisation::getApprovedStatuses(),
-                            'tour_id'  => $this->votingTour->id,
+                            'tour_id'  => $votingTour->id,
                         ],
                     ];
                     list($registered, $registeredErrors) = api_result(ApiOrganisation::class, 'search', $statParams);
@@ -165,24 +162,24 @@ class VotingTourController extends BaseAdminController
                     }
 
                     // calculate votes limit
-                    $votesLimit = 0;
+                    $votesLimit = -1;
+                    $setBallotage = false;
                     $keys = collect($listData)->keys();
                     if ($maxVotesKey = $keys->get(Vote::MAX_VOTES)) {
                         if ($prevVotesKey = $keys->get(Vote::MAX_VOTES - 1)) {
                             if ($listData->{$prevVotesKey}->votes == $listData->{$maxVotesKey}->votes) {
-                                $votesLimit = $listData->{$maxVotesKey}->votes;
+                                $setBallotage = true;
                             }
+                            $votesLimit = $listData->{$prevVotesKey}->votes;
                         }
                     }
 
                     // separate list data by votes limit
-                    if ($votesLimit > 0) {
-                        foreach ($listData as $data) {
-                            if ($data->votes == $votesLimit) {
-                                $data->for_ballotage = true;
-                            } elseif ($data->votes < $votesLimit) {
-                                $data->dropped_out = true;
-                            }
+                    foreach ($listData as $data) {
+                        if ($setBallotage && $data->votes == $votesLimit) {
+                            $data->for_ballotage = true;
+                        } elseif ($data->votes < $votesLimit) {
+                            $data->dropped_out = true;
                         }
                     }
 
@@ -214,35 +211,33 @@ class VotingTourController extends BaseAdminController
 
                             // apply ballotage votes and reorder list data
                             $finalList = new \stdClass();
-                            if ($votesLimit > 0) {
-                                foreach ($listData as $orgId => $data) {
-                                    if (isset($ballotageData->{$orgId})) {
-                                        $ballotageData->{$orgId}->ballotage_votes = $ballotageData->{$orgId}->votes;
-                                        $ballotageData->{$orgId}->votes = $data->votes;
-                                        $ballotageData->{$orgId}->for_ballotage = true;
-                                        $ballotageData->{$orgId}->dropped_out = false;
-                                        unset($listData->{$orgId});
+                            foreach ($listData as $orgId => $data) {
+                                if (isset($ballotageData->{$orgId})) {
+                                    $ballotageData->{$orgId}->ballotage_votes = $ballotageData->{$orgId}->votes;
+                                    $ballotageData->{$orgId}->votes = $data->votes;
+                                    $ballotageData->{$orgId}->for_ballotage = true;
+                                    $ballotageData->{$orgId}->dropped_out = false;
+                                    unset($listData->{$orgId});
+                                } else {
+                                    if (isset($data->for_ballotage) && $data->for_ballotage ||
+                                        isset($data->dropped_out) && $data->dropped_out) {
+                                        $data->for_ballotage = false;
+                                        $data->dropped_out = true;
                                     } else {
-                                        if (isset($data->for_ballotage) && $data->for_ballotage ||
-                                            isset($data->dropped_out) && $data->dropped_out) {
-                                            $data->for_ballotage = false;
-                                            $data->dropped_out = true;
-                                        } else {
-                                            $finalList->{$orgId} = $data;
-                                            unset($listData->{$orgId});
-                                        }
-                                    }
-                                }
-                                foreach ($ballotageData as $orgId => $data) {
-                                    if (isset($data->ballotage_votes)) {
                                         $finalList->{$orgId} = $data;
+                                        unset($listData->{$orgId});
                                     }
                                 }
-                                foreach ($listData as $orgId => $data) {
+                            }
+                            foreach ($ballotageData as $orgId => $data) {
+                                if (isset($data->ballotage_votes)) {
                                     $finalList->{$orgId} = $data;
                                 }
-                                $listData = $finalList;
                             }
+                            foreach ($listData as $orgId => $data) {
+                                $finalList->{$orgId} = $data;
+                            }
+                            $listData = $finalList;
                         }
                     }
                 }
@@ -250,9 +245,9 @@ class VotingTourController extends BaseAdminController
         } else {
             return redirect()->route('admin.voting_tour.list');
         }
-      
+
         return view('tours.ranking', [
-            'listTitle'     => $this->votingTour->name,
+            'listTitle'     => $votingTour->name,
             'listData'      => $listData,
             'route'         => 'admin.org_edit',
             'showBallotage' => $showBallotage,

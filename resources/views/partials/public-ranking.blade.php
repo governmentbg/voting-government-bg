@@ -31,7 +31,7 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-            <div class="table-wrapper nano" style="height:600px">
+            <div class="table-wrapper nano h-600">
                 <div class="tableFixHead nano-content">
                     <table class="table table-striped ams-table ranking">
                         <thead>

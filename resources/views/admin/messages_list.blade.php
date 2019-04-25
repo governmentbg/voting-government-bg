@@ -4,15 +4,15 @@
 @include('partials.admin-nav-bar')
 @include('components.breadcrumbs')
 
-<div class="row m-t-30">
+<div class="row m-t-30 m-r-none m-l-none">
     @include('components.status')
     @include('components.errors')
     <div class="col-lg-12">
         <form method="get" action="{{ url('/admin/messages') }}">
-            <div class="row m-t-15">
-                <div class="col-lg-4 display-inline">
-                    <label for="filters[status]" class="text-left">{{__('custom.status')}}:</label>
-                    <select name="filters[status]" class="ams-dropdown custom-select w-50 js-drop-filter p-t-3">
+            <div class="from-group row">
+                <div class="col-lg-3">
+                    <label for="filters[status]" class="col-form-label col-lg-2">{{__('custom.status')}}:</label>
+                    <select name="filters[status]" class="col-lg-8 ams-dropdown custom-select w-50 js-drop-filter p-t-3">
                         @if (isset($statuses))
                             @foreach($statuses as $statIndex => $statusName)
                                 <option value="{{$statIndex}}" {{isset($filters['status']) && $filters['status'] == $statIndex ? 'selected' : ''}}>{{$statusName}}</option>
@@ -20,33 +20,52 @@
                         @endif
                     </select>
                 </div>
-                <div class="col-lg-5 display-inline">
-                    <div class="display-inline ">
-                        <label for="filters[subject]">{{__('custom.subject')}}:</label>
+                <div class="col-lg-5">
+                    <div class="row form-group">
+                        <label for="filters[subject]" class="col-form-label col-lg-3">{{__('custom.subject')}}:</label>
+                        <div class="col-lg-8">
+                            <input
+                                type="text"
+                                name="filters[subject]"
+                                placeholder="{{__('custom.search')}}"
+                                value="{{isset($filters['subject']) && $filters['subject'] ? $filters['subject']: ''}}"
+                                class="form-control js-search search-box float-right"
+                            >
+                        </div>
                     </div>
                     <input type="text" name="filters[subject]" placeholder="{{__('custom.search')}}" value="{{isset($filters['subject']) && $filters['subject'] ? $filters['subject']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
             </div>
-            <div class="row m-t-10">
-                <div class="offset-lg-4 col-lg-5 display-inline">
-                    <div class="display-inline">
-                        <label for="filters[org_name]">{{__('custom.send_from')}}:</label>
+            <div class="from-group row">
+                <div class="offset-lg-3 col-lg-5">
+                    <div class="row form-group">
+                        <label for="filters[org_name]"  class="col-form-label col-lg-3">{{__('custom.send_from')}}:</label>
+                        <div class="col-lg-8">
+                            <input
+                                type="text"
+                                name="filters[org_name]"
+                                placeholder="{{__('custom.search')}}"
+                                value="{{isset($filters['org_name']) && $filters['org_name'] ? $filters['org_name']: ''}}"
+                                class="form-control js-search search-box float-right"
+                            >
+                        </div>
                     </div>
                     <input type="text" name="filters[org_name]" placeholder="{{__('custom.search')}}" value="{{isset($filters['org_name']) && $filters['org_name'] ? $filters['org_name']: ''}}" class="js-search search-box float-right w-70 js-focusout-submit">
                 </div>
             </div>
-            <div class="row m-t-10">
-                <div class="offset-lg-4 col-lg-6 display-inline">
-                    <div class="display-inline">
-                        <label for="registered_period">{{__('custom.date_period')}}:</label>
-                    </div>
-                    <div class="display-inline float-right col-lg-9 p-l-none">
-                        <!-- From -->
-                        @include('components.datepicker', ['name' => 'filters[date_from]', 'value' => isset($filters['date_from']) && $filters['date_from'] ? $filters['date_from']: ''])
-                        <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" class="m-r-10"/>
-                        <!-- To -->
-                        @include('components.datepicker', ['name' => 'filters[date_to]', 'value' => isset($filters['date_to']) && $filters['date_to'] ? $filters['date_to']: ''])
-                        <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px"/>
+            <div class="from-group row m-b-30">
+                <div class="offset-lg-3 col-lg-5">
+                    <div class="form-group row p-l-none">
+                        <label for="registered_period" class="col-lg-3 col-form-label">{{__('custom.date_period')}}:</label>
+
+                        <div class="col-lg-8 display-inherit">
+                            <!-- From -->
+                            @include('components.datepicker', ['name' => 'filters[date_from]', 'value' => isset($filters['date_from']) && $filters['date_from'] ? $filters['date_from']: ''])
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_from" class="m-r-10 p-t-3 m-l-p5"/>
+                            <!-- To -->
+                            @include('components.datepicker', ['name' => 'filters[date_to]', 'value' => isset($filters['date_to']) && $filters['date_to'] ? $filters['date_to']: ''])
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" id="reg_date_to" width="30px" class="p-t-3 m-l-p5"/>
+                        </div>
                     </div>
                 </div>
             </div>

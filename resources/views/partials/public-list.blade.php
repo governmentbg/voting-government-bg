@@ -14,8 +14,8 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-            <div class="table-wrapper">
-                <div class="table-responsive ams-table-scrollable tableFixHead">
+            <div class="table-wrapper nano h-600">
+                <div class="tableFixHead nano-content">
                     <table class="table table-striped ams-table">
                         <thead>
                             <tr>
@@ -34,12 +34,12 @@
                                 <tr>
                                     <td class="text-right">{{ ++$counter }}</td>
                                     <td class="text-left">
-                                        <img src="{{ asset('img/view.svg') }}" class="additional-info" data-org-additional-id="{{ $organisation->id }}" height="30px" width="30px" class="p-r-5"/>
+                                        <img src="{{ asset('img/view.svg') }}" class="additional-info" data-org-additional-id="{{ $organisation->id }}" height="20px" width="30px" class="p-r-5"/>
                                         {{ $organisation->name }}
                                     </td>
                                     <td class="text-center">
                                     @if ($organisation->is_candidate)
-                                        <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" />
+                                        <img src="{{ asset('img/tick.svg') }}" height="20px" width="30px" />
                                     @endif
                                     </td>
                                     <td>{{ $organisation->eik }}</td>

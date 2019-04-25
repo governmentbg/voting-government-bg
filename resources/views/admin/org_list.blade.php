@@ -4,14 +4,14 @@
 @include('partials.admin-nav-bar')
 @include('components.breadcrumbs')
 
-<div class="row">
+<div class="row m-r-none m-l-none">
     @include('components.status')
     <div class="col-lg-12 m-t-30">
         <form method="get" action="{{ url('/admin/organisations') }}">
-            <div class="row">
-                <div class="col-lg-3 display-inline">
-                    <label for="status" class="text-left m-r-10">{{__('custom.status')}}:</label>
-                    <select name="status" class="ams-dropdown custom-select w-50 js-drop-filter m-b-5">
+            <div class="from-group row">
+                <div class="col-lg-3">
+                    <label for="status" class="col-form-label col-lg-2">{{__('custom.status')}}:</label>
+                    <select name="status" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
                         <option value="all">{{__('custom.all')}}</option>
                         @if (isset($statuses))
                             @foreach($statuses as $statIndex => $statusName)
@@ -20,70 +20,78 @@
                         @endif
                     </select>
                 </div>
-                <div class="col-lg-5 display-inline">
-                    <div class="display-inline ">
-                        <label for="eik">{{__('custom.eik')}}:</label>
+                <div class="col-lg-5">
+                    <div class="row form-group">
+                        <label for="eik" class="col-form-label col-lg-3">{{__('custom.eik')}}:</label>
+                        <div class="col-lg-8">
+                            <input
+                                type="text"
+                                name="eik"
+                                placeholder="{{__('custom.search')}}"
+                                value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}"
+                                class="form-control js-search search-box no-outline js-focusout-submit"
+                            >
+                        </div>
                     </div>
-                    <input
-                        type="text"
-                        name="eik"
-                        placeholder="{{__('custom.search')}}"
-                        value="{{isset($filters['eik']) && $filters['eik'] ? $filters['eik']: ''}}"
-                        class="js-search search-box float-right w-70 no-outline js-focusout-submit"
-                    >
                 </div>
-                <div class="offset-lg-1 col-lg-3 display-inline">
-                    <label for="is_candidate" class="m-r-10">{{__('custom.candidate')}}:</label>
-                    <select name="is_candidate" class="ams-dropdown custom-select w-50 js-drop-filter m-b-5">
-                        <option value="all">{{__('custom.all')}}</option>
-                        @if (isset($candidateStatuses))
-                            @foreach($candidateStatuses as $candidateIndex => $candidateStatuses)
-                                <option value="{{$candidateIndex}}" {{isset($filters['is_candidate']) && $filters['is_candidate'] == $candidateIndex ? 'selected' : ''}}>{{$candidateStatuses}}</option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="offset-lg-3 col-lg-5 display-inline">
-                    <div class="display-inline">
-                        <label for="email">{{__('custom.email')}}:</label>
+                <div class="col-lg-3">
+                    <div class="form-group row">
+                        <label for="is_candidate" class="col-form-label col-lg-3">{{__('custom.candidate')}}:</label>
+                        <select name="is_candidate" class="col-lg-8 form-control ams-dropdown custom-select js-drop-filter p-t-3">
+                            <option value="all">{{__('custom.all')}}</option>
+                            @if (isset($candidateStatuses))
+                                @foreach($candidateStatuses as $candidateIndex => $candidateStatuses)
+                                    <option value="{{$candidateIndex}}" {{isset($filters['is_candidate']) && $filters['is_candidate'] == $candidateIndex ? 'selected' : ''}}>{{$candidateStatuses}}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
-                    <input
-                        type="text"
-                        name="email"
-                        placeholder="{{__('custom.search')}}"
-                        value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}"
-                        class="js-search search-box float-right w-70 no-outline js-focusout-submit"
-                    >
                 </div>
             </div>
-            <div class="row m-t-10">
-                <div class="offset-lg-3 col-lg-5 display-inline">
-                    <div class="display-inline">
-                        <label for="name">{{__('custom.org_name')}}:</label>
+            <div class="from-group row">
+                <div class="offset-lg-3 col-lg-5">
+                    <div class="form-group row">
+                        <label for="email" class="col-form-label col-lg-3">{{__('custom.email')}}:</label>
+                        <div class="col-lg-8">
+                            <input
+                                type="text"
+                                name="email"
+                                placeholder="{{__('custom.search')}}"
+                                value="{{isset($filters['email']) && $filters['email'] ? $filters['email']: ''}}"
+                                class="form-control js-search search-box float-right no-outline js-focusout-submit"
+                            >
+                        </div>
                     </div>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="{{__('custom.search')}}"
-                        value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}"
-                        class="js-search search-box float-right w-70 no-outline js-focusout-submit"
-                    >
                 </div>
             </div>
-            <div class="row m-t-10 m-b-30">
-                <div class="offset-lg-3 col-lg-6 display-inline">
-                    <div class="display-inline">
-                        <label for="registered_period">{{__('custom.registered_period')}}:</label>
+            <div class="from-group row">
+                <div class="offset-lg-3 col-lg-5">
+                    <div class="row form-group">
+                        <label for="name" class="col-lg-3 col-form-label">{{__('custom.org_name')}}:</label>
+                        <div class="col-lg-8">
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="{{__('custom.search')}}"
+                                value="{{isset($filters['name']) && $filters['name'] ? $filters['name']: ''}}"
+                                class="form-control js-search search-box no-outline js-focusout-submit"
+                            >
+                        </div>
                     </div>
-                    <div class="display-inline float-right col-lg-9 p-l-none">
-                        <!-- From -->
-                        @include('components.datepicker', ['name' => 'reg_date_from', 'value' => isset($filters['reg_date_from']) && $filters['reg_date_from'] ? $filters['reg_date_from']: ''])
-                        <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" class="m-r-10"/>
-                        <!-- To -->
-                        @include('components.datepicker', ['name' => 'reg_date_to', 'value' => isset($filters['reg_date_to']) && $filters['reg_date_to'] ? $filters['reg_date_to']: ''])
-                        <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px"/>
+                </div>
+            </div>
+            <div class="from-group row m-b-30">
+                <div class="offset-lg-3 col-lg-5">
+                    <div class="form-group row p-l-none">
+                        <label for="registered_period" class="col-lg-3 col-form-label">{{__('custom.registered_period')}}:</label>
+                        <div class="col-lg-8 display-inherit">
+                            <!-- From -->
+                            @include('components.datepicker', ['name' => 'reg_date_from', 'value' => isset($filters['reg_date_from']) && $filters['reg_date_from'] ? $filters['reg_date_from']: ''])
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_from" class="m-r-10 p-t-3 m-l-p5"/>
+                            <!-- To -->
+                            @include('components.datepicker', ['name' => 'reg_date_to', 'value' => isset($filters['reg_date_to']) && $filters['reg_date_to'] ? $filters['reg_date_to']: ''])
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_to" class="p-t-3 m-l-p5"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -117,7 +125,6 @@
                                     <td>{{$singleOrg->created_at}}</td>
                                     <td>{{$singleOrg->email}}</td>
                                     <td class="text-center">
-                                        <!-- <a href="{{ url('admin/organisations/view/' . $singleOrg->id) }}"><img src="{{ asset('img/view.svg') }}" height="30px" width="30px"/></a> -->
                                         <a
                                             href="{{ url('admin/organisations/edit/' . $singleOrg->id) }}"
                                             title="{{ __('custom.edit') }}"

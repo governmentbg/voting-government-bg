@@ -8,6 +8,7 @@
 require('./bootstrap');
 require('bootstrap-table');
 require('bootstrap-datepicker');
+require('nanoscroller');
 
 $('#vote_organisations').dblclick(function() {
     $('#vote_organisations option:selected').remove().appendTo($('#votefor'));
@@ -202,8 +203,6 @@ $('#confirmEmailSending .confirm').click(function(){
 });
 
 $('.additional-info').on('click', function() {
-    $('.hidetable').css('visibility', 'visible');
-
     $(this).closest('tr').siblings('tr').css('font-weight', 'normal');
     $(this).closest('tr').css('font-weight', 'bold');
 
@@ -213,13 +212,30 @@ $('.additional-info').on('click', function() {
         data: {
             org_id: $(this).data('org-additional-id')
         },
-        success: function(result){
+        success: function(result) {
             $('#additional_header').text(result.data.name);
             $('#additional_name').text(result.data.name);
             $('#additional_eik').text(result.data.eik);
             $('#additional_address').text(result.data.address);
             $('#additional_representative').text(result.data.name);
             $('#additional_reg_date').text(result.data.created_at);
+            $('.hidetable').css('visibility', 'visible');
+        },
+        fail: function(result) {
+            $('.hidetable').css('visibility', 'hidden');
         }
     });
 });
+
+$(function() {
+    $("#reg_date_from").click(function(){
+        $("[name='reg_date_from'], [name='filters[date_from]']").datepicker("show");
+    });
+
+    $("#reg_date_to").click(function(){
+        $("[name='reg_date_to'], [name='filters[date_to]']").datepicker("show");
+    });
+});
+
+$(".nano").nanoScroller({});
+

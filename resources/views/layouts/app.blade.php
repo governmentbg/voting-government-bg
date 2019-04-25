@@ -9,32 +9,15 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('css/datepicker.min.css') }}">
-
-        <!-- <link href="{{ asset('fonts/vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">-->
-
-        <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/nanoscroller.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/colorpicker.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/bootstrap-clockpicker.min.css') }}" rel="stylesheet">  -->
-
     </head>
     <body>
-        <div class="container-fluid">
-            @yield('content')
+        <div class="nano" >
+            <div class="nano-content">
+                @yield('content')
+            </div>
         </div>
         <footer class="p-t-15">
-            <div >
-
-            </div>
         </footer>
-
         <script src="{{ asset('js/app.js') }}"></script>
-    <!-- <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
-        <script src="{{ asset('js/jquery.smartmenus.min.js') }}"></script>
-        <script src="{{ asset('js/jquery.nanoscroller.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap-colorpicker.js') }}"></script>
-        <script src="{{ asset('js/bootstrap-clockpicker.min.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script> -->
     </body>
 </html>

@@ -139,7 +139,7 @@
                                     src="{{ asset('img/arrow.svg') }}" 
                                     height="30px" 
                                     width="30px" 
-                                    class="p-r-5 {{ $message->recipient_org_id != null ? 'rotate-180' : ''}}"
+                                    class="p-r-5 {{ $message->recipient_org_id == null ? 'rotate-180' : ''}}"
                                     />
                             </td>
                             <td>

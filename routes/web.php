@@ -14,10 +14,10 @@
 Auth::routes();
 
 Route::get('/','PublicController@index')->name('home');
-Route::get('/publicLists/registered/{id?}','PublicController@listRegistered')->name('list.registered');
-Route::get('/publicLists/candidates/{id?}','PublicController@listCandidates')->name('list.candidates');
-Route::get('/publicLists/voted/{id?}','PublicController@listVoted')->name('list.voted');
-Route::get('/publicLists/ranking/{id?}','PublicController@listRanking')->name('list.ranking');
+Route::get('/publicLists/registered','PublicController@listRegistered')->name('list.registered');
+Route::get('/publicLists/candidates','PublicController@listCandidates')->name('list.candidates');
+Route::get('/publicLists/voted','PublicController@listVoted')->name('list.voted');
+Route::get('/publicLists/ranking','PublicController@listRanking')->name('list.ranking');
 
 Route::get('/register','OrganisationController@register')->name('organisation.register');
 Route::get('createcaptcha', 'CaptchaController@create');

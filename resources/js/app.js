@@ -100,7 +100,7 @@ $(document).on('click', '.js-plus-file-upl', function (e) {
 
     html = $(html);
     html.find('span').text('Select file');
-    
+
     $('.add-file-input').before(html);
 });
 
@@ -190,7 +190,7 @@ $('form.change-tour').submit(function(e){
             else{
                 modal.find('.confirm').attr('disabled', true);
             }
-        });      
+        });
     }
     else{
         $(this).unbind('submit').submit();
@@ -201,3 +201,25 @@ $('#confirmEmailSending .confirm').click(function(){
     $('form.change-tour').unbind('submit').submit();
 });
 
+$('.additional-info').on('click', function() {
+    $('.hidetable').css('visibility', 'visible');
+
+    $(this).closest('tr').siblings('tr').css('font-weight', 'normal');
+    $(this).closest('tr').css('font-weight', 'bold');
+
+    $.ajax({
+        type: "POST",
+        url: '/api/organisation/getData',
+        data: {
+            org_id: $(this).data('org-additional-id')
+        },
+        success: function(result){
+            $('#additional_header').text(result.data.name);
+            $('#additional_name').text(result.data.name);
+            $('#additional_eik').text(result.data.eik);
+            $('#additional_address').text(result.data.address);
+            $('#additional_representative').text(result.data.name);
+            $('#additional_reg_date').text(result.data.created_at);
+        }
+    });
+});

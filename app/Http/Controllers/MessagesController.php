@@ -17,7 +17,8 @@ class MessagesController extends BaseFrontendController
 
     public function view($id)
     {
-        $parent = Message::where('id', $id)->first()->toArray();
+        $parent = Message::where('id', $id)->with('files')->first()->toArray();
+        $parent['files'] = array_map(function($val){ return (object)$val; }, $parent['files']);
         $this->addBreadcrumb($parent['subject'], '');
 
         list($messages, $errors) = api_result(ApiMessages::class, 'listByParent', [
@@ -67,7 +68,7 @@ class MessagesController extends BaseFrontendController
         list($result, $errors) = api_result(ApiMessages::class, 'sendMessageFromOrg', $data, 'id');
 
         if (!empty($errors)) {
-            return redirect()->back()->withErrors($errors);
+            return redirect()->back()->withErrors($errors)->withInput();
         }
         
         if($id == null){
@@ -81,6 +82,6 @@ class MessagesController extends BaseFrontendController
     {
         $this->addBreadcrumb(__('custom.new_message'), '');
         
-        return view('organisation.new_request', ['statuses' => Message::getSubjectsList()]);
+        return view('organisation.new_request');
     }
 }

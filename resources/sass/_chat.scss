@@ -30,6 +30,9 @@
     }
 
     textarea[name="new_message"]{
+        &.add-message{
+            margin-top: auto;
+        }
         margin-top: 40px;
         padding: 5px;
         outline: none;

@@ -31,8 +31,8 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-            <div class="table-wrapper">
-                <div class="table-responsive ams-table-scrollable tableFixHead">
+            <div class="table-wrapper nano h-600">
+                <div class="tableFixHead nano-content">
                     <table class="table table-striped ams-table ranking">
                         <thead>
                             <tr>
@@ -45,7 +45,7 @@
                                 @endif
                             </tr>
                         </thead>
-                        <tbody class="text-left">
+                        <tbody class="text-left ">
                         @php
                             $counter = 0;
                         @endphp

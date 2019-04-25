@@ -4,9 +4,9 @@
     }
 
     span {
-        font-family: Roboto Light;
+        font-family: Roboto, sans-serif;
         &.error {
-            font-family: Roboto Light Italic;
+            font-family: Roboto, sans-serif;
             color: $darkRed;
         }
     }

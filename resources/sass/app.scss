@@ -30,6 +30,8 @@
 
 @import 'chat';
 
+@import 'components/nanoscroller';
+
 body {
     font-family: 'Roboto', sans-serif !important;
 }
@@ -330,7 +332,7 @@ input[type='file'] {
     border: 2px solid $darkBlue;
     border-radius: 7px;
     margin-right: 5px;
-    width: 32%;
+    width: 41%;
 }
 
 .m-r-20 {
@@ -504,4 +506,55 @@ table.messages-list{
 
 .hidetable {
     visibility: hidden;
+}
+
+.p-l-10 {
+    padding-left: 10px !important;
+}
+
+.m-b-1r {
+    margin-bottom: 1rem;
+}
+
+.msg-m-b {
+    margin-bottom: 27px;
+}
+
+.c-pointer {
+    cursor: pointer;
+}
+
+.m-b-4 {
+    margin-bottom: 4px;
+}
+
+.p-l-55 {
+    padding-left: 55px;
+}
+
+.display-inherit {
+    display: inherit;
+}
+
+.m-t-5 {
+    margin-top: 5px;
+}
+
+.m-l-p5 {
+    margin-left: 5px;
+}
+
+.h-600 {
+    height: 600px;
+}
+
+.m-r-none {
+    margin-right: 0px;
+}
+.m-l-none {
+    margin-left: 0px;
+}
+
+.p-l-60 {
+    padding-left: 60px;
 }

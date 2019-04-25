@@ -1,6 +1,6 @@
 @php $multiple = !isset($multiple)? true : $multiple; @endphp
 
-<h3 class="color-black">{{ isset($title) ? $title : '' }}</h3>
+<h3 class="color-black p-t-15">{{ isset($title) ? $title : '' }}</h3>
 
 <div class="multiple-input-container">
     <div class="file-field file-input-container">
@@ -15,12 +15,28 @@
             >
         </div>
         @if (!(isset($withoutImg) && $withoutImg))
-            <img class="upload-btn js-file-upl display-inline m-b-8 rotate-180" src="{{ asset('img/download.svg') }}" height="35px" width="30px" />
+            <img
+                class="upload-btn js-file-upl display-inline m-b-8 rotate-180 c-pointer"
+                src="{{ asset('img/download.svg') }}"
+                title="{{ __('custom.select') }}"
+                data-toggle="tooltip"
+                data-placement="top"
+                height="35px"
+                width="30px"
+            />
         @endif
     </div>
     @if(isset($multiple) && $multiple)
     <div class="add-file-input">
-        <img class="add-multiple js-plus-file-upl display-inline rotate-180" src="{{ asset('img/plus.svg') }}" height="35px" width="30px" />
+        <img
+            class="add-multiple js-plus-file-upl display-inline rotate-180 c-pointer"
+            title="{{ __('custom.add') }}"
+            data-toggle="tooltip"
+            data-placement="top"
+            src="{{ asset('img/plus.svg') }}"
+            height="35px"
+            width="30px"
+        />
     </div>
     @endif
 </div>

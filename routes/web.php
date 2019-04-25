@@ -14,15 +14,18 @@
 Auth::routes();
 
 Route::get('/','PublicController@index')->name('home');
-Route::get('/publicLists/registered','PublicController@listRegistered')->name('list.registered');
-Route::get('/publicLists/candidates','PublicController@listCandidates')->name('list.candidates');
-Route::get('/publicLists/voted','PublicController@listVoted')->name('list.voted');
-Route::get('/publicLists/ranking','PublicController@listRanking')->name('list.ranking');
 
-Route::get('/register','OrganisationController@register')->name('organisation.register');
-Route::get('createcaptcha', 'CaptchaController@create');
-Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
-Route::post('/organisations','OrganisationController@store')->name('organisation.store');
+Route::group(['middleware' => ['guest']], function () {
+    Route::get('/publicLists/registered','PublicController@listRegistered')->name('list.registered');
+    Route::get('/publicLists/candidates','PublicController@listCandidates')->name('list.candidates');
+    Route::get('/publicLists/voted','PublicController@listVoted')->name('list.voted');
+    Route::get('/publicLists/ranking','PublicController@listRanking')->name('list.ranking');
+
+    Route::get('/register','OrganisationController@register')->name('organisation.register');
+    Route::get('createcaptcha', 'CaptchaController@create');
+    Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
+    Route::post('/organisations','OrganisationController@store')->name('organisation.store');
+});
 
 //Frontend routes that needs user authorisation
 Route::group(['middleware' => ['auth']], function () {
@@ -83,7 +86,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
         Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
 
-        //SYSTEM user routes
+        // SYSTEM user routes
         Route::group(['middleware' => 'auth.system:backend'], function () {
             Route::get('/committees', 'CommitteeController@list')->name('admin.committee.list');
             Route::get('/committee/add', 'CommitteeController@create')->name('admin.committee.add');

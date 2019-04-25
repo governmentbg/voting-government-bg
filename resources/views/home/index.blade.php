@@ -56,9 +56,15 @@
             </form>
             <div class="row p-t-15">
                 <div class="col-lg-4 p-l-none p-r-none">
-                    <a
-                        href="{{ route('organisation.register') }}"
-                    ><h3 class="f-s-14">{{ __('custom.register') }}</h3></a>
+                    @if (isset($showRegister) && $showRegister)
+                        <a href="{{ route('organisation.register') }}">
+                            <h3 class="f-s-14">{{ __('custom.register') }}</h3>
+                        </a>
+                    @else
+                        <a href="mailto:{{config('mail.mailto')}}">
+                            <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
+                        </a>
+                    @endif
                 </div>
                 <div class="col-lg-5 text-right p-l-none">
                     <a href="{{ route('password.request') }}">
@@ -66,11 +72,15 @@
                     </a>
                 </div>
             </div>
-            <div class="form-group row text-center p-t-15">
-                <div class="col-xs-12">
-                    <a href="mailto:{{config('mail.mailto')}}"><h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3></a>
+            @if (isset($showRegister) && $showRegister)
+                <div class="form-group row text-center p-t-15">
+                    <div class="col-xs-12">
+                        <a href="mailto:{{config('mail.mailto')}}">
+                            <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
         @elseif(!auth()->check())
             <!-- Forgotten password form -->
@@ -113,7 +123,7 @@
 
 <hr class="hr-thin">
 
-@if (isset($listData))
+@if (!auth()->check() && isset($listData))
     @if (isset($isRanking) && $isRanking)
         @include('partials.public-ranking')
     @else

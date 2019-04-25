@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\VoteController as ApiVote;
 use App\VotingTour;
@@ -11,15 +10,25 @@ use App\Vote;
 
 class PublicController extends BaseFrontendController
 {
-    protected $votingTour = null;
-
     public function __construct()
     {
-        list($this->votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+        parent::__construct();
+
+        $showRegister = (!empty($this->votingTour) && $this->votingTour->status == VotingTour::STATUS_OPENED_REG);
+
+        view()->share('showRegister', $showRegister);
     }
 
     public function index()
     {
+        if (auth()->guard('backend')->check()) {
+            return redirect()->route('admin.org_list');
+        }
+
+        if (auth()->check()) {
+            return redirect()->route('organisation.view');
+        }
+
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
             return redirect()->action('PublicController@listRegistered');
         }

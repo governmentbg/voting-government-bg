@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\UserController as ApiUser;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Organisation;
 use App\Message;
+use App\VotingTour;
 use \Validator;
 
 class OrganisationController extends BaseFrontendController
@@ -23,9 +24,13 @@ class OrganisationController extends BaseFrontendController
 
     public function register(Request $request)
     {
-        $this->addBreadcrumb(__('breadcrumbs.register'), '');
+        if (!empty($this->votingTour) && $this->votingTour->status == VotingTour::STATUS_OPENED_REG) {
+            $this->addBreadcrumb(__('breadcrumbs.register'), '');
 
-        return view('organisation.register');
+            return view('organisation.register');
+        }
+
+        return redirect('/');
     }
 
     public function store(Request $request)

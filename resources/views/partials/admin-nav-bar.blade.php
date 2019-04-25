@@ -1,8 +1,10 @@
 <div class="flex-nav-items p-t-15">
     <div class="p-l-25 f-s-21">
         @if (isset($votingTourData))
-            <img src="{{ $votingTourData->showTick ? asset('img/tick.svg') : asset('img/cross.svg') }}" height="30px" width="30px" class="display-inline m-t-12"/>
-            <h3 class="display-inline">{{ $votingTourData->name }} {{ ' - '. $votingTourData->statusName}}</h3>
+            @if ($votingTourData->showTick)
+                <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-t-12"/>
+            @endif
+            <h3 class="display-inline">{{ $votingTourData->name .' - '. $votingTourData->statusName }}</h3>
         @endif
     </div>
     <div class="display-flex">

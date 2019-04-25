@@ -63,6 +63,6 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        return view('home.index');
+        return redirect()->route('home');
     }
 }

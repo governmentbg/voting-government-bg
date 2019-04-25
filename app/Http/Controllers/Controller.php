@@ -6,12 +6,16 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
+use App\VotingTour;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $breadcrumbs;
+
+    protected $votingTour = null;
 
     protected function addBreadcrumb($label, $link = null)
     {
@@ -26,6 +30,18 @@ class Controller extends BaseController
     protected function getBreadcrumbs()
     {
         return $this->breadcrumbs;
+    }
+
+    protected function setVotingTourData()
+    {
+        list($this->votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+
+        if ($this->votingTour) {
+            $this->votingTour->statusName = VotingTour::getStatuses()[$this->votingTour->status];
+            $this->votingTour->showTick = ($this->votingTour->status != VotingTour::STATUS_FINISHED) ? true: false;
+        }
+
+        view()->share('votingTourData', $this->votingTour);
     }
 
     public function paginate($object)

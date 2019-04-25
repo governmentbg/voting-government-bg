@@ -30,6 +30,7 @@
                                 class="input-box"
                                 name="name"
                                 value="{{ old('name') }}"
+                                maxlength="255"
                                 required
                                 oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.org_name')]) }}')"
                                 oninput="setCustomValidity('')"
@@ -45,6 +46,7 @@
                                 class="input-box"
                                 name="eik"
                                 value="{{ old('eik') }}"
+                                maxlength="19"
                                 required
                                 oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => __('custom.eik_bulstat')]) }}')"
                                 oninput="setCustomValidity('')"
@@ -60,6 +62,7 @@
                                 class="input-box"
                                 name="address"
                                 value="{{ old('address') }}"
+                                maxlength="512"
                                 required
                                 oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.management_address')]) }}')"
                                 oninput="setCustomValidity('')"
@@ -75,6 +78,7 @@
                                 class="input-box"
                                 name="representative"
                                 value="{{ old('representative') }}"
+                                maxlength="512"
                                 required
                                 oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}')"
                                 oninput="setCustomValidity('')"
@@ -90,6 +94,7 @@
                                 class="input-box"
                                 name="phone"
                                 value="{{ old('phone') }}"
+                                maxlength="40"
                                 required
                                 oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.phone_number')]) }}')"
                                 oninput="setCustomValidity('')"
@@ -105,6 +110,7 @@
                                 class="input-box"
                                 name="email"
                                 value="{{ old('email') }}"
+                                maxlength="255"
                                 required
                                 oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.email')]) }}')"
                                 oninput="setCustomValidity('')"

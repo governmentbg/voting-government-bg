@@ -175,16 +175,26 @@
                         <div class="col-lg-12 p-r-none">
                             @include('components.fileinput', ['name' => 'files[]'])
                         </div>
-                        <div class="col-sm-8 col-xs-6 p-r-none">
-                            <span class="error">{{ $errors->first('files') }}</span>
+                        <div class="col-lg-12 p-r-none p-t-5">
+                            @php $filesErr = false; @endphp
+                            @if ($errors->has('files'))
+                                <span class="error">{{ $errors->first('files') }}</span>
+                                @php $filesErr = true; @endphp
+                            @endif
                             @if ($errors->has('files.*.name'))
                                 <span class="error">{{ $errors->first('files.*.name') }}</span>
+                                @php $filesErr = true; @endphp
                             @endif
                             @if ($errors->has('files.*.mime_type'))
                                 <span class="error">{{ $errors->first('files.*.mime_type') }}</span>
+                                @php $filesErr = true; @endphp
                             @endif
                             @if ($errors->has('files.*.data'))
                                 <span class="error">{{ $errors->first('files.*.data') }}</span>
+                                @php $filesErr = true; @endphp
+                            @endif
+                            @if ($errors->has('reattach_files') && !$filesErr)
+                                <span class="error">{{ $errors->first('reattach_files') }}</span>
                             @endif
                         </div>
                     </div>

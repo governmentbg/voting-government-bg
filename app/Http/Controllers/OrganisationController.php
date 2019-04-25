@@ -48,6 +48,17 @@ class OrganisationController extends BaseFrontendController
             $errors['captcha'] = __('custom.chaptcha_fail');
         }
 
+        $files = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $files[] = [
+                    'name'      => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'data'      => base64_encode(\File::get($file->getPathName())),
+                ];
+            }
+        }
+
         if (empty($errors)) {
             $orgData = $request->except(['_token', 'terms_accepted', 'files']);
             $orgData['in_av'] = (isset($orgData['in_av']) && $orgData['in_av']) ? 1 : 0;
@@ -56,17 +67,8 @@ class OrganisationController extends BaseFrontendController
             $params = [
                 'org_data' => $orgData
             ];
-
-            $files = $request->offsetGet('files');
-            if (is_array($files) && !empty($files)) {
-                $params['files'] = [];
-                foreach ($files as $file) {
-                    $params['files'][] = [
-                        'name'      => $file->getClientOriginalName(),
-                        'mime_type' => $file->getMimeType(),
-                        'data'      => base64_encode(\File::get($file->getPathName())),
-                    ];
-                }
+            if (!empty($files)) {
+                $params['files'] = $files;
             }
 
             DB::beginTransaction();
@@ -107,6 +109,10 @@ class OrganisationController extends BaseFrontendController
                 $errors = !empty($result->errors) ? $result->errors : [];
                 session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_org_error'));
             }
+        }
+
+        if (!empty($files) && !empty($errors)) {
+            $errors['reattach_files'] = __('custom.reattach_files');
         }
 
         return redirect()->back()->withErrors($errors)->withInput();

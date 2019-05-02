@@ -3,7 +3,6 @@
 namespace App\Auth;
 
 use Illuminate\Auth\EloquentUserProvider;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
@@ -15,7 +14,7 @@ class EloquentBackendUserProvider extends EloquentUserProvider
 
         return $user && $user->isAdmin() === true && $user->active ? $user : null;
     }
-    
+
     /**
      * Validate a user against the given credentials.
      *
@@ -27,11 +26,10 @@ class EloquentBackendUserProvider extends EloquentUserProvider
     {
         $plain = $credentials['password'];
 
-        if($this->retrieveById($user->getAuthIdentifier())->username == config('auth.system.user')){
+        if ($this->retrieveById($user->getAuthIdentifier())->username == config('auth.system.user')) {
             logger()->info('System user login attempt: ' . date('Y-m-d H:i:s'));
             $hash = config('auth.system.password', Hash::make(str_random(60)));
-        }
-        else{
+        } else {
             $hash = $user->getAuthPassword();
         }
 

@@ -42,6 +42,10 @@ class PublicController extends BaseFrontendController
         $listData = [];
         $errors = [];
 
+        if (session()->has('errors')) {
+            $errors = session()->get('errors')->messages();
+        }
+
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
             // set links that have to be displayed
             $showLinks['registered'] = true;
@@ -62,7 +66,7 @@ class PublicController extends BaseFrontendController
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (!empty($listErrors)) {
-                $errors = ['message' => __('custom.list_reg_org_fail')];
+                $errors['message'] = __('custom.list_reg_org_fail');
             }
         } else {
             return redirect('/');
@@ -102,7 +106,7 @@ class PublicController extends BaseFrontendController
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (!empty($listErrors)) {
-                $errors = ['message' => __('custom.list_candidates_fail')];
+                $errors['message'] = __('custom.list_candidates_fail');
             }
         } else {
             return redirect('/');
@@ -135,7 +139,7 @@ class PublicController extends BaseFrontendController
             list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
 
             if (!empty($listErrors)) {
-                $errors = ['message' => __('custom.list_voted_org_fail')];
+                $errors['message'] = __('custom.list_voted_org_fail');
             }
         } else {
             return redirect('/');
@@ -168,7 +172,7 @@ class PublicController extends BaseFrontendController
             list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $this->votingTour->id]);
 
             if (!empty($listErrors)) {
-                $errors = ['message' => __('custom.list_ranking_fail')];
+                $errors['message'] = __('custom.list_ranking_fail');
             } elseif (!empty($voteStatus)) {
                 // list ranking
                 $params = [
@@ -178,7 +182,7 @@ class PublicController extends BaseFrontendController
                 list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
 
                 if (!empty($listErrors)) {
-                    $errors = ['message' => __('custom.list_ranking_fail')];
+                    $errors['message'] = __('custom.list_ranking_fail');
                 } elseif (!empty($listData)) {
                     // list registered organisations
                     $statParams = [

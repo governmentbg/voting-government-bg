@@ -18,6 +18,9 @@ class User extends Authenticatable
     use CanResetPassword;
     use MetaData;
 
+    const ACTIVE_FALSE = 0;
+    const ACTIVE_TRUE = 1;
+
     const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
 
     protected $guarded = ['id'];
@@ -80,9 +83,9 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name .' '. $this->last_name;
     }
-    
+
     /**
      * Get the notification routing information for the given driver.
      *
@@ -91,7 +94,7 @@ class User extends Authenticatable
      */
     public function routeNotificationFor($driver)
     {
-        if (method_exists($this, $method = 'routeNotificationFor'.Str::studly($driver))) {
+        if (method_exists($this, $method = 'routeNotificationFor'. Str::studly($driver))) {
             return $this->{$method}();
         }
 

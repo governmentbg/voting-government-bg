@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::get('/','PublicController@index')->name('home');
 
-Route::group(['middleware' => ['guest']], function () {
+Route::group(['middleware' => ['guest', 'guest:backend']], function () {
     Route::get('/publicLists/registered','PublicController@listRegistered')->name('list.registered');
     Route::get('/publicLists/candidates','PublicController@listCandidates')->name('list.candidates');
     Route::get('/publicLists/voted','PublicController@listVoted')->name('list.voted');
@@ -34,8 +34,8 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('organisation.settings');
 
     Route::get('/passwordChange', function () {
-            return view('auth.password_change');
-        })->name('organisation.change_password');
+        return view('auth.password_change');
+    })->name('organisation.change_password');
 
     Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
 

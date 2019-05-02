@@ -146,14 +146,15 @@ class UserController extends ApiController
     /**
      * Add new user record
      *
-     * @param array data - required
-     * @param string data[firs_tname] - required
-     * @param string data[last_name] - required
-     * @param string data[email] - required
-     * @param string data[username] - optional
-     * @param string data[password] - required
-     * @param string data[active] - required
-     * @param string data[org_id] - optional
+     * @param array user_data - required
+     * @param int user_data[org_id] - optional
+     * @param string user_data[username] - required
+     * @param string user_data[password] - required
+     * @param string user_data[password_confirm] - required
+     * @param string user_data[firs_tname] - required without org_id
+     * @param string user_data[last_name] - required without org_id
+     * @param string user_data[email] - required without org_id
+     * @param string user_data[active] - optional
      *
      * @return json $response - response with status and api key if successful
      */
@@ -162,28 +163,37 @@ class UserController extends ApiController
         $data = $request->get('user_data', []);
 
         $rules = [
-            'org_id'           => 'nullable',
-            'first_name'       => 'nullable|string',
-            'last_name'        => 'nullable|string',
-            'username'         => 'required|string|unique:users',
+            'org_id'           => 'nullable|int|exists:organisations,id',
+            'username'         => 'required|string|max:255',
+            'password'         => 'required|string|min:6|max:255',
+            'password_confirm' => 'required|string|same:password',
+            'first_name'       => 'nullable|string|max:255',
+            'last_name'        => 'nullable|string|max:255',
             'email'            => '',
             'active'           => 'nullable|bool',
-            'password'         => 'required|string|min:6',
-            'password_confirm' => 'required|string|same:password',
         ];
 
         if (!isset($data['org_id'])) {
+            $rules['username'] .= '|unique:users';
+            $rules['first_name'] = 'required|string|max:255';
+            $rules['last_name'] = 'required|string|max:255';
             $rules['email'] = 'required|email|unique:users';
-            $rules['first_name'] = 'required|string';
-            $rules['last_name'] = 'required|string';
-            $rules['active'] = 'bool';
+
+            if (!isset($data['active'])) {
+                $data['active'] = User::ACTIVE_FALSE;
+            }
         } else {
             $votingTour = VotingTour::getLatestTour();
             if (!$votingTour) {
                 return $this->errorResponse(__('custom.add_user_fail'), __('custom.voting_tour_not_found'));
             }
 
+            $rules['username'] .= '|unique:users,username,NULL,id,voting_tour_id,'. $votingTour->id;
+
             $data['voting_tour_id'] = $votingTour->id;
+            if (isset($data['email'])) {
+                unset($data['email']);
+            }
         }
 
         $validator = \Validator::make($data, $rules);

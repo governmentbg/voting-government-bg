@@ -18,8 +18,8 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            if($guard == 'backend'){
-                return redirect('/admin');
+            if ($guard == 'backend') {
+                return redirect()->route('admin.org_list');
             }
             return redirect('/');
         }

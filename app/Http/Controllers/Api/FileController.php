@@ -26,7 +26,7 @@ class FileController extends ApiController
         $fileId = $request->get('file_id', null);
 
         $validator = \Validator::make(['file_id' => $fileId], [
-            'file_id' => 'required|int|exists:files,id|digits_between:1,10',
+            'file_id' => 'required|int|exists:files,id',
         ]);
 
         if (!$validator->fails()) {

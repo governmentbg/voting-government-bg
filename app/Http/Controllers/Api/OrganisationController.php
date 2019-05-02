@@ -168,7 +168,7 @@ class OrganisationController extends ApiController
             $data['org_id'] = $request->get('org_id', null);
 
             $validator = \Validator::make($data, [
-                'org_id'         => 'required|int|exists:organisations,id|digits_between:1,10',
+                'org_id'         => 'required|int|exists:organisations,id',
                 'name'           => 'string|max:255',
                 'address'        => 'string|max:512',
                 'representative' => 'string|max:512',
@@ -372,7 +372,7 @@ class OrganisationController extends ApiController
         $data = $request->all();
 
         $validator = \Validator::make($data, [
-            'org_id' => 'required_without:eik|nullable|int|exists:organisations,id|digits_between:1,10',
+            'org_id' => 'required_without:eik|nullable|int|exists:organisations,id',
             'eik'    => 'required_without:org_id|nullable|exists:organisations,eik,voting_tour_id,'. $votingTour->id .'|digits_between:1,19',
         ]);
 
@@ -415,7 +415,7 @@ class OrganisationController extends ApiController
         $orgId = $request->get('org_id', null);
 
         $validator = \Validator::make(['org_id' => $orgId], [
-            'org_id' => 'required|int|exists:organisations,id|digits_between:1,10',
+            'org_id' => 'required|int|exists:organisations,id',
         ]);
 
         if (!$validator->fails()) {

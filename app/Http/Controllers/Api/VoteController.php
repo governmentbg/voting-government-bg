@@ -113,7 +113,7 @@ class VoteController extends ApiController
         $post = $request->all();
 
         $validator = Validator::make($post, [
-            'org_id' => 'required|int|exists:organisations,id|digits_between:1,10',
+            'org_id' => 'required|int|exists:organisations,id',
         ]);
 
         if (!$validator->fails()) {

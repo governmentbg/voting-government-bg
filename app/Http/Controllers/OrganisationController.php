@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\UserController as ApiUser;
 use App\Http\Controllers\Api\FileController as ApiFile;
+use App\Http\Controllers\Api\MessageController as ApiMessage;
 use App\Organisation;
-use App\Message;
 use App\VotingTour;
 use \Validator;
 
@@ -120,54 +120,64 @@ class OrganisationController extends BaseFrontendController
 
     public function view()
     {
-        $id = auth()->user()->org_id;
-        list($org, $errors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+        $org = [];
+        $status = '';
+        $isApproved = false;
+        $files = [];
+        $messages = [];
+        $errors = [];
 
-        if(!empty($errors)){
-           return back()->withErrors($errors);
-        }
+        if (auth()->check()) {
+            $orgId = auth()->user()->org_id;
+            list($org, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $orgId]);
+            if (!empty($orgErrors)) {
+                session()->flash('alert-danger', __('custom.get_org_fail'));
+            } elseif (!empty($org)) {
+                list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
+                $statuses = !empty($statuses) ? collect($statuses)->pluck('name', 'id')->toArray() : [];
+                $status = isset($statuses[$org->status]) ? $statuses[$org->status] : $org->status;
+                $isApproved = in_array($org->status, Organisation::getApprovedStatuses());
 
-//        list($messages, $errors) = api_result(APIMessage::class, 'listByOrg', ['org_id' => $id]);
-//
-//        if(!empty($errors)){
-//           return back()->withErrors($errors);
-//        }
+                list($files, $fileErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $orgId]);
+                if (!empty($fileErrors)) {
+                    $errors['file_message'] = __('custom.list_org_files_fail');
+                }
 
-        $messages = Message::where('recipient_org_id', $org->id)->orWhere('sender_org_id', $org->id)->get();
-
-        list($files, $errors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
-
-        if(!empty($errors)){
-           return back()->withErrors($errors);
+                list($messages, $msgErrors) = api_result(ApiMessage::class, 'listByOrg', ['org_id' => $orgId]);
+                if (!empty($msgErrors)) {
+                    $errors['message'] = __('custom.list_msgs_fail');
+                } else {
+                    $messages = !empty($messages->data) ? $this->paginate($messages) : [];
+                }
+            }
         }
 
         $data = [
             'organisation' => $org,
-            'status' => (Organisation::getStatuses())[$org->status],
-            'isApproved' => in_array($org->status, Organisation::getApprovedStatuses()),
+            'status' => $status,
+            'isApproved' => $isApproved,
             'messages' => $messages,
             'files' => $files
         ];
 
-        return view('organisation.view', $data);
+        return view('organisation.view', $data)->withErrors($errors);
     }
 
     public function downloadFile(Request $request)
     {
-        $id = $request->offsetGet('id');
-        list($file, $filesErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
+        if (auth()->check()) {
+            $id = $request->offsetGet('id');
+            list($file, $filesErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
 
-        if (!empty($file->data)) {
-            $file->data = base64_decode($file->data);
-            return response($file->data, 200, [
-                'Content-Type'          => $file->mime_type,
-                'Content-Disposition'   => 'attachment; filename="'. $file->name .'"',
-            ]);
-        }
-
-        if ($filesErrors) {
-            $request->session()->flash('alert-danger', __('custom.edit_error'));
-            return redirect()->back()->withErrors(isset($filesErrors) ? $filesErrors : []);
+            if (!empty($file) && $file->org_id == auth()->user()->org_id) {
+                if (!empty($file->data)) {
+                    $file->data = base64_decode($file->data);
+                    return response($file->data, 200, [
+                        'Content-Type'          => $file->mime_type,
+                        'Content-Disposition'   => 'attachment; filename="'. $file->name .'"',
+                    ]);
+                }
+            }
         }
 
         $request->session()->flash('alert-danger', __('custom.file_not_found'));

@@ -15,7 +15,7 @@ $('#vote_organisations').dblclick(function() {
     checkVoteSize();
 });
 
-$('#votefor').dblclick(function(){
+$('#votefor').dblclick(function() {
     $('#votefor option:selected').remove().appendTo($('#vote_organisations'));
     checkVoteSize();
 });
@@ -54,10 +54,10 @@ $('#filter_org').on('keyup', function() {
 
     for (var i = 0; i < output.length; i++) {
         if (output[i].text.toLowerCase().indexOf(input) < 0) {
-            output[i].style.display = "none";
+            output[i].style.display = 'none';
             output[i].setAttribute('style', 'display:none');
         } else {
-            output[i].style.display = "";
+            output[i].style.display = '';
             output[i].setAttribute('style', 'display:block');
         }
     }
@@ -74,7 +74,11 @@ $('.js-search').on('keydown', function(e) {
 });
 
 $('[name="is_candidate"].checkbox-ams').on('change', function() {
-    $('.for_org_candidates').toggle($(this).is(':checked'));
+    if ($(this).is(':checked')) {
+        $('.for_org_candidates').removeClass('d-none');
+    } else {
+        $('.for_org_candidates').addClass('d-none');
+    }
 });
 
 $(document).on('click', '.js-file-upl', function (e) {
@@ -125,12 +129,12 @@ $(document).ready(function() {
     }
 });
 
-$('#refresh').click(function(){
+$('#refresh').click(function() {
     $.ajax({
-       type:'GET',
-       url:'refreshcaptcha',
-       success:function(data){
-          $(".captcha span").html(data);
+       type: 'GET',
+       url: 'refreshcaptcha',
+       success: function(data) {
+          $('.captcha span').html(data);
        }
     });
 });
@@ -175,30 +179,28 @@ $('#votebtn').click(function(ev) {
 });
 
 //voting tour update - send vote invites confirmation
-$('form.change-tour').submit(function(e){
+$('form.change-tour').submit(function(e) {
     e.preventDefault();
     let oldValue = $('form.change-tour [name="status"]').data('old-status');
     let status = $('form.change-tour [name="status"]').val();
 
-    if(status == 3 && status != oldValue){ //status - voting
+    if (status == 3 && status != oldValue) { //status - voting
         let modal = $('#confirmEmailSending');
         modal.modal();
 
-        modal.find('input[name="send_emails"]').change(function(){
-            if($(this).prop('checked')){
+        modal.find('input[name="send_emails"]').change(function() {
+            if ($(this).prop('checked')) {
                 modal.find('.confirm').attr('disabled', false);
-            }
-            else{
+            } else {
                 modal.find('.confirm').attr('disabled', true);
             }
         });
-    }
-    else{
+    } else {
         $(this).unbind('submit').submit();
     }
 });
 
-$('#confirmEmailSending .confirm').click(function(){
+$('#confirmEmailSending .confirm').click(function() {
     $('form.change-tour').unbind('submit').submit();
 });
 
@@ -207,7 +209,7 @@ $('.additional-info').on('click', function() {
     $(this).closest('tr').css('font-weight', 'bold');
 
     $.ajax({
-        type: "POST",
+        type: 'POST',
         url: '/api/organisation/getData',
         data: {
             org_id: $(this).data('org-additional-id')
@@ -228,14 +230,14 @@ $('.additional-info').on('click', function() {
 });
 
 $(function() {
-    $("#reg_date_from").click(function(){
-        $("[name='reg_date_from'], [name='filters[date_from]']").datepicker("show");
+    $('#reg_date_from').click(function() {
+        $('[name="reg_date_from"], [name="filters[date_from]"]').datepicker('show');
     });
 
-    $("#reg_date_to").click(function(){
-        $("[name='reg_date_to'], [name='filters[date_to]']").datepicker("show");
+    $('#reg_date_to').click(function() {
+        $('[name="reg_date_to"], [name="filters[date_to]"]').datepicker('show');
     });
 });
 
-$(".nano").nanoScroller({});
+$('.nano').nanoScroller({});
 

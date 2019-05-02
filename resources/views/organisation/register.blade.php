@@ -136,7 +136,7 @@
                             <span class="error">{{ $errors->first('is_candidate') }}</span>
                         </div>
                     </div>
-                    <div class="form-group row for_org_candidates" {!! old('is_candidate') ? '' : 'style="display: none"' !!}>
+                    <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea
@@ -150,7 +150,7 @@
                             <span class="error">{{ $errors->first('description') }}</span>
                         </div>
                     </div>
-                    <div class="form-group row for_org_candidates"{!! old('is_candidate') ? '' : 'style="display: none"' !!}>
+                    <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea

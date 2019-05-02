@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-@if(!auth()->guard('backend')->check())
+@if (!auth()->guard('backend')->check())
     @include('partials.public-nav-bar')
 @else
     @include('partials.admin-nav-bar')
 @endif
 @include('components.breadcrumbs')
 <div class="row">
-	@include('components.status')
+    @include('components.status')
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
             <h3><b>{{ __('custom.online_voting_system') }}</b></h3>
@@ -19,29 +19,33 @@
         </div>
     </div>
     <div class="col-lg-5 p-l-40">
-        @if(!auth()->guard('backend')->check())
+        @if (!auth()->guard('backend')->check())
         <div>
-            <form method="POST" action="{{route('admin.login')}}">
+            <form method="POST" action="{{ route('admin.login') }}">
                 {{ csrf_field() }}
                 <div class="form-group row">
                     <h3><b>{{ __('custom.login_into_platform') }}</b></h3>
                 </div>
                 <div class="form-group row m-b-none">
-                    <label for="username" class="col-xs-12 col-form-label">{{ __('custom.user_name') }}:</label>
+                    <label for="username" class="col-xs-12">{{ __('custom.user_name') }}:</label>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                        <input type="text" class="input-box" name="username">
-                        <span class="error">{{ $errors->first('username') }}</span>
+                        <input type="text" class="input-box" name="username" value="{{old('username')}}">
+                        @if (!empty($errors) && $errors->has('username'))
+                            <span class="error">{{ $errors->first('username') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="form-group row m-b-none">
-                    <label for="password" class="col-xs-12 col-form-label">{{ __('custom.password') }}:</label>
+                    <label for="password" class="col-xs-12">{{ __('custom.password') }}:</label>
                 </div>
                 <div class="form-group row">
-                <div class="col-lg-9 p-l-none">
-                        <input type="password" class="input-box" name="password">
-                        <span class="error">{{ $errors->first('password') }}</span>
+                    <div class="col-lg-9 p-l-none">
+                        <input type="password" class="input-box" name="password" autocomplete="off">
+                        @if (!empty($errors) && $errors->has('password'))
+                            <span class="error">{{ $errors->first('password') }}</span>
+                        @endif
                     </div>
                 </div>
                 <div class="form-group row p-t-15">
@@ -62,4 +66,4 @@
         @endif
     </div>
 </div>
-
+@endsection

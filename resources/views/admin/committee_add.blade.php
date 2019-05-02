@@ -70,7 +70,7 @@
                     <div class="form-group row required">
                         <div class="col-sm-12 col-xs-6 p-r-none text-right">
                             @include('components.button', ['buttonLabel' => __('custom.send')])
-                            <a class="btn btn-primary login-btn p-t-13" href="{{ route('admin.committee.list') }}">{{ __('custom.back') }}</a>
+                            <a class="btn btn-primary login-btn" href="{{ route('admin.committee.list') }}">{{ __('custom.back') }}</a>
                         </div>
                     </div>
                 </form>

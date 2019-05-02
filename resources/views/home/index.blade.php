@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if(!auth()->check())
+@if (!auth()->check())
     @include('partials.public-nav-bar')
 @else
     @include('partials.user-nav-bar')
@@ -19,9 +19,9 @@
         </div>
     </div>
     <div class="col-lg-5 p-l-40">
-        @if(!auth()->check() && !isset($reset_password))
+        @if (!auth()->check() && !isset($reset_password))
         <div>
-            <form method="POST" action="{{route('login')}}">
+            <form method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
                 <div class="form-group row">
                     <h3><b>{{ __('custom.login_into_platform') }}</b></h3>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                        <input type="text" class="input-box" name="username" value="{{old('username')}}">
+                        <input type="text" class="input-box" name="username" value="{{ old('username') }}">
                         @if (!empty($errors) && $errors->has('username'))
                             <span class="error">{{ $errors->first('username') }}</span>
                         @endif
@@ -41,7 +41,7 @@
                     <label for="password" class="col-xs-12">{{ __('custom.password') }}:</label>
                 </div>
                 <div class="form-group row">
-                <div class="col-lg-9 p-l-none">
+                    <div class="col-lg-9 p-l-none">
                         <input type="password" class="input-box" name="password" autocomplete="off">
                         @if (!empty($errors) && $errors->has('password'))
                             <span class="error">{{ $errors->first('password') }}</span>
@@ -75,14 +75,14 @@
             @if (isset($showRegister) && $showRegister)
                 <div class="form-group row text-center p-t-15">
                     <div class="col-xs-12">
-                        <a href="mailto:{{config('mail.mailto')}}">
+                        <a href="mailto:{{ config('mail.mailto') }}">
                             <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
                         </a>
                     </div>
                 </div>
             @endif
         </div>
-        @elseif(!auth()->check())
+        @elseif (!auth()->check())
             <!-- Forgotten password form -->
             <form method="POST" action="{{ route('password.email') }}">
                 {{ csrf_field() }}
@@ -98,7 +98,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                        <input type="text" class="input-box" name="username">
+                        <input type="text" class="input-box" name="username" value="{{ old('username') }}">
                         <span class="error">{{ $errors->first('username') }}</span>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                        <input type="text" class="input-box" name="email">
+                        <input type="text" class="input-box" name="email" value="{{ old('email') }}">
                         <span class="error">{{ $errors->first('email') }}</span>
                     </div>
                 </div>
@@ -121,9 +121,8 @@
     </div>
 </div>
 
-<hr class="hr-thin">
-
 @if (!auth()->check() && isset($listData))
+    <hr class="hr-thin">
     @if (isset($isRanking) && $isRanking)
         @include('partials.public-ranking')
     @else

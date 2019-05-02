@@ -2,9 +2,11 @@
 @extends('layouts.app')
 
 @section('content')
-        @include('partials.user-nav-bar')
-        @include('components.breadcrumbs')
-        <div class="container chat chat-list">
+    @include('partials.user-nav-bar')
+    @include('components.breadcrumbs')
+
+    @if (!empty($parent))
+        <div class="container chat chat-list p-b-30">
             <div class="row">
                 <div class="col-lg-12"><h3>{{ $parent->subject }}</h3></div>
             </div>
@@ -20,14 +22,15 @@
                     'isAdmin' => false,
                 ])
             @endforeach
+
             <div class="row">
                 <div class="col-lg-12">
                     @include('components.errors')
-                    <form method="POST" action="{{ route('organisation.messages.send', ['id' => $parent->id])}}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('organisation.messages.send', ['id' => $parent->id]) }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="subject" value="{{ $parent->subject }}">
 
-                        <textarea class="txt-area p-l-10" name="new_message" rows="5" placeholder="{{__('custom.enter_text')}}"></textarea>
+                        <textarea class="txt-area p-l-10" name="new_message" rows="5" placeholder="{{ __('custom.enter_text') }}"></textarea>
 
                         @include('components.fileinput', ['title' => __('custom.applied_files'), 'name' => 'files[]'])
 
@@ -37,6 +40,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
+    @endif
 @endsection

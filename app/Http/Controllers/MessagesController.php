@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\MessageController as ApiMessages;
-use App\Message;
 
 class MessagesController extends BaseFrontendController
 {
@@ -17,10 +16,6 @@ class MessagesController extends BaseFrontendController
 
     public function view($id)
     {
-        $parent = Message::where('id', $id)->with('files')->first()->toArray();
-        $parent['files'] = array_map(function($val){ return (object)$val; }, $parent['files']);
-        $this->addBreadcrumb($parent['subject'], '');
-
         list($messages, $errors) = api_result(ApiMessages::class, 'listByParent', [
             'parent_id' => $id,
         ]);
@@ -29,18 +24,25 @@ class MessagesController extends BaseFrontendController
             return redirect()->back()->withErrors($errors);
         }
 
-        array_unshift($messages, (object) $parent); //add parent message to the begging of the array
-
-        //mark as read
-        foreach ($messages as $key => $message) {
-            if ($message->sender_org_id == null && !$message->read) {
-                list($res, $errors) = api_result(ApiMessages::class, 'markAsRead', ['message_id' => $message->id]);
+        $parent = [];
+        if (!empty($messages)) {
+            foreach ($messages as $key => $message) {
+                // set parent
+                if (empty($parent) && is_null($message->parent_id)) {
+                    $parent = $message;
+                }
+                // mark as read
+                if ($message->sender_org_id == null && !$message->read) {
+                    list($res, $errors) = api_result(ApiMessages::class, 'markAsRead', ['message_id' => $message->id]);
+                }
             }
         }
 
+        $this->addBreadcrumb(!empty($parent) ? $parent->subject : '', '');
+
         return view('organisation.request', [
             'messages' => $messages,
-            'parent'   => (object) $parent,
+            'parent'   => $parent,
         ]);
     }
 
@@ -70,18 +72,18 @@ class MessagesController extends BaseFrontendController
         if (!empty($errors)) {
             return redirect()->back()->withErrors($errors)->withInput();
         }
-        
-        if($id == null){
+
+        if ($id == null) {
             $id = isset($result) ? $result : null;
         }
 
         return redirect()->route('organisation.messages', ['id' => $id]);
     }
-    
+
     public function add()
     {
         $this->addBreadcrumb(__('custom.new_message'), '');
-        
+
         return view('organisation.new_request');
     }
 }

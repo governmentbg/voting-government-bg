@@ -23,8 +23,8 @@ class MessageController extends ApiController
     public function listByOrg(Request $request)
     {
         $orgId = $request->get('org_id');
-        $field = $request->get('order_field');
-        $order = $request->get('order_type', 'ASC');
+        $field = $request->get('order_field', 'created_at');
+        $order = $request->get('order_type', 'DESC');
         $page = $request->get('page_number');
         $request->request->add(['page' => $page]);
 
@@ -37,7 +37,14 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::where('sender_org_id', $orgId)->with('files')->sort($field, $order)->paginate();
+            $votingTour = VotingTour::getLatestTour();
+            if (empty($votingTour)) {
+                return $this->errorResponse(__('custom.voting_tour_not_found'));
+            }
+
+            $messages = Message::where(function($query) use ($orgId) {
+                            $query->where('sender_org_id', $orgId)->orWhere('recipient_org_id', $orgId);
+                        })->where('voting_tour_id', $votingTour->id)->sort($field, $order)->paginate();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -70,7 +77,14 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::where('parent_id', $parentId)->with('files')->sort($field, $order)->get();
+            $votingTour = VotingTour::getLatestTour();
+            if (empty($votingTour)) {
+                return $this->errorResponse(__('custom.voting_tour_not_found'));
+            }
+
+            $messages = Message::where(function($query) use ($parentId) {
+                            $query->where('parent_id', $parentId)->orWhere('id', $parentId);
+                        })->where('voting_tour_id', $votingTour->id)->with('files')->sort($field, $order)->get();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {

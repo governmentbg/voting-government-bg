@@ -127,9 +127,14 @@ class OrganisationController extends BaseFrontendController
         $messages = [];
         $errors = [];
 
+        if (session()->has('errors')) {
+            $errors = session()->get('errors')->messages();
+        }
+
         if (auth()->check()) {
             $orgId = auth()->user()->org_id;
             list($org, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $orgId]);
+
             if (!empty($orgErrors)) {
                 session()->flash('alert-danger', __('custom.get_org_fail'));
             } elseif (!empty($org)) {
@@ -138,14 +143,14 @@ class OrganisationController extends BaseFrontendController
                 $status = isset($statuses[$org->status]) ? $statuses[$org->status] : $org->status;
                 $isApproved = in_array($org->status, Organisation::getApprovedStatuses());
 
-                list($files, $fileErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $orgId]);
-                if (!empty($fileErrors)) {
-                    $errors['file_message'] = __('custom.list_org_files_fail');
+                list($files, $filesErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $orgId]);
+                if (!empty($filesErrors)) {
+                    $errors['files_message'] = __('custom.list_org_files_fail');
                 }
 
                 list($messages, $msgErrors) = api_result(ApiMessage::class, 'listByOrg', ['org_id' => $orgId]);
                 if (!empty($msgErrors)) {
-                    $errors['message'] = __('custom.list_msgs_fail');
+                    $errors['msg_message'] = __('custom.list_msg_fail');
                 } else {
                     $messages = !empty($messages->data) ? $this->paginate($messages) : [];
                 }
@@ -167,16 +172,21 @@ class OrganisationController extends BaseFrontendController
     {
         if (auth()->check()) {
             $id = $request->offsetGet('id');
-            list($file, $filesErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
+            list($file, $fileErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
 
             if (!empty($file) && $file->org_id == auth()->user()->org_id) {
                 if (!empty($file->data)) {
                     $file->data = base64_decode($file->data);
                     return response($file->data, 200, [
-                        'Content-Type'          => $file->mime_type,
-                        'Content-Disposition'   => 'attachment; filename="'. $file->name .'"',
+                        'Content-Type'        => $file->mime_type,
+                        'Content-Disposition' => 'attachment; filename="'. $file->name .'"',
                     ]);
                 }
+            }
+
+            if (!empty($fileErrors)) {
+                $request->session()->flash('alert-danger', __('custom.dl_file_fail'));
+                return redirect()->back()->withErrors($fileErrors);
             }
         }
 

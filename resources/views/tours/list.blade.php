@@ -61,4 +61,9 @@
         <a class="btn btn-primary" href="{{ route('admin.voting_tour.create') }}">{{ __('custom.new_voting_tour') }}</a>
     </div>
 </div>
+
+<div class="row">
+    <div class="p-b-15"></div>
+</div>
+
 @endsection

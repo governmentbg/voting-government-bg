@@ -14,56 +14,56 @@
             <div class="col-md-10">
                 {{ csrf_field() }}
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.org_name') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->name }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.eik_bulstat') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->eik }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.management_address') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.management_address') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->address }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.representative') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.representative') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->representative }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.registered_at') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.registered_at') }}:</label>
                     <div class="col-sm-4">
                         <label>{{ translate_date(date('d F Y', strtotime($organisation->created_at))) }}</label>
                         <span>{{ date('H:i', strtotime($organisation->created_at)) }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.phone_number') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.phone_number') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->phone }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.email') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.email') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->email }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.in_av') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.in_av') }}:</label>
                     <div class="col-sm-4">
                         @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->in_av])
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12"> {{ __('custom.candidate') }}:</label>
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.candidate') }}:</label>
                     <div class="col-sm-4">
                         @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->is_candidate])
                     </div>
@@ -117,7 +117,7 @@
         <div class="col-lg-6 text-right p-r-50">
         @if (empty($messages))
             <a
-                href=" {{ route('organisation.messages.add') }} "
+                href="{{ route('organisation.messages.add') }}"
                 class="btn btn-primary login-btn"
             >{{ __('custom.new_message') }}</a>
         @endif
@@ -149,9 +149,11 @@
                                         height="30px" width="30px" class="p-r-5"/>
                                     {{ $message->subject }}
                                 </td>
-                                <td class="text-center">{{ date('Y-m-d H:i:s', strtotime($message->created_at)) }}</td>
+                                <td class="text-center">{{ $message->created_at }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('organisation.messages', ['id' => $message->parent_id  ? $message->parent_id : $message->id]) }}">
+                                    <a href="{{ route('organisation.messages', [
+                                            'id' => $message->parent_id  ? $message->parent_id : $message->id
+                                        ]) . ($message->parent_id ? '#'. $message->id : '') }}">
                                         <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                     </a>
                                 </td>
@@ -171,15 +173,17 @@
         </div>
         <div class="col-lg-12 text-right">
             <a
-                href=" {{ route('organisation.messages.add') }} "
+                href="{{ route('organisation.messages.add') }}"
                 class="btn btn-primary login-btn"
             >{{ __('custom.new_message') }}</a>
         </div>
     </div>
-    @elseif (!empty($errors) && $errors->has('message'))
+    @elseif (!empty($errors) && $errors->has('msg_message'))
+    <div class="row msg-m-b">
         <div class="col-lg-12 p-l-40 alert-error">
-            <span>{{ $errors->first('message') }}</span>
+            <span>{{ $errors->first('msg_message') }}</span>
         </div>
+    </div>
     @endif
 
     <hr class="hr-thin">
@@ -201,9 +205,9 @@
                 </div>
             </div>
         @endforeach
-    @elseif (!empty($errors) && $errors->has('file_message'))
+    @elseif (!empty($errors) && $errors->has('files_message'))
         <div class="col-lg-12 p-l-40 alert-error">
-            <span>{{ $errors->first('file_message') }}</span>
+            <span>{{ $errors->first('files_message') }}</span>
         </div>
     @else
         <div class="col-lg-12 p-l-40">

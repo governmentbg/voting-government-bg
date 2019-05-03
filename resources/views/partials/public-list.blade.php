@@ -5,7 +5,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row h-600">
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
             @if (!empty($errors) && $errors->has('message'))

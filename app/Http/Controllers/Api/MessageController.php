@@ -123,7 +123,12 @@ class MessageController extends ApiController
         }
 
         try {
-            $messages = Message::search($filters, $field, $order)->paginate();
+            $votingTour = VotingTour::getLatestTour();
+            if (empty($votingTour)) {
+                return $this->errorResponse(__('custom.voting_tour_not_found'));
+            }
+
+            $messages = Message::where('voting_tour_id', $votingTour->id)->search($filters, $field, $order)->paginate();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -263,10 +268,13 @@ class MessageController extends ApiController
             return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
         }
 
-        //validate files
+        // validate files
         $files = $request->get('files', []);
         foreach ($files as $file) {
-            if (empty($file['name']) || empty($file['data']) || empty($file['mime_type'])) {
+            if (empty($file['name']) || mb_strlen($file['name']) > 255 ||
+                empty($file['data']) || mb_strlen($file['name']) > File::MAX_SIZE ||
+                empty($file['mime_type']) || !in_array($file['mime_type'], File::getSupportedFormats())
+            ) {
                 return $this->errorResponse(__('custom.validation_error'), __('custom.file_save_error'));
             }
         }

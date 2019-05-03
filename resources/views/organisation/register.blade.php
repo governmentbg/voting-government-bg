@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label for="password-confirm" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.phone_number') }}:</label>
+                        <label for="phone" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.phone_number') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <div class="form-group row required">
-                        <label for="description" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.email') }}:</label>
+                        <label for="email" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.email') }}:</label>
                         <div class="col-sm-8">
                             <input
                                 type="text"
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="password" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.in_av') }}:</label>
+                        <label for="in_av" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.in_av') }}:</label>
                         <div class="col-sm-8">
                             @include('components.checkbox', ['name' => 'in_av'])
                             <span class="error">{{ $errors->first('in_av') }}</span>
@@ -130,14 +130,14 @@
                 <div class="col-md-10">
                     <h5>{{ __('custom.committee_member_request') }}</h5>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.request_for_candidacy') }}:</label>
+                        <label for="is_candidate" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.request_for_candidacy') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             @include('components.checkbox', ['name' => 'is_candidate'])
                             <span class="error">{{ $errors->first('is_candidate') }}</span>
                         </div>
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
-                        <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
+                        <label for="description" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea
                                 class="txt-area no-outline"
@@ -151,7 +151,7 @@
                         </div>
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
-                        <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
+                        <label for="references" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             <textarea
                                 class="txt-area no-outline"

@@ -21,11 +21,10 @@
         @endif
     </div>
 </div>
-<div class="row">
-    <div class="{{isset($fullWidth) && $fullWidth ? 'col-lg-12' : 'col-lg-7'}} p-l-25">
+<div class="row h-600">
+    <div class="{{ isset($fullWidth) && $fullWidth ? 'col-lg-12' : 'col-lg-7' }} p-l-25">
         <div class="p-l-40">
-            @if (!empty($errors) && ($errors->has('message') || $errors->has('stat_message')))
-                @include('components.errors', ['errorKey' => 'stat_message'])
+            @if (!empty($errors) && ($errors->has('message')))
                 @include('components.errors')
             @elseif (empty($listData))
                 <div>{{ __('custom.no_info') }}</div>

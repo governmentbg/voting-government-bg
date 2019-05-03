@@ -72,8 +72,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         })->name('admin.settings');
 
         Route::get('/messages', 'MessagesController@list')->name('admin.messages.list');
-        Route::get('/messages/{id}', 'MessagesController@view')->name('admin.messages');
-        Route::post('/messages/{id}/send', 'MessagesController@send')->name('admin.messages.send');
+        Route::post('/messages/send/{id?}', 'MessagesController@send')->name('admin.messages.send');
+        Route::get('/messages/{id}/{orgId?}', 'MessagesController@view')->name('admin.messages');
 
         Route::get('/passwordChange', function () {
             return view('auth.password_change');
@@ -82,9 +82,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
 
         Route::get('/logout', 'AuthController@logout')->name('admin.logout');
         Route::get('/organisations', 'OrganisationController@list')->name('admin.org_list');
-        Route::post('/organisations/update/{id}', 'OrganisationController@update')->name('admin.org_edit');
+        Route::post('/organisations/update/{id}', 'OrganisationController@update')->name('admin.org_update');
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
         Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
+        Route::get('/organisations/{id}/messages/new', 'MessagesController@add')->name('admin.messages.add');
 
         // SYSTEM user routes
         Route::group(['middleware' => 'auth.system:backend'], function () {

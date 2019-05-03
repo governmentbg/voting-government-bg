@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
-use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\FileController as ApiFile;
-use App\Message;
+use App\Http\Controllers\Api\MessageController as ApiMessage;
 
 class OrganisationController extends BaseAdminController
 {
@@ -27,35 +26,28 @@ class OrganisationController extends BaseAdminController
         $is_candidate = $request->offsetGet('is_candidate');
         $reg_date_from = $request->offsetGet('reg_date_from');
         $reg_date_to = $request->offsetGet('reg_date_to');
-            
+
         $this->addBreadcrumb(__('custom.registered_orgs'), '');
 
         $allFilters = [];
-
         if (isset($status) && $status != 'all') {
             $allFilters['statuses'] = [(int) $status];
         }
-
         if (isset($eik) && $eik != '') {
             $allFilters['eik'] = $eik;
         }
-
         if (isset($email) && $email != '') {
             $allFilters['email'] = $email;
         }
-
         if (isset($name) && $name != '') {
             $allFilters['name'] = $name;
         }
-
         if (isset($is_candidate) && $is_candidate != 'all') {
             $allFilters['is_candidate'] = $is_candidate;
         }
-
         if (isset($reg_date_from)) {
             $allFilters['reg_date_from'] = $reg_date_from;
         }
-
         if (isset($reg_date_to)) {
             $allFilters['reg_date_to'] = $reg_date_to;
         }
@@ -65,18 +57,20 @@ class OrganisationController extends BaseAdminController
             'filters' => $allFilters
         ]);
 
-        list($votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
-        list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses' );
+        if (!empty($errors)) {
+            $request->session()->flash('alert-danger', __('custom.list_org_fail'));
+        } else {
+            $organisations = !empty($organisations->data) ? $this->paginate($organisations) : [];
+        }
+
+        list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
+        $statuses = !empty($statuses) ? collect($statuses)->pluck('name', 'id')->toArray() : [];
+
         list($candidateStatuses, $candidateErrors) = api_result(ApiOrganisation::class, 'listCandidateStatuses');
-
-        $statuses = collect($statuses)->pluck('name', 'id')->toArray();
-        $candidateStatuses = collect($candidateStatuses)->pluck('name', 'id')->toArray();
-
-        $paginatedData = $organisations ? $this->paginate($organisations) : [];
+        $candidateStatuses = !empty($candidateStatuses) ? collect($candidateStatuses)->pluck('name', 'id')->toArray() : [];
 
         return view('admin.org_list', [
-            'organisationList'  => $paginatedData,
-            'tourData'          => $votingTour,
+            'organisationList'  => $organisations,
             'statuses'          => $statuses,
             'candidateStatuses' => $candidateStatuses,
             'filters'           => $allFilters
@@ -85,24 +79,45 @@ class OrganisationController extends BaseAdminController
 
     public function edit(Request $request)
     {
-        $id = $request->offsetGet('id');
-        list($org_data, $errors) = api_result(ApiOrganisation::class, 'getData', [
-            'org_id' => $id
-        ]);
+        $statuses = [];
+        $files = [];
+        $messages = [];
+        $errors = [];
 
-        $this->addBreadcrumb($org_data->name);
-        list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
-        list($files, $filesErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
-        $candidateStatuses = collect($statuses)->pluck('name', 'id')->toArray();
-        
-        $messages = Message::where('recipient_org_id', $id)->orWhere('sender_org_id', $id)->get();
+        if (session()->has('errors')) {
+            $errors = session()->get('errors')->messages();
+        }
+
+        $id = $request->offsetGet('id');
+        list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+
+        if (!empty($orgErrors)) {
+            session()->flash('alert-danger', __('custom.get_org_fail'));
+        } elseif (!empty($orgData)) {
+            list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
+            $statuses = !empty($statuses) ? collect($statuses)->pluck('name', 'id')->toArray() : [];
+
+            list($files, $filesErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
+            if (!empty($filesErrors)) {
+                $errors['files_message'] = __('custom.list_org_files_fail');
+            }
+
+            list($messages, $msgErrors) = api_result(ApiMessage::class, 'listByOrg', ['org_id' => $id]);
+            if (!empty($msgErrors)) {
+                $errors['msg_message'] = __('custom.list_msg_fail');
+            } else {
+                $messages = !empty($messages->data) ? $this->paginate($messages) : [];
+            }
+        }
+
+        $this->addBreadcrumb(!empty($orgData) ? $orgData->name : '');
 
         return view('admin.org_edit', [
-            'org_data'          => $org_data,
-            'candidateStatuses' => $candidateStatuses,
-            'files'             => $files,
-            'messages'          => $messages
-        ]);
+            'orgData'  => $orgData,
+            'statuses' => $statuses,
+            'files'    => $files,
+            'messages' => $messages,
+        ])->withErrors($errors);
     }
 
     public function update(Request $request)
@@ -141,26 +156,26 @@ class OrganisationController extends BaseAdminController
             return redirect()->back();
         } else {
             $request->session()->flash('alert-danger', __('custom.edit_error'));
-            return redirect()->back()->withErrors(isset($editErrors) ? $editErrors : []);
+            return redirect()->back()->withErrors($editErrors)->withInput();
         }
     }
 
     public function downloadFile(Request $request)
     {
         $id = $request->offsetGet('id');
-        list($file, $filesErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
+        list($file, $fileErrors) = api_result(ApiFile::class, 'getData', ['file_id' => $id]);
 
-        if (!empty($file->data)) {
+        if (!empty($file) && !empty($file->data)) {
             $file->data = base64_decode($file->data);
             return response($file->data, 200, [
-                'Content-Type'          => $file->mime_type,
-                'Content-Disposition'   => 'attachment; filename="'. $file->name .'"',
+                'Content-Type'        => $file->mime_type,
+                'Content-Disposition' => 'attachment; filename="'. $file->name .'"',
             ]);
         }
 
-        if ($filesErrors) {
-            $request->session()->flash('alert-danger', __('custom.edit_error'));
-            return redirect()->back()->withErrors(isset($filesErrors) ? $filesErrors : []);
+        if (!empty($fileErrors)) {
+            $request->session()->flash('alert-danger', __('custom.dl_file_fail'));
+            return redirect()->back()->withErrors($fileErrors);
         }
 
         $request->session()->flash('alert-danger', __('custom.file_not_found'));

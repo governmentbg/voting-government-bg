@@ -2,6 +2,7 @@
     $id = uniqid();
 @endphp
 <div class="checkbox-container">
+    <input type="hidden" name="{{ isset($name) ? $name : '' }}" value="0">
     <input
         id="{{ $id }}"
         type="checkbox"

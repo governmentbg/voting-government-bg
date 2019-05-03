@@ -127,4 +127,21 @@ class Organisation extends Model
 
         return false;
     }
+
+    public function scopeCountRegistered($query, $tourId)
+    {
+        $query->where('voting_tour_id', $tourId)->whereIn('status', self::getApprovedStatuses());
+
+        return $query->count();
+    }
+
+    public function scopeCountVoted($query, $tourId, $voteStatus)
+    {
+        $query->where('voting_tour_id', $tourId)->whereIn('status', self::getApprovedStatuses())
+              ->whereHas('votes', function($query) use ($voteStatus) {
+                  $query->where('tour_status', $voteStatus);
+              });
+
+        return $query->count();
+    }
 }

@@ -184,29 +184,20 @@ class PublicController extends BaseFrontendController
                 if (!empty($listErrors)) {
                     $errors['message'] = __('custom.list_ranking_fail');
                 } elseif (!empty($listData)) {
-                    // list registered organisations
-                    $statParams = [
-                        'filters' => [
-                            'statuses' => Organisation::getApprovedStatuses()
-                        ]
+                    // count registered organisations
+                    $registered = Organisation::countRegistered($this->votingTour->id);
+
+                    // count voted organisations
+                    $voted = Organisation::countVoted($params['tour_id'], $params['status']);
+
+                    // calculate voter turnout
+                    $stats['voting'] = [
+                        'all'     => $registered,
+                        'voted'   => $voted,
+                        'percent' => 0
                     ];
-                    list($registered, $registeredErrors) = api_result(ApiOrganisation::class, 'search', $statParams);
-
-                    // list voted organisations
-                    list($voted, $votedErrors) = api_result(ApiVote::class, 'listVoters', $params);
-
-                    if (!empty($registeredErrors) || !empty($votedErrors)) {
-                        $errors['stat_message'] = __('custom.voter_turnout_fail');
-                    } else {
-                        // calculate voter turnout
-                        $stats['voting'] = [
-                            'all'     => count($registered),
-                            'voted'   => count($voted),
-                            'percent' => 0
-                        ];
-                        if ($stats['voting']['all'] > 0) {
-                            $stats['voting']['percent'] = round($stats['voting']['voted'] / $stats['voting']['all'] * 100, 2);
-                        }
+                    if ($stats['voting']['all'] > 0) {
+                        $stats['voting']['percent'] = round($stats['voting']['voted'] / $stats['voting']['all'] * 100, 2);
                     }
 
                     // calculate votes limit
@@ -241,15 +232,14 @@ class PublicController extends BaseFrontendController
                         if (!empty($listErrors)) {
                             $errors['message'] = __('custom.list_ballotage_ranking_fail');
                         } elseif (!empty($ballotageData)) {
-                            list($voted, $votedErrors) = api_result(ApiVote::class, 'listVoters', $params);
+                            // count voted organisations
+                            $voted = Organisation::countVoted($params['tour_id'], $params['status']);
 
-                            if (empty($errors['stat_message']) && !empty($votedErrors)) {
-                                $errors['stat_message'] = __('custom.voter_turnout_ballotage_fail');
-                            } elseif (!empty($stats)) {
+                            if (!empty($stats)) {
                                 // calculate ballotage voter turnout
                                 $stats['ballotage'] = [
                                     'all'     => $stats['voting']['all'],
-                                    'voted'   => count($voted),
+                                    'voted'   => $voted,
                                     'percent' => 0
                                 ];
                                 if ($stats['ballotage']['all'] > 0) {

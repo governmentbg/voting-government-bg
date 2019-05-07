@@ -7,8 +7,8 @@
     <div class="container chat chat-list">
         <div class="row">
             <div class="col-lg-12">
-                @include('components.errors')
                 @include('components.status')
+                @include('components.errors')
                 <form method="POST" action="{{ route('organisation.messages.send') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="form-group">
@@ -29,7 +29,12 @@
                         <span class="error">{{ $errors->first('body') }}</span>
                     </div>
 
-                    @include('components.fileinput', ['title' => __('custom.applied_files'), 'name' => 'files[]'])
+                    <div class="form-group">
+                        @include('components.fileinput', ['title' => __('custom.applied_files'), 'name' => 'files[]'])
+                        @if ($errors->has('reattach_files'))
+                            <span class="error">{{ $errors->first('reattach_files') }}</span>
+                        @endif
+                    </div>
 
                     <div class="float-right p-t-5">
                         @include('components.button', ['buttonLabel' => __('custom.send')])

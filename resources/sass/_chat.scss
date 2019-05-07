@@ -29,11 +29,10 @@
         padding-right: 5px;
     }
 
-    textarea[name="new_message"]{
+    textarea[name="new_message"] {
         &.add-message{
             margin-top: auto;
         }
-        margin-top: 40px;
         padding: 5px;
         outline: none;
     }

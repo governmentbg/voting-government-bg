@@ -8,8 +8,8 @@
         <div class="container chat chat-list">
             <div class="row">
                 <div class="col-lg-12">
-                    @include('components.errors')
                     @include('components.status')
+                    @include('components.errors')
                     <form method="POST" action="{{ route('admin.messages.send') }}">
                         {{ csrf_field() }}
                         <input type="hidden" class="input-box" name="recipient_org_id" value="{{ $orgData->id }}">

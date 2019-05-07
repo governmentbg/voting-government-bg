@@ -68,8 +68,18 @@ class MessagesController extends BaseFrontendController
         list($result, $errors) = api_result(ApiMessages::class, 'sendMessageFromOrg', $data, 'id');
 
         if (!empty($errors)) {
-            $errors = ['message' => is_string($errors) ? $errors : __('custom.send_msg_fail')];
-            return redirect()->back()->withErrors($errors)->withInput();
+            if (is_string($errors)) {
+                $errors = ['message' => $errors];
+            } else {
+                $errors = (array) $errors;
+                if (!isset($errors['subject']) && !isset($errors['body'])) {
+                    $errors = ['message' => __('custom.send_msg_fail')];
+                }
+            }
+            if (!empty($files)) {
+                $errors['reattach_files'] = __('custom.reattach_files');
+            }
+            return redirect()->to(back()->getTargetUrl() . (isset($id) ? '#error' : ''))->withErrors($errors)->withInput();
         }
 
         if ($id == null) {

@@ -110,8 +110,15 @@ class MessagesController extends BaseAdminController
         list($result, $errors) = api_result(ApiMessages::class, 'sendMessageToOrg', $data, 'id');
 
         if (!empty($errors)) {
-            $errors = ['message' => __('custom.send_msg_fail')];
-            return redirect()->back()->withErrors($errors)->withInput();
+            if (is_string($errors)) {
+                $errors = ['message' => $errors];
+            } else {
+                $errors = (array) $errors;
+                if (!isset($errors['body'])) {
+                    $errors = ['message' => __('custom.send_msg_fail')];
+                }
+            }
+            return redirect()->to(back()->getTargetUrl() . (isset($id) ? '#error' : ''))->withErrors($errors)->withInput();
         }
 
         if ($id == null) {

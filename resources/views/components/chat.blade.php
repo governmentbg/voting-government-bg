@@ -7,12 +7,12 @@
             </div>
             <div class="border-chat-receiver">
                 <div class="chat-container">
-                    <p class="p-t-5">{{ $message }}</p>
+                    <p class="p-t-5">{!! nl2br($message) !!}</p>
                     <span class="msg-time">
                         {{ $messageTime }}
                         @if ($read)
                             <img class="display-inline m-b-8 p-l-5" src="{{ asset('img/tick.svg') }}"
-                                title="{{ __('custom.status_read') }}: {{$read}}" height="20px" width="20px"/>
+                                title="{{ __('custom.status_read') }}: {{ $read }}" height="20px" width="20px"/>
                         @endif
                     </span>
                 </div>
@@ -38,12 +38,12 @@
             </div>
             <div class="border-chat-sender">
                 <div class="chat-container">
-                    <p class="p-t-5">{{ $message }}</p>
+                    <p class="p-t-5">{!! nl2br($message) !!}</p>
                     <span class="msg-time">
                         {{ $messageTime }}
                         @if ($read)
                          <img class="display-inline m-b-8 p-l-5" src="{{ asset('img/tick.svg') }}"
-                            title="{{ __('custom.status_read') }}: {{$read}}" height="20px" width="20px"/>
+                            title="{{ __('custom.status_read') }}: {{ $read }}" height="20px" width="20px"/>
                         @endif
                     </span>
                 </div>
@@ -51,7 +51,7 @@
             @if (!empty($files))
                 <div class="file-container">
                     <h3 class="color-black">{{__('custom.applied_files')}}</h3>
-                    @foreach($files as $file)
+                    @foreach ($files as $file)
                     <div>
                         <a href="{{ $isAdmin ? route('admin.fileDowload', ['id' => $file->id]) : route('fileDowload', ['id' => $file->id]) }}">
                             {{ $file->name }}

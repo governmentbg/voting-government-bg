@@ -139,13 +139,13 @@
                         </thead>
                         <tbody>
                             @foreach ($messages as $message)
-                            <tr class="{{ !$message->read ? 'message-not-read' : ''}}">
+                            <tr class="{{ is_null($message->sender_user_id) && !$message->read ? 'message-not-read' : ''}}">
                                 <td>
                                     <img src="{{ asset('img/arrow.svg') }}"
                                         height="30px" width="30px" class="p-r-5 {{ $message->recipient_org_id == null ? 'rotate-180' : ''}}"/>
                                 </td>
                                 <td>
-                                    <img src="{{ !$message->read ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}"
+                                    <img src="{{ is_null($message->sender_user_id) && !$message->read ? asset('img/circle-fill.svg') : asset('img/circle-no-fill.svg') }}"
                                         height="30px" width="30px" class="p-r-5"/>
                                     {{ $message->subject }}
                                 </td>

@@ -113,12 +113,91 @@
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>
                         <tr>
-                            <th class="w-30" data-field="name" data-sortable="true">{{ __('custom.organisation') }}</th>
-                            <th class="w-10" data-field="eik" data-sortable="true">{{ __('custom.eik') }}</th>
-                            <th class="w-15" data-field="status" data-sortable="true">{{ __('custom.status') }}</th>
-                            <th class="w-10" data-field="is_candidate" data-sortable="true">{{ __('custom.candidate') }}</th>
-                            <th class="w-10" data-field="registered_at" data-sortable="true">{{ __('custom.registered_at') }}</th>
-                            <th class="w-15" data-field="email" data-sortable="true">{{ __('custom.email') }}</th>
+                            <th class="w-30">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'name' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'name', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.organisation') }}<img src="{{ app('request')->sort == 'name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/>
+                                </a>
+                            </th>
+                            <th class="w-10">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'eik' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'eik', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.eik') }}<img src="{{ app('request')->sort == 'eik' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-15">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'status' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'status', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.status') }}<img src="{{ app('request')->sort == 'status' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-10">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'is_candidate' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'is_candidate', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.candidate') }}<img src="{{ app('request')->sort == 'is_candidate' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-10">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'created_at' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'created_at', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.registered_at') }}<img src="{{ app('request')->sort == 'created_at' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-15">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'email' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'email', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.email') }}<img src="{{ app('request')->sort == 'email' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
                             <th class="w-10">{{ __('custom.operations') }}</th>
                         </tr>
                     </thead>
@@ -156,7 +235,7 @@
         <div class="col-lg-12">
             <div class="display-flex justify-center">
                 @if (!empty($organisationList))
-                    {{ $organisationList->links() }}
+                    {{ $organisationList->appends(['sort' => app('request')->sort, 'order' => app('request')->order])->links() }}
                 @endif
             </div>
         </div>

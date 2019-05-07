@@ -5,7 +5,7 @@
 
 @include('components.breadcrumbs')
 
-<div class="row">
+<div class="row m-r-none m-l-none">
     @include('components.status')
     <div class="col-lg-12">
         <div class="table-wrapper">

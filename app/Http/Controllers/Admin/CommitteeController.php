@@ -18,7 +18,23 @@ class CommitteeController extends BaseAdminController
     {
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.committee'), '');
-        list($users, $errors) = api_result(ApiUsers::class, 'list');
+         // apply sort parameters
+         if ($request->has('sort')) {
+            $orderField = $request->sort;
+        } else {
+            $orderField = 'name';
+        }
+
+        if ($request->has('order')) {
+            $orderType = $request->order;
+        } else {
+            $orderType = 'asc';
+        }
+
+        list($users, $errors) = api_result(ApiUsers::class, 'list', [
+            'order_field' => $orderField,
+            'order_type'  => $orderType
+        ]);
 
         if (!empty($errors)) {
             return view('admin.committeeList')->withErrors($errors)->with('users', []);

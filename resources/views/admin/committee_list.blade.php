@@ -14,10 +14,62 @@
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>
                         <tr>
-                            <th class="w-20" data-field="username" data-sortable="true">{{ __('custom.username') }}</th>
-                            <th class="w-30" data-field="full_name" data-sortable="true">{{ __('custom.own_name') }}</th>
-                            <th class="w-25" data-field="email" data-sortable="true">{{ __('custom.email') }}</th>
-                            <th class="w-15" data-field="active" data-sortable="true">{{ __('custom.status') }}</th>
+                            <th class="w-20">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'name' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\CommitteeController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'name', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc', 'page' => app('request')->page]
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.username') }}<img src="{{ app('request')->sort == 'name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-30">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'first_name' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\CommitteeController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'first_name', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc', 'page' => app('request')->page]
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.own_name') }}<img src="{{ app('request')->sort == 'first_name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-25">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'email' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\CommitteeController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'email', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc', 'page' => app('request')->page]
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.email') }}<img src="{{ app('request')->sort == 'email' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-15">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'active' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\CommitteeController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'active', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc', 'page' => app('request')->page]
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.status') }}<img src="{{ app('request')->sort == 'active' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
                             <th class="w-10">{{ __('custom.operations') }}</th>
                         </tr>
                     </thead>
@@ -45,8 +97,8 @@
         </div>
     </div>
     <div class="col-lg-6 col-md-12">
-        @if(!empty($users))
-        {{ $users->links() }}
+        @if (!empty($users))
+            {{ $users->appends(['sort' => app('request')->sort, 'order' => app('request')->order])->links() }}
         @endif
     </div>
     <div class="col-lg-6 col-md-12 text-right">

@@ -202,7 +202,7 @@ return [
     'confirm_vote'                     => 'Потвърди гласуване',
     'your_vote_was_successful'         => 'Вашият вот беше отчетен успешно',
     'change'                           => 'Промени',
-    'no_tours_available'               => 'Към момента няма активни турове',
+    'no_tours_available'               => 'Към момента системата не позволява гласуване',
     'voter_turnout'                    => 'Избирателна активност',
     'voter_turnout_ballotage'          => 'Избирателна активност (балотаж)',
     'percent'                          => '%',

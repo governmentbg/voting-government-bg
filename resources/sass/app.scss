@@ -566,3 +566,20 @@ table.messages-list{
 .p-b-30 {
     padding-bottom: 30px;
 }
+
+.text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 240px;
+    display: inline-block;
+}
+
+.c-white {
+    color: white;
+    text-decoration: none !important;
+}
+
+.sort-active {
+    text-decoration: underline !important;
+}

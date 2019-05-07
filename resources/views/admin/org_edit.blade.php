@@ -189,7 +189,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-1">{{ __('custom.last_updated_at') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            {{ $orgData->updated_at }}
+                            {{ isset($orgData->updated_at) ? date('Y-m-d H:i:s', strtotime($orgData->updated_at)) : ''}}
                         </div>
                     </div>
                 </div>

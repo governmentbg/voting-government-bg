@@ -192,37 +192,44 @@ class VoteController extends ApiController
                     $candidateStatus = [Organisation::STATUS_BALLOTAGE];
                 }
 
-                $tourVoteData = DB::select('
-                    SELECT v.vote_data, v.vote_time, v.voter_id, v.tour_status
-                    FROM votes v
-                        INNER JOIN
-                        (SELECT voter_id, MAX(vote_time) AS voteTime
-                        FROM votes
-                        WHERE voting_tour_id = '. $post['tour_id'] .' AND tour_status = '. $post['status'] .'
-                        GROUP BY voter_id) innerv
-                    ON v.voter_id = innerv.voter_id
-                    INNER JOIN voting_tour vt ON vt.id = v.voting_tour_id
-                    WHERE vt.id = '. $post['tour_id'] .'
-                    AND v.tour_status = '. $post['status'] .'
-                    AND v.vote_time = innerv.voteTime
-                    AND v.id != '. Vote::GENESIS_RECORD .'
-                    GROUP BY v.voter_id
-                ');
-
                 $listOfCandidates = Organisation::select('id', 'eik', 'name', DB::raw('0 as votes'))
                                         ->where('voting_tour_id', $post['tour_id'])
                                         ->whereIn('status', $candidateStatus)
                                         ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
 
-                $fullResult = $listOfCandidates->keyBy('id');
+                $listOfCandidates = $listOfCandidates->keyBy('id');
 
-                foreach ($fullResult as $orgId => $orgData) {
-                    foreach ($tourVoteData as $singleVote) {
-                        $fullResult[$orgId]['votes'] += in_array($orgId, explode(',', $singleVote->vote_data)) ? 1 : 0;
+                if ($listOfCandidates->isNotEmpty()) {
+                    $tourVoteData = Vote::select('votes.vote_data', 'votes.vote_time', 'votes.voter_id', 'votes.tour_status')
+                                        ->join(DB::raw(
+                                            '(SELECT voter_id, MAX(vote_time) AS voteTime '.
+                                            'FROM votes '.
+                                            'WHERE voting_tour_id = '. $post['tour_id'] .' '.
+                                            'AND tour_status = '. $post['status'] .' '.
+                                            'GROUP BY voter_id) innerv'
+                                        ), 'votes.voter_id', '=', 'innerv.voter_id')
+                                        ->join('voting_tour', 'voting_tour.id', '=', 'votes.voting_tour_id')
+                                        ->where('voting_tour.id', $post['tour_id'])
+                                        ->where('votes.tour_status', $post['status'])
+                                        ->whereRaw('votes.vote_time = innerv.voteTime')
+                                        ->where('votes.id', '!=', Vote::GENESIS_RECORD)
+                                        ->groupBy('votes.voter_id')
+                                        ->get();
+
+                    if ($tourVoteData->isNotEmpty()) {
+                        foreach ($listOfCandidates as $orgId => $orgData) {
+                            foreach ($tourVoteData as $singleVote) {
+                                if (!empty($singleVote->organisation) &&
+                                    in_array($singleVote->organisation->status, Organisation::getApprovedStatuses())
+                                ) {
+                                    $listOfCandidates[$orgId]['votes'] += in_array($orgId, explode(',', $singleVote->vote_data)) ? 1 : 0;
+                                }
+                            }
+                        }
                     }
                 }
 
-                $fullResult = $fullResult->sort(function ($a, $b) {
+                $listOfCandidates = $listOfCandidates->sort(function ($a, $b) {
                     if ($a->votes === $b->votes) {
                         if ($a->eik === $b->eik) {
                             return 0;
@@ -232,7 +239,7 @@ class VoteController extends ApiController
                    return $a->votes > $b->votes ? -1 : 1;
                 });
 
-                return $this->successResponse($fullResult);
+                return $this->successResponse($listOfCandidates);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
                 return $this->errorResponse(__('custom.ranking_failed'), $e->getMessage());

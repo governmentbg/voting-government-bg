@@ -22,4 +22,9 @@ class Vote extends Model
     const MIN_VOTES = 1;
 
     const GENESIS_RECORD = 1;
+
+    public function organisation()
+    {
+        return $this->belongsTo('App\Organisation', 'voter_id');
+    }
 }

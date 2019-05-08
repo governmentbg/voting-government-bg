@@ -11,7 +11,7 @@
             <div class="row">
                 <h2 class="color-dark"><b>{{ __('custom.voting_title') }}</b></h2>
             </div>
-            <form method="POST" class="m-t-20" action="{{ route('organisation.vote_action') }}">
+            <form method="POST" class="m-t-20" id="js-voteform" action="{{ route('organisation.vote_action') }}">
                 @include('components.modal', [
                     'title' => __('custom.confirm_vote'),
                     'body' => '',
@@ -25,7 +25,8 @@
                         <div class="display-flex m-b-8">
                             <input type="text" name="org_name" id="filter_org" placeholder="{{__('custom.search')}}" autocomplete="off" class="search-box float-right w-100 no-outline">
                         </div>
-                        <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box" size="14">
+                        <div class="nano h-65 m-b-15">
+                        <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box nano-content" size="13">
                             @if (!empty($orgList))
                                 @foreach ($orgList as $singleOrg)
                                     @if (!empty($latestVoteData))
@@ -40,6 +41,7 @@
                                 <option disabled>{{ __('custom.org_list_not_available') }}</option>
                             @endif
                         </select>
+                        </div>
                     </div>
                     <div class="col-md-1 p-l-37 arrows-position">
                         <div>
@@ -52,8 +54,8 @@
                     <div class="col-md-4 vote-box-outline">
                         <h3 class="m-t-15">{{ __('custom.selected_participants') }} {{ __('custom.max_14') }}</h3>
                         <hr class="hr-small">
-                        <div class="m-t-45">
-                            <select name="votefor[]" multiple="multiple" id="votefor" class="vote-box" size="15">
+                        <div class="m-t-53 nano h-65 m-b-15">
+                            <select name="votefor[]" multiple="multiple" id="votefor" class="vote-box nano-content" size="13">
                                 @if (!empty($latestVoteData))
                                     @foreach ($orgList as $singleOrg)
                                         @if (in_array($singleOrg->id, $latestVoteData))

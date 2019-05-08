@@ -99,13 +99,13 @@
                                 'name' => 'reg_date_from',
                                 'value' => isset($filters['reg_date_from']) && $filters['reg_date_from'] ? $filters['reg_date_from']: ''
                             ])
-                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_from" class="m-r-10 p-t-3 m-l-p5"/>
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_from" class="m-r-10 p-t-3 m-l-p5 c-pointer"/>
                             <!-- To -->
                             @include('components.datepicker', [
                                 'name' => 'reg_date_to',
                                 'value' => isset($filters['reg_date_to']) && $filters['reg_date_to'] ? $filters['reg_date_to']: ''
                             ])
-                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_to" class="p-t-3 m-l-p5"/>
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_to" class="p-t-3 m-l-p5 c-pointer"/>
                         </div>
                     </div>
                 </div>

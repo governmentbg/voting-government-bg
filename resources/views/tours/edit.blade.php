@@ -8,12 +8,12 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-10 offset-lg-2 col-md-11 offset-md-1 col-sm-12">
-            <h2 class="color-dark"><b>{{ $votingTour->name }}</b></h2>
+            <h2 class="color-dark m-b-30"><b>{{ $votingTour->name }}</b></h2>
             <form method="POST" action="{{route('admin.voting_tour.update', ['id' => $votingTour->id])}}" class="change-tour">
                 {{ method_field('PUT') }}
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 @include('components.errors')
-                
+
                 <div class="form-group row">
                     <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
                     <div class="col-sm-8">
@@ -24,7 +24,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group row">
                     <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.updated_at') }}:</label>
                     <div class="col-sm-8">
@@ -33,14 +33,14 @@
                         </label>
                     </div>
                 </div>
-                
+
                 <div class="form-group row">
                     <label for="fname" class="col-sm-4 col-xs-12 col-form-label"> {{ __('custom.updated_by') }}:</label>
                     <div class="col-sm-8">
                         <label class="col-form-label">{{ $votingTour->updated_by_name }}</label>
                     </div>
                 </div>
-                
+
                 <div class="col-xs-12 text-center">
                     <button class="btn btn-primary" type="submit">{{ __('custom.save') }}</button>
                 </div>
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 @endsection

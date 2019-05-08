@@ -91,7 +91,7 @@
                 </div>
                 <div class="form-group row">
                     <h3><b>{{ __('custom.forgotten_password') }}</b></h3>
-                    <p>{{ __('messages.reset_password_from_info') }}</p>
+                    <p class="w-90">{{ __('messages.reset_password_from_info') }}</p>
                 </div>
                 <div class="form-group row m-b-none">
                     <label for="username" class="col-xs-12 col-form-label">{{ __('custom.user_name') }}:</label>
@@ -129,9 +129,5 @@
         @include('partials.public-list')
     @endif
 @endif
-
-<div class="row">
-    <div class="p-b-30"></div>
-</div>
 
 @endsection

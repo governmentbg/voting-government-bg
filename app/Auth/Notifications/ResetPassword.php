@@ -28,10 +28,7 @@ class ResetPassword extends ResetPasswordNotification
     {
         return (new MailMessage)
             ->subject(trans('custom.password_change'))
-            ->line(trans('messages.reset_password_email1'))
-            ->line(trans('messages.reset_password_email2'))
-            ->action(trans('custom.password_change'), url(config('app.url').route('password.reset', $this->token, false)))
-            ->markdown('emails.markdown.reset-password');
+            ->view('emails.reset_password', ['token' => $this->token]);
     }
 }
 

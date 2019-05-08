@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\VotingTour;
 
 class SendVoteInvite implements ShouldQueue
 {
@@ -15,13 +16,20 @@ class SendVoteInvite implements ShouldQueue
     private $org;
     
     /**
+     *  Voting Tour status.
+     * @var int
+     */
+    private $status;
+    
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($org)
+    public function __construct($org, $status)
     {
         $this->org = $org;
+        $this->status = $status;
     }
 
     /**
@@ -35,6 +43,10 @@ class SendVoteInvite implements ShouldQueue
         $template = 'emails.vote_invite'; 
         $to = $this->org->email;
         $subject = __('custom.vote_invite');
+        
+        if($this->status == VotingTour::STATUS_BALLOTAGE){
+            $subject .= ' - ' . __('custom.ballotage'); 
+        }
         
         sendEmail($template, ['name' => $this->org->name ], $to, $subject);
     }

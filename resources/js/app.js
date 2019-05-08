@@ -184,7 +184,7 @@ $('form.change-tour').submit(function(e) {
     let oldValue = $('form.change-tour [name="status"]').data('old-status');
     let status = $('form.change-tour [name="status"]').val();
 
-    if (status == 3 && status != oldValue) { //status - voting
+    if ((status == 3 || status == 5) && status != oldValue) { //status - voting
         let modal = $('#confirmEmailSending');
         modal.modal();
 

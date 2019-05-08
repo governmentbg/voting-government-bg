@@ -14,15 +14,21 @@ use App\Organisation;
 class SendAllVoteInvites implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    
+    /**
+     *  Current Voting tour status.
+     * @var int 
+     */
+    private $status;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($status)
     {
-        //
+        $this->status = $status;
     }
 
     /**
@@ -47,7 +53,7 @@ class SendAllVoteInvites implements ShouldQueue
         }
                
         foreach($organisations as $key => $organisation) {
-            SendVoteInvite::dispatch($organisation);
+            SendVoteInvite::dispatch($organisation, $this->status);
         }
     }    
 }

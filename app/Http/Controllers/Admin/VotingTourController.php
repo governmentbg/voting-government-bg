@@ -78,7 +78,7 @@ class VotingTourController extends BaseAdminController
         if (empty($errors)) {
             if ($oldStatus != $status && ($status == VotingTour::STATUS_VOTING || $status == VotingTour::STATUS_BALLOTAGE)) {
                 //send emails to all orgs - voting is open
-                $this->sendEmails();
+                $this->sendEmails($status);
             }
 
             session()->flash('alert-success', trans(self::UPDATE_SUCCESS));
@@ -100,9 +100,9 @@ class VotingTourController extends BaseAdminController
         return redirect()->back()->withErrors($errors)->withInput();
     }
 
-    private function sendEmails()
+    private function sendEmails($status)
     {
-        SendAllVoteInvites::dispatch();
+        SendAllVoteInvites::dispatch($status);
     }
 
     public function ranking($id)

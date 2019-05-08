@@ -570,3 +570,20 @@ table.messages-list{
 .m-t-40 {
     margin-top: 40px;
 }
+
+.text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 240px;
+    display: inline-block;
+}
+
+.c-white {
+    color: white;
+    text-decoration: none !important;
+}
+
+.sort-active {
+    text-decoration: underline !important;
+}

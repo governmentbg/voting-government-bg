@@ -71,7 +71,7 @@
                     <div class="form-group row required">
                         <label class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.last_change_time') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none p-t-10">
-                            {{ date('Y-m-d H:i:s', strtotime($user->updated_at)) }}
+                            {{ isset($user->updated_at) ? date('Y-m-d H:i:s', strtotime($user->updated_at)) : ''}}
                         </div>
                     </div>
                     <div class="form-group row required">

@@ -83,9 +83,35 @@
                 <table class="table table-striped ams-table messages-list" data-toggle="table">
                     <thead>
                         <tr>
-                            <th class="w-20" data-field="subject" data-sortable="true">{{ __('custom.subject') }}</th>
-                            <th class="w-10" data-field="org_name" data-sortable="true">{{ __('custom.from') }}</th>
-                            <th class="w-10" data-field="created_at" data-sortable="true">{{ __('custom.date') }}</th>
+                            <th class="w-20">
+                                <a
+                                    class="c-white {{ app('request')->orderBy == 'subject' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\MessagesController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['orderBy' => 'subject', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.subject') }}<img src="{{ app('request')->orderBy == 'subject' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-10">{{ __('custom.from') }}</th>
+                            <th class="w-10">
+                                <a
+                                    class="c-white {{ app('request')->orderBy == 'created_by' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\MessagesController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['orderBy' => 'created_by', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.date') }}<img src="{{ app('request')->orderBy == 'created_by' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
                             <th class="w-10">{{ __('custom.operations') }}</th>
                         </tr>
                     </thead>
@@ -110,6 +136,10 @@
                                     </td>
                                 </tr>
                             @endforeach
+                        @else
+                            <tr>
+                                <td colspan="4">{{__('custom.no_info')}}</td>
+                                        </tr>
                         @endif
                     </tbody>
                 </table>
@@ -118,7 +148,7 @@
         <div class="col-lg-12">
             <div class="display-flex justify-center">
                 @if (!empty($messages))
-                    {{ $messages->links() }}
+                    {{ $messages->appends(['orderBy' => app('request')->orderBy, 'order' => app('request')->order])->links() }}
                 @endif
             </div>
         </div>

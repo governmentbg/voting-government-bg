@@ -138,7 +138,7 @@ class MessageController extends ApiController
     }
 
     /**
-     * Mark messasge as read.
+     * Mark message as read.
      *
      * @param int $message_id - required
      *

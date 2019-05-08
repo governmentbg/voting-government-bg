@@ -5,7 +5,7 @@
 <div class="multiple-input-container">
     <div class="file-field file-input-container">
         <div class="btn-rounded waves-effect btn-sm float-left input-f">
-            <span class="back-z p-t-5 c-darkBlue">Select file</span>
+            <span class="back-z p-t-5 c-darkBlue text-overflow">Select file</span>
             <input
                 type="file"
                 title="Select File"
@@ -26,7 +26,7 @@
             />
         @endif
     </div>
-    @if(isset($multiple) && $multiple)
+    @if (isset($multiple) && $multiple)
     <div class="add-file-input">
         <img
             class="add-multiple js-plus-file-upl display-inline rotate-180 c-pointer"

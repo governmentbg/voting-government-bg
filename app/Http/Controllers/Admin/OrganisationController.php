@@ -52,9 +52,24 @@ class OrganisationController extends BaseAdminController
             $allFilters['reg_date_to'] = $reg_date_to;
         }
 
+        // apply sort parameters
+        if ($request->has('sort')) {
+            $orderField = $request->sort;
+        } else {
+            $orderField = 'name';
+        }
+
+        if ($request->has('order')) {
+            $orderType = $request->order;
+        } else {
+            $orderType = 'asc';
+        }
+
         list($organisations, $errors) = api_result(ApiOrganisation::class, 'search', [
             'with_pagination' => true,
-            'filters' => $allFilters
+            'filters'         => $allFilters,
+            'order_field'     => $orderField,
+            'order_type'      => $orderType,
         ]);
 
         if (!empty($errors)) {

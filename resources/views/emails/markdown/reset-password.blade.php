@@ -51,7 +51,7 @@
 
 @endif
 
-@slot('footer') 
+@slot('footer')
 @component('mail::footer') @endcomponent
 @endslot
 @endcomponent

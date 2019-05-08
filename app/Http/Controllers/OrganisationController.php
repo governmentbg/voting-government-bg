@@ -102,11 +102,11 @@ class OrganisationController extends BaseFrontendController
                     return redirect($this->redirectTo);
                 } else {
                     DB::rollback();
-                    $errors = !empty($result->errors) ? $result->errors : [];
+                    $errors = !empty($result->errors) ? (array) $result->errors : [];
                     session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_error'));
                 }
             } else {
-                $errors = !empty($result->errors) ? $result->errors : [];
+                $errors = !empty($result->errors) ? (array) $result->errors : [];
                 session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_org_error'));
             }
         }

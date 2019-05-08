@@ -1,6 +1,12 @@
 @php $multiple = !isset($multiple)? true : $multiple; @endphp
 
-<h3 class="color-black p-t-15">{{ isset($title) ? $title : '' }}</h3>
+@if (isset($title))
+    <h3 class="color-black p-t-15">{{ $title }}</h3>
+@endif
+
+<div class="file-info">
+    <label>{{ __('custom.files_info') }}</label>
+</div>
 
 <div class="multiple-input-container">
     <div class="file-field file-input-container">

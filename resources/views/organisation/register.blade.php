@@ -169,9 +169,6 @@
                 <div class="col-md-10">
                     <h5>{{ __('custom.applied_files') }}</h5>
                     <div class="form-group row">
-                        <label class="col-sm-12 col-xs-12 col-form-label">{{ __('custom.files_info') }}</label>
-                    </div>
-                    <div class="form-group row">
                         <div class="col-lg-12 p-r-none">
                             @include('components.fileinput', ['name' => 'files[]'])
                         </div>

@@ -5,7 +5,7 @@
         </div>
     </div>
 </div>
-<div class="row h-600">
+<div class="row">
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
             @if (!empty($errors) && $errors->has('message'))
@@ -14,16 +14,16 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-            <div class="table-wrapper nano h-600">
+            <div class="table-wrapper nano h-600 p-b-15 public-table">
                 <div class="tableFixHead nano-content">
                     <table class="table table-striped ams-table">
                         <thead>
                             <tr>
-                                <th class="w-5">{{ __('custom.number') }}</th>
-                                <th class="w-55">{{ __('custom.organisation') }}</th>
-                                <th class="w-5">{{ __('custom.candidate') }}</th>
-                                <th class="w-10">{{ __('custom.eik') }}</th>
-                                <th class="w-15">{{ __('custom.registered_at') }}</th>
+                                <th class="w-5 no-top">{{ __('custom.number') }}</th>
+                                <th class="w-55 text-left no-top">{{ __('custom.organisation') }}</th>
+                                <th class="w-5 no-top">{{ __('custom.candidate') }}</th>
+                                <th class="w-10 no-top">{{ __('custom.eik') }}</th>
+                                <th class="w-15 no-top">{{ __('custom.registered_at') }}</th>
                             </tr>
                         </thead>
                         <tbody class="text-left">
@@ -34,7 +34,7 @@
                                 <tr>
                                     <td class="text-right">{{ ++$counter }}</td>
                                     <td class="text-left">
-                                        <img src="{{ asset('img/view.svg') }}" class="additional-info" data-org-additional-id="{{ $organisation->id }}" height="20px" width="30px" class="p-r-5"/>
+                                        <img src="{{ asset('img/view.svg') }}" class="additional-info c-pointer" data-org-additional-id="{{ $organisation->id }}" height="20px" width="30px" class="p-r-5"/>
                                         {{ $organisation->name }}
                                     </td>
                                     <td class="text-center">

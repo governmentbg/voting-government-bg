@@ -13,9 +13,6 @@
     </div>
 </div>
 <div class="row m-b-15">
-    <div class="offset-lg-1 col-lg-10 col-md-12 p-r-none">
-        <hr class="hr-small w-50">
-    </div>
 </div>
 <div class="row">
     <div class="col-lg-12">
@@ -26,8 +23,16 @@
             <div class="offset-lg-3 col-lg-6 vote-box-outline">
                 @foreach ($orgList as $index => $singleOrg)
                     @if (in_array($singleOrg->id, $latestVoteData))
+                    @php  $padNumber = ''; @endphp
                         <div class="c-darkBlue p-2">
-                            <div class="display-inline f-s-21 p-r-15"><b>{{ $i }}</b></div>
+                            @php
+                                if (strlen($i) < 2 ) {
+                                    $padNumber = 'p-l-13';
+                                } else {
+                                    $padNumber = '';
+                                }
+                            @endphp
+                            <div class="display-inline f-s-21 p-r-15 {{$padNumber}}"><b>{{ $i }}</b></div>
                             <div class="display-inline p-r-15"><img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="m-b-8"/></div>
                             <div class="display-inline f-s-21 ">{{ $singleOrg->eik .' - '. $singleOrg->name }}</div>
                             @php $i++ @endphp

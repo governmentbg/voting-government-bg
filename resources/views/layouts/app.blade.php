@@ -11,13 +11,11 @@
         <link rel="stylesheet" href="{{ asset('css/datepicker.min.css') }}">
     </head>
     <body>
-        <div class="nano" >
+        <div class="container-fluid nano absolute-body">
             <div class="nano-content">
                 @yield('content')
             </div>
         </div>
-        <footer class="p-t-15">
-        </footer>
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

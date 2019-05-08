@@ -48,6 +48,11 @@ function checkVoteSize() {
     }
 }
 
+// Disable enter key submit of vote form to honor js rules
+$(document).on("keydown", "#js-voteform", function(event) {
+    return event.key != "Enter";
+});
+
 $('#filter_org').on('keyup', function() {
     var input = document.getElementById('filter_org').value.toLowerCase();
     var output = document.getElementById('vote_organisations').options;

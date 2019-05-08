@@ -186,6 +186,16 @@ $('form.change-tour').submit(function(e) {
 
     if ((status == 3 || status == 5) && status != oldValue) { //status - voting
         let modal = $('#confirmEmailSending');
+        if(status == 3){
+            $('.modal-title.voting', modal).removeClass('d-none');
+            $('.modal-title.ballotage', modal).addClass('d-none');
+        }
+        
+        if(status == 5){
+            $('.modal-title.voting', modal).addClass('d-none');
+            $('.modal-title.ballotage', modal).removeClass('d-none');
+        }
+
         modal.modal();
 
         modal.find('input[name="send_emails"]').change(function() {

@@ -52,7 +52,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ __('custom.voting') }}</h5>
+                    <h5 class="modal-title voting">{{ __('custom.voting') }}</h5>
+                    <h5 class="modal-title ballotage d-none">{{ __('custom.ballotage') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

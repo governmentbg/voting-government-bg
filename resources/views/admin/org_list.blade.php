@@ -8,6 +8,9 @@
     @include('components.status')
     <div class="col-lg-12 m-t-30">
         <form method="get" action="{{ url('/admin/organisations') }}">
+            <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
+            <input type="hidden" name="order" value="{{ request()->get('order')}}">
+            
             <div class="from-group row">
                 <div class="col-lg-3">
                     <label for="status" class="col-form-label col-lg-2">{{ __('custom.status') }}:</label>

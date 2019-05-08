@@ -9,6 +9,9 @@
         @include('components.status')
         @include('components.errors')
         <form method="get" action="{{ url('/admin/messages') }}">
+            <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
+            <input type="hidden" name="order" value="{{ request()->get('order')}}">
+            
             <div class="from-group row">
                 <div class="col-lg-3">
                     <label for="filters[status]" class="col-form-label col-lg-2">{{__('custom.status')}}:</label>

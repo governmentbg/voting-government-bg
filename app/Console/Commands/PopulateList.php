@@ -87,7 +87,7 @@ class PopulateList extends Command
     {
         try{        
             //$data = array_map('str_getcsv', file(storage_path('app/csv/predefined_list.csv')));  
-            $data = csv_to_array(storage_path('app/csv/predefined_list.csv'));
+            $data = csv_to_array(storage_path('csv/predefined_list.csv'));
             array_shift($data);  // remove column header
 
             $bar = $this->output->createProgressBar(count($data));

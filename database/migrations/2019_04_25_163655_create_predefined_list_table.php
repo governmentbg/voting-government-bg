@@ -14,7 +14,7 @@ class CreatePredefinedListTable extends Migration
     public function up()
     {
         Schema::create('predefined_list', function (Blueprint $table) {
-            $table->integer('eik')->primary();
+            $table->bigInteger('eik')->primary();
             $table->bigInteger('reg_number');
             $table->timestamp('reg_date');
             $table->string('name', 255);

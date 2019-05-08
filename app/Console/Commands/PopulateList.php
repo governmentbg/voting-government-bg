@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use App\PredefinedOrganisation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 
 class PopulateList extends Command
 {
@@ -84,11 +85,11 @@ class PopulateList extends Command
      */
     public function handle()
     {
-        try{
-            $data = array_map('str_getcsv', file(storage_path('app/csv/predefined_list.csv')), [',', '"']);       
+        try{        
+            //$data = array_map('str_getcsv', file(storage_path('app/csv/predefined_list.csv')));  
+            $data = csv_to_array(storage_path('app/csv/predefined_list.csv'));
             array_shift($data);  // remove column header
 
-            //TODO fix csv parse
             $bar = $this->output->createProgressBar(count($data));
             
             $columns = self::COlUMN_MAP;
@@ -104,12 +105,21 @@ class PopulateList extends Command
                     }
                 }
                 
-                $predefinedOrg->save();
+                try{
+                    $predefinedOrg->save();
+                }
+                catch(QueryException $e){  
+                    //TODO temporary skip errors
+                    $bar->clear();
+                    $this->error($e->getMessage());
+                    $bar->display();
+                    continue;
+                }
                 
                 $bar->advance();
             }
             DB::commit();
-            $bar->finish();
+            //$bar->finish();
         }
         catch(\Exception $e){
             DB::rollback();

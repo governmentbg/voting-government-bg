@@ -86,6 +86,16 @@ class VoteController extends BaseFrontendController
                 $latestVoteArray = explode(',', $latestVote->vote_data);
             }
 
+            list($loggedOrg, $loggedOrgErrors) = api_result(ApiOrganisation::class, 'getData', [
+                'org_id' => \Auth::user()->org_id
+            ]);
+
+            $mailResult = sendEmail('emails/vote_confirmation', ['name' => $loggedOrg->name], $loggedOrg->email, __('custom.vote_successful'));
+
+            if (!$mailResult) {
+                $request->session()->flash('alert-danger', __('custom.error_mail_confirmation'));
+            }
+
             $request->session()->flash('alert-success', __('custom.vote_success'));
 
             return view('organisation.latest_vote', [

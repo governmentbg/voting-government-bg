@@ -256,3 +256,35 @@ $(function() {
 
 $('.nano').nanoScroller({});
 
+$('input[required]').on('invalid', function() {
+    let message = $(this).attr('title');
+    if (message) {
+        this.setCustomValidity(message);
+    }
+});
+
+$('input[required]').on('input', function() {
+    this.setCustomValidity('');
+});
+
+$(function() {
+    $('#registerOrg input[name="eik"]').on('focusout', function() {
+        if ($.isNumeric(eik = $('#registerOrg input[name="eik"]').val())) {
+            $.ajax({
+                type: 'POST',
+                url: 'predefinedData',
+                data: $('#registerOrg input[name="eik"], #registerOrg input[name="_token"]').serialize(),
+                success: function(result) {
+                    result = JSON.parse(result);
+                    if (jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data)) {
+                        $('#registerOrg input[name="name"]').val(result.data.name);
+                        $('#registerOrg input[name="address"]').val(result.data.fullAddress);
+                        $('#registerOrg input[name="representative"]').val(result.data.representative);
+                        $('#registerOrg input[name="phone"]').val(result.data.phone);
+                        $('#registerOrg input[name="email"]').val(result.data.email);
+                    }
+                }
+            });
+        }
+    });
+});

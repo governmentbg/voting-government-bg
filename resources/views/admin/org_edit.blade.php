@@ -16,6 +16,15 @@
                     {{ csrf_field() }}
                     @include('components.errors')
                     <div class="form-group row">
+                        <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
+                        <div class="row w-50">
+                            <div class="col-lg-12">
+                                <input type="text" class="input-box" name="eik" value="{{ $orgData->eik }}" disabled>
+                                <span class="error">{{ $errors->first('eik') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
                         <div class="row w-50">
                             <div class="col-lg-12">
@@ -26,19 +35,9 @@
                                     value="{{ old('name', $orgData->name) }}"
                                     maxlength="255"
                                     required
-                                    oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.org_name')]) }}')"
-                                    oninput="setCustomValidity('')"
+                                    title="{{ __('custom.required_mgs', ['field' => ultrans('custom.org_name')]) }}"
                                 >
                                 <span class="error">{{ $errors->first('name') }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
-                        <div class="row w-50">
-                            <div class="col-lg-12">
-                                <input type="text" class="input-box" name="eik" value="{{ $orgData->eik }}" disabled>
-                                <span class="error">{{ $errors->first('eik') }}</span>
                             </div>
                         </div>
                     </div>
@@ -53,8 +52,7 @@
                                     value="{{ old('address', $orgData->address) }}"
                                     maxlength="512"
                                     required
-                                    oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.management_address')]) }}')"
-                                    oninput="setCustomValidity('')"
+                                    title="{{ __('custom.required_mgs', ['field' => ultrans('custom.management_address')]) }}"
                                 >
                                 <span class="error">{{ $errors->first('address') }}</span>
                             </div>
@@ -71,8 +69,7 @@
                                     value="{{ old('representative', $orgData->representative) }}"
                                     maxlength="512"
                                     required
-                                    oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}')"
-                                    oninput="setCustomValidity('')"
+                                    title="{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}"
                                 >
                                 <span class="error">{{ $errors->first('representative') }}</span>
                             </div>
@@ -98,8 +95,7 @@
                                     value="{{ old('phone', $orgData->phone) }}"
                                     maxlength="40"
                                     required
-                                    oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.phone_number')]) }}')"
-                                    oninput="setCustomValidity('')"
+                                    title="{{ __('custom.required_mgs', ['field' => ultrans('custom.phone_number')]) }}"
                                 >
                                 <span class="error">{{ $errors->first('phone') }}</span>
                             </div>
@@ -116,8 +112,7 @@
                                     value="{{ old('email', $orgData->email) }}"
                                     maxlength="255"
                                     required
-                                    oninvalid="setCustomValidity('{{ __('custom.required_mgs', ['field' => ultrans('custom.email')]) }}')"
-                                    oninput="setCustomValidity('')"
+                                    title="{{ __('custom.required_mgs', ['field' => ultrans('custom.email')]) }}"
                                 >
                                 <span class="error">{{ $errors->first('email') }}</span>
                             </div>

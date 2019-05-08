@@ -14,15 +14,15 @@
             <div class="col-md-10">
                 {{ csrf_field() }}
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
-                    <div class="col-sm-4">
-                        <span>{{ $organisation->name }}</span>
-                    </div>
-                </div>
-                <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->eik }}</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
+                    <div class="col-sm-4">
+                        <span>{{ $organisation->name }}</span>
                     </div>
                 </div>
                 <div class="form-group row">

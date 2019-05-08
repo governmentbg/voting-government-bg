@@ -13,12 +13,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="w-30">{{ __('custom.name') }}</td>
-                            <td id="additional_name"></td>
-                        </tr>
-                        <tr>
                             <td>{{ __('custom.eik') }}</td>
                             <td id="additional_eik"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-30">{{ __('custom.name') }}</td>
+                            <td id="additional_name"></td>
                         </tr>
                         <tr>
                             <td>{{ __('custom.address') }}</td>

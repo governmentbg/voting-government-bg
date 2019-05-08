@@ -11,4 +11,6 @@ class PredefinedOrganisation extends Model
     protected $guarded = [];
     
     public $timestamps = false;
+    
+    protected $primaryKey = 'eik';
 }

@@ -85,7 +85,7 @@ class PopulateList extends Command
      */
     public function handle()
     {
-        try{        
+        try{                   
             //$data = array_map('str_getcsv', file(storage_path('app/csv/predefined_list.csv')));  
             $data = csv_to_array(storage_path('csv/predefined_list.csv'));
             array_shift($data);  // remove column header
@@ -108,12 +108,31 @@ class PopulateList extends Command
                 try{
                     $predefinedOrg->save();
                 }
-                catch(QueryException $e){  
-                    //TODO temporary skip errors
-                    $bar->clear();
-                    $this->error($e->getMessage());
-                    $bar->display();
-                    continue;
+                catch(QueryException $e){
+                    //eik already exists
+                    if($e->getCode() == '23000' && $e->errorInfo[1] == 1062){
+                        if($predefinedOrg->eik != 0){
+                            //update existing record with newer
+                            $existingOrg = PredefinedOrganisation::where('eik', $predefinedOrg->eik)->first(); 
+                            if($existingOrg){
+                                foreach($columns as $index2 => $column) {
+                                    if(isset($org[$index])){
+                                        $existingOrg->{$column} = $org[$index2];
+                                    }
+                                }
+                                $existingOrg->save();   
+                            }
+                            continue;
+                        }
+                        else{
+                            //eik is empty - don't-save
+                            $bar->clear();
+                            $this->warn('Невалиден ЕИК: "' . $org[0] . '"');
+                            $bar->display();
+                            continue;
+                        }
+                    }
+                    throw $e;
                 }
                 
                 $bar->advance();

@@ -142,26 +142,30 @@
                     <div class="form-group row">
                         <label class="col-lg-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            <textarea
-                                class="txt-area no-outline p-a-5"
-                                name="description"
-                                rows="3"
-                                cols="40"
-                                maxlength="8000"
-                            >{{ old('description', $orgData->description) }}</textarea>
+                            <div class="nano h-90">
+                                <textarea
+                                    class="txt-area no-outline p-a-5 nano-content"
+                                    name="description"
+                                    rows="3"
+                                    cols="40"
+                                    maxlength="8000"
+                                >{{ old('description', $orgData->description) }}</textarea>
+                            </div>
                             <span class="error">{{ $errors->first('description') }}</span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            <textarea
-                                class="txt-area no-outline p-a-5"
-                                name="references"
-                                rows="3"
-                                cols="40"
-                                maxlength="8000"
-                            >{{ old('references', $orgData->references) }}</textarea>
+                            <div class="nano h-90">
+                                <textarea
+                                    class="txt-area no-outline p-a-5 nano-content"
+                                    name="references"
+                                    rows="3"
+                                    cols="40"
+                                    maxlength="8000"
+                                >{{ old('references', $orgData->references) }}</textarea>
+                            </div>
                             <span class="error">{{ $errors->first('references') }}</span>
                         </div>
                     </div>

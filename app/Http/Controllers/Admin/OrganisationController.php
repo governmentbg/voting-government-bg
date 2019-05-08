@@ -56,13 +56,13 @@ class OrganisationController extends BaseAdminController
         if ($request->has('sort')) {
             $orderField = $request->sort;
         } else {
-            $orderField = 'name';
+            $orderField = 'created_at';
         }
 
         if ($request->has('order')) {
             $orderType = $request->order;
         } else {
-            $orderType = 'asc';
+            $orderType = 'desc';
         }
 
         list($organisations, $errors) = api_result(ApiOrganisation::class, 'search', [

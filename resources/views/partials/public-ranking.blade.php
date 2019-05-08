@@ -30,7 +30,7 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-            <div class="table-wrapper nano h-600">
+            <div class="table-wrapper nano h-600 public-table">
                 <div class="tableFixHead nano-content">
                     <table class="table table-striped ams-table ranking">
                         <thead>
@@ -61,7 +61,7 @@
                                 <td class="text-right">{{ ++$counter }}</td>
                                 <td class="text-left">
                                     @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
-                                        <img src="{{ asset('img/view.svg') }}" class="additional-info" data-org-additional-id="{{ $organisation->id }}" height="30px" width="30px" class="p-r-5"/>
+                                        <img src="{{ asset('img/view.svg') }}" class="additional-info c-pointer" data-org-additional-id="{{ $organisation->id }}" height="30px" width="30px" class="p-r-5"/>
                                     @endif
                                     {{ $organisation->name }}
                                 </td>

@@ -14,7 +14,7 @@
                     <thead>
                         <tr>
                             <th class="w-15">{{ __('custom.status') }}</th>
-                            <th class="w-50">{{ __('custom.org_name') }}</th>
+                            <th class="w-50 text-left">{{ __('custom.org_name') }}</th>
                             <th class="w-20">{{ __('custom.end_date') }}</th>
                             <th class="w-15">{{ __('custom.operations') }}</th>
                         </tr>

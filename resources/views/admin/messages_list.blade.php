@@ -66,13 +66,13 @@
                                 'name' => 'filters[date_from]',
                                 'value' => isset($filters['date_from']) && $filters['date_from'] ? $filters['date_from']: ''
                             ])
-                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_from" class="m-r-10 p-t-3 m-l-p5"/>
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" width="30px" id="reg_date_from" class="m-r-10 p-t-3 m-l-p5 c-pointer"/>
                             <!-- To -->
                             @include('components.datepicker', [
                                 'name' => 'filters[date_to]',
                                 'value' => isset($filters['date_to']) && $filters['date_to'] ? $filters['date_to']: ''
                             ])
-                            <img src="{{ asset('img/calendar.svg') }}" height="30px" id="reg_date_to" width="30px" class="p-t-3 m-l-p5"/>
+                            <img src="{{ asset('img/calendar.svg') }}" height="30px" id="reg_date_to" width="30px" class="p-t-3 m-l-p5 c-pointer"/>
                         </div>
                     </div>
                 </div>
@@ -124,13 +124,17 @@
                                             height="30px" width="30px" class="p-r-5"/>
                                         {{ $message->subject }}
                                     </td>
-                                    <td>{{ $message->sender_org_name }}</td>
+                                    <td class="text-left">{{ $message->sender_org_name }}</td>
                                     <td>{{ $message->created_at }}</td>
                                     <td>
                                         <a href="{{ route('admin.messages', [
                                                 'id' => $message->parent_id ? $message->parent_id : $message->id,
                                                 'orgId' => null
-                                            ]) . ($message->parent_id ? '#'. $message->id : '') }}">
+                                            ]) . ($message->parent_id ? '#'. $message->id : '') }}"
+                                            title="{{ __('custom.view') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            >
                                             <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
                                         </a>
                                     </td>
@@ -139,7 +143,7 @@
                         @else
                             <tr>
                                 <td colspan="4">{{__('custom.no_info')}}</td>
-                                        </tr>
+                            </tr>
                         @endif
                     </tbody>
                 </table>

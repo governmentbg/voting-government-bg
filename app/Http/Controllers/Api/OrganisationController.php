@@ -163,7 +163,7 @@ class OrganisationController extends ApiController
     public function edit(Request $request)
     {
         $votingTour = VotingTour::getLatestTour();
-        if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRegStatuses())) {
+        if (!empty($votingTour) && !array_key_exists($votingTour->status, VotingTour::getActiveStatuses())) {
             $data = $request->get('org_data', []);
             $data['org_id'] = $request->get('org_id', null);
 

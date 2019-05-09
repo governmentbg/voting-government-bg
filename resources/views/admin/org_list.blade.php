@@ -16,7 +16,7 @@
                 <div class="col-lg-3">
                     <label for="status" class="col-form-label col-lg-2">{{ __('custom.status') }}:</label>
                     <div class="headerDropdown">
-                        <select name="status" class="col-lg-8 ams-dropdown form-control custom-select js-drop-filter p-t-3">
+                        <select name="status" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
                             <option value="all">{{ __('custom.all') }}</option>
                             @if (isset($statuses))
                                 @foreach ($statuses as $statIndex => $statusName)
@@ -47,7 +47,7 @@
                 <div class="col-lg-3">
                     <div class="form-group row headerDropdown">
                         <label for="is_candidate" class="col-form-label col-lg-3">{{ __('custom.candidate') }}:</label>
-                        <select name="is_candidate" class="col-lg-8 form-control ams-dropdown custom-select js-drop-filter p-t-3">
+                        <select name="is_candidate" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
                             <option value="all">{{ __('custom.all') }}</option>
                             @if (isset($candidateStatuses))
                                 @foreach ($candidateStatuses as $candidateIndex => $candidateStatuses)

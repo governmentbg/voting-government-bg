@@ -10,7 +10,7 @@
     -webkit-appearance: none;  /*Removes default chrome and safari style*/
     -moz-appearance: none;  /*Removes default style Firefox*/
     width: 100%;
-    background: #f8fafc;
+    background: transparent;
     text-overflow: "";
     transition: 0.2s;
 }
@@ -32,6 +32,7 @@
     top: 0px;
     width: 23px;
     height: 23px;
+    z-index: -1;
 }
 
 .headerDropdown .rotateCaret {

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Lang;
 
 class LoginController extends Controller
 {
@@ -64,5 +66,23 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return redirect()->route('home');
+    }
+    
+    /**
+     * Redirect the user after determining they are locked out.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = $this->limiter()->availableIn(
+            $this->throttleKey($request)
+        );
+
+        throw ValidationException::withMessages([
+            $this->username() => [Lang::get('auth.throttle', ['minutes' => round($seconds/60)])],
+        ])->status(423);
     }
 }

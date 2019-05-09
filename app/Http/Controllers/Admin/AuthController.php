@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Api\UserController;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Lang;
 
 class AuthController extends Controller
 {
@@ -140,5 +142,23 @@ class AuthController extends Controller
 
         session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
         return redirect($this->redirectTo);
+    }
+    
+     /**
+     * Redirect the user after determining they are locked out.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = $this->limiter()->availableIn(
+            $this->throttleKey($request)
+        );
+
+        throw ValidationException::withMessages([
+            $this->username() => [Lang::get('auth.throttle', ['minutes' => round($seconds/60)])],
+        ])->status(423);
     }
 }

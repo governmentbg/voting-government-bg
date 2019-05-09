@@ -13,20 +13,22 @@
                 <input type="hidden" name="order" value="{{ request()->get('order')}}">
             @endif
             
-            <div class="from-group row">
+            <div class="row">
                 <div class="col-lg-3">
-                    <label for="status" class="col-form-label col-lg-2">{{ __('custom.status') }}:</label>
-                    <select name="status" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
-                        <option value="all">{{ __('custom.all') }}</option>
-                        @if (isset($statuses))
-                            @foreach ($statuses as $statIndex => $statusName)
-                                <option
-                                    value="{{ $statIndex }}"
-                                    {{ isset($filters['statuses'][0]) && $filters['statuses'][0] == $statIndex ? 'selected' : '' }}
-                                >{{ $statusName }}</option>
-                            @endforeach
-                        @endif
-                    </select>
+                    <div class="row form-group">
+                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.status') }}:</label>
+                        <select name="status" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
+                            <option value="all">{{ __('custom.all') }}</option>
+                            @if (isset($statuses))
+                                @foreach ($statuses as $statIndex => $statusName)
+                                    <option
+                                        value="{{ $statIndex }}"
+                                        {{ isset($filters['statuses'][0]) && $filters['statuses'][0] == $statIndex ? 'selected' : '' }}
+                                    >{{ $statusName }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="row form-group">
@@ -44,7 +46,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group row">
-                        <label for="is_candidate" class="col-form-label col-lg-3">{{ __('custom.candidate') }}:</label>
+                        <label for="is_candidate" class="col-form-label col-lg-3" style="min-width: 85px">{{ __('custom.candidate') }}:</label>
                         <select name="is_candidate" class="col-lg-8 form-control ams-dropdown custom-select js-drop-filter p-t-3">
                             <option value="all">{{ __('custom.all') }}</option>
                             @if (isset($candidateStatuses))

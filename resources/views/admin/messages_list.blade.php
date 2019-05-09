@@ -14,8 +14,8 @@
 
             <div class="from-group row">
                 <div class="col-lg-3">
-                    <label for="filters[status]" class="col-form-label col-lg-3">{{__('custom.status')}}:</label>
-                    <div class="headerDropdown">
+                    <div class="headerDropdown row form-group">
+                        <label for="filters[status]" class="col-form-label col-lg-3">{{__('custom.status')}}:</label>
                         <select name="filters[status]" class="col-lg-8 ams-dropdown custom-select w-50 js-drop-filter p-t-3">
                             @if (isset($statuses))
                                 @foreach ($statuses as $statIndex => $statusName)

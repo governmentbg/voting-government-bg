@@ -125,7 +125,7 @@ class MessagesController extends BaseAdminController
             $id = isset($result) ? $result : null;
         }
 
-        return redirect(route('admin.messages', ['id' => $id]) . (isset($result) ? '#'. $result : ''));
+        return redirect(route('admin.messages', ['id' => $id, 'orgId' => request()->get('recipient_org_id') ]) . (isset($result) ? '#'. $result : ''));
     }
 
     public function add($id)

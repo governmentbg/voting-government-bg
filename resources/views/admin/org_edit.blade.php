@@ -167,16 +167,23 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-1">{{ __('custom.status') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
-                            <select name="status" class="ams-dropdown custom-select w-100">
-                                @if (isset($statuses))
-                                    @foreach ($statuses as $statusIndex => $status)
-                                        <option
-                                            value="{{ $statusIndex }}"
-                                            {{ $orgData->status == $statusIndex ? 'selected' : '' }}
-                                        >{{ $status }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
+                            <div class="headerDropdown">
+                                <select name="status" class="ams-dropdown custom-select w-100">
+                                    @if (isset($statuses))
+                                        @foreach ($statuses as $statusIndex => $status)
+                                            <option
+                                                value="{{ $statusIndex }}"
+                                                @if (old('status'))
+                                                    {{ old('status') == $statusIndex ? 'selected' : ''}}
+                                                @else
+                                                    {{ $orgData->status == $statusIndex ? 'selected' : ''}}
+                                                @endif
+                                            >{{ $status }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <i class="caret"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">

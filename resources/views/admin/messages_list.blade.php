@@ -11,20 +11,23 @@
         <form method="get" action="{{ url('/admin/messages') }}">
             <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
             <input type="hidden" name="order" value="{{ request()->get('order')}}">
-            
+
             <div class="from-group row">
                 <div class="col-lg-3">
                     <label for="filters[status]" class="col-form-label col-lg-2">{{__('custom.status')}}:</label>
-                    <select name="filters[status]" class="col-lg-8 ams-dropdown custom-select w-50 js-drop-filter p-t-3">
-                        @if (isset($statuses))
-                            @foreach ($statuses as $statIndex => $statusName)
-                                <option
-                                    value="{{ $statIndex }}"
-                                    {{ isset($filters['status']) && $filters['status'] == $statIndex ? 'selected' : '' }}
-                                >{{ $statusName }}</option>
-                            @endforeach
-                        @endif
-                    </select>
+                    <div class="headerDropdown">
+                        <select name="filters[status]" class="col-lg-8 ams-dropdown custom-select w-50 js-drop-filter p-t-3">
+                            @if (isset($statuses))
+                                @foreach ($statuses as $statIndex => $statusName)
+                                    <option
+                                        value="{{ $statIndex }}"
+                                        {{ isset($filters['status']) && $filters['status'] == $statIndex ? 'selected' : '' }}
+                                    >{{ $statusName }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <i class="caret"></i>
+                    </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="row form-group">

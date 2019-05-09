@@ -1,22 +1,78 @@
-select.ams-dropdown{
-    border: solid 2px;
+ .headerDropdown {
+    position: relative;
+    display: inline;
+}
+
+.headerDropdown select {
+    border: 2px solid $darkBlue !important;
     border-radius: 8px;
-    border-color: $darkBlue;
-    height: 35px;
-    width: auto;
+    padding-top: 5px;
+    -webkit-appearance: none;  /*Removes default chrome and safari style*/
+    -moz-appearance: none;  /*Removes default style Firefox*/
+    width: 100%;
+    background: transparent;
+    text-overflow: "";
+    transition: 0.2s;
+}
 
-    background: url(/img/arrow_down.svg) no-repeat right 0.5rem center/20px 22px;
+.headerDropdown select::-ms-expand {
+    display: none;
+}
 
-/*    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    background:  no-repeat scroll 0 0; */
+.headerDropdown select::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
 
-    &:focus{
-        border: solid 2px;
-        border-radius: 8px;
-        border-color: $darkBlue;
-        height: 35px;
+.headerDropdown .caret {
+    display: block;
+    background: url(/img/arrow_down.svg) no-repeat;
+    position: absolute;
+    right: 7px;
+    top: 0px;
+    width: 23px;
+    height: 23px;
+    z-index: -1;
+}
+
+.headerDropdown .rotateCaret {
+    animation-name: rotateCaret;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+    transform-origin: 50% 40%; //x y
+}
+
+.headerDropdown .rotateCaretBack {
+    animation-name: rotateCaretBack;
+    animation-duration: .5s;
+    animation-fill-mode: backwards;
+    transform-origin: 50% 40%; //x y
+}
+
+@keyframes rotateCaret {
+    0% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -ms-transform: rotate(180deg); /* IE 9 */
+        -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+        transform: rotate(180deg);
     }
 }
 
+@keyframes rotateCaretBack {
+    0% {
+        -ms-transform: rotate(180deg); /* IE 9 */
+        -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+        transform: rotate(180deg);
+    }
+
+    100% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg);
+    }
+}

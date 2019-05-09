@@ -195,7 +195,7 @@ $('form.change-tour').submit(function(e) {
             $('.modal-title.voting', modal).removeClass('d-none');
             $('.modal-title.ballotage', modal).addClass('d-none');
         }
-        
+
         if(status == 5){
             $('.modal-title.voting', modal).addClass('d-none');
             $('.modal-title.ballotage', modal).removeClass('d-none');
@@ -287,4 +287,23 @@ $(function() {
             });
         }
     });
+});
+
+var clicks = 0;
+
+$('.ams-dropdown').click(function() {
+    if (clicks == 0) {
+        $(this).parent().find('.caret').toggleClass('rotateCaret');
+    } else {
+        $(this).parent().find('.caret').toggleClass('rotateCaretBack');
+    }
+
+    ++clicks;
+});
+
+// On lost focus remove classes and counter so next entry will have correct logic
+$('.ams-dropdown').on('blur', function() {
+    $(this).parent().find('.caret').removeClass('rotateCaretBack');
+    $(this).parent().find('.caret').removeClass('rotateCaret');
+    clicks = 0;
 });

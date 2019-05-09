@@ -12,22 +12,25 @@
                 <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
                 <input type="hidden" name="order" value="{{ request()->get('order')}}">
             @endif
-            
+
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="row form-group">
+                    <div class="row form-group headerDropdown">
                         <label for="status" class="col-form-label col-lg-3">{{ __('custom.status') }}:</label>
-                        <select name="status" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
-                            <option value="all">{{ __('custom.all') }}</option>
-                            @if (isset($statuses))
-                                @foreach ($statuses as $statIndex => $statusName)
-                                    <option
-                                        value="{{ $statIndex }}"
-                                        {{ isset($filters['statuses'][0]) && $filters['statuses'][0] == $statIndex ? 'selected' : '' }}
-                                    >{{ $statusName }}</option>
-                                @endforeach
-                            @endif
-                        </select>
+
+                            <select name="status" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
+                                <option value="all">{{ __('custom.all') }}</option>
+                                @if (isset($statuses))
+                                    @foreach ($statuses as $statIndex => $statusName)
+                                        <option
+                                            value="{{ $statIndex }}"
+                                            {{ isset($filters['statuses'][0]) && $filters['statuses'][0] == $statIndex ? 'selected' : '' }}
+                                        >{{ $statusName }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
+
                     </div>
                 </div>
                 <div class="col-lg-5">
@@ -45,9 +48,9 @@
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <div class="form-group row">
+                    <div class="form-group row headerDropdown">
                         <label for="is_candidate" class="col-form-label col-lg-3" style="min-width: 85px">{{ __('custom.candidate') }}:</label>
-                        <select name="is_candidate" class="col-lg-8 form-control ams-dropdown custom-select js-drop-filter p-t-3">
+                        <select name="is_candidate" class="col-lg-8 ams-dropdown custom-select js-drop-filter p-t-3">
                             <option value="all">{{ __('custom.all') }}</option>
                             @if (isset($candidateStatuses))
                                 @foreach ($candidateStatuses as $candidateIndex => $candidateStatuses)
@@ -58,6 +61,7 @@
                                 @endforeach
                             @endif
                         </select>
+                        <i class="caret"></i>
                     </div>
                 </div>
             </div>
@@ -234,6 +238,10 @@
                                     </td>
                                 </tr>
                             @endforeach
+                        @else
+                            <tr>
+                                <td colspan="7" class="text-center">{{__('custom.no_info')}}</td>
+                            </tr>
                         @endif
                     </tbody>
                 </table>

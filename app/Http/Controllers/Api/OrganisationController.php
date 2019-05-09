@@ -186,7 +186,7 @@ class OrganisationController extends ApiController
                 try {
                     DB::beginTransaction();
 
-                    $organisation = Organisation::findOrFail($data['org_id']);
+                    $organisation = Organisation::where('id', $data['org_id'])->where('voting_tour_id', $votingTour->id)->first();
 
                     if ($organisation) {
                         $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
@@ -241,6 +241,8 @@ class OrganisationController extends ApiController
                         DB::commit();
 
                         return $this->successResponse();
+                    } else {
+                        return $this->errorResponse(__('custom.org_not_found'));
                     }
                 } catch (\Exception $e) {
                     DB::rollback();

@@ -27,15 +27,18 @@
                             <span class="error">{{ $errors->first('name') }}</span>
                         </div>
                     </div>
-                    
+
                     <div class="form-group row required">
                         <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
                         <div class="col-sm-8">
-                            <select name="status" class="ams-dropdown custom-select">
-                                @foreach(\App\VotingTour::getStatuses() as $key => $status)
-                                <option value="{{$key}}" {{ old('status') == $key ? 'selected' : ''}}>{{$status}}</option>
-                                @endforeach
-                            </select>
+                            <div class="headerDropdown">
+                                <select name="status" class="ams-dropdown custom-select">
+                                    @foreach(\App\VotingTour::getStatuses() as $key => $status)
+                                    <option value="{{$key}}" {{ old('status') == $key ? 'selected' : ''}}>{{$status}}</option>
+                                    @endforeach
+                                </select>
+                                <i class="caret"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -43,7 +46,7 @@
                     <div class="form-group mt-4">
                     @include('components.button', ['buttonLabel' => __('custom.new_voting_tour')])
                     </div>
-                </div>                            
+                </div>
                 </form>
             </div>
         </div>

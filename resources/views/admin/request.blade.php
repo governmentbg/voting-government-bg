@@ -32,6 +32,7 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="subject" value="{{ $parent->subject }}">
                         <input type="hidden" name="recipient_org_id" value="{{ !is_null($parent->sender_org_id) ? $parent->sender_org_id : $parent-> recipient_org_id }}">
+                        <input type="hidden" name="orgId" value="{{ isset($orgId) ? $orgId : null }}">
 
                         <div class="form-group p-b-none m-t-40">
                             <a name="error"></a>

@@ -24,7 +24,8 @@
                     href="{{ route('admin.messages.list') }}"
                     class="f-s-21 color-black text-decoration-none {{ in_array(Route::currentRouteName(), [
                         'admin.messages.list',
-                        'admin.messages'
+                        'admin.messages',
+                        'admin.messages.add'
                     ]) ? 'c-darkBlue' : 'color-black' }}"
                 >{{ __('breadcrumbs.message_list') }}</a>
             </div>

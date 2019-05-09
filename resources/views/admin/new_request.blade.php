@@ -13,6 +13,7 @@
                     <form method="POST" action="{{ route('admin.messages.send') }}">
                         {{ csrf_field() }}
                         <input type="hidden" class="input-box" name="recipient_org_id" value="{{ $orgData->id }}">
+                        <input type="hidden" class="input-box" name="orgId" value="{{ $orgData->id }}">
 
                         <div class="form-group">
                             <p class="col-form-label inline-block">{{ __('custom.subject') }}:</p><br>

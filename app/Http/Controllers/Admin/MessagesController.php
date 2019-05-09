@@ -96,12 +96,15 @@ class MessagesController extends BaseAdminController
         return view('admin.request', [
             'messages' => $messages,
             'parent'   => $parent,
+            'orgId'    => $orgId,
         ]);
     }
 
     public function send(Request $request, $id = null)
     {
-        $data = $request->all();
+        $orgId = $request->get('orgId', null);
+
+        $data = $request->except(['orgId']);
 
         $data['parent_id'] = $id;
         $data['body'] = $data['new_message'];
@@ -125,7 +128,7 @@ class MessagesController extends BaseAdminController
             $id = isset($result) ? $result : null;
         }
 
-        return redirect(route('admin.messages', ['id' => $id, 'orgId' => request()->get('recipient_org_id') ]) . (isset($result) ? '#'. $result : ''));
+        return redirect(route('admin.messages', ['id' => $id, 'orgId' => $orgId]) . (isset($result) ? '#'. $result : ''));
     }
 
     public function add($id)

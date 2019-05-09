@@ -8,8 +8,10 @@
     @include('components.status')
     <div class="col-lg-12 m-t-30">
         <form method="get" action="{{ url('/admin/organisations') }}">
-            <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
-            <input type="hidden" name="order" value="{{ request()->get('order')}}">
+            @if(request()->has('sort') && request()->has('order'))
+                <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
+                <input type="hidden" name="order" value="{{ request()->get('order')}}">
+            @endif
             
             <div class="from-group row">
                 <div class="col-lg-3">

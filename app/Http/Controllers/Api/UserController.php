@@ -38,9 +38,16 @@ class UserController extends ApiController
             $password = hash_hmac('sha256', str_random(40), config('app.key'));
             $user = User::where('username', $username)->where('email', $email)->first();
             if (!$user) {
-                $user = User::where('username', $username)->whereHas('organisation', function ($query) use ($email) {
-                    $query->where('email', $email);
-                })->first();
+                $votingTour = VotingTour::getLatestTour();
+
+                if($votingTour){
+                    $user = User::where('username', $username)->where('voting_tour_id', $votingTour->id)->whereHas('organisation', function ($query) use ($email) {
+                        $query->where('email', $email);
+                    })->first();
+                }
+                else{
+                    $user = null;
+                }
             }
 
             if ($user) {

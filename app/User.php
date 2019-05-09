@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function organisation()
     {
-        return $this->hasOne('App\Organisation', ['id', 'voting_tour_id'], ['org_id', 'voting_tour_id']);
+        return $this->belongsTo('App\Organisation', 'org_id');
     }
 
     public function scopeSort($query, $field, $order)

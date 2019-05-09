@@ -138,7 +138,7 @@ class PopulateList extends Command
                 $bar->advance();
             }
             DB::commit();
-            //$bar->finish();
+            $bar->finish();
         }
         catch(\Exception $e){
             DB::rollback();

@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -40,9 +42,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function render($request, Exception $exception)
     {
@@ -52,6 +54,13 @@ class Handler extends ExceptionHandler
 //        
         if ($exception instanceof AuthorizationException) {
             return response()->view('errors.403', [], 403);
+        }
+        
+        if ($exception instanceof TokenMismatchException) {
+            return redirect()
+                ->back()
+                ->withInput($request->except('password', 'password_confirmation', '_token'))
+                ->with(['error' => __('messages.crfs_expired')]);
         }
 //        
 //        if ($exception instanceof \ErrorException && !\App::environment('local')) {

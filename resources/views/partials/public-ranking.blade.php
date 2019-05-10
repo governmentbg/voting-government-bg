@@ -61,7 +61,17 @@
                                 <td class="text-right">{{ ++$counter }}</td>
                                 <td class="text-left">
                                     @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
-                                        <img src="{{ asset('img/view.svg') }}" class="additional-info c-pointer" data-org-additional-id="{{ $organisation->id }}" height="30px" width="30px" class="p-r-5"/>
+                                        <img
+                                            src="{{ asset('img/view.svg') }}"
+                                            class="additional-info c-pointer"
+                                            data-org-additional-id="{{ $organisation->id }}"
+                                            height="30px"
+                                            width="30px"
+                                            class="p-r-5"
+                                            title="{{ __('custom.view') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                        />
                                     @endif
                                     {{ $organisation->name }}
                                 </td>

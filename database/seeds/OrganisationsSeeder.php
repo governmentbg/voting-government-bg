@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class OrganisationsSeeder extends Seeder
 {
-    const ORGANISATION_RECORDS = 100;
+    const ORGANISATION_RECORDS = 13000;
 
     /**
      * Run the database seeds.

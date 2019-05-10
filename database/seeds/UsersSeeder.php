@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    const USER_RECORDS = 20;
+    const USER_RECORDS = 50;
 
     /**
      * Run the database seeds.

@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class VotingToursSeeder extends Seeder
 {
-    const TOUR_RECORDS = 100;
+    const TOUR_RECORDS = 1;
 
     /**
      * Run the database seeds.

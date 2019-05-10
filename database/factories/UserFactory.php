@@ -32,7 +32,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'active' => 1,
-        'username' => $faker->name,
+        'username' => $faker->unique()->name,
         'voting_tour_id' => $tourId,
         'org_id' => $orgId,
     ];

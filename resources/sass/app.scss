@@ -283,6 +283,7 @@ input[type='file'] {
 
 .front-z {
     z-index: 100;
+    width: 270px;
 }
 
 .back-z {
@@ -625,4 +626,8 @@ div.public-table div.nano-pane {
 
 .absolute-body {
     position: absolute;
+}
+
+.tooltip {
+    pointer-events: none;
 }

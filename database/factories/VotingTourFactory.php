@@ -8,7 +8,7 @@ $factory->define(App\VotingTour::class, function (Faker $faker) {
     $userId = $userIds->isNotEmpty() ? $this->faker->randomElement($userIds)['id'] : factory(User::class)->create()->id;
     return [
         'name' => $faker->name,
-        'status' => 6,
+        'status' => 3,
         'created_by' => $userId
     ];
 });

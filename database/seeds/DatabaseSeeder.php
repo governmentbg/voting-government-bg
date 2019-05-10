@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
             SystemUserSeeder::class,
             VotingToursSeeder::class,
             OrganisationsSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            VotesSeeder::class
         ]);
     }
 }

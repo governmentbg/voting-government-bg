@@ -158,7 +158,15 @@
                                     <a href="{{ route('organisation.messages', [
                                             'id' => $message->parent_id  ? $message->parent_id : $message->id
                                         ]) . ($message->parent_id ? '#'. $message->id : '') }}">
-                                        <img src="{{ asset('img/view.svg') }}" height="30px" width="30px" class="p-r-5"/>
+                                        <img
+                                            src="{{ asset('img/view.svg') }}"
+                                            title="{{ __('custom.view') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            height="30px"
+                                            width="30px"
+                                            class="p-r-5"
+                                        />
                                     </a>
                                 </td>
                             </tr>

@@ -61,8 +61,17 @@ class OrganisationController extends ApiController
             ]);
 
             $validator->after(function ($validator) use ($data) {
-                if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE && empty($data['description'])) {
-                    $validator->errors()->add('description', __('custom.org_descr_required'));
+                if ($data['description'] == '') {
+                    if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                        $validator->errors()->add('description', __('custom.org_descr_required'));
+                    }
+                } else {
+                    if (!$validator->errors()->has('description')) {
+                        $words = preg_split( '|\s+|s', $data['description']);
+                        if (($words = count($words)) > 500) {
+                            $validator->errors()->add('description', __('custom.org_descr_words_exceeded', ['words' => $words]));
+                        }
+                    }
                 }
                 if (!$validator->errors()->has('files')) {
                     if (!(isset($data['in_av']) && $data['in_av'] == Organisation::IN_AV_TRUE) && empty($data['files'])) {
@@ -182,6 +191,15 @@ class OrganisationController extends ApiController
                 'status_hint'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
             ]);
 
+            $validator->after(function ($validator) use ($data) {
+                if ($data['description'] != '' && !$validator->errors()->has('description')) {
+                    $words = preg_split( '|\s+|s', $data['description']);
+                    if (($words = count($words)) > 5) {
+                        $validator->errors()->add('description', __('custom.org_descr_words_exceeded', ['words' => $words]));
+                    }
+                }
+            });
+
             if (!$validator->fails()) {
                 try {
                     DB::beginTransaction();
@@ -190,25 +208,25 @@ class OrganisationController extends ApiController
 
                     if ($organisation) {
                         $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
-                        $description = (isset($data['description']) ? $data['description'] : $organisation->description);
-                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE && empty($description)) {
+                        $description = (array_key_exists('description', $data) ? trim($data['description']) : $organisation->description);
+                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE && $description == '') {
                             return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
                         }
 
                         $orgData = [];
-                        if (!empty($data['name'])) {
+                        if (isset($data['name']) && $data['name'] != '') {
                             $orgData['name'] = $data['name'];
                         }
-                        if (!empty($data['address'])) {
+                        if (isset($data['address']) && $data['address'] != '') {
                             $orgData['address'] = $data['address'];
                         }
-                        if (!empty($data['representative'])) {
+                        if (isset($data['representative']) && $data['representative'] != '') {
                             $orgData['representative'] = $data['representative'];
                         }
-                        if (!empty($data['email'])) {
+                        if (isset($data['email']) && $data['email'] != '') {
                             $orgData['email'] = $data['email'];
                         }
-                        if (!empty($data['phone'])) {
+                        if (isset($data['phone']) && $data['phone'] != '') {
                             $orgData['phone'] = $data['phone'];
                         }
                         if (isset($data['in_av'])) {
@@ -217,10 +235,10 @@ class OrganisationController extends ApiController
                         if (isset($data['is_candidate'])) {
                             $orgData['is_candidate'] = $data['is_candidate'];
                         }
-                        if (isset($data['description'])) {
+                        if (array_key_exists('description', $data)) {
                             $orgData['description'] = $data['description'];
                         }
-                        if (isset($data['references'])) {
+                        if (array_key_exists('references', $data)) {
                             $orgData['references'] = $data['references'];
                         }
                         if (isset($data['status'])) {

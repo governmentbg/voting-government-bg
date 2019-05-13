@@ -138,15 +138,15 @@ class OrganisationController extends BaseAdminController
     public function update(Request $request)
     {
         $id = $request->offsetGet('id');
-        $name = $request->offsetGet('name') ? $request->offsetGet('name') : '';
-        $address = $request->offsetGet('address') ? $request->offsetGet('address') : '';
-        $representative = $request->offsetGet('representative') ? $request->offsetGet('representative') : '';
-        $phone = $request->offsetGet('phone') ? $request->offsetGet('phone') : '';
-        $email = $request->offsetGet('email') ? $request->offsetGet('email') : '';
+        $name = $request->get('name', '');
+        $address = $request->get('address', '');
+        $representative = $request->get('representative', '');
+        $phone = $request->get('phone', '');
+        $email = $request->get('email', '');
         $in_av = $request->offsetGet('in_av') ? $request->offsetGet('in_av') : false;
         $is_candidate = $request->offsetGet('is_candidate') ? $request->offsetGet('is_candidate') : false;
-        $references = $request->offsetGet('references') ? $request->offsetGet('references') : '';
-        $description = $request->offsetGet('description') ? $request->offsetGet('description') : '';
+        $description = $request->get('description', '');
+        $references = $request->get('references', '');
         $status = $request->offsetGet('status');
 
         list($edit, $editErrors) = api_result(ApiOrganisation::class, 'edit', [

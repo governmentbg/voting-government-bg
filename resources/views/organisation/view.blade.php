@@ -77,7 +77,7 @@
                     <div class="col-sm-8 col-xs-6 p-r-none">
                         <div class="nano h-90">
                             <textarea
-                                class="txt-area no-outline p-l-10 nano-content"
+                                class="txt-area no-outline p-a-5 nano-content"
                                 name=""
                                 rows="3"
                                 cols="40"
@@ -91,7 +91,7 @@
                     <div class="col-sm-8 col-xs-6 p-r-none">
                         <div class="nano h-90">
                             <textarea
-                                class="txt-area no-outline p-l-10 nano-content"
+                                class="txt-area no-outline p-a-5 nano-content"
                                 name=""
                                 rows="3"
                                 cols="40"

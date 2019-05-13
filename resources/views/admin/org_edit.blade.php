@@ -17,7 +17,7 @@
                     @include('components.errors')
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input type="text" class="input-box" name="eik" value="{{ $orgData->eik }}" disabled>
                                 <span class="error">{{ $errors->first('eik') }}</span>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.management_address') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.representative') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -77,7 +77,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.registered_at') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input type="text" class="input-box" name="created_at" value="{{ $orgData->created_at }}" disabled>
                                 <span class="error">{{ $errors->first('created_at') }}</span>
@@ -86,7 +86,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.phone_number') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -103,7 +103,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.email') }}:</label>
-                        <div class="row w-50">
+                        <div class="row w-70">
                             <div class="col-lg-12">
                                 <input
                                     type="text"

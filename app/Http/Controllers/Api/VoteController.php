@@ -208,8 +208,9 @@ class VoteController extends ApiController
                                             'AND tour_status = '. $post['status'] .' '.
                                             'GROUP BY voter_id) innerv'
                                         ), 'votes.voter_id', '=', 'innerv.voter_id')
-                                        ->join('voting_tour', 'voting_tour.id', '=', 'votes.voting_tour_id')
-                                        ->where('voting_tour.id', $post['tour_id'])
+                                        ->join('organisations', 'organisations.id', '=', 'votes.voter_id')
+                                        ->whereIn('organisations.status', Organisation::getApprovedStatuses())
+                                        ->where('votes.voting_tour_id', $post['tour_id'])
                                         ->where('votes.tour_status', $post['status'])
                                         ->whereRaw('votes.vote_time = innerv.voteTime')
                                         ->where('votes.id', '!=', Vote::GENESIS_RECORD)
@@ -219,11 +220,7 @@ class VoteController extends ApiController
                     if ($tourVoteData->isNotEmpty()) {
                         foreach ($listOfCandidates as $orgId => $orgData) {
                             foreach ($tourVoteData as $singleVote) {
-                                if (!empty($singleVote->organisation) &&
-                                    in_array($singleVote->organisation->status, Organisation::getApprovedStatuses())
-                                ) {
-                                    $listOfCandidates[$orgId]['votes'] += in_array($orgId, explode(',', $singleVote->vote_data)) ? 1 : 0;
-                                }
+                                $listOfCandidates[$orgId]['votes'] += in_array($orgId, explode(',', $singleVote->vote_data)) ? 1 : 0;
                             }
                         }
                     }

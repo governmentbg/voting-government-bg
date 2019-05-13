@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\VoteController as ApiVote;
 use App\VotingTour;
 use App\Organisation;
 use App\Vote;
+use Illuminate\Http\Request;
 
 class PublicController extends BaseFrontendController
 {
@@ -61,22 +62,26 @@ class PublicController extends BaseFrontendController
             $params = [
                 'filters' => [
                     'statuses' => Organisation::getApprovedStatuses()
-                ]
+                ],
+                'with_pagination' => true
             ];
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_reg_org_fail');
+            } else {
+                $listData = !empty($listData->data) ? $this->paginate($listData) : [];
             }
         } else {
             return redirect('/');
         }
 
         return view('home.index', [
-            'showLinks' => $showLinks,
-            'listTitle' => __('custom.registered'),
-            'listData'  => $listData,
-            'route'     => 'list.registered',
+            'showLinks'  => $showLinks,
+            'listTitle'  => __('custom.registered'),
+            'listData'   => $listData,
+            'route'      => 'list.registered',
+            'ajaxMethod' => 'registeredAjax'
         ])->withErrors($errors);
     }
 
@@ -101,22 +106,26 @@ class PublicController extends BaseFrontendController
             $params = [
                 'filters' => [
                     'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE]
-                ]
+                ],
+                'with_pagination' => true
             ];
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_candidates_fail');
+            } else {
+                $listData = !empty($listData->data) ? $this->paginate($listData) : [];
             }
         } else {
             return redirect('/');
         }
 
         return view('home.index', [
-            'showLinks' => $showLinks,
-            'listTitle' => __('custom.candidates'),
-            'listData'  => $listData,
-            'route'     => 'list.candidates',
+            'showLinks'  => $showLinks,
+            'listTitle'  => __('custom.candidates'),
+            'listData'   => $listData,
+            'route'      => 'list.candidates',
+            'ajaxMethod' => 'candidatesAjax'
         ])->withErrors($errors);
     }
 
@@ -140,16 +149,19 @@ class PublicController extends BaseFrontendController
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_voted_org_fail');
+            } else {
+                $listData = !empty($listData->data) ? $this->paginate($listData) : [];
             }
         } else {
             return redirect('/');
         }
 
         return view('home.index', [
-            'showLinks' => $showLinks,
-            'listTitle' => __('custom.voted'),
-            'listData'  => $listData,
-            'route'     => 'list.voted',
+            'showLinks'  => $showLinks,
+            'listTitle'  => __('custom.voted'),
+            'listData'   => $listData,
+            'route'      => 'list.voted',
+            'ajaxMethod' => 'votedAjax'
         ])->withErrors($errors);
     }
 
@@ -293,5 +305,52 @@ class PublicController extends BaseFrontendController
             'showBallotage' => $showBallotage,
             'stats'         => $stats,
         ])->withErrors($errors);
+    }
+
+    public function listRegisteredAjax(Request $request)
+    {
+        $params = [
+            'filters' => [
+                'statuses' => Organisation::getApprovedStatuses()
+            ],
+            'with_pagination' => true
+        ];
+
+        list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+
+        if (empty($listErrors)) {
+            $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+        }
+
+        return json_encode($listData);
+    }
+
+    public function listCandidatesAjax(Request $request)
+    {
+        $params = [
+            'filters' => [
+                'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE]
+            ],
+            'with_pagination' => true
+        ];
+
+        list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+
+        if (empty($listErrors)) {
+            $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+        }
+
+        return json_encode($listData);
+    }
+
+    public function listVotedAjax(Request $request)
+    {
+        list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
+
+        if (empty($listErrors)) {
+            $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+        }
+
+        return json_encode($listData);
     }
 }

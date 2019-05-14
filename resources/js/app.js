@@ -311,44 +311,22 @@ $('.ams-dropdown').on('blur', function() {
 var initialPage = 2;
 
 $('.js-org-table').on('scroll', function() {
+
     if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
         $.ajax({
             type: 'GET',
             url: $('.js-orgs').data('ajax-url'),
             data: {
-                "page" : initialPage
+                "page" : initialPage,
+                "consecNum" : lastEntryNumber
             },
             success: function(result) {
-                result = JSON.parse(result);
+                $('.js-orgs').append(
+                    result
+                );
 
-                if (jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data)) {
-                    var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
-
-                    $.each(result.data, function(index, value) {
-                        lastEntryNumber += 1;
-                        var candidateSvg = value.is_candidate == 1 ? '<img src="/img/tick.svg" height="20px" width="30px"/>' : '';
-                        $('.js-orgs').append(
-                            '<tr>'+
-                                '<td class="text-right">'+ lastEntryNumber +'</td>' +
-                                '<td class="text-left"><img '+
-                                'src="/img/view.svg" '+
-                                'class="additional-info c-pointer p-r-5" ' +
-                                'data-org-additional-id="'+value.id+'" ' +
-                                'height="20px" ' +
-                                'width="30px" ' +
-                                'title="Преглед" ' +
-                                'data-toggle="tooltip" ' +
-                                'data-placement="top" ' +
-                            '/>'+value.name+'</td>'+
-                                '<td class="text-center">'+ candidateSvg +'</td>'+
-                                '<td>'+value.eik+'</td>'+
-                                '<td class="text-center">'+value.created_at.substring(0, 10)+'</td>'+
-                            '</tr>'
-                        );
-                    })
-
-                    initialPage += 1;
-                }
+                initialPage += 1;
             }
         });
     }

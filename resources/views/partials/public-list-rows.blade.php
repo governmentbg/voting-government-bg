@@ -6,7 +6,7 @@
             <img
                 src="{{ asset('img/view.svg') }}"
                 class="additional-info c-pointer p-r-5"
-                data-org-additional-id="value.id"
+                data-org-additional-id="{{$singleOrg->id}}"
                 height="20px"
                 width="30px"
                 title="Преглед"

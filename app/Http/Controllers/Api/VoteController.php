@@ -218,9 +218,12 @@ class VoteController extends ApiController
                                         ->get();
 
                     if ($tourVoteData->isNotEmpty()) {
-                        foreach ($listOfCandidates as $orgId => $orgData) {
-                            foreach ($tourVoteData as $singleVote) {
-                                $listOfCandidates[$orgId]['votes'] += in_array($orgId, explode(',', $singleVote->vote_data)) ? 1 : 0;
+                        foreach ($tourVoteData as $singleVote) {
+                            $votes = explode(',', $singleVote->vote_data);
+                            foreach($votes as $orgId) {
+                                if(isset($listOfCandidates[$orgId])){
+                                    $listOfCandidates[$orgId]->votes += 1;
+                                }
                             }
                         }
                     }

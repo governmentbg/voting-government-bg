@@ -328,7 +328,7 @@ class VoteController extends ApiController
                               ->whereHas('votes', function($query) use ($voteStatus) {
                                   $query->where('tour_status', $voteStatus);
                               })
-                              ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
+                              ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->paginate();
 
                 return $this->successResponse($voters);
             } catch (\Exception $e) {

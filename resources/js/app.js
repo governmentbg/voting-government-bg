@@ -219,7 +219,7 @@ $('#confirmEmailSending .confirm').click(function() {
     $('form.change-tour').unbind('submit').submit();
 });
 
-$('.additional-info').on('click', function() {
+$(document).on('click', '.additional-info', function() {
     $(this).closest('tr').siblings('tr').css('font-weight', 'normal');
     $(this).closest('tr').css('font-weight', 'bold');
 
@@ -254,7 +254,7 @@ $(function() {
     });
 });
 
-$('.nano').nanoScroller({});
+$('.nano').nanoScroller({ sliderMaxHeight: 100});
 
 $('input[required]').on('invalid', function() {
     let message = $(this).attr('title');
@@ -306,4 +306,28 @@ $('.ams-dropdown').on('blur', function() {
     $(this).parent().find('.caret').removeClass('rotateCaretBack');
     $(this).parent().find('.caret').removeClass('rotateCaret');
     clicks = 0;
+});
+
+var initialPage = 2;
+
+$('.js-org-table').on('scroll', function() {
+
+    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
+        $.ajax({
+            type: 'GET',
+            url: $('.js-orgs').data('ajax-url'),
+            data: {
+                "page" : initialPage,
+                "consecNum" : lastEntryNumber
+            },
+            success: function(result) {
+                $('.js-orgs').append(
+                    result
+                );
+
+                initialPage += 1;
+            }
+        });
+    }
 });

@@ -15,8 +15,8 @@
             @endif
             @if (!empty($listData))
             <div class="table-wrapper nano h-600 public-table">
-                <div class="tableFixHead nano-content">
-                    <table class="table table-striped ams-table">
+                <div class="tableFixHead nano-content js-org-table">
+                    <table class="table table-striped ams-table js-orgs" data-ajax-url="{{isset($ajaxMethod) ? $ajaxMethod : ''}}">
                         <thead>
                             <tr>
                                 <th class="w-5 no-top">{{ __('custom.number') }}</th>
@@ -36,11 +36,10 @@
                                     <td class="text-left">
                                         <img
                                             src="{{ asset('img/view.svg') }}"
-                                            class="additional-info c-pointer"
+                                            class="additional-info c-pointer p-r-5"
                                             data-org-additional-id="{{ $organisation->id }}"
                                             height="20px"
                                             width="30px"
-                                            class="p-r-5"
                                             title="{{ __('custom.view') }}"
                                             data-toggle="tooltip"
                                             data-placement="top"

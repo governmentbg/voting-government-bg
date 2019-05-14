@@ -184,8 +184,6 @@ class VoteController extends ApiController
 
         if (!$validator->fails()) {
             try {
-                $tour = VotingTour::where('id', $post['tour_id'])->first();
-
                 if ($post['status'] == VotingTour::STATUS_VOTING) {
                     $candidateStatus = [Organisation::STATUS_BALLOTAGE, Organisation::STATUS_CANDIDATE];
                 } elseif ($post['status'] == VotingTour::STATUS_BALLOTAGE) {
@@ -220,8 +218,8 @@ class VoteController extends ApiController
                     if ($tourVoteData->isNotEmpty()) {
                         foreach ($tourVoteData as $singleVote) {
                             $votes = explode(',', $singleVote->vote_data);
-                            foreach($votes as $orgId) {
-                                if(isset($listOfCandidates[$orgId])){
+                            foreach ($votes as $orgId) {
+                                if (isset($listOfCandidates[$orgId])) {
                                     $listOfCandidates[$orgId]->votes += 1;
                                 }
                             }

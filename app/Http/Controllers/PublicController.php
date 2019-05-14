@@ -173,16 +173,17 @@ class PublicController extends BaseFrontendController
         $showBallotage = false;
         $stats = [];
         $errors = [];
-        $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
 
         if (!empty($this->votingTour) && in_array($this->votingTour->status, VotingTour::getRankingStatuses())) {
+            $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
+
             // set links that have to be displayed
             $showLinks['registered'] = true;
             $showLinks['candidates'] = true;
             $showLinks['voted'] = true;
             $showLinks['ranking'] = true;
-            
-            //check if vote result is cached
+
+            // check if vote result is cached
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
 
@@ -309,11 +310,11 @@ class PublicController extends BaseFrontendController
                     }
                 }
             }
+
+            Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
         } else {
             return redirect('/');
         }
-        
-        Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
 
         return view('home.index', [
             'showLinks'     => $showLinks,
@@ -335,22 +336,16 @@ class PublicController extends BaseFrontendController
             'with_pagination' => true
         ];
 
-        $lastNum = $request->offsetGet('consecNum');
-
         list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
         if (empty($listErrors)) {
             $listData = !empty($listData->data) ? $this->paginate($listData) : [];
-            if (!empty($listData)) {
-                foreach ($listData as $singleOrg) {
-                    $singleOrg->consecNum = $lastNum;
-                    $lastNum += 1;
-                }
-            }
         }
 
-        $html = view('partials.public-list-rows')->with('listData', $listData);
-        return $html;
+        return view('partials.public-list-rows', [
+            'listData' => $listData,
+            'counter'  => $request->offsetGet('consecNum')
+        ]);
     }
 
     public function listCandidatesAjax(Request $request)
@@ -362,41 +357,29 @@ class PublicController extends BaseFrontendController
             'with_pagination' => true
         ];
 
-        $lastNum = $request->offsetGet('consecNum');
-
         list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
         if (empty($listErrors)) {
             $listData = !empty($listData->data) ? $this->paginate($listData) : [];
-            if (!empty($listData)) {
-                foreach ($listData as $singleOrg) {
-                    $singleOrg->consecNum = $lastNum;
-                    $lastNum += 1;
-                }
-            }
         }
 
-
-        $html = view('partials.public-list-rows')->with('listData', $listData);
-        return $html;
+        return view('partials.public-list-rows', [
+            'listData' => $listData,
+            'counter'  => $request->offsetGet('consecNum')
+        ]);
     }
 
     public function listVotedAjax(Request $request)
     {
         list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
-        $lastNum = $request->offsetGet('consecNum');
 
         if (empty($listErrors)) {
             $listData = !empty($listData->data) ? $this->paginate($listData) : [];
-            if (!empty($listData)) {
-                foreach ($listData as $singleOrg) {
-                    $singleOrg->consecNum = $lastNum;
-                    $lastNum += 1;
-                }
-            }
         }
 
-        $html = view('partials.public-list-rows')->with('listData', $listData);
-        return $html;
+        return view('partials.public-list-rows', [
+            'listData' => $listData,
+            'counter'  => $request->offsetGet('consecNum')
+        ]);
     }
 }

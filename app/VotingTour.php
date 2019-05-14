@@ -106,7 +106,7 @@ class VotingTour extends Model
     {
         return $query->where('status', '!=', self::STATUS_FINISHED);
     }
-    
+
     public static function getCacheKey($id, $postfix = null)
     {
         $keyData = [
@@ -114,7 +114,7 @@ class VotingTour extends Model
             $id,
             $postfix
         ];
-        
+
         return implode(':', $keyData);
     }
 }

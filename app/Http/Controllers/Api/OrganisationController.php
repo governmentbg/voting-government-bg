@@ -194,7 +194,7 @@ class OrganisationController extends ApiController
             $validator->after(function ($validator) use ($data) {
                 if ($data['description'] != '' && !$validator->errors()->has('description')) {
                     $words = preg_split( '|\s+|s', $data['description']);
-                    if (($words = count($words)) > 5) {
+                    if (($words = count($words)) > 500) {
                         $validator->errors()->add('description', __('custom.org_descr_words_exceeded', ['words' => $words]));
                     }
                 }

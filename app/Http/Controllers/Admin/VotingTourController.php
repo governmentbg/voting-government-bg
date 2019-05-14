@@ -10,6 +10,7 @@ use App\VotingTour;
 use App\Jobs\SendAllVoteInvites;
 use App\Organisation;
 use App\Vote;
+use Illuminate\Support\Facades\Cache;
 
 class VotingTourController extends BaseAdminController
 {
@@ -117,8 +118,23 @@ class VotingTourController extends BaseAdminController
         $errors = [];
 
         list($votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getData', ['tour_id' => $id]);
+        
+        $cacheKey = VotingTour::getCacheKey($votingTour->id);
 
         if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
+            //check if vote result is cached
+            if (Cache::has($cacheKey)) {
+                $dataFromCache = Cache::get($cacheKey);
+
+                return view('tours.ranking', [
+                    'listTitle'     => $votingTour->name,
+                    'listData'      => $dataFromCache['listData'],
+                    'route'         => 'admin.org_edit',
+                    'showBallotage' => $dataFromCache['showBallotage'],
+                    'stats'         => $dataFromCache['stats'],
+                    'fullWidth'     => true,
+                ]);
+            }
             // get vote status
             list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $votingTour->id]);
 
@@ -234,6 +250,9 @@ class VotingTourController extends BaseAdminController
         } else {
             return redirect()->route('admin.voting_tour.list');
         }
+
+        //cache computed vote results for 1 hour
+        Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
 
         return view('tours.ranking', [
             'listTitle'     => $votingTour->name,

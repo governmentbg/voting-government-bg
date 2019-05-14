@@ -25,6 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('validate:blockChain')->hourly()->appendOutputTo(storage_path() .'/logs/blockChainValidation.log');
+        
+        $schedule->command('cache:ranking')->cron('*/20 * * * *')->withoutOverlapping(); //every 20 minutes
     }
 
     /**

@@ -8,6 +8,7 @@ use App\VotingTour;
 use App\Organisation;
 use App\Vote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PublicController extends BaseFrontendController
 {
@@ -172,6 +173,7 @@ class PublicController extends BaseFrontendController
         $showBallotage = false;
         $stats = [];
         $errors = [];
+        $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
 
         if (!empty($this->votingTour) && in_array($this->votingTour->status, VotingTour::getRankingStatuses())) {
             // set links that have to be displayed
@@ -179,6 +181,21 @@ class PublicController extends BaseFrontendController
             $showLinks['candidates'] = true;
             $showLinks['voted'] = true;
             $showLinks['ranking'] = true;
+            
+            //check if vote result is cached
+            if (Cache::has($cacheKey)) {
+                $dataFromCache = Cache::get($cacheKey);
+
+                return view('home.index', [
+                    'showLinks'     => $showLinks,
+                    'listTitle'     => __('custom.ranking'),
+                    'listData'      => $dataFromCache['listData'],
+                    'route'         => 'list.ranking',
+                    'isRanking'     => true,
+                    'showBallotage' => $dataFromCache['showBallotage'],
+                    'stats'         => $dataFromCache['stats'],
+                ]);
+            }
 
             // get vote status
             list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $this->votingTour->id]);
@@ -295,6 +312,8 @@ class PublicController extends BaseFrontendController
         } else {
             return redirect('/');
         }
+        
+        Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
 
         return view('home.index', [
             'showLinks'     => $showLinks,

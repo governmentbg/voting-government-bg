@@ -1,7 +1,8 @@
 <?php
-ini_set('max_execution_time', 300); 
 
 namespace App\Http\Controllers\Admin;
+
+ini_set('max_execution_time', 300); 
 
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;

@@ -1,7 +1,8 @@
 <?php
-ini_set('max_execution_time', 300); 
 
 namespace App\Http\Controllers;
+
+ini_set('max_execution_time', 300); 
 
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\VoteController as ApiVote;

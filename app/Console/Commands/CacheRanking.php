@@ -1,7 +1,8 @@
 <?php
-ini_set('max_execution_time', 300); 
 
 namespace App\Console\Commands;
+
+ini_set('max_execution_time', 300); 
 
 use App\Organisation;
 use App\Vote;

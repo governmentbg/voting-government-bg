@@ -18,13 +18,13 @@ class VotesSeeder extends Seeder
     {
         $this->faker = Faker::create();
 
+        $tourIds = VotingTour::select('id')->orderBy('created_at', 'DESC')->first();
+
+        $tourId = $tourIds ? $tourIds['id'] : '';
+
+        $orgIds = Organisation::select('id')->pluck('id');
+
         foreach (range(1, self::VOTE_RECORDS) as $i) {
-            $tourIds = VotingTour::select('id')->orderBy('created_at', 'DESC')->first();
-
-            $tourId = $tourIds ? $tourIds['id'] : '';
-
-            $orgIds = Organisation::select('id')->pluck('id');
-
             $singleOrg = !empty($orgIds) ? $this->faker->unique()->randomElement($orgIds) : '';
 
             $voteData = $orgIds->isNotEmpty() ? $this->faker->randomElements($orgIds, 14) : '';

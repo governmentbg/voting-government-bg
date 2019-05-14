@@ -219,7 +219,7 @@ $('#confirmEmailSending .confirm').click(function() {
     $('form.change-tour').unbind('submit').submit();
 });
 
-$('.additional-info').on('click', function() {
+$(document).on('click', '.additional-info', function() {
     $(this).closest('tr').siblings('tr').css('font-weight', 'normal');
     $(this).closest('tr').css('font-weight', 'bold');
 
@@ -254,7 +254,7 @@ $(function() {
     });
 });
 
-$('.nano').nanoScroller({});
+$('.nano').nanoScroller({ sliderMaxHeight: 100});
 
 $('input[required]').on('invalid', function() {
     let message = $(this).attr('title');
@@ -306,4 +306,50 @@ $('.ams-dropdown').on('blur', function() {
     $(this).parent().find('.caret').removeClass('rotateCaretBack');
     $(this).parent().find('.caret').removeClass('rotateCaret');
     clicks = 0;
+});
+
+var initialPage = 2;
+
+$('.js-org-table').on('scroll', function() {
+    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        $.ajax({
+            type: 'GET',
+            url: $('.js-orgs').data('ajax-url'),
+            data: {
+                "page" : initialPage
+            },
+            success: function(result) {
+                result = JSON.parse(result);
+
+                if (jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data)) {
+                    var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
+
+                    $.each(result.data, function(index, value) {
+                        lastEntryNumber += 1;
+                        var candidateSvg = value.is_candidate == 1 ? '<img src="/img/tick.svg" height="20px" width="30px"/>' : '';
+                        $('.js-orgs').append(
+                            '<tr>'+
+                                '<td class="text-right">'+ lastEntryNumber +'</td>' +
+                                '<td class="text-left"><img '+
+                                'src="/img/view.svg" '+
+                                'class="additional-info c-pointer p-r-5" ' +
+                                'data-org-additional-id="'+value.id+'" ' +
+                                'height="20px" ' +
+                                'width="30px" ' +
+                                'title="Преглед" ' +
+                                'data-toggle="tooltip" ' +
+                                'data-placement="top" ' +
+                            '/>'+value.name+'</td>'+
+                                '<td class="text-center">'+ candidateSvg +'</td>'+
+                                '<td>'+value.eik+'</td>'+
+                                '<td class="text-center">'+value.created_at.substring(0, 10)+'</td>'+
+                            '</tr>'
+                        );
+                    })
+
+                    initialPage += 1;
+                }
+            }
+        });
+    }
 });

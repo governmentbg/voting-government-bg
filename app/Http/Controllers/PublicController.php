@@ -335,13 +335,22 @@ class PublicController extends BaseFrontendController
             'with_pagination' => true
         ];
 
+        $lastNum = $request->offsetGet('consecNum');
+
         list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
         if (empty($listErrors)) {
             $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            if (!empty($listData)) {
+                foreach ($listData as $singleOrg) {
+                    $singleOrg->consecNum = $lastNum;
+                    $lastNum += 1;
+                }
+            }
         }
 
-        return json_encode($listData);
+        $html = view('partials.public-list-rows')->with('listData', $listData);
+        return $html;
     }
 
     public function listCandidatesAjax(Request $request)
@@ -353,23 +362,41 @@ class PublicController extends BaseFrontendController
             'with_pagination' => true
         ];
 
+        $lastNum = $request->offsetGet('consecNum');
+
         list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
         if (empty($listErrors)) {
             $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            if (!empty($listData)) {
+                foreach ($listData as $singleOrg) {
+                    $singleOrg->consecNum = $lastNum;
+                    $lastNum += 1;
+                }
+            }
         }
 
-        return json_encode($listData);
+
+        $html = view('partials.public-list-rows')->with('listData', $listData);
+        return $html;
     }
 
     public function listVotedAjax(Request $request)
     {
         list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
+        $lastNum = $request->offsetGet('consecNum');
 
         if (empty($listErrors)) {
             $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            if (!empty($listData)) {
+                foreach ($listData as $singleOrg) {
+                    $singleOrg->consecNum = $lastNum;
+                    $lastNum += 1;
+                }
+            }
         }
 
-        return json_encode($listData);
+        $html = view('partials.public-list-rows')->with('listData', $listData);
+        return $html;
     }
 }

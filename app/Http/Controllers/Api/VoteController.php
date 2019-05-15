@@ -184,60 +184,70 @@ class VoteController extends ApiController
 
         if (!$validator->fails()) {
             try {
-                if ($post['status'] == VotingTour::STATUS_VOTING) {
-                    $candidateStatus = [Organisation::STATUS_BALLOTAGE, Organisation::STATUS_CANDIDATE];
-                } elseif ($post['status'] == VotingTour::STATUS_BALLOTAGE) {
-                    $candidateStatus = [Organisation::STATUS_BALLOTAGE];
-                }
+                $votingTour = VotingTour::where('id', $post['tour_id'])->first();
+                if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
+                    if ($votingTour->status == VotingTour::STATUS_BALLOTAGE && $post['status'] == VotingTour::STATUS_BALLOTAGE) {
+                        return $this->errorResponse(__('custom.ballotage_ranking_not_allowed'));
+                    }
 
-                $listOfCandidates = Organisation::select('id', 'eik', 'name', DB::raw('0 as votes'))
-                                        ->where('voting_tour_id', $post['tour_id'])
-                                        ->whereIn('status', $candidateStatus)
-                                        ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
+                    if ($post['status'] == VotingTour::STATUS_VOTING) {
+                        $candidateStatus = [Organisation::STATUS_BALLOTAGE, Organisation::STATUS_CANDIDATE];
+                    } elseif ($post['status'] == VotingTour::STATUS_BALLOTAGE) {
+                        $candidateStatus = [Organisation::STATUS_BALLOTAGE];
+                    }
 
-                $listOfCandidates = $listOfCandidates->keyBy('id');
+                    $listOfCandidates = Organisation::select('id', 'eik', 'name', DB::raw('0 as votes'))
+                                            ->where('voting_tour_id', $post['tour_id'])
+                                            ->whereIn('status', $candidateStatus)
+                                            ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
 
-                if ($listOfCandidates->isNotEmpty()) {
-                    $tourVoteData = Vote::select('votes.vote_data', 'votes.vote_time', 'votes.voter_id', 'votes.tour_status')
-                                        ->join(DB::raw(
-                                            '(SELECT voter_id, MAX(vote_time) AS voteTime '.
-                                            'FROM votes '.
-                                            'WHERE voting_tour_id = '. $post['tour_id'] .' '.
-                                            'AND tour_status = '. $post['status'] .' '.
-                                            'GROUP BY voter_id) innerv'
-                                        ), 'votes.voter_id', '=', 'innerv.voter_id')
-                                        ->join('organisations', 'organisations.id', '=', 'votes.voter_id')
-                                        ->whereIn('organisations.status', Organisation::getApprovedStatuses())
-                                        ->where('votes.voting_tour_id', $post['tour_id'])
-                                        ->where('votes.tour_status', $post['status'])
-                                        ->whereRaw('votes.vote_time = innerv.voteTime')
-                                        ->where('votes.id', '!=', Vote::GENESIS_RECORD)
-                                        ->groupBy('votes.voter_id')
-                                        ->get();
+                    $listOfCandidates = $listOfCandidates->keyBy('id');
 
-                    if ($tourVoteData->isNotEmpty()) {
-                        foreach ($tourVoteData as $singleVote) {
-                            $votes = explode(',', $singleVote->vote_data);
-                            foreach ($votes as $orgId) {
-                                if (isset($listOfCandidates[$orgId])) {
-                                    $listOfCandidates[$orgId]->votes += 1;
+                    if ($listOfCandidates->isNotEmpty()) {
+                        $tourVoteData = Vote::select('votes.vote_data', 'votes.vote_time', 'votes.voter_id', 'votes.tour_status')
+                                            ->join(DB::raw(
+                                                '(SELECT voter_id, MAX(vote_time) AS voteTime '.
+                                                'FROM votes '.
+                                                'WHERE voting_tour_id = '. $post['tour_id'] .' '.
+                                                'AND tour_status = '. $post['status'] .' '.
+                                                'GROUP BY voter_id) innerv'
+                                            ), 'votes.voter_id', '=', 'innerv.voter_id')
+                                            ->join('organisations', 'organisations.id', '=', 'votes.voter_id')
+                                            ->whereIn('organisations.status', Organisation::getApprovedStatuses())
+                                            ->where('votes.voting_tour_id', $post['tour_id'])
+                                            ->where('votes.tour_status', $post['status'])
+                                            ->whereRaw('votes.vote_time = innerv.voteTime')
+                                            ->where('votes.id', '!=', Vote::GENESIS_RECORD)
+                                            ->groupBy('votes.voter_id')
+                                            ->get();
+
+                        if ($tourVoteData->isNotEmpty()) {
+                            foreach ($tourVoteData as $singleVote) {
+                                $votes = explode(',', $singleVote->vote_data);
+                                foreach ($votes as $orgId) {
+                                    if (isset($listOfCandidates[$orgId])) {
+                                        $listOfCandidates[$orgId]->votes += 1;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    $listOfCandidates = $listOfCandidates->sort(function ($a, $b) {
+                        if ($a->votes === $b->votes) {
+                            if ($a->eik === $b->eik) {
+                                return 0;
+                            }
+                            return $a->eik < $b->eik ? -1 : 1;
+                       }
+                       return $a->votes > $b->votes ? -1 : 1;
+                    });
+
+
+                    return $this->successResponse($listOfCandidates);
                 }
 
-                $listOfCandidates = $listOfCandidates->sort(function ($a, $b) {
-                    if ($a->votes === $b->votes) {
-                        if ($a->eik === $b->eik) {
-                            return 0;
-                        }
-                        return $a->eik < $b->eik ? -1 : 1;
-                   }
-                   return $a->votes > $b->votes ? -1 : 1;
-                });
-
-                return $this->successResponse($listOfCandidates);
+                return $this->errorResponse(__('custom.ranking_not_allowed'));
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
                 return $this->errorResponse(__('custom.ranking_failed'), $e->getMessage());
@@ -324,7 +334,8 @@ class VoteController extends ApiController
                     }
                 }
 
-                $voters = Organisation::where('voting_tour_id', $votingTour->id)
+                $voters = Organisation::select('id', 'eik', 'name', 'is_candidate', 'created_at')
+                              ->where('voting_tour_id', $votingTour->id)
                               ->whereIn('status', Organisation::getApprovedStatuses())
                               ->whereHas('votes', function($query) use ($voteStatus) {
                                   $query->where('tour_status', $voteStatus);

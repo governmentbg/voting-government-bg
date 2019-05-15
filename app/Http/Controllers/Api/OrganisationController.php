@@ -303,16 +303,17 @@ class OrganisationController extends ApiController
         $withPagination = $request->get('with_pagination', false);
 
         $validator = \Validator::make($filters, [
-            'eik'           => 'nullable|digits_between:1,19',
-            'name'          => 'nullable|string|max:255',
-            'email'         => 'nullable|string|max:255',
-            'in_av'         => 'nullable|bool',
-            'is_candidate'  => 'nullable|bool',
-            'statuses'      => 'nullable|array',
-            'statuses.*'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
-            'reg_date_from' => 'nullable|date|date_format:Y-m-d',
-            'reg_date_to'   => 'nullable|date|date_format:Y-m-d'. (!empty($filters['reg_date_from']) ? '|after_or_equal:reg_date_from' : ''),
-            'tour_id'       => 'nullable|int|exists:voting_tour,id',
+            'eik'              => 'nullable|digits_between:1,19',
+            'name'             => 'nullable|string|max:255',
+            'email'            => 'nullable|string|max:255',
+            'in_av'            => 'nullable|bool',
+            'is_candidate'     => 'nullable|bool',
+            'statuses'         => 'nullable|array',
+            'statuses.*'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
+            'reg_date_from'    => 'nullable|date|date_format:Y-m-d',
+            'reg_date_to'      => 'nullable|date|date_format:Y-m-d'. (!empty($filters['reg_date_from']) ? '|after_or_equal:reg_date_from' : ''),
+            'tour_id'          => 'nullable|int|exists:voting_tour,id',
+            'only_main_fields' => 'nullable|bool',
         ]);
 
         if (!$validator->fails()) {
@@ -330,7 +331,13 @@ class OrganisationController extends ApiController
                     return $this->errorResponse(__('custom.invalid_sort_field'));
                 }
 
-                $organisations = Organisation::where('voting_tour_id', $votingTour->id);
+                if (isset($filters['only_main_fields']) && $filters['only_main_fields']) {
+                    $fields = ['id', 'eik', 'name', 'is_candidate', 'created_at'];
+                } else {
+                    $fields = '*';
+                }
+
+                $organisations = Organisation::select($fields)->where('voting_tour_id', $votingTour->id);
                 if (isset($filters['eik'])) {
                     $organisations->where('eik', $filters['eik']);
                 }

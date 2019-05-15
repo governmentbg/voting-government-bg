@@ -64,7 +64,8 @@ class PublicController extends BaseFrontendController
             // list registered organisations
             $params = [
                 'filters' => [
-                    'statuses' => Organisation::getApprovedStatuses()
+                    'statuses' => Organisation::getApprovedStatuses(),
+                    'only_main_fields' => true
                 ],
                 'with_pagination' => true
             ];
@@ -108,7 +109,8 @@ class PublicController extends BaseFrontendController
             // list candidates
             $params = [
                 'filters' => [
-                    'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE]
+                    'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                    'only_main_fields' => true
                 ],
                 'with_pagination' => true
             ];
@@ -333,7 +335,8 @@ class PublicController extends BaseFrontendController
     {
         $params = [
             'filters' => [
-                'statuses' => Organisation::getApprovedStatuses()
+                'statuses' => Organisation::getApprovedStatuses(),
+                'only_main_fields' => true
             ],
             'with_pagination' => true
         ];
@@ -354,7 +357,8 @@ class PublicController extends BaseFrontendController
     {
         $params = [
             'filters' => [
-                'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE]
+                'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                'only_main_fields' => true
             ],
             'with_pagination' => true
         ];

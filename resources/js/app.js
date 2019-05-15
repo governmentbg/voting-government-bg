@@ -254,8 +254,6 @@ $(function() {
     });
 });
 
-$('.nano').nanoScroller({ sliderMaxHeight: 100});
-
 $('input[required]').on('invalid', function() {
     let message = $(this).attr('title');
     if (message) {
@@ -330,4 +328,18 @@ $('.js-org-table').on('scroll', function() {
             }
         });
     }
+});
+
+// General initialization of nanoscroll for project
+$('.nano').nanoScroller({ sliderMaxHeight: 100 });
+
+// Fixes a bug where nanoscroller is not initialized on front page
+$(document).ready(function() {
+    $('.nano').nanoScroller({ sliderMaxHeight: 100 });
+});
+
+// Fixes a bug where nanoscroll is not initialized for textareas
+// while inputting text
+$('.h-90').on('keyup', function() {
+    $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });

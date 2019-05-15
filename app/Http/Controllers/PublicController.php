@@ -190,6 +190,8 @@ class PublicController extends BaseFrontendController
             // check if vote result is cached
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
+                $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
 
                 return view('home.index', [
                     'showLinks'     => $showLinks,
@@ -199,6 +201,7 @@ class PublicController extends BaseFrontendController
                     'isRanking'     => true,
                     'showBallotage' => $dataFromCache['showBallotage'],
                     'stats'         => $dataFromCache['stats'],
+                    'ajaxMethod'    => 'rankingAjax'
                 ]);
             }
 
@@ -323,12 +326,32 @@ class PublicController extends BaseFrontendController
         return view('home.index', [
             'showLinks'     => $showLinks,
             'listTitle'     => __('custom.ranking'),
-            'listData'      => $listData,
+            'listData'      => collect($listData)->forPage(1, 100),
             'route'         => 'list.ranking',
             'isRanking'     => true,
             'showBallotage' => $showBallotage,
             'stats'         => $stats,
+            'ajaxMethod'    => 'rankingAjax'
         ])->withErrors($errors);
+    }
+
+    public function listRankingAjax(Request $request)
+    {
+        $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
+        $page = $request->offsetGet('page', 2);
+        if (Cache::has($cacheKey)) {
+            $dataFromCache = Cache::get($cacheKey);
+            $dataFromCache['listData'] = collect($dataFromCache['listData']);
+            $dataFromCache['listData'] = $dataFromCache['listData']->forPage($page, 100);
+        } else {
+            $dataFromCache = [];
+            $dataFromCache['listData'] = [];
+        }
+
+        return view('partials.ranking-rows', [
+            'listData' => $dataFromCache['listData'],
+            'counter'  => $request->offsetGet('consecNum')
+        ]);
     }
 
     public function listRegisteredAjax(Request $request)

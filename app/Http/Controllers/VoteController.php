@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\VoteController as ApiVote;
@@ -33,7 +32,10 @@ class VoteController extends BaseFrontendController
         }
 
         list($organisations, $orgErrors) = api_result(ApiOrganisation::class, 'search', [
-            'filters' => ['statuses' => $memberStatus]
+            'filters' => [
+                'statuses' => $memberStatus,
+                'only_main_fields' => true
+            ]
         ]);
 
         list($latestVote, $latestVoteErrors) = api_result(ApiVote::class, 'getLatestVote', ['org_id' => \Auth::user()->org_id]);
@@ -77,7 +79,10 @@ class VoteController extends BaseFrontendController
 
         if (empty($voteErrors)) {
             list($organisations, $orgErrors) = api_result(ApiOrganisation::class, 'search', [
-                'filters' => ['statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE]]
+                'filters' => [
+                    'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                    'only_main_fields' => true
+                ]
             ]);
 
             list($latestVote, $latestVoteErrors) = api_result(ApiVote::class, 'getLatestVote', ['org_id' => \Auth::user()->org_id]);

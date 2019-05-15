@@ -26,7 +26,7 @@
                             <input type="text" name="org_name" id="filter_org" placeholder="{{__('custom.search')}}" autocomplete="off" class="search-box float-right w-100 no-outline">
                         </div>
                         <div class="nano h-65 m-b-15">
-                        <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box nano-content" size="13">
+                        <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box nano-content" size="14">
                             @if (!empty($orgList))
                                 @foreach ($orgList as $singleOrg)
                                     @if (!empty($latestVoteData))

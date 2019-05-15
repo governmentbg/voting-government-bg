@@ -450,6 +450,9 @@ input[type='file'] {
 .vote-box {
     border: none;
     width: 100%;
+    // Below lines remove the default scrollbar displayed along with nano by IE and FF
+    scrollbar-width: none;  // Firefox
+    -ms-overflow-style: none; // IE 10+
 }
 
 .vote-box-outline {
@@ -617,7 +620,7 @@ table.messages-list{
 div.h-90 div.nano-pane {
     margin-top: 4px;
     margin-right: 10px;
-    margin-bottom: 4px;
+    margin-bottom: 11px;
 }
 
 div.public-table div.nano-pane {

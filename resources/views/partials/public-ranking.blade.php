@@ -31,8 +31,8 @@
             @endif
             @if (!empty($listData))
             <div class="table-wrapper nano h-600 public-table">
-                <div class="tableFixHead nano-content">
-                    <table class="table table-striped ams-table ranking">
+                <div class="tableFixHead nano-content js-org-table">
+                    <table class="table table-striped ams-table ranking js-orgs" data-ajax-url="{{isset($ajaxMethod) ? $ajaxMethod : ''}}">
                         <thead>
                             <tr>
                                 <th class="w-5">{{ __('custom.number') }}</th>
@@ -45,43 +45,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-left ">
-                        @php
-                            $counter = 0;
-                        @endphp
-                        @foreach ($listData as $organisation)
-                            @php
-                            $class = '';
-                            if (isset($organisation->for_ballotage) && $organisation->for_ballotage) {
-                                $class = 'for-ballotage ';
-                            } elseif (isset($organisation->dropped_out) && $organisation->dropped_out) {
-                                $class = 'dropped-out ';
-                            }
-                            @endphp
-                            <tr class="{{ $class }}">
-                                <td class="text-right">{{ ++$counter }}</td>
-                                <td class="text-left">
-                                    @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
-                                        <img
-                                            src="{{ asset('img/view.svg') }}"
-                                            class="additional-info c-pointer"
-                                            data-org-additional-id="{{ $organisation->id }}"
-                                            height="30px"
-                                            width="30px"
-                                            class="p-r-5"
-                                            title="{{ __('custom.view') }}"
-                                            data-toggle="tooltip"
-                                            data-placement="top"
-                                        />
-                                    @endif
-                                    {{ $organisation->name }}
-                                </td>
-                                <td>{{ $organisation->eik }}</td>
-                                <td class="text-right">{{ $organisation->votes }}</td>
-                                @if (isset($showBallotage) && $showBallotage)
-                                    <td class="text-right">{{ isset($organisation->ballotage_votes) ? $organisation->ballotage_votes : '' }}</td>
-                                @endif
-                            </tr>
-                        @endforeach
+                            @include('partials.ranking-rows', ['counter' => 0])
                         </tbody>
                     </table>
                 </div>

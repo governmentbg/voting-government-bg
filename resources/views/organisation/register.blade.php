@@ -132,12 +132,12 @@
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
                         <label for="description" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none h-90 nano">
+                        <div class="col-sm-8 col-xs-6 p-r-none txt-area-height nano">
                             <textarea
                                 class="txt-area no-outline p-a-5 nano-content"
                                 name="description"
                                 placeholder="{{ __('custom.experience_info_placeholder') }}"
-                                rows="3"
+                                rows="5"
                                 cols="40"
                                 maxlength="8000"
                             >{{ old('description') }}</textarea>
@@ -146,12 +146,12 @@
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
                         <label for="references" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none h-90 nano">
+                        <div class="col-sm-8 col-xs-6 p-r-none txt-area-height nano">
                             <textarea
                                 class="txt-area no-outline p-a-5 nano-content"
                                 name="references"
                                 placeholder="{{ __('custom.reference_materials_placeholder') }}"
-                                rows="3"
+                                rows="5"
                                 cols="40"
                                 maxlength="8000"
                             >{{ old('references') }}</textarea>

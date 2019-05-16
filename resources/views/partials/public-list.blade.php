@@ -12,7 +12,7 @@
                 <div class="offset-lg-8">
                     <div class="row form-group">
                         <label for="eik" class="col-form-label p-l-15">{{ __('custom.eik') }}:</label>
-                        <div class="col-lg-11">
+                        <div class="col-lg-12">
                             <input
                                 type="text"
                                 name="eik"

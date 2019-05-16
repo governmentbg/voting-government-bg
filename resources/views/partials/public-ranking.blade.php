@@ -32,7 +32,7 @@
             @if (!empty($listData))
                 <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
-                        <table class="table table-striped ams-table ranking js-orgs" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
+                        <table class="table table-striped ams-table ranking js-orgs" data-show-view="{{$orgNotEditable}}" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
                             <thead>
                                 <tr>
                                     <th class="w-5">{{ __('custom.number') }}</th>
@@ -45,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody class="text-left">
-                                @include('partials.ranking-rows', ['counter' => 0])
+                                @include('partials.ranking-rows', ['counter' => 0, 'orgNotEditable' => $orgNotEditable])
                             </tbody>
                         </table>
                     </div>

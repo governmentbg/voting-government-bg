@@ -137,7 +137,8 @@ class VotingTourController extends BaseAdminController
                     'showBallotage' => $dataFromCache['showBallotage'],
                     'stats'         => $dataFromCache['stats'],
                     'fullWidth'     => true,
-                    'ajaxMethod'    => 'rankingAjax'
+                    'ajaxMethod'    => 'rankingAjax',
+                    'orgNotEditable' => true
                 ]);
             }
             // get vote status
@@ -267,6 +268,7 @@ class VotingTourController extends BaseAdminController
             'fullWidth'     => true,
             'fullWidth'     => true,
             'ajaxMethod'    => 'rankingAjax',
+            'orgNotEditable' => true
         ])->withErrors($errors);
     }
 }

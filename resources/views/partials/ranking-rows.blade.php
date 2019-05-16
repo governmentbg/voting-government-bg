@@ -13,11 +13,10 @@
             @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
                 <img
                     src="{{ asset('img/view.svg') }}"
-                    class="additional-info c-pointer"
+                    class="additional-info c-pointer p-r-5"
                     data-org-additional-id="{{ $organisation->id }}"
-                    height="30px"
+                    height="20px"
                     width="30px"
-                    class="p-r-5"
                     title="{{ __('custom.view') }}"
                     data-toggle="tooltip"
                     data-placement="top"

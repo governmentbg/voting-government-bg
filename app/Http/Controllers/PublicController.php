@@ -40,7 +40,7 @@ class PublicController extends BaseFrontendController
         return view('home.index');
     }
 
-    public function listRegistered()
+    public function listRegistered(Request $request)
     {
         $showLinks = [];
         $listData = [];
@@ -49,6 +49,8 @@ class PublicController extends BaseFrontendController
         if (session()->has('errors')) {
             $errors = session()->get('errors')->messages();
         }
+
+        $eik = $request->offsetGet('eik');
 
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
             // set links that have to be displayed
@@ -64,11 +66,14 @@ class PublicController extends BaseFrontendController
             // list registered organisations
             $params = [
                 'filters' => [
-                    'statuses' => Organisation::getApprovedStatuses(),
+                    'statuses'         => Organisation::getApprovedStatuses(),
                     'only_main_fields' => true
                 ],
                 'with_pagination' => true
             ];
+            if (isset($eik)) {
+                $params['filters']['eik'] = $eik;
+            }
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (!empty($listErrors)) {
@@ -84,16 +89,19 @@ class PublicController extends BaseFrontendController
             'showLinks'  => $showLinks,
             'listTitle'  => __('custom.registered'),
             'listData'   => $listData,
+            'eik'        => $eik,
             'route'      => 'list.registered',
             'ajaxMethod' => 'registeredAjax'
         ])->withErrors($errors);
     }
 
-    public function listCandidates()
+    public function listCandidates(Request $request)
     {
         $showLinks = [];
         $listData = [];
         $errors = [];
+
+        $eik = $request->offsetGet('eik');
 
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
             // set links that have to be displayed
@@ -109,11 +117,14 @@ class PublicController extends BaseFrontendController
             // list candidates
             $params = [
                 'filters' => [
-                    'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                    'statuses'         => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
                     'only_main_fields' => true
                 ],
                 'with_pagination' => true
             ];
+            if (isset($eik)) {
+                $params['filters']['eik'] = $eik;
+            }
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
 
             if (!empty($listErrors)) {
@@ -129,16 +140,19 @@ class PublicController extends BaseFrontendController
             'showLinks'  => $showLinks,
             'listTitle'  => __('custom.candidates'),
             'listData'   => $listData,
+            'eik'        => $eik,
             'route'      => 'list.candidates',
             'ajaxMethod' => 'candidatesAjax'
         ])->withErrors($errors);
     }
 
-    public function listVoted()
+    public function listVoted(Request $request)
     {
         $showLinks = [];
         $listData = [];
         $errors = [];
+
+        $eik = $request->offsetGet('eik');
 
         if (!empty($this->votingTour) && !in_array($this->votingTour->status, VotingTour::getRegStatuses())) {
             // set links that have to be displayed
@@ -150,7 +164,11 @@ class PublicController extends BaseFrontendController
             }
 
             // list voted organisations
-            list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
+            $params = [];
+            if (isset($eik)) {
+                $params['filters']['eik'] = $eik;
+            }
+            list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters', $params);
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_voted_org_fail');
@@ -165,6 +183,7 @@ class PublicController extends BaseFrontendController
             'showLinks'  => $showLinks,
             'listTitle'  => __('custom.voted'),
             'listData'   => $listData,
+            'eik'        => $eik,
             'route'      => 'list.voted',
             'ajaxMethod' => 'votedAjax'
         ])->withErrors($errors);
@@ -214,7 +233,7 @@ class PublicController extends BaseFrontendController
                 // list ranking
                 $params = [
                     'tour_id' => $this->votingTour->id,
-                    'status' => VotingTour::STATUS_VOTING
+                    'status'  => VotingTour::STATUS_VOTING
                 ];
                 list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
 
@@ -335,39 +354,24 @@ class PublicController extends BaseFrontendController
         ])->withErrors($errors);
     }
 
-    public function listRankingAjax(Request $request)
-    {
-        $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
-        $page = $request->offsetGet('page', 2);
-        if (Cache::has($cacheKey)) {
-            $dataFromCache = Cache::get($cacheKey);
-            $dataFromCache['listData'] = collect($dataFromCache['listData']);
-            $dataFromCache['listData'] = $dataFromCache['listData']->forPage($page, 100);
-        } else {
-            $dataFromCache = [];
-            $dataFromCache['listData'] = [];
-        }
-
-        return view('partials.ranking-rows', [
-            'listData' => $dataFromCache['listData'],
-            'counter'  => $request->offsetGet('consecNum')
-        ]);
-    }
-
     public function listRegisteredAjax(Request $request)
     {
-        $params = [
-            'filters' => [
-                'statuses' => Organisation::getApprovedStatuses(),
-                'only_main_fields' => true
-            ],
-            'with_pagination' => true
-        ];
+        $listData = [];
 
-        list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+        if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
+            $params = [
+                'filters' => [
+                    'statuses'         => Organisation::getApprovedStatuses(),
+                    'only_main_fields' => true
+                ],
+                'with_pagination' => true
+            ];
 
-        if (empty($listErrors)) {
-            $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+
+            if (empty($listErrors)) {
+                $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            }
         }
 
         return view('partials.public-list-rows', [
@@ -378,18 +382,22 @@ class PublicController extends BaseFrontendController
 
     public function listCandidatesAjax(Request $request)
     {
-        $params = [
-            'filters' => [
-                'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
-                'only_main_fields' => true
-            ],
-            'with_pagination' => true
-        ];
+        $listData = [];
 
-        list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+        if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
+            $params = [
+                'filters' => [
+                    'statuses'         => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                    'only_main_fields' => true
+                ],
+                'with_pagination' => true
+            ];
 
-        if (empty($listErrors)) {
-            $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+
+            if (empty($listErrors)) {
+                $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            }
         }
 
         return view('partials.public-list-rows', [
@@ -400,14 +408,40 @@ class PublicController extends BaseFrontendController
 
     public function listVotedAjax(Request $request)
     {
-        list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
+        $listData = [];
 
-        if (empty($listErrors)) {
-            $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+        if (!empty($this->votingTour) && !in_array($this->votingTour->status, VotingTour::getRegStatuses())) {
+            list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters');
+
+            if (empty($listErrors)) {
+                $listData = !empty($listData->data) ? $this->paginate($listData) : [];
+            }
         }
 
         return view('partials.public-list-rows', [
             'listData' => $listData,
+            'counter'  => $request->offsetGet('consecNum')
+        ]);
+    }
+
+    public function listRankingAjax(Request $request)
+    {
+        $dataFromCache = [];
+        $dataFromCache['listData'] = [];
+
+        $page = $request->offsetGet('page');
+
+        if (!empty($this->votingTour) && in_array($this->votingTour->status, VotingTour::getRankingStatuses())) {
+            $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
+            if (Cache::has($cacheKey)) {
+                $dataFromCache = Cache::get($cacheKey);
+                $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                $dataFromCache['listData'] = $dataFromCache['listData']->forPage($page, 100);
+            }
+        }
+
+        return view('partials.ranking-rows', [
+            'listData' => $dataFromCache['listData'],
             'counter'  => $request->offsetGet('consecNum')
         ]);
     }

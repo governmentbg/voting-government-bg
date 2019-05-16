@@ -552,11 +552,6 @@ table.messages-list{
     margin-left: 5px;
 }
 
-.h-600 {
-    max-height: 600px;
-    height: auto;
-}
-
 .m-r-none {
     margin-right: 0px;
 }
@@ -621,6 +616,11 @@ div.txt-area-height div.nano-pane {
     margin-top: 4px;
     margin-right: 10px;
     margin-bottom: 11px;
+}
+
+.public-table {
+    max-height: 800px;
+    height: auto;
 }
 
 div.public-table div.nano-pane {

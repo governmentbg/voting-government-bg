@@ -9,6 +9,13 @@ class Vote extends Model
 {
     use Compoships;
 
+    const MIN_VOTES = 1;
+    const MAX_VOTES = 14;
+
+    const GENESIS_RECORD = 1;
+
+    protected $perPage = 20;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -17,11 +24,6 @@ class Vote extends Model
     protected $guarded = ['id'];
 
     public $timestamps = false;
-
-    const MAX_VOTES = 14;
-    const MIN_VOTES = 1;
-
-    const GENESIS_RECORD = 1;
 
     public function organisation()
     {

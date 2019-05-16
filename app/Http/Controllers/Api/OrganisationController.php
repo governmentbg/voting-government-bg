@@ -288,6 +288,7 @@ class OrganisationController extends ApiController
      * @param string filters[reg_date_from] - optional
      * @param string filters[reg_date_to] - optional
      * @param string filters[tour_id] - optional
+     * @param boolean filters[only_main_fields] - optional
      * @param string order_field - optional
      * @param string order_type - optional
      * @param boolean with_pagination - optional

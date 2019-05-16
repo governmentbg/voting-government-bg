@@ -30,7 +30,7 @@ class Organisation extends Model
     const DEFAULT_ORDER_FIELD = 'eik';
     const DEFAULT_ORDER_TYPE = 'ASC';
 
-    protected $perPage = 15;
+    protected $perPage = 20;
 
     protected $hidden = ['updater', 'creator'];
 

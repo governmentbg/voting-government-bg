@@ -1,4 +1,3 @@
-
 @foreach ($listData as $organisation)
     <tr>
         <td class="text-right">{{ ++$counter }}</td>

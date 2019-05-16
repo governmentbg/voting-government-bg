@@ -299,29 +299,32 @@ class VoteController extends ApiController
     /**
      * List already voted organisations
      *
-     * @param integer tour_id - required with status
-     * @param integer status - required with tour_id
+     * @param array filters - optional
+     * @param integer filters[tour_id] - required with status
+     * @param integer filters[status] - required with tour_id
+     * @param big integer filters[eik] - optional
      *
      * @return json - response with status code and list of voted organisations or errors
      */
     public function listVoters(Request $request)
     {
-        $post = $request->all();
+        $filters = $request->get('filters', []);
 
-        $validator = Validator::make($post, [
+        $validator = Validator::make($filters, [
             'tour_id' => 'required_with:status|int|exists:voting_tour,id',
             'status'  => 'required_with:tour_id|int|in:'. implode(',', array_keys(VotingTour::getActiveStatuses())),
+            'eik'     => 'nullable|digits_between:1,19',
         ]);
 
         if (!$validator->fails()) {
             try {
-                if (!empty($post['tour_id']) && !empty($post['status'])) {
-                    $votingTour = VotingTour::where('id', $post['tour_id'])->first();
+                if (!empty($filters['tour_id']) && !empty($filters['status'])) {
+                    $votingTour = VotingTour::where('id', $filters['tour_id'])->first();
                     if (empty($votingTour)) {
                         return $this->errorResponse(__('custom.voting_tour_not_found'));
                     }
 
-                    $voteStatus = $post['status'];
+                    $voteStatus = $filters['status'];
                 } else {
                     $votingTour = VotingTour::getLatestTour();
                     if (empty($votingTour)) {
@@ -334,13 +337,17 @@ class VoteController extends ApiController
                     }
                 }
 
-                $voters = Organisation::select('id', 'eik', 'name', 'is_candidate', 'created_at')
-                              ->where('voting_tour_id', $votingTour->id)
-                              ->whereIn('status', Organisation::getApprovedStatuses())
-                              ->whereHas('votes', function($query) use ($voteStatus) {
-                                  $query->where('tour_status', $voteStatus);
-                              })
-                              ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->paginate();
+                $voters = Organisation::select('id', 'eik', 'name', 'is_candidate', 'created_at');
+                if (isset($filters['eik'])) {
+                    $voters->where('eik', $filters['eik']);
+                }
+                $voters->where('voting_tour_id', $votingTour->id)
+                       ->whereIn('status', Organisation::getApprovedStatuses())
+                       ->whereHas('votes', function($query) use ($voteStatus) {
+                           $query->where('tour_status', $voteStatus);
+                       })
+                      ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
+                $voters = $voters->paginate();
 
                 return $this->successResponse($voters);
             } catch (\Exception $e) {

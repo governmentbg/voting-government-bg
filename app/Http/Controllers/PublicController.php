@@ -442,7 +442,8 @@ class PublicController extends BaseFrontendController
 
         return view('partials.ranking-rows', [
             'listData' => $dataFromCache['listData'],
-            'counter'  => $request->offsetGet('consecNum')
+            'counter'  => $request->offsetGet('consecNum'),
+            'orgNotEditable' => true
         ]);
     }
 }

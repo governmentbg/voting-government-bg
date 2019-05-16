@@ -121,12 +121,14 @@ class VotingTourController extends BaseAdminController
 
         list($votingTour, $tourErrors) = api_result(ApiVotingTour::class, 'getData', ['tour_id' => $id]);
 
-        if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
-            $cacheKey = VotingTour::getCacheKey($votingTour->id);
+        $cacheKey = VotingTour::getCacheKey($votingTour->id);
 
-            // check if vote result is cached
+        if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
+            //check if vote result is cached
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
+                $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
 
                 return view('tours.ranking', [
                     'listTitle'     => $votingTour->name,
@@ -135,24 +137,24 @@ class VotingTourController extends BaseAdminController
                     'showBallotage' => $dataFromCache['showBallotage'],
                     'stats'         => $dataFromCache['stats'],
                     'fullWidth'     => true,
+                    'ajaxMethod'    => 'rankingAjax'
                 ]);
             }
-
             // get vote status
             list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $votingTour->id]);
 
             if (!empty($listErrors)) {
-                $errors['message'] = __('custom.list_ranking_fail');
+                $errors = ['message' => __('custom.list_ranking_fail')];
             } elseif (!empty($voteStatus)) {
                 // list ranking
                 $params = [
                     'tour_id' => $votingTour->id,
-                    'status'  => VotingTour::STATUS_VOTING
+                    'status'  => VotingTour::STATUS_VOTING,
                 ];
                 list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
 
                 if (!empty($listErrors)) {
-                    $errors['message'] = __('custom.list_ranking_fail');
+                    $errors = ['message' => __('custom.list_ranking_fail')];
                 } elseif (!empty($listData)) {
                     // count registered organisations
                     $registered = Organisation::countRegistered($votingTour->id);
@@ -164,7 +166,7 @@ class VotingTourController extends BaseAdminController
                     $stats['voting'] = [
                         'all'     => $registered,
                         'voted'   => $voted,
-                        'percent' => 0
+                        'percent' => 0,
                     ];
                     if ($stats['voting']['all'] > 0) {
                         $stats['voting']['percent'] = round($stats['voting']['voted'] / $stats['voting']['all'] * 100, 2);
@@ -210,7 +212,7 @@ class VotingTourController extends BaseAdminController
                                 $stats['ballotage'] = [
                                     'all'     => $stats['voting']['all'],
                                     'voted'   => $voted,
-                                    'percent' => 0
+                                    'percent' => 0,
                                 ];
                                 if ($stats['ballotage']['all'] > 0) {
                                     $stats['ballotage']['percent'] = round($stats['ballotage']['voted'] / $stats['ballotage']['all'] * 100, 2);
@@ -250,20 +252,22 @@ class VotingTourController extends BaseAdminController
                     }
                 }
             }
-
-            // cache computed vote results for 1 hour
-            Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
         } else {
             return redirect()->route('admin.voting_tour.list');
         }
 
+        //cache computed vote results for 1 hour
+        Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
+
         return view('tours.ranking', [
             'listTitle'     => $votingTour->name,
-            'listData'      => $listData,
+            'listData'      => collect($listData)->forPage(1, 100),
             'route'         => 'admin.org_edit',
             'showBallotage' => $showBallotage,
             'stats'         => $stats,
             'fullWidth'     => true,
+            'fullWidth'     => true,
+            'ajaxMethod'    => 'rankingAjax',
         ])->withErrors($errors);
     }
 }

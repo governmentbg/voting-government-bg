@@ -19,7 +19,7 @@
                                 placeholder="{{__('custom.search')}}"
                                 value="{{ isset($eik) ? $eik : '' }}"
                                 maxlength="19"
-                                class="form-control js-search search-box no-outline"
+                                class="form-control js-search search-box no-outline js-focusout-submit"
                             >
                         </div>
                     </div>

@@ -124,28 +124,29 @@ class VotingTourController extends BaseAdminController
         if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
             $cacheKey = VotingTour::getCacheKey($votingTour->id);
 
-            //check if vote result is cached
+            // check if vote result is cached
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
                 $dataFromCache['listData'] = collect($dataFromCache['listData']);
                 $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
 
                 return view('tours.ranking', [
-                    'listTitle'     => $votingTour->name,
-                    'listData'      => $dataFromCache['listData'],
-                    'route'         => 'admin.org_edit',
-                    'showBallotage' => $dataFromCache['showBallotage'],
-                    'stats'         => $dataFromCache['stats'],
-                    'fullWidth'     => true,
-                    'ajaxMethod'    => 'rankingAjax',
+                    'listTitle'      => $votingTour->name,
+                    'listData'       => $dataFromCache['listData'],
+                    'route'          => 'admin.org_edit',
+                    'showBallotage'  => $dataFromCache['showBallotage'],
+                    'stats'          => $dataFromCache['stats'],
+                    'fullWidth'      => true,
+                    'ajaxMethod'     => 'rankingAjax',
                     'orgNotEditable' => true
                 ]);
             }
+
             // get vote status
             list($voteStatus, $listErrors) = api_result(ApiVote::class, 'getVoteStatus', ['tour_id' => $votingTour->id]);
 
             if (!empty($listErrors)) {
-                $errors = ['message' => __('custom.list_ranking_fail')];
+                $errors['message'] = __('custom.list_ranking_fail');
             } elseif (!empty($voteStatus)) {
                 // list ranking
                 $params = [
@@ -167,7 +168,7 @@ class VotingTourController extends BaseAdminController
                     $stats['voting'] = [
                         'all'     => $registered,
                         'voted'   => $voted,
-                        'percent' => 0,
+                        'percent' => 0
                     ];
                     if ($stats['voting']['all'] > 0) {
                         $stats['voting']['percent'] = round($stats['voting']['voted'] / $stats['voting']['all'] * 100, 2);
@@ -203,7 +204,7 @@ class VotingTourController extends BaseAdminController
                         list($ballotageData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
 
                         if (!empty($listErrors)) {
-                            $errors['message'] = __('custom.list_ranking_fail');
+                            $errors['message'] = __('custom.list_ballotage_ranking_fail');
                         } elseif (!empty($ballotageData)) {
                             // count voted organisations
                             $voted = Organisation::countVoted($params['tour_id'], $params['status']);
@@ -253,21 +254,22 @@ class VotingTourController extends BaseAdminController
                     }
                 }
             }
-            //cache computed vote results for 1 hour
+
+            // cache computed vote results for 1 hour
             Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'showBallotage' => $showBallotage], now()->addMinutes(60));
         } else {
             return redirect()->route('admin.voting_tour.list');
         }
 
         return view('tours.ranking', [
-            'listTitle'     => $votingTour->name,
-            'listData'      => collect($listData)->forPage(1, 100),
-            'route'         => 'admin.org_edit',
-            'showBallotage' => $showBallotage,
-            'stats'         => $stats,
-            'fullWidth'     => true,
-            'fullWidth'     => true,
-            'ajaxMethod'    => 'rankingAjax',
+            'listTitle'      => $votingTour->name,
+            'listData'       => collect($listData)->forPage(1, 100),
+            'route'          => 'admin.org_edit',
+            'showBallotage'  => $showBallotage,
+            'stats'          => $stats,
+            'fullWidth'      => true,
+            'fullWidth'      => true,
+            'ajaxMethod'     => 'rankingAjax',
             'orgNotEditable' => true
         ])->withErrors($errors);
     }

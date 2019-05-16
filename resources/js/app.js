@@ -340,6 +340,6 @@ $(document).ready(function() {
 
 // Fixes a bug where nanoscroll is not initialized for textareas
 // while inputting text
-$('.h-90').on('keyup', function() {
+$('.txt-area-height').on('keyup', function() {
     $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });

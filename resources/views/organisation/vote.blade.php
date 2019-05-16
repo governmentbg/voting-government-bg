@@ -25,7 +25,7 @@
                         <div class="display-flex m-b-8">
                             <input type="text" name="org_name" id="filter_org" placeholder="{{__('custom.search')}}" autocomplete="off" class="search-box float-right w-100 no-outline">
                         </div>
-                        <div class="nano h-65 m-b-15">
+                        <div class="nano vote-height m-b-15">
                         <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box nano-content" size="14">
                             @if (!empty($orgList))
                                 @foreach ($orgList as $singleOrg)
@@ -43,18 +43,18 @@
                         </select>
                         </div>
                     </div>
-                    <div class="col-md-1 p-l-37 arrows-position">
-                        <div>
-                            <img class="arrow-right c-darkBlue" src="{{ asset('img/vote_arrow.svg') }}" id="js-add-org" height="60px" width="60px" />
+                    <div class="col-md-1 arrows-position">
+                        <div class="display-flex justify-center">
+                            <img class="arrow-right c-darkBlue c-pointer" src="{{ asset('img/vote_arrow.svg') }}" id="js-add-org" height="60px" width="60px" />
                         </div>
-                        <div class="p-t-15">
-                            <img class="arrow-left c-darkBlue" src="{{ asset('img/vote_arrow.svg') }}"  id="js-remove-org" height="60px" width="60px" />
+                        <div class="p-t-15 display-flex justify-center">
+                            <img class="arrow-left c-darkBlue c-pointer" src="{{ asset('img/vote_arrow.svg') }}"  id="js-remove-org" height="60px" width="60px" />
                         </div>
                     </div>
                     <div class="col-md-4 vote-box-outline">
                         <h3 class="m-t-15">{{ __('custom.selected_participants') }} {{ __('custom.max_14') }}</h3>
                         <hr class="hr-small">
-                        <div class="m-t-53 nano h-65 m-b-15">
+                        <div class="m-t-53 nano vote-height m-b-15">
                             <select name="votefor[]" multiple="multiple" id="votefor" class="vote-box nano-content" size="13">
                                 @if (!empty($latestVoteData))
                                     @foreach ($orgList as $singleOrg)

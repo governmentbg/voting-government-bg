@@ -75,11 +75,11 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
                     <div class="col-sm-8 col-xs-6 p-r-none">
-                        <div class="nano h-90">
+                        <div class="nano txt-area-height">
                             <textarea
                                 class="txt-area no-outline p-a-5 nano-content"
                                 name=""
-                                rows="3"
+                                rows="5"
                                 cols="40"
                                 readonly="true"
                             >{{ $organisation->description }}</textarea>
@@ -89,11 +89,11 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
                     <div class="col-sm-8 col-xs-6 p-r-none">
-                        <div class="nano h-90">
+                        <div class="nano txt-area-height">
                             <textarea
                                 class="txt-area no-outline p-a-5 nano-content"
                                 name=""
-                                rows="3"
+                                rows="5"
                                 cols="40"
                                 readonly="true"
                             >{{ $organisation->references }}</textarea>

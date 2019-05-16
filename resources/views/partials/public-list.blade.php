@@ -11,7 +11,7 @@
             <form method="get" action="{{ route($route) }}">
                 <div class="offset-lg-8">
                     <div class="row form-group">
-                        <label for="eik" class="col-form-label">{{ __('custom.eik') }}:</label>
+                        <label for="eik" class="col-form-label p-l-15">{{ __('custom.eik') }}:</label>
                         <div class="col-lg-11">
                             <input
                                 type="text"

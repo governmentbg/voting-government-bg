@@ -41,12 +41,6 @@ class VotingTourController extends BaseAdminController
 
     public function create()
     {
-//        list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
-//
-//        if($votingTour && $votingTour->status != VotingTour::STATUS_FINISHED){
-//            return redirect()->back()->withErrors(['messsage' => __('custom.active_tour_exists')]);
-//        }
-
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
         $this->addBreadcrumb(__('custom.create_voting_tour'), '');

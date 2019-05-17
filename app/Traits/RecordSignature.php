@@ -9,28 +9,35 @@ trait RecordSignature
 {
     protected static function bootRecordSignature()
     {
-        $userId = null;
+        static::updating(function ($model) {
+            $userId = self::getUserId();
 
-        if (Auth::check()) {
-            $userId = Auth::user()->id;
-        } else {
-            if (\Schema::hasTable('users')) {
-                if (!empty($system = User::select('id')->where('username', config('auth.system.user'))->first())) {
-                    $userId = $system->id;
-                }
-            }
-        }
-
-        static::updating(function ($model) use ($userId) {
-            if (array_key_exists('updated_by', $model->attributes) && empty($model->updated_by)) {
+            if (array_key_exists('updated_by', $model->attributes)) {
                 $model->updated_by = $userId;
             }
         });
 
-        static::creating(function ($model) use ($userId) {
+        static::creating(function ($model) {
+            $userId = self::getUserId();
+
             if (empty($model->created_by)) {
                 $model->created_by = $userId;
             }
         });
+    }
+
+    private static function getUserId()
+    {
+        if (Auth::guard('backend')->check()) {
+            $userId = Auth::guard('backend')->user()->id;
+        } elseif (Auth::check()) {
+            $userId = Auth::user()->id;
+        } elseif (!empty($system = User::select('id')->where('username', config('auth.system.user'))->first())) {
+            $userId = $system->id;
+        } else {
+            $userId = null;
+        }
+
+        return $userId;
     }
 }

@@ -69,6 +69,11 @@ class Message extends Model
     {
     }
 
+    public function setUpdatedAtAttribute($value)
+    {
+        // to Disable updated_at
+    }
+
     public function scopeSort($query, $field, $order)
     {
         if (isset($field)) {

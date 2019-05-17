@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Organisation', 'org_id');
     }
 
+    public function setUpdatedAtAttribute($value)
+    {
+        // to disable updated_at
+    }
+
     public function scopeSort($query, $field, $order)
     {
         if (isset($field)) {

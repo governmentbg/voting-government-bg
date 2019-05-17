@@ -32,7 +32,12 @@
             @if (!empty($listData))
                 <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
-                        <table class="table table-striped ams-table ranking js-orgs" data-show-view="{{$orgNotEditable}}" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
+                        <table
+                            class="table table-striped ams-table ranking js-orgs"
+                            data-show-view="{{$orgNotEditable}}"
+                            data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}"
+                            data-tour-id="{{isset($tourId) ? $tourId : ''}}"
+                        >
                             <thead>
                                 <tr>
                                     <th class="w-5">{{ __('custom.number') }}</th>

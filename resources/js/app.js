@@ -313,14 +313,16 @@ $('.js-org-table').on('scroll', function() {
     if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
         var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
         var showView = $('.js-orgs').data('show-view');
+        var tourId = $('.js-orgs').data('tourId');
 
         $.ajax({
             type: 'GET',
             url: $('.js-orgs').data('ajax-url'),
             data: {
-                "page" : initialPage,
-                "consecNum" : lastEntryNumber,
-                "showView" : showView
+                'page' : initialPage,
+                'consecNum' : lastEntryNumber,
+                'showView' : showView,
+                'tourId' : tourId
             },
             success: function(result) {
                 $('.js-orgs').append(

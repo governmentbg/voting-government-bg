@@ -13,6 +13,7 @@ use App\Jobs\SendAllVoteInvites;
 use App\Organisation;
 use App\Vote;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 class VotingTourController extends BaseAdminController
 {
@@ -137,8 +138,9 @@ class VotingTourController extends BaseAdminController
                     'showBallotage'  => $dataFromCache['showBallotage'],
                     'stats'          => $dataFromCache['stats'],
                     'fullWidth'      => true,
-                    'ajaxMethod'     => 'rankingAjax',
-                    'orgNotEditable' => true
+                    'ajaxMethod'     => 'rankingAdminAjax',
+                    'orgNotEditable' => true,
+                    'tourId'         => $id
                 ]);
             }
 
@@ -269,8 +271,36 @@ class VotingTourController extends BaseAdminController
             'stats'          => $stats,
             'fullWidth'      => true,
             'fullWidth'      => true,
-            'ajaxMethod'     => 'rankingAjax',
-            'orgNotEditable' => true
+            'ajaxMethod'     => 'rankingAdminAjax',
+            'orgNotEditable' => true,
+            'tourId'         => $id
         ])->withErrors($errors);
+    }
+
+    public function listAdminRankingAjax(Request $request)
+    {
+        $dataFromCache = [];
+        $dataFromCache['listData'] = [];
+
+        $page = $request->offsetGet('page');
+        $tourId = $request->offsetGet('tourId');
+
+        $showView = $request->offsetGet('showView');
+
+        if (!empty($tourId)) {
+            $cacheKey = VotingTour::getCacheKey($tourId);
+
+            if (Cache::has($cacheKey)) {
+                $dataFromCache = Cache::get($cacheKey);
+                $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                $dataFromCache['listData'] = $dataFromCache['listData']->forPage($page, 100);
+            }
+        }
+
+        return view('partials.ranking-rows', [
+            'listData' => $dataFromCache['listData'],
+            'counter'  => $request->offsetGet('consecNum'),
+            'orgNotEditable' => $showView
+        ]);
     }
 }

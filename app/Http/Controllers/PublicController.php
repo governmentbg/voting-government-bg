@@ -100,7 +100,7 @@ class PublicController extends BaseFrontendController
         $showLinks = [];
         $listData = [];
         $errors = [];
-        $tmp = $novar;//test
+
         $eik = $request->offsetGet('eik');
 
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {

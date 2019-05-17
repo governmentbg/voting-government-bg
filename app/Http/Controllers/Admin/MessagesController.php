@@ -18,6 +18,7 @@ class MessagesController extends BaseAdminController
     public function list(Request $request)
     {
         $errors = [];
+        $messages = [];
 
         if (session()->has('errors')) {
             $errors = session()->get('errors')->messages();
@@ -32,16 +33,18 @@ class MessagesController extends BaseAdminController
         $field = request('orderBy', 'created_at');
         $orderType = request('order', 'DESC');
 
-        list($messages, $msgErrors) = api_result(ApiMessages::class, 'search', [
-            'filters'     => $filters,
-            'order_field' => $field,
-            'order_type'  => $orderType,
-        ]);
+        if (!empty($this->votingTour)) {
+            list($messages, $msgErrors) = api_result(ApiMessages::class, 'search', [
+                'filters'     => $filters,
+                'order_field' => $field,
+                'order_type'  => $orderType,
+            ]);
 
-        if (!empty($msgErrors)) {
-            $request->session()->flash('alert-danger', __('custom.list_msg_fail'));
-        } else {
-            $messages = !empty($messages->data) ? $this->paginate($messages) : [];
+            if (!empty($msgErrors)) {
+                $request->session()->flash('alert-danger', __('custom.list_msg_fail'));
+            } else {
+                $messages = !empty($messages->data) ? $this->paginate($messages) : [];
+            }
         }
 
         $this->addBreadcrumb(__('breadcrumbs.message_list'), '');

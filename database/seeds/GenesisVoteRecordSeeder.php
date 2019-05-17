@@ -13,12 +13,12 @@ class GenesisVoteRecordSeeder extends Seeder
      */
     public function run()
     {
-        if (!Vote::where('voter_id', 0)->where('voting_tour_id', 0)->first()){
+        if (!Vote::where('voter_id', 0)->where('voting_tour_id', 0)->first()) {
             if (config('database.INITIAL_HASH')) {
                 Schema::disableForeignKeyConstraints();
 
                 // Genesis block for votes
-                factory(Vote::class)->create([
+                Vote::create([
                     'vote_time' => date('Y-m-d H:i:s'),
                     'voter_id' => 0,
                     'voting_tour_id' => 0,

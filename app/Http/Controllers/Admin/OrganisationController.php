@@ -19,6 +19,7 @@ class OrganisationController extends BaseAdminController
 
     public function list(Request $request)
     {
+        $organisations = [];
         $status = $request->offsetGet('status');
         $eik = $request->offsetGet('eik');
         $email = $request->offsetGet('email');
@@ -65,17 +66,19 @@ class OrganisationController extends BaseAdminController
             $orderType = 'desc';
         }
 
-        list($organisations, $errors) = api_result(ApiOrganisation::class, 'search', [
-            'with_pagination' => true,
-            'filters'         => $allFilters,
-            'order_field'     => $orderField,
-            'order_type'      => $orderType,
-        ]);
+        if (!empty($this->votingTour)) {
+            list($organisations, $errors) = api_result(ApiOrganisation::class, 'search', [
+                'with_pagination' => true,
+                'filters'         => $allFilters,
+                'order_field'     => $orderField,
+                'order_type'      => $orderType,
+            ]);
 
-        if (!empty($errors)) {
-            $request->session()->flash('alert-danger', __('custom.list_org_fail'));
-        } else {
-            $organisations = !empty($organisations->data) ? $this->paginate($organisations) : [];
+            if (!empty($errors)) {
+                $request->session()->flash('alert-danger', __('custom.list_org_fail'));
+            } else {
+                $organisations = !empty($organisations->data) ? $this->paginate($organisations) : [];
+            }
         }
 
         list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');

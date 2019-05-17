@@ -1,6 +1,6 @@
 <div class="flex-nav-items p-t-15">
     <div class="p-l-25 f-s-21">
-        @if (isset($votingTourData))
+        @if (!empty($votingTourData))
             @if ($votingTourData->showTick)
                 <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="display-inline m-t-12"/>
             @endif

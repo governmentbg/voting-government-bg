@@ -432,7 +432,6 @@ class PublicController extends BaseFrontendController
         $dataFromCache['listData'] = [];
 
         $page = $request->offsetGet('page');
-        $showView = $request->offsetGet('showView');
 
         if (!empty($this->votingTour) && in_array($this->votingTour->status, VotingTour::getRankingStatuses())) {
             $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
@@ -446,7 +445,7 @@ class PublicController extends BaseFrontendController
         return view('partials.ranking-rows', [
             'listData' => $dataFromCache['listData'],
             'counter'  => $request->offsetGet('consecNum'),
-            'orgNotEditable' => $showView
+            'orgNotEditable' => false
         ]);
     }
 }

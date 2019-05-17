@@ -34,9 +34,7 @@
                     <div class="tableFixHead nano-content js-org-table">
                         <table
                             class="table table-striped ams-table ranking js-orgs"
-                            data-show-view="{{$orgNotEditable}}"
                             data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}"
-                            data-tour-id="{{isset($tourId) ? $tourId : ''}}"
                         >
                             <thead>
                                 <tr>

@@ -139,8 +139,7 @@ class VotingTourController extends BaseAdminController
                     'stats'          => $dataFromCache['stats'],
                     'fullWidth'      => true,
                     'ajaxMethod'     => 'rankingAdminAjax',
-                    'orgNotEditable' => true,
-                    'tourId'         => $id
+                    'orgNotEditable' => true
                 ]);
             }
 
@@ -272,23 +271,19 @@ class VotingTourController extends BaseAdminController
             'fullWidth'      => true,
             'fullWidth'      => true,
             'ajaxMethod'     => 'rankingAdminAjax',
-            'orgNotEditable' => true,
-            'tourId'         => $id
+            'orgNotEditable' => true
         ])->withErrors($errors);
     }
 
-    public function listAdminRankingAjax(Request $request)
+    public function listAdminRankingAjax(Request $request, $id)
     {
         $dataFromCache = [];
         $dataFromCache['listData'] = [];
 
         $page = $request->offsetGet('page');
-        $tourId = $request->offsetGet('tourId');
 
-        $showView = $request->offsetGet('showView');
-
-        if (!empty($tourId)) {
-            $cacheKey = VotingTour::getCacheKey($tourId);
+        if (!empty($id)) {
+            $cacheKey = VotingTour::getCacheKey($id);
 
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
@@ -300,7 +295,7 @@ class VotingTourController extends BaseAdminController
         return view('partials.ranking-rows', [
             'listData' => $dataFromCache['listData'],
             'counter'  => $request->offsetGet('consecNum'),
-            'orgNotEditable' => $showView
+            'orgNotEditable' => true
         ]);
     }
 }

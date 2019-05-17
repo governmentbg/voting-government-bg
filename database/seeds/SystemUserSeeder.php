@@ -13,8 +13,8 @@ class SystemUserSeeder extends Seeder
      */
     public function run()
     {
-        if(!User::where('username', config('auth.system.user'))->first()){
-            factory(\App\User::class)->create([
+        if (!User::where('username', config('auth.system.user'))->first()) {
+            User::create([
                 'username' => config('auth.system.user'),
                 'password' => Hash::make(str_random(60)),
                 'active' => 1,
@@ -24,8 +24,7 @@ class SystemUserSeeder extends Seeder
                 'voting_tour_id' => null,
                 'org_id' => null
             ]);
-        }
-        else{
+        } else {
             if (isset($this->command)) {
                 $this->command->warn("System user already exists!");
             }

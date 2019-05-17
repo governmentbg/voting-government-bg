@@ -9,12 +9,16 @@ trait RecordSignature
 {
     protected static function bootRecordSignature()
     {
+        $userId = null;
+
         if (Auth::check()) {
             $userId = Auth::user()->id;
-        } elseif (!empty($system = User::select('id')->where('username', config('auth.system.user'))->first())) {
-            $userId = $system->id;
         } else {
-            $userId = null;
+            if (\Schema::hasTable('users')) {
+                if (!empty($system = User::select('id')->where('username', config('auth.system.user'))->first())) {
+                    $userId = $system->id;
+                }
+            }
         }
 
         static::updating(function ($model) use ($userId) {

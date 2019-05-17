@@ -81,10 +81,14 @@ class VotingTour extends Model
 
     public static function getLatestTour()
     {
-        $latestTour = self::where('status', '!=', self::STATUS_FINISHED)->first();
+        $latestTour = [];
 
-        if (empty($latestTour)) {
-            $latestTour = self::orderBy('updated_at', 'DESC')->orderBy('id', 'DESC')->first();
+        if (\Schema::hasTable('voting_tour')) {
+            $latestTour = self::where('status', '!=', self::STATUS_FINISHED)->first();
+
+            if (empty($latestTour)) {
+                $latestTour = self::orderBy('updated_at', 'DESC')->orderBy('id', 'DESC')->first();
+            }
         }
 
         if (empty($latestTour)) {

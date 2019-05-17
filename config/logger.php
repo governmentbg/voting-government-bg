@@ -14,6 +14,7 @@ return [
     'tag' => [
         'test' => 'amsvoting.test',
         'production' => 'amsvoting.production',
+        'local' => 'amsvoting.production',
     ]
 ];
 

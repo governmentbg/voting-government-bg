@@ -9,10 +9,10 @@
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
             <form method="get" action="{{ route($route) }}">
-                <div class="offset-lg-8">
+                <div class="offset-lg-6">
                     <div class="row form-group">
-                        <label for="eik" class="col-form-label">{{ __('custom.eik') }}:</label>
-                        <div class="col-lg-11">
+                        <label for="eik" class="col-form-label p-l-15 offset-lg-3 col-lg-2">{{ __('custom.eik') }}:</label>
+                        <div class="col-lg-7">
                             <input
                                 type="text"
                                 name="eik"

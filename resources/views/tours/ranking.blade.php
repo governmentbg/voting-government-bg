@@ -8,7 +8,7 @@
         @include('components.errors')
         @include('components.status')
         <div class="col-md-10 offset-md-1">
-        @include('partials.public-ranking', ['orgNotEditable' => true])
+            @include('partials.public-ranking', ['orgNotEditable' => $orgNotEditable])
         </div>
     </div>
 

@@ -220,7 +220,8 @@ class PublicController extends BaseFrontendController
                     'isRanking'     => true,
                     'showBallotage' => $dataFromCache['showBallotage'],
                     'stats'         => $dataFromCache['stats'],
-                    'ajaxMethod'    => 'rankingAjax'
+                    'ajaxMethod'    => 'rankingAjax',
+                    'orgNotEditable' => false
                 ]);
             }
 
@@ -350,7 +351,8 @@ class PublicController extends BaseFrontendController
             'isRanking'     => true,
             'showBallotage' => $showBallotage,
             'stats'         => $stats,
-            'ajaxMethod'    => 'rankingAjax'
+            'ajaxMethod'    => 'rankingAjax',
+            'orgNotEditable' => false
         ])->withErrors($errors);
     }
 
@@ -442,7 +444,8 @@ class PublicController extends BaseFrontendController
 
         return view('partials.ranking-rows', [
             'listData' => $dataFromCache['listData'],
-            'counter'  => $request->offsetGet('consecNum')
+            'counter'  => $request->offsetGet('consecNum'),
+            'orgNotEditable' => false
         ]);
     }
 }

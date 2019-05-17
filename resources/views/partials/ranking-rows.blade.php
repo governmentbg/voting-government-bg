@@ -6,6 +6,7 @@
         } elseif (isset($organisation->dropped_out) && $organisation->dropped_out) {
             $class = 'dropped-out ';
         }
+
     @endphp
     <tr class="{{ $class }}">
         <td class="text-right">{{ ++$counter }}</td>

@@ -91,6 +91,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/organisations/edit/{id}', 'OrganisationController@edit')->name('admin.org_edit');
         Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
         Route::get('/organisations/{id}/messages/new', 'MessagesController@add')->name('admin.messages.add');
+        Route::get('/votingTours/{id}/rankingAdminAjax', 'VotingTourController@listAdminRankingAjax');
 
         // SYSTEM user routes
         Route::group(['middleware' => 'auth.system:backend'], function () {

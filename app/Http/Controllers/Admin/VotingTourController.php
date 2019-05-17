@@ -13,6 +13,7 @@ use App\Jobs\SendAllVoteInvites;
 use App\Organisation;
 use App\Vote;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 class VotingTourController extends BaseAdminController
 {
@@ -127,14 +128,18 @@ class VotingTourController extends BaseAdminController
             // check if vote result is cached
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
+                $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
 
                 return view('tours.ranking', [
-                    'listTitle'     => $votingTour->name,
-                    'listData'      => $dataFromCache['listData'],
-                    'route'         => 'admin.org_edit',
-                    'showBallotage' => $dataFromCache['showBallotage'],
-                    'stats'         => $dataFromCache['stats'],
-                    'fullWidth'     => true,
+                    'listTitle'      => $votingTour->name,
+                    'listData'       => $dataFromCache['listData'],
+                    'route'          => 'admin.org_edit',
+                    'showBallotage'  => $dataFromCache['showBallotage'],
+                    'stats'          => $dataFromCache['stats'],
+                    'fullWidth'      => true,
+                    'ajaxMethod'     => 'rankingAdminAjax',
+                    'orgNotEditable' => true
                 ]);
             }
 
@@ -258,12 +263,39 @@ class VotingTourController extends BaseAdminController
         }
 
         return view('tours.ranking', [
-            'listTitle'     => $votingTour->name,
-            'listData'      => $listData,
-            'route'         => 'admin.org_edit',
-            'showBallotage' => $showBallotage,
-            'stats'         => $stats,
-            'fullWidth'     => true,
+            'listTitle'      => $votingTour->name,
+            'listData'       => collect($listData)->forPage(1, 100),
+            'route'          => 'admin.org_edit',
+            'showBallotage'  => $showBallotage,
+            'stats'          => $stats,
+            'fullWidth'      => true,
+            'fullWidth'      => true,
+            'ajaxMethod'     => 'rankingAdminAjax',
+            'orgNotEditable' => true
         ])->withErrors($errors);
+    }
+
+    public function listAdminRankingAjax(Request $request, $id)
+    {
+        $dataFromCache = [];
+        $dataFromCache['listData'] = [];
+
+        $page = $request->offsetGet('page');
+
+        if (!empty($id)) {
+            $cacheKey = VotingTour::getCacheKey($id);
+
+            if (Cache::has($cacheKey)) {
+                $dataFromCache = Cache::get($cacheKey);
+                $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                $dataFromCache['listData'] = $dataFromCache['listData']->forPage($page, 100);
+            }
+        }
+
+        return view('partials.ranking-rows', [
+            'listData' => $dataFromCache['listData'],
+            'counter'  => $request->offsetGet('consecNum'),
+            'orgNotEditable' => true
+        ]);
     }
 }

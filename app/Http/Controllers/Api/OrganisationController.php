@@ -208,9 +208,15 @@ class OrganisationController extends ApiController
 
                     if ($organisation) {
                         $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
-                        $description = (array_key_exists('description', $data) ? trim($data['description']) : $organisation->description);
-                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE && $description == '') {
-                            return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
+                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
+                            $description = (array_key_exists('description', $data) ? $data['description'] : $organisation->description);
+                            if (trim($description) == '') {
+                                return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
+                            }
+                            $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
+                            if (trim($references) == '') {
+                                $data['references'] = '';
+                            }
                         }
 
                         $orgData = [];

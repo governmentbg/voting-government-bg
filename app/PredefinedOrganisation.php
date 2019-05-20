@@ -18,7 +18,7 @@ class PredefinedOrganisation extends Model
     {
         $query->where('eik', $eik)->select('name', 'city', 'address', 'phone', 'email');
 
-        return $query->first();
+        return $query;
     }
 
     public function getFullAddressAttribute()

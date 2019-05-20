@@ -311,12 +311,12 @@ input[type='file'] {
     color: $darkRed;
 }
 
-.alert-error{
+.alert-error {
     color: $darkRed;
     border-color: $darkRed;
 }
 
-.alert-status{
+.alert-status {
     color: $darkBlue;
     border-color: $darkBlue;
 }
@@ -326,6 +326,10 @@ input[type='file'] {
     border-radius: 7px;
     padding-left: 5px;
     background: url(/img/lupa.svg) no-repeat right 0.5rem center/20px 22px;
+
+    &::-ms-clear {
+       display: none;
+    }
 }
 
 .space-between {

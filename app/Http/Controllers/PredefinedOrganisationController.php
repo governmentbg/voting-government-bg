@@ -13,7 +13,7 @@ class PredefinedOrganisationController extends Controller
 
         $result = [];
         if (isset($eik) && is_numeric($eik)) {
-            $data = PredefinedOrganisation::getData($eik);
+            $data = PredefinedOrganisation::getData($eik)->first();
             if (!empty($data)) {
                 $result['data'] = $data;
                 $result['data']['fullAddress'] = $data->fullAddress;

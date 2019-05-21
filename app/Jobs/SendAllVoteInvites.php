@@ -14,10 +14,10 @@ use App\Organisation;
 class SendAllVoteInvites implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
+
     /**
      *  Current Voting tour status.
-     * @var int 
+     * @var int
      */
     private $status;
 
@@ -38,22 +38,25 @@ class SendAllVoteInvites implements ShouldQueue
      */
     public function handle()
     {
-        list($organisations , $errors) = api_result(ApiOrg::class, 'search', [ 'filters' => ['statuses' => Organisation::getApprovedStatuses()], 'with_pagination' => false]);
-        //page_number - maybe
-        
-        if(!empty($errors)){
-            if(is_array($errors)){
-                $error = array_shift($errors);
-            }
-            else{
+        list($organisations, $errors) = api_result(ApiOrg::class, 'search', [
+            'filters' => [
+                'statuses' => Organisation::getApprovedStatuses(),
+            ],
+            'with_pagination' => false
+        ]);
+
+        if (!empty($errors)) {
+            if (!is_string($errors)) {
+                $error = json_encode($errors, JSON_UNESCAPED_UNICODE);
+            } else {
                 $error = $errors;
             }
-            
+
             throw new \Exception($error);
         }
-               
-        foreach($organisations as $key => $organisation) {
+
+        foreach ($organisations as $key => $organisation) {
             SendVoteInvite::dispatch($organisation, $this->status);
         }
-    }    
+    }
 }

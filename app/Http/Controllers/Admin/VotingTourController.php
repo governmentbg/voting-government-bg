@@ -7,7 +7,6 @@ ini_set('max_execution_time', 300);
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\VoteController as ApiVote;
-use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\VotingTour;
 use App\Jobs\SendAllVoteInvites;
 use App\Organisation;
@@ -100,7 +99,12 @@ class VotingTourController extends BaseAdminController
 
     private function sendEmails($status)
     {
-        SendAllVoteInvites::dispatch($status);
+        try {
+            SendAllVoteInvites::dispatch($status);
+        } catch (\Exception $e) {
+            logger()->error('Send vote invites error: '. $e->getMessage());
+            session()->flash('alert-info', __('custom.send_vote_invites_failed'));
+        }
     }
 
     public function ranking($id)

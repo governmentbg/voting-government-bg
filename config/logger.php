@@ -13,6 +13,7 @@ return [
      */
     'tag' => [
         'test' => 'amsvoting.test',
+        'demo' => 'amsvoting.test',
         'production' => 'amsvoting.production'
     ]
 ];

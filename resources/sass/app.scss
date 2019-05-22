@@ -668,3 +668,18 @@ html {
         font-size: 1.2rem;
     }
 }
+
+@mixin table-mixin() {
+    margin-bottom: 1rem;
+    color: #212529;
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+@media (max-width: 991px) {
+    .js-var {
+        @include table-mixin();
+    }
+}

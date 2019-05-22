@@ -44,7 +44,7 @@ $app->singleton(
 $app->configureMonologUsing(function ($monolog) use($app){
     $logLevel = \Monolog\Logger::toMonologLevel(config('app.log_level'));
 
-    if(App::environment(['test', 'production'])){
+    if(App::environment(['test', 'production', 'demo'])){
         //graylog handler
         $fluentd = new \App\Extensions\FluentdHandler($logLevel);
         $fluentd->pushProcessor(function ($record) {

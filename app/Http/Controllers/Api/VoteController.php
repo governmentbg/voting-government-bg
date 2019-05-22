@@ -47,7 +47,7 @@ class VoteController extends ApiController
 
                         $votedForListSize = sizeof($votedForOrgArray);
 
-                        if ($votedForListSize <= Vote::MAX_VOTES || ($votedForListSize >= Vote::MIN_VOTES)) {
+                        if ($votedForListSize <= Vote::MAX_VOTES && ($votedForListSize >= Vote::MIN_VOTES)) {
                             $currentTourOrgList = Organisation::where('voting_tour_id', VotingTour::getLatestTour()->id)
                                 ->whereIn('id', $votedForOrgArray)
                                 ->whereIn('status', [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE])

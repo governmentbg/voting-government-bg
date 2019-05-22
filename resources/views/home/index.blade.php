@@ -9,7 +9,7 @@
 @include('components.breadcrumbs')
 <div class="row">
     @include('components.status')
-    <div class="col-lg-7 p-l-25">
+    <div class="col-lg-7 col-md-7 col-sm-7 col-11 p-l-25">
         <div class="p-l-40">
             <h3><b>{{ __('custom.online_voting_system') }}</b></h3>
             <p>
@@ -18,7 +18,7 @@
             </p>
         </div>
     </div>
-    <div class="col-lg-5 p-l-40">
+    <div class="col-lg-5 col-md-5 col-sm-5 col-11 p-l-40">
         @if (!auth()->check() && !isset($reset_password))
         <div>
             <form method="POST" action="{{ route('login') }}">
@@ -54,8 +54,8 @@
                     </div>
                 </div>
             </form>
-            <div class="row p-t-15">
-                <div class="col-lg-4 p-l-none p-r-none">
+            <div class="form-group row p-t-15">
+                <div class="col-lg-6 p-l-none p-r-none">
                     @if (isset($showRegister) && $showRegister)
                         <a href="{{ route('organisation.register') }}">
                             <h3 class="f-s-14">{{ __('custom.register') }}</h3>
@@ -66,21 +66,21 @@
                         </a>
                     @endif
                 </div>
-                <div class="col-lg-5 text-right p-l-none">
+                <div class="col-lg-6 p-l-none mt-xl-0 mt-md-3 mt-sm-3 mt-3">
                     <a href="{{ route('password.request') }}">
                         <h3 class="f-s-14">{{ __('custom.forgotten_password') }}</h3>
                     </a>
                 </div>
-            </div>
-            @if (isset($showRegister) && $showRegister)
-                <div class="form-group row text-center p-t-15">
-                    <div class="col-xs-12">
-                        <a href="mailto:{{ config('mail.mailto') }}">
-                            <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
-                        </a>
+                @if (isset($showRegister) && $showRegister)
+                    <div class="form-group row p-t-15">
+                        <div class="col-lg-12">
+                            <a href="mailto:{{ config('mail.mailto') }}">
+                                <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
         @elseif (!auth()->check())
             <!-- Forgotten password form -->

@@ -33,7 +33,7 @@
             @if (!empty($listData))
                 <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
-                        <table class="table table-striped ams-table js-orgs" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
+                        <table class="table table-striped table-responsive ams-table js-orgs" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
                             <thead>
                                 <tr>
                                     <th class="w-5 no-top">{{ __('custom.number') }}</th>

@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="{{ isset($fullWidth) && $fullWidth ? 'col-lg-12' : 'col-lg-7' }} p-l-25">
+    <div class="{{ isset($fullWidth) && $fullWidth ? 'col-lg-12' : 'col-lg-6' }} p-l-25">
         <div class="p-l-40">
             @if (!empty($errors) && $errors->has('message'))
                 @include('components.errors')
@@ -33,7 +33,7 @@
                 <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
                         <table
-                            class="table table-striped ams-table ranking js-orgs"
+                            class="table table-striped table-responsive ams-table ranking js-orgs"
                             data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}"
                         >
                             <thead>

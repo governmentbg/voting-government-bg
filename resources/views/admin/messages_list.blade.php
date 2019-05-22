@@ -14,19 +14,21 @@
 
             <div class="from-group row">
                 <div class="col-lg-3">
-                    <div class="headerDropdown row form-group">
+                    <div class="row form-group">
                         <label for="filters[status]" class="col-form-label col-lg-3">{{__('custom.status')}}:</label>
-                        <select name="filters[status]" class="col-lg-8 ams-dropdown custom-select w-50 js-drop-filter p-t-3">
-                            @if (isset($statuses))
-                                @foreach ($statuses as $statIndex => $statusName)
-                                    <option
-                                        value="{{ $statIndex }}"
-                                        {{ isset($filters['status']) && $filters['status'] == $statIndex ? 'selected' : '' }}
-                                    >{{ $statusName }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                        <i class="caret"></i>
+                        <div class="headerDropdown col-lg-8">
+                            <select name="filters[status]" class="ams-dropdown custom-select js-drop-filter p-t-3">
+                                @if (isset($statuses))
+                                    @foreach ($statuses as $statIndex => $statusName)
+                                        <option
+                                            value="{{ $statIndex }}"
+                                            {{ isset($filters['status']) && $filters['status'] == $statIndex ? 'selected' : '' }}
+                                        >{{ $statusName }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-5">

@@ -12,12 +12,12 @@
     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.org_update', ['id' => $orgData->id]) }}">
         <div class="row m-l-5">
             <div class="col-lg-6">
-                <div class="col-md-10">
+                <div class="col-md-12">
                     {{ csrf_field() }}
                     @include('components.errors')
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input type="text" class="input-box" name="eik" value="{{ $orgData->eik }}" disabled>
                                 <span class="error">{{ $errors->first('eik') }}</span>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.management_address') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.representative') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -77,7 +77,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.registered_at') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input type="text" class="input-box" name="created_at" value="{{ $orgData->created_at }}" disabled>
                                 <span class="error">{{ $errors->first('created_at') }}</span>
@@ -86,7 +86,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.phone_number') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -103,7 +103,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.email') }}:</label>
-                        <div class="row w-70">
+                        <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input
                                     type="text"
@@ -119,14 +119,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-xs-12">{{ __('custom.in_av') }}:</label>
-                        <div class="col-sm-4 p-l-none">
+                        <label class="col-lg-4">{{ __('custom.in_av') }}:</label>
+                        <div class="col-lg-8">
                             @include('components.checkbox', ['name' => 'in_av', 'checked' => old('in_av', $orgData->in_av)])
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.candidate') }}:</label>
-                        <div class="col-sm-4 p-l-none">
+                        <div class="col-lg-8">
                             @include('components.checkbox', ['name' => 'is_candidate', 'checked' => old('is_candidate', $orgData->is_candidate)])
                         </div>
                     </div>
@@ -135,8 +135,8 @@
             <div class="col-lg-6">
                 <div class="col-md-10">
                     <div class="form-group row">
-                        <label class="col-lg-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none">
+                        <label class="col-lg-4 col-md-6 col-xs-6">{{ __('custom.experience_info') }}:</label>
+                        <div class="col-lg-8 col-md-12 col-xs-12">
                             <div class="nano txt-area-height">
                                 <textarea
                                     class="txt-area no-outline p-a-5 nano-content"
@@ -150,8 +150,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none">
+                        <label class="col-lg-4 col-md-6 col-xs-6">{{ __('custom.reference_materials') }}:</label>
+                        <div class="col-lg-8 col-md-12 col-xs-12">
                             <div class="nano txt-area-height">
                                 <textarea
                                     class="txt-area no-outline p-a-5 nano-content"
@@ -165,25 +165,23 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-xs-1">{{ __('custom.status') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none">
-                            <div class="headerDropdown">
-                                <select name="status" class="ams-dropdown custom-select w-100">
-                                    @if (isset($statuses))
-                                        @foreach ($statuses as $statusIndex => $status)
-                                            <option
-                                                value="{{ $statusIndex }}"
-                                                @if (old('status'))
-                                                    {{ old('status') == $statusIndex ? 'selected' : ''}}
-                                                @else
-                                                    {{ $orgData->status == $statusIndex ? 'selected' : ''}}
-                                                @endif
-                                            >{{ $status }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <i class="caret"></i>
-                            </div>
+                        <label class="col-lg-4">{{ __('custom.status') }}:</label>
+                        <div class="col-lg-8 headerDropdown">
+                            <select name="status" class="ams-dropdown custom-select w-100">
+                                @if (isset($statuses))
+                                    @foreach ($statuses as $statusIndex => $status)
+                                        <option
+                                            value="{{ $statusIndex }}"
+                                            @if (old('status'))
+                                                {{ old('status') == $statusIndex ? 'selected' : ''}}
+                                            @else
+                                                {{ $orgData->status == $statusIndex ? 'selected' : ''}}
+                                            @endif
+                                        >{{ $status }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
                         </div>
                     </div>
                     <div class="form-group row">

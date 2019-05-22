@@ -48,6 +48,20 @@ function checkVoteSize() {
     }
 }
 
+$(document).ready(function() {
+    var lastSelect = null;
+
+    $('#vote_organisations').on('change', function(event) {
+
+      if ($(this).val().length > (14 - $('#votefor option').length)) {
+
+        $(this).val(lastSelect);
+      } else {
+        lastSelect = $(this).val();
+      }
+    });
+  });
+
 // Disable enter key submit of vote form to honor js rules
 $(document).on("keydown", "#js-voteform", function(event) {
     return event.key != "Enter";

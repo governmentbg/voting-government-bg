@@ -360,7 +360,6 @@ $('.txt-area-height').on('keyup', function() {
 });
 
 $(window).on('resize load', function () {
-    console.log($(window).width());
     if ($(window).width() < 991) {
         $('.js-var').addClass('table');
         $('.js-var').addClass('table-responsive');

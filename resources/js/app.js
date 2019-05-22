@@ -358,3 +358,14 @@ $(document).ready(function() {
 $('.txt-area-height').on('keyup', function() {
     $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });
+
+$(window).on('resize load', function () {
+    console.log($(window).width());
+    if ($(window).width() < 991) {
+        $('.js-var').addClass('table');
+        $('.js-var').addClass('table-responsive');
+    } else {
+        $('.js-var').removeClass('table');
+        $('.js-var').removeClass('table-responsive');
+    }
+});

@@ -1,8 +1,8 @@
 <div class="col-lg-5 hidetable display-inline">
-    <div class="col-lg-12 p-l-60 p-t-15">
+    <div class="col-lg-12">
         <div class="p-t-15">
             <div class="p-t-15">
-                <table class="w-100">
+                <table class="w-100 js-var">
                     <thead>
                         <tr>
                             <th colspan="2">

@@ -385,6 +385,10 @@ input[type='file'] {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    @media (max-width: 768px) {
+        transform: rotate(90deg);
+    }
 }
 
 .m-l-85 {
@@ -641,4 +645,26 @@ div.public-table div.nano-pane {
 
 .p-l-15 {
     padding-left: 15px;
+}
+
+html {
+    font-size: 1rem;
+}
+
+@include media-breakpoint-up(sm) {
+    html {
+        font-size: 1rem;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    html {
+      font-size: 1rem;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    html {
+        font-size: 1.2rem;
+    }
 }

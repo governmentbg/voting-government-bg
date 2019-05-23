@@ -84,7 +84,9 @@ class MessageController extends ApiController
 
             $messages = Message::where(function($query) use ($parentId) {
                             $query->where('parent_id', $parentId)->orWhere('id', $parentId);
-                        })->where('voting_tour_id', $votingTour->id)->with('files')->sort($field, $order)->get();
+                        })->where('voting_tour_id', $votingTour->id)->with(['files' => function($query) {
+                            $query->select('id', 'name', 'mime_type', 'message_id', 'org_id', 'created_at');
+                        }])->sort($field, $order)->get();
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {

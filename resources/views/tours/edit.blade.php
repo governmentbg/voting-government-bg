@@ -16,15 +16,13 @@
 
                 <div class="form-group row">
                     <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
-                    <div class="col-sm-8">
-                        <div class="headerDropdown">
-                            <select name="status" class="ams-dropdown custom-select" data-old-status="{{ $votingTour->status }}">
-                                @foreach(\App\VotingTour::getStatuses() as $key => $status)
-                                <option value="{{$key}}" {{$votingTour->status == $key? 'selected' : '' }}>{{$status}}</option>
-                                @endforeach
-                            </select>
-                            <i class="caret"></i>
-                        </div>
+                    <div class="headerDropdown col-lg-8">
+                        <select name="status" class="ams-dropdown custom-select" data-old-status="{{ $votingTour->status }}">
+                            @foreach(\App\VotingTour::getStatuses() as $key => $status)
+                            <option value="{{$key}}" {{$votingTour->status == $key? 'selected' : '' }}>{{$status}}</option>
+                            @endforeach
+                        </select>
+                        <i class="caret"></i>
                     </div>
                 </div>
 

@@ -1,4 +1,4 @@
-<div class="flex-nav-end p-t-15">
+<div class="navbar navbar-expand-lg navbar-expand-sm justify-content-end p-b-none">
 @if (isset($showLinks) && !empty($showLinks))
     @if (isset($showLinks['registered']) && $showLinks['registered'])
     <div class="p-r-20">

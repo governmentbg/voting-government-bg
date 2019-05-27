@@ -5,8 +5,8 @@
 @include('components.breadcrumbs')
 @include('components.status')
 
-<div class="row">
-    <div class="offset-lg-2 col-lg-10">
+<div class="row p-l-15 p-r-15">
+    <div class="offset-lg-2 offset-md-2 col-lg-10 col-md-10 col-sm-12">
         @if (!empty($orgList))
             <div class="row">
                 <h2 class="color-dark"><b>{{ __('custom.voting_title') }}</b></h2>
@@ -67,8 +67,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="m-l-percent col-sm-3 p-r-none text-center">
+                <div class="form-group row mt-2">
+                    <div class="col-lg-9 col-md-9 p-r-none text-center">
                         @include('components.button', ['buttonLabel' => __('custom.vote'), 'id' => 'votebtn', 'disabled' => true])
                     </div>
                 </div>

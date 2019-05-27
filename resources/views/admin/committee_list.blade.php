@@ -7,7 +7,7 @@
 
 @include('components.status')
 @include('components.errors')
-<div class="row">
+<div class="row m-r-none m-l-none">
     <div class="col-lg-12">
         <div class="table-wrapper">
             <div class="table-responsive">

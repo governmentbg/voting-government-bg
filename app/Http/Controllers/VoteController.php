@@ -43,17 +43,25 @@ class VoteController extends BaseFrontendController
         if (!empty($latestVote)) {
             $latestVoteArray = explode(',', $latestVote->vote_data);
         }
+        
+        $maxVotes = \App\Vote::MAX_VOTES;
+        if ($votingTourData->status == VotingTour::STATUS_BALLOTAGE){
+            //max votes for ballotage
+            $maxVotes = 3; //tODO
+        }
 
         if (!empty($latestVote) && !isset($request->change)) {
             return view('organisation.latest_vote', [
                 'latestVoteData'  => $latestVoteArray,
-                'orgList'         => $organisations
+                'orgList'         => $organisations,
+                'maxVotes'        => $maxVotes,  
             ]);
         }
 
         return view('organisation.vote', [
             'orgList'        => $organisations,
-            'latestVoteData' => $latestVoteArray
+            'latestVoteData' => $latestVoteArray,
+            'maxVotes'       => $maxVotes,  
         ]);
     }
 
@@ -113,6 +121,41 @@ class VoteController extends BaseFrontendController
             }
 
             return redirect()->back();
+        }
+    }
+    
+    /**
+     * @todo finish the method
+     * @param type $votingTour
+     * @return type
+     */
+    private function getMaxVotes($votingTour)
+    {
+        if ($votingTour->status == VotingTour::STATUS_VOTING){
+            return \App\Vote::MAX_VOTES;
+        }
+        //TODO calculate - max votes for ballotage
+        list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
+        // calculate votes limit
+        $votesLimit = -1;
+        $setBallotage = false;
+        $keys = collect($listData)->keys();
+        if ($maxVotesKey = $keys->get(Vote::MAX_VOTES)) {
+            if ($prevVotesKey = $keys->get(Vote::MAX_VOTES - 1)) {
+                if ($listData->{$prevVotesKey}->votes == $listData->{$maxVotesKey}->votes) {
+                    $setBallotage = true;
+                }
+                $votesLimit = $listData->{$prevVotesKey}->votes;
+            }
+        }
+
+        // separate list data by votes limit
+        foreach ($listData as $data) {
+            if ($setBallotage && $data->votes == $votesLimit) {
+                $data->for_ballotage = true;
+            } elseif ($data->votes < $votesLimit) {
+                $data->dropped_out = true;
+            }
         }
     }
 }

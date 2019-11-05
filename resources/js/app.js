@@ -148,16 +148,6 @@ $(document).ready(function() {
     }
 });
 
-$('#refresh').click(function() {
-    $.ajax({
-       type: 'GET',
-       url: 'refreshcaptcha',
-       success: function(data) {
-          $('.captcha span').html(data);
-       }
-    });
-});
-
 $('.js-focusout-submit').on('focusout', function() {
     $(this).closest('form').submit();
 });

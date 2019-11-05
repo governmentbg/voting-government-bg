@@ -40,14 +40,6 @@ class OrganisationController extends BaseFrontendController
             $errors = ['terms_accepted' => __('custom.terms_not_accepted')];
         }
 
-        $validator = Validator::make(['captcha' => $request->captcha], [
-            'captcha' => 'required|captcha'
-        ]);
-
-        if ($validator->fails()) {
-            $errors['captcha'] = __('custom.chaptcha_fail');
-        }
-
         $files = [];
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {

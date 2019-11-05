@@ -87,6 +87,39 @@ class OrganisationController extends BaseAdminController
         list($candidateStatuses, $candidateErrors) = api_result(ApiOrganisation::class, 'listCandidateStatuses');
         $candidateStatuses = !empty($candidateStatuses) ? collect($candidateStatuses)->pluck('name', 'id')->toArray() : [];
 
+        if ($request->has('download')) {
+            $filename = 'organisationsList.csv';
+            $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+            $temp = fopen($tempname, 'w+');
+            $path = stream_get_meta_data($temp)['uri'];
+
+            fputcsv($temp, [
+                __('custom.organisation'),
+                __('custom.eik'),
+                __('custom.status'),
+                __('custom.candidate'),
+                __('custom.registered_at'),
+                __('custom.email')
+            ]);
+
+            $statuses = \App\Organisation::getStatuses();
+
+            foreach($organisations as $singleOrg) {
+                fputcsv($temp, [
+                    $singleOrg->name,
+                    $singleOrg->eik,
+                    $statuses[$singleOrg->status],
+                    $singleOrg->is_candidate == true ? __('custom.status_yes') :  __('custom.status_no'),
+                    $singleOrg->created_at,
+                    $singleOrg->email
+                ]);
+            }
+
+            $headers = ['Content-Type' => 'text/csv'];
+
+            return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+        }
+
         return view('admin.org_list', [
             'organisationList'  => $organisations,
             'statuses'          => $statuses,

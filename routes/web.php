@@ -26,8 +26,6 @@ Route::group(['middleware' => ['guest', 'guest:backend']], function () {
     Route::get('/publicLists/rankingAjax', 'PublicController@listRankingAjax');
 
     Route::get('/register', 'OrganisationController@register')->name('organisation.register');
-    Route::get('/createcaptcha', 'CaptchaController@create');
-    Route::get('/refreshcaptcha', 'CaptchaController@refreshCaptcha');
     Route::post('/predefinedData', 'PredefinedOrganisationController@readData');
     Route::post('/organisations', 'OrganisationController@store')->name('organisation.store');
 });

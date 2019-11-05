@@ -7,7 +7,7 @@
 <div class="row m-r-none m-l-none">
     @include('components.status')
     <div class="col-lg-12 m-t-30">
-        <form method="get" action="{{ url('/admin/organisations') }}">
+        <form method="get" action="{{ url('/admin/organisations') }}" id="orgList">
             @if(request()->has('sort') && request()->has('order'))
                 <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
                 <input type="hidden" name="order" value="{{ request()->get('order')}}">
@@ -120,8 +120,17 @@
                     </div>
                 </div>
             </div>
+            @if (!empty($organisationList))
+                <div class="col-lg-12 text-right p-r-none p-b-none">
+                    <button
+                        class="btn btn-primary add"
+                        type="submit"
+                        name="download"
+                    >{{ uctrans('custom.download') }}</button>
+                </div>
+            @endif
         </form>
-        <div class="table-wrapper m-t-60">
+        <div class="table-wrapper {{!empty($organisationList) ? 'm-t-30' : 'm-t-90' }}">
             <div class="table-responsive">
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>

@@ -68,7 +68,7 @@ class OrganisationController extends BaseAdminController
 
         if (!empty($this->votingTour)) {
             list($organisations, $errors) = api_result(ApiOrganisation::class, 'search', [
-                'with_pagination' => true,
+                'with_pagination' => $request->has('download') ? false : true,
                 'filters'         => $allFilters,
                 'order_field'     => $orderField,
                 'order_type'      => $orderType,
@@ -77,6 +77,7 @@ class OrganisationController extends BaseAdminController
             if (!empty($errors)) {
                 $request->session()->flash('alert-danger', __('custom.list_org_fail'));
             } else {
+                $exportOrgs = $organisations;
                 $organisations = !empty($organisations->data) ? $this->paginate($organisations) : [];
             }
         }
@@ -104,7 +105,7 @@ class OrganisationController extends BaseAdminController
 
             $statuses = \App\Organisation::getStatuses();
 
-            foreach($organisations as $singleOrg) {
+            foreach($exportOrgs as $singleOrg) {
                 fputcsv($temp, [
                     $singleOrg->name,
                     $singleOrg->eik,

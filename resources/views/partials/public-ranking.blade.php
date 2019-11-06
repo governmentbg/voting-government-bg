@@ -30,6 +30,15 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
+                <form method="get" action="{{ route($route) }}" id="orgList">
+                    <div class="col-lg-12 text-right p-r-none p-b-15">
+                        <button
+                            class="btn btn-primary add"
+                            type="submit"
+                            name="download"
+                        >{{ uctrans('custom.download') }}</button>
+                    </div>
+                </form>
                 <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
                         <table

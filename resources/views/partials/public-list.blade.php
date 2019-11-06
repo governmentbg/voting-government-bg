@@ -8,11 +8,20 @@
 <div class="row">
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
-            <form method="get" action="{{ route($route) }}">
-                <div class="offset-lg-6">
+            <form method="get" action="{{ route($route) }}" id="orgList">
+                <div class="col-lg-12">
                     <div class="row form-group">
-                        <label for="eik" class="col-form-label p-l-15 offset-lg-3 col-lg-2">{{ __('custom.eik') }}:</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-3 inline-block text-left p-l-none p-b-none">
+                            @if (!empty($listData))
+                                <button
+                                    class="btn btn-primary add"
+                                    type="submit"
+                                    name="download"
+                                >{{ uctrans('custom.download') }}</button>
+                            @endif
+                        </div>
+                        <label for="eik" class="col-form-label p-l-15 offset-lg-3 col-lg-2 text-right">{{ __('custom.eik') }}:</label>
+                        <div class="col-lg-4 p-r-none">
                             <input
                                 type="text"
                                 name="eik"

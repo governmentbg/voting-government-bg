@@ -309,6 +309,7 @@ class VoteController extends ApiController
     public function listVoters(Request $request)
     {
         $filters = $request->get('filters', []);
+        $withPagination = $request->get('with_pagination', true);
 
         $validator = Validator::make($filters, [
             'tour_id' => 'required_with:status|int|exists:voting_tour,id',
@@ -341,13 +342,15 @@ class VoteController extends ApiController
                 if (isset($filters['eik'])) {
                     $voters->where('eik', $filters['eik']);
                 }
+
                 $voters->where('voting_tour_id', $votingTour->id)
                        ->whereIn('status', Organisation::getApprovedStatuses())
                        ->whereHas('votes', function($query) use ($voteStatus) {
                            $query->where('tour_status', $voteStatus);
                        })
                       ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
-                $voters = $voters->paginate();
+
+                $voters = $withPagination ? $voters->paginate() : $voters->get();
 
                 return $this->successResponse($voters);
             } catch (\Exception $e) {

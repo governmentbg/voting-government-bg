@@ -56,6 +56,7 @@ class PublicController extends BaseFrontendController
             // set links that have to be displayed
             $showLinks['registered'] = true;
             $showLinks['candidates'] = true;
+
             if (!in_array($this->votingTour->status, VotingTour::getRegStatuses())) {
                 $showLinks['voted'] = true;
                 if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_VOTING) {
@@ -69,12 +70,43 @@ class PublicController extends BaseFrontendController
                     'statuses'         => Organisation::getApprovedStatuses(),
                     'only_main_fields' => true
                 ],
-                'with_pagination' => true
+                'with_pagination' => $request->has('download') ? false : true
             ];
+
             if (isset($eik)) {
                 $params['filters']['eik'] = $eik;
             }
+
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+
+            if ($request->has('download')) {
+                $filename = 'organisationsRegistered.csv';
+                $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+                $temp = fopen($tempname, 'w+');
+                $path = stream_get_meta_data($temp)['uri'];
+
+                fputcsv($temp, [
+                    __('custom.organisation'),
+                    __('custom.candidate'),
+                    __('custom.eik'),
+                    __('custom.registered_at')
+                ]);
+
+                $statuses = \App\Organisation::getStatuses();
+
+                foreach($listData as $singleOrg) {
+                    fputcsv($temp, [
+                        $singleOrg->name,
+                        $singleOrg->is_candidate == true ? __('custom.status_yes') :  __('custom.status_no'),
+                        $singleOrg->eik,
+                        $singleOrg->created_at,
+                    ]);
+                }
+
+                $headers = ['Content-Type' => 'text/csv'];
+
+                return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+            }
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_reg_org_fail');
@@ -120,12 +152,43 @@ class PublicController extends BaseFrontendController
                     'statuses'         => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
                     'only_main_fields' => true
                 ],
-                'with_pagination' => true
+                'with_pagination' => $request->has('download') ? false : true
             ];
+
             if (isset($eik)) {
                 $params['filters']['eik'] = $eik;
             }
+
             list($listData, $listErrors) = api_result(ApiOrganisation::class, 'search', $params);
+
+            if ($request->has('download')) {
+                $filename = 'organisationsCandidates.csv';
+                $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+                $temp = fopen($tempname, 'w+');
+                $path = stream_get_meta_data($temp)['uri'];
+
+                fputcsv($temp, [
+                    __('custom.organisation'),
+                    __('custom.candidate'),
+                    __('custom.eik'),
+                    __('custom.registered_at')
+                ]);
+
+                $statuses = \App\Organisation::getStatuses();
+
+                foreach($listData as $singleOrg) {
+                    fputcsv($temp, [
+                        $singleOrg->name,
+                        $singleOrg->is_candidate == true ? __('custom.status_yes') :  __('custom.status_no'),
+                        $singleOrg->eik,
+                        $singleOrg->created_at,
+                    ]);
+                }
+
+                $headers = ['Content-Type' => 'text/csv'];
+
+                return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+            }
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_candidates_fail');
@@ -165,10 +228,43 @@ class PublicController extends BaseFrontendController
 
             // list voted organisations
             $params = [];
+
+            $params['with_pagination'] = $request->has('download') ?  false : true;
+
             if (isset($eik)) {
                 $params['filters']['eik'] = $eik;
             }
+
             list($listData, $listErrors) = api_result(ApiVote::class, 'listVoters', $params);
+
+            if ($request->has('download')) {
+                $filename = 'organisationsVoted.csv';
+                $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+                $temp = fopen($tempname, 'w+');
+                $path = stream_get_meta_data($temp)['uri'];
+
+                fputcsv($temp, [
+                    __('custom.organisation'),
+                    __('custom.candidate'),
+                    __('custom.eik'),
+                    __('custom.registered_at')
+                ]);
+
+                $statuses = \App\Organisation::getStatuses();
+
+                foreach($listData as $singleOrg) {
+                    fputcsv($temp, [
+                        $singleOrg->name,
+                        $singleOrg->is_candidate == true ? __('custom.status_yes') :  __('custom.status_no'),
+                        $singleOrg->eik,
+                        $singleOrg->created_at,
+                    ]);
+                }
+
+                $headers = ['Content-Type' => 'text/csv'];
+
+                return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+            }
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_voted_org_fail');
@@ -189,7 +285,7 @@ class PublicController extends BaseFrontendController
         ])->withErrors($errors);
     }
 
-    public function listRanking()
+    public function listRanking(Request $request)
     {
         $showLinks = [];
         $listData = [];
@@ -210,6 +306,34 @@ class PublicController extends BaseFrontendController
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
                 $dataFromCache['listData'] = collect($dataFromCache['listData']);
+
+                if ($request->has('download')) {
+                    $filename = 'voteResults.csv';
+                    $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+                    $temp = fopen($tempname, 'w+');
+                    $path = stream_get_meta_data($temp)['uri'];
+
+                    fputcsv($temp, [
+                        __('custom.organisation'),
+                        __('custom.eik'),
+                        __('custom.votes')
+                    ]);
+
+                    $statuses = \App\Organisation::getStatuses();
+
+                    foreach($dataFromCache['listData'] as $singleOrgData) {
+                        fputcsv($temp, [
+                            $singleOrgData->name,
+                            $singleOrgData->eik,
+                            $singleOrgData->votes,
+                        ]);
+                    }
+
+                    $headers = ['Content-Type' => 'text/csv'];
+
+                    return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+                }
+
                 $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
 
                 return view('home.index', [

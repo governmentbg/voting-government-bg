@@ -67,7 +67,7 @@ class PublicController extends BaseFrontendController
             // list registered organisations
             $params = [
                 'filters' => [
-                    'statuses'         => Organisation::getApprovedStatuses(),
+                    'statuses'         => array_merge(Organisation::getApprovedStatuses(), [Organisation::STATUS_DECLASSED]),
                     'only_main_fields' => true
                 ],
                 'with_pagination' => $request->has('download') ? false : true
@@ -149,7 +149,7 @@ class PublicController extends BaseFrontendController
             // list candidates
             $params = [
                 'filters' => [
-                    'statuses'         => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                    'statuses'         => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE, Organisation::STATUS_DECLASSED],
                     'only_main_fields' => true
                 ],
                 'with_pagination' => $request->has('download') ? false : true

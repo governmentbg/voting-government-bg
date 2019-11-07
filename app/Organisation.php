@@ -19,6 +19,7 @@ class Organisation extends Model
     const STATUS_PENDING = 3;
     const STATUS_BALLOTAGE = 4;
     const STATUS_REJECTED = 5;
+    const STATUS_DECLASSED = 6;
 
     const STATUS_HINT_NONE = 0;
 
@@ -90,6 +91,7 @@ class Organisation extends Model
             self::STATUS_PENDING     => __('custom.org_status_pending'),
             self::STATUS_BALLOTAGE   => __('custom.org_status_ballotage'),
             self::STATUS_REJECTED    => __('custom.org_status_rejected'),
+            self::STATUS_DECLASSED   => __('custom.org_status_declassed'),
         ];
     }
 

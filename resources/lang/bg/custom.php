@@ -39,6 +39,7 @@ return [
     'org_status_pending'               => 'Очаква допълнителна информация',
     'org_status_ballotage'             => 'За балотаж',
     'org_status_rejected'              => 'Отхвърлена регистрация',
+    'org_status_declassed'             => 'Декласирана',
     'status_yes'                       => 'Да',
     'status_no'                        => 'Не',
     'reg_org_not_accepted'             => 'На този етап не се приемат нови регистрации',

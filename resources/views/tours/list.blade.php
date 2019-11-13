@@ -39,22 +39,28 @@
                                             data-toggle="tooltip"
                                             data-placement="top"
                                         ></a>
-                                        <a
-                                            href="{{ route('admin.actions_history', ['voting_tour_id' => $tour->id])}}"><img src="{{ asset('img/clock.png') }}" height="30px" width="30px"
-                                            title="{{ __('custom.actions_history') }}"
-                                            data-toggle="tooltip"
-                                            data-placement="top"
-                                        ></a>
                                     @else
                                         <a
                                             href="{{route('admin.voting_tour.edit', ['id' => $tour->id])}}"
                                             title="{{ __('custom.edit') }}"
                                             data-toggle="tooltip"
                                             data-placement="top"
+                                            class="m-r-15"
                                         >
                                             <img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/>
                                         </a>
                                     @endif
+                                    <a
+                                        href="{{ route('admin.actions_history', ['voting_tour_id' => $tour->id])}}"
+                                    >
+                                        <img
+                                            src="{{ asset('img/clock.png') }}"
+                                            height="30px" width="30px"
+                                            title="{{ __('custom.actions_history') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                        >
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

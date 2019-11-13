@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use \Validator;
 use App\Vote;
+use \Validator;
 use App\VotingTour;
 use App\Organisation;
+use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ApiController;
@@ -83,6 +84,12 @@ class VoteController extends ApiController
 
                             $vote->save();
 
+                            $logData = [
+                                'module' => ActionsHistory::VOTES,
+                                'action' => ActionsHistory::TYPE_VOTED
+                            ];
+
+                            ActionsHistory::add($logData);
                             return $this->successResponse(['id' => $vote->id], true);
                         }
                     }

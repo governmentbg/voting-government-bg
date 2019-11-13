@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ActionsHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
@@ -118,6 +119,13 @@ class OrganisationController extends BaseAdminController
 
             $headers = ['Content-Type' => 'text/csv'];
 
+            $logData = [
+                'module' => ActionsHistory::ORGANISATIONS,
+                'action' => ActionsHistory::TYPE_DOWNLOADED
+            ];
+
+            ActionsHistory::add($logData);
+
             return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
         }
 
@@ -232,5 +240,10 @@ class OrganisationController extends BaseAdminController
 
         $request->session()->flash('alert-danger', __('custom.file_not_found'));
         return redirect()->back();
+    }
+
+    public function settings(Request $request)
+    {
+       return view('organisation.settings');
     }
 }

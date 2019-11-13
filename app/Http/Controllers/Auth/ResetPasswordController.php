@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Api\UserController;
 use App\User;
+use App\VotingTour;
+use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 
 class ResetPasswordController extends Controller
 {
@@ -107,34 +109,44 @@ class ResetPasswordController extends Controller
 
     public function changePassword(Request $request)
     {
-        $user = auth()->user();
-        $password = $request->get('password');
-        $newPassword = $request->get('new_password');
+        if ($request->has('save')) {
+            $user = auth()->user();
+            $password = $request->get('password');
+            $newPassword = $request->get('new_password');
 
-        $data = [
-            'user_id' => $user->id,
-            'password' => $password,
-            'new_password' => $newPassword,
-        ];
+            $data = [
+                'user_id' => $user->id,
+                'password' => $password,
+                'new_password' => $newPassword,
+            ];
 
-        $rules = [
-            'new_password' => 'confirmed'
-        ];
+            $rules = [
+                'new_password' => 'confirmed'
+            ];
 
-        $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
+            $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+
+            list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
+
+            if(!empty($errors)){
+                return redirect()->back()->withErrors((array)$errors);
+            }
+
+            session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
+            return redirect()->back();
         }
 
+        list($votingData, $tourErrors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
 
-        list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
-
-        if(!empty($errors)){
-            return redirect()->back()->withErrors((array)$errors);
+        if ($votingData) {
+            $votingData->statusName = VotingTour::getStatuses()[$votingData->status];
+            $votingData->showTick = ($votingData->status != VotingTour::STATUS_FINISHED) ? true: false;
         }
 
-        session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
-        return redirect()->back();
+        return view('auth.password_change', ['votingTourData' => $votingData]);
     }
 }

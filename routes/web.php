@@ -30,17 +30,9 @@ Route::group(['middleware' => ['guest', 'guest:backend']], function () {
     Route::post('/organisations', 'OrganisationController@store')->name('organisation.store');
 });
 
-//Frontend routes that needs user authorisation
+//Frontend routes that need user authorisation
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/settings', function () {
-        return view('organisation.settings');
-    })->name('organisation.settings');
-
-    Route::get('/passwordChange', function () {
-        return view('auth.password_change');
-    })->name('organisation.change_password');
-
-    Route::post('/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
+    Route::match(['get', 'post'], '/passwordChange', 'Auth\ResetPasswordController@changePassword')->name('organisation.change_password');
 
     Route::get('/view', 'OrganisationController@view')->name('organisation.view');
     Route::get('/vote/view', 'VoteController@view')->name('organisation.vote');
@@ -70,18 +62,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::put('/votingTours/{id}','VotingTourController@update')->name('admin.voting_tour.update');
         Route::get('/votingTours/{id}/ranking','VotingTourController@ranking')->name('admin.ranking');
 
-        Route::get('/settings', function () {
-            return view('organisation.settings');
-        })->name('admin.settings');
+        Route::get('/settings', 'OrganisationController@settings')->name('admin.settings');
 
         Route::get('/messages', 'MessagesController@list')->name('admin.messages.list');
         Route::post('/messages/send/{id?}', 'MessagesController@send')->name('admin.messages.send');
         Route::get('/messages/{id}/{orgId?}', 'MessagesController@view')->name('admin.messages');
 
-        Route::get('/passwordChange', function () {
-            return view('auth.password_change');
-        })->name('admin.change_password');
-        Route::post('/passwordChange', 'AuthController@changePassword');
+        Route::match(['get', 'post'], '/passwordChange', 'AuthController@changePassword')->name('admin.change_password');
 
         Route::get('/logout', 'AuthController@logout')->name('admin.logout');
         Route::get('/organisations', 'OrganisationController@list')->name('admin.org_list');
@@ -90,6 +77,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::get('/organisations/files/download/{id}', 'OrganisationController@downloadFile')->name('admin.fileDowload');
         Route::get('/organisations/{id}/messages/new', 'MessagesController@add')->name('admin.messages.add');
         Route::get('/votingTours/{id}/rankingAdminAjax', 'VotingTourController@listAdminRankingAjax');
+        Route::get('/actionsHistory', 'ActionsHistoryController@list')->name('admin.actions_history');
 
         // SYSTEM user routes
         Route::group(['middleware' => 'auth.system:backend'], function () {

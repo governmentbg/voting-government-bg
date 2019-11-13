@@ -54,6 +54,10 @@ Route::middleware(['api'])->group(function () {
     Route::post('organisation/listStatuses', 'Api\OrganisationController@listStatuses');
     Route::post('organisation/listCandidateStatuses', 'Api\OrganisationController@listCandidateStatuses');
 
+    Route::post('actionHistory/search', 'Api\ActionsHistoryController@search');
+    Route::post('actionHistory/listModules', 'Api\ActionsHistoryController@listModules');
+    Route::post('actionHistory/listActions', 'Api\ActionsHistoryController@listActions');
+
     Route::post('file/getData', 'Api\FileController@getData');
 
 });

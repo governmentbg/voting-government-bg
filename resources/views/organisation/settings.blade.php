@@ -4,6 +4,7 @@
     if (request()->segment(1) == 'admin') {
         $changePasswordRoute = route('admin.change_password');
         $registeredOrgs = route('admin.voting_tour.list');
+        $actionsHistory = route('admin.actions_history');
         $route = route('admin.org_list');
     }
     else {
@@ -20,7 +21,6 @@
     @include('partials.user-nav-bar')
 @endif
 @php
-    $breadcrumbs[] = (object) ['label' => 'Начало', 'link' => $route];
     $breadcrumbs[] = (object) ['label' => 'Настройки'];
 @endphp
 @include('components.breadcrumbs')
@@ -41,6 +41,11 @@
                     <div class="form-group row">
                         <div class="col-sm-8">
                             <a href="{{$registeredOrgs}}">{{ __('custom.elections') }}</a>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <a href="{{$actionsHistory}}">{{ __('custom.actions_history') }}</a>
                         </div>
                     </div>
                     @if (auth()->guard('backend')->user()->isSuperAdmin())

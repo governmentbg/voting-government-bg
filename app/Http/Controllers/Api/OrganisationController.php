@@ -8,6 +8,7 @@ use App\Http\Controllers\ApiController;
 use App\Organisation;
 use App\VotingTour;
 use App\File;
+use App\ActionsHistory;
 
 class OrganisationController extends ApiController
 {
@@ -123,6 +124,15 @@ class OrganisationController extends ApiController
 
                     $organisation->save();
 
+                    $logData = [
+                        'module' => ActionsHistory::ORGANISATIONS,
+                        'action' => ActionsHistory::TYPE_ADD,
+                        'object' => $organisation->id,
+                        'actor'  => $organisation->created_by
+                    ];
+
+                    ActionsHistory::add($logData);
+
                     foreach ($data['files'] as $newFile) {
                         $file = new File;
                         $file->name = $newFile['name'];
@@ -132,6 +142,17 @@ class OrganisationController extends ApiController
                         $file->voting_tour_id = $votingTour->id;
 
                         $file->save();
+                    }
+
+                    if (!empty($data['files'])) {
+                        $logData = [
+                            'module' => ActionsHistory::ORGANISATIONS_FILES,
+                            'action' => ActionsHistory::TYPE_ADD,
+                            'object' => $organisation->id,
+                            'actor'  => $organisation->created_by
+                        ];
+
+                        ActionsHistory::add($logData);
                     }
 
                     DB::commit();
@@ -264,6 +285,14 @@ class OrganisationController extends ApiController
 
                         DB::commit();
 
+                        $logData = [
+                            'module' => ActionsHistory::ORGANISATIONS,
+                            'action' => ActionsHistory::TYPE_MOD,
+                            'object' => $organisation->id
+                        ];
+
+                        ActionsHistory::add($logData);
+
                         return $this->successResponse();
                     } else {
                         return $this->errorResponse(__('custom.org_not_found'));
@@ -378,6 +407,15 @@ class OrganisationController extends ApiController
                     $organisations = $organisations->get();
                 }
 
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::ORGANISATIONS,
+                        'action' => ActionsHistory::TYPE_SEE
+                    ];
+
+                    ActionsHistory::add($logData);
+                }
+
                 return $this->successResponse($organisations);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
@@ -419,8 +457,18 @@ class OrganisationController extends ApiController
                     $orgKey = 'eik';
                     $orgVal = $data['eik'];
                 }
+
                 $organisation = Organisation::where($orgKey, $orgVal)->where('voting_tour_id', $votingTour->id)->first();
+
                 if ($organisation) {
+                    $logData = [
+                        'module' => ActionsHistory::ORGANISATIONS,
+                        'action' => ActionsHistory::TYPE_SEE,
+                        'object' => $organisation->id
+                    ];
+
+                    ActionsHistory::add($logData);
+
                     return $this->successResponse($organisation);
                 }
             } catch (\Exception $e) {
@@ -458,6 +506,14 @@ class OrganisationController extends ApiController
                             ->where('org_id', $orgId)
                             ->where('voting_tour_id', $votingTour->id)
                             ->orderBy('id')->get();
+
+                $logData = [
+                    'module' => ActionsHistory::ORGANISATIONS_FILES,
+                    'action' => ActionsHistory::TYPE_SEE,
+                    'object' => $orgId
+                ];
+
+                ActionsHistory::add($logData);
 
                 return $this->successResponse($files);
             } catch (\Exception $e) {

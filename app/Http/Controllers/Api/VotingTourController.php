@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use \Validator;
 use App\VotingTour;
+use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,7 @@ class VotingTourController extends ApiController
                 DB::beginTransaction();
 
                 $saved = VotingTour::create([
-                    'name' => $post['name'],
+                    'name'   => $post['name'],
                     'status' => VotingTour::STATUS_UPCOMING
                 ]);
 
@@ -56,6 +57,14 @@ class VotingTourController extends ApiController
             }
 
             if (isset($saved)) {
+                $logData = [
+                    'module' => ActionsHistory::VOTING_TOURS,
+                    'action' => ActionsHistory::TYPE_ADD,
+                    'object' => $saved->id
+                ];
+
+                ActionsHistory::add($logData);
+
                 return $this->successResponse(['id' => $saved->id], true);
             }
         }
@@ -94,6 +103,14 @@ class VotingTourController extends ApiController
                     DB::rollback();
                     Log::error($e->getMessage());
                 }
+
+                $logData = [
+                    'module' => ActionsHistory::VOTING_TOURS,
+                    'action' => ActionsHistory::TYPE_MOD,
+                    'object' => $editVotingTour->id
+                ];
+
+                ActionsHistory::add($logData);
 
                 return $this->successResponse();
             }
@@ -134,6 +151,14 @@ class VotingTourController extends ApiController
                     DB::rollback();
                     Log::error($e->getMessage());
                 }
+
+                $logData = [
+                    'module' => ActionsHistory::VOTING_TOURS,
+                    'action' => ActionsHistory::TYPE_MOD,
+                    'object' => $editVotingTour->id
+                ];
+
+                ActionsHistory::add($logData);
 
                 return $this->successResponse();
             }
@@ -201,6 +226,14 @@ class VotingTourController extends ApiController
         $tourList = VotingTour::orderBy($orderField, $orderType)->get();
 
         if ($tourList->first()) {
+
+            $logData = [
+                'module' => ActionsHistory::VOTING_TOURS,
+                'action' => ActionsHistory::TYPE_SEE
+            ];
+
+            ActionsHistory::add($logData);
+
             return $this->successResponse($tourList);
         } else {
             return $this->errorResponse(__('custom.tour_list_not_found'));
@@ -226,6 +259,14 @@ class VotingTourController extends ApiController
             $votingTourData = VotingTour::where('id', $post['tour_id'])->first();
 
             if ($votingTourData) {
+                $logData = [
+                    'module' => ActionsHistory::VOTING_TOURS,
+                    'action' => ActionsHistory::TYPE_SEE,
+                    'object' => $votingTourData->id
+                ];
+
+                ActionsHistory::add($logData);
+
                 return $this->successResponse($votingTourData);
             } else {
                 return $this->errorResponse(__('custom.no_data_found'));

@@ -160,7 +160,19 @@
         <div class="col-lg-12">
             <div class="display-flex justify-center">
                 @if (!empty($messages))
-                    {{ $messages->appends(['orderBy' => app('request')->orderBy, 'order' => app('request')->order])->links() }}
+                    {{
+                        $messages->appends([
+                            'orderBy' => app('request')->orderBy,
+                            'order'   => app('request')->order,
+                            'filters' => [
+                                'subject'   => isset(app('request')->filters['subject']) ? app('request')->filters['subject'] : '',
+                                'status'    => isset(app('request')->filters['status']) ? app('request')->filters['status'] : 'all',
+                                'org_name'  => isset(app('request')->filters['org_name']) ? app('request')->filters['org_name'] : '',
+                                'date_from' => isset(app('request')->filters['date_from']) ? app('request')->filters['date_from'] : '',
+                                'date_to'   => isset(app('request')->filters['date_to']) ? app('request')->filters['date_to'] : ''
+                            ]
+                        ])->links()
+                    }}
                 @endif
             </div>
         </div>

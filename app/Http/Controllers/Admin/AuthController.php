@@ -9,6 +9,9 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Lang;
+use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
+use App\VotingTour;
+use App\ActionsHistory;
 
 class AuthController extends Controller
 {
@@ -114,36 +117,47 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
-        $user = auth()->guard('backend')->user();
-        $password = $request->get('password');
-        $newPassword = $request->get('new_password');
+        if ($request->has('save')) {
+            $user = auth()->guard('backend')->user();
+            $password = $request->get('password');
+            $newPassword = $request->get('new_password');
 
-        $data = [
-            'user_id' => $user->id,
-            'password' => $password,
-            'new_password' => $newPassword,
-        ];
+            $data = [
+                'user_id' => $user->id,
+                'password' => $password,
+                'new_password' => $newPassword,
+            ];
 
-        $rules = [
-            'new_password' => 'confirmed'
-        ];
+            $rules = [
+                'new_password' => 'confirmed'
+            ];
 
-        $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
+            $validator = \Validator::make(array_merge($data, ['new_password_confirmation' => $request->get('new_password_confirmation')]), $rules);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+
+            list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
+
+            if(!empty($errors)){
+                return redirect()->back()->withErrors((array)$errors);
+            }
+
+            session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
+            return redirect()->back();
         }
 
-        list($result, $errors) = api_result(UserController::class, 'changePassword', $data);
+        list($votingData, $tourErrors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
 
-        if(!empty($errors)){
-            return redirect()->back()->withErrors((array)$errors);
+        if ($votingData) {
+            $votingData->statusName = VotingTour::getStatuses()[$votingData->status];
+            $votingData->showTick = ($votingData->status != VotingTour::STATUS_FINISHED) ? true: false;
         }
 
-        session()->flash('alert-success', trans(self::PASSWORD_CHANGED));
-        return redirect($this->redirectTo);
+        return view('auth.password_change', ['votingTourData' => $votingData]);
     }
-    
+
      /**
      * Redirect the user after determining they are locked out.
      *
@@ -160,5 +174,23 @@ class AuthController extends Controller
         throw ValidationException::withMessages([
             $this->username() => [Lang::get('auth.throttle', ['minutes' => round($seconds/60)])],
         ])->status(423);
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $logData = [
+            'module' => ActionsHistory::USERS,
+            'action' => ActionsHistory::TYPE_LOGGED_IN,
+            'object' => $user->id
+        ];
+
+        ActionsHistory::add($logData);
     }
 }

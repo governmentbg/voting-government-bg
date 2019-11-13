@@ -20,10 +20,10 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        @foreach($votingTours as $tour)
+                        @foreach ($votingTours as $tour)
                             <tr>
                                 <td>
-                                    @if($tour->status == App\VotingTour::STATUS_FINISHED)
+                                    @if ($tour->status == App\VotingTour::STATUS_FINISHED)
                                         <img src="{{ asset('img/cross.svg') }}" height="30px" width="30px"/>
                                     @else
                                         <img src="{{ asset('img/tick.svg') }}" height="30px" width="30px"/>
@@ -32,10 +32,16 @@
                                 <td class="text-left">{{$tour->name}}</td>
                                 <td>{{isset($tour->updated_at) ? date('Y-m-d H:i', strtotime($tour->updated_at)) : ''}}</td>
                                 <td>
-                                    @if($tour->status == App\VotingTour::STATUS_FINISHED)
+                                    @if ($tour->status == App\VotingTour::STATUS_FINISHED)
                                         <a
                                             href="{{ route('admin.ranking', ['id' => $tour->id])}}"><img src="{{ asset('img/star.svg') }}" height="30px" width="50px"
                                             title="{{ __('custom.inactive') }}"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                        ></a>
+                                        <a
+                                            href="{{ route('admin.actions_history', ['voting_tour_id' => $tour->id])}}"><img src="{{ asset('img/clock.png') }}" height="30px" width="30px"
+                                            title="{{ __('custom.actions_history') }}"
                                             data-toggle="tooltip"
                                             data-placement="top"
                                         ></a>

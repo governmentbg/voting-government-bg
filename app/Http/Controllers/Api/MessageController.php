@@ -8,11 +8,12 @@ use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\DB;
 use App\File;
 use App\VotingTour;
+use App\ActionsHistory;
 
 class MessageController extends ApiController
 {
     /**
-     * Get all messages send by specific organisation and order them if needed.
+     * Get all messages sent by specific organisation and order them if needed.
      *
      * @param int    $org_id      - required
      * @param string $order_field - optional
@@ -45,6 +46,14 @@ class MessageController extends ApiController
             $messages = Message::where(function($query) use ($orgId) {
                             $query->where('sender_org_id', $orgId)->orWhere('recipient_org_id', $orgId);
                         })->where('voting_tour_id', $votingTour->id)->sort($field, $order)->paginate();
+
+            $logData = [
+                'module' => ActionsHistory::ORGANISATION_MESSAGES,
+                'action' => ActionsHistory::TYPE_SEE,
+                'object' => $orgId
+            ];
+
+            ActionsHistory::add($logData);
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -87,6 +96,14 @@ class MessageController extends ApiController
                         })->where('voting_tour_id', $votingTour->id)->with(['files' => function($query) {
                             $query->select('id', 'name', 'mime_type', 'message_id', 'org_id', 'created_at');
                         }])->sort($field, $order)->get();
+
+            $logData = [
+                'module' => ActionsHistory::MESSAGES,
+                'action' => ActionsHistory::TYPE_SEE,
+                'object' => $parentId
+            ];
+
+            ActionsHistory::add($logData);
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -131,6 +148,13 @@ class MessageController extends ApiController
             }
 
             $messages = Message::where('voting_tour_id', $votingTour->id)->search($filters, $field, $order)->paginate();
+
+            $logData = [
+                'module' => ActionsHistory::MESSAGES,
+                'action' => ActionsHistory::TYPE_SEE
+            ];
+
+            ActionsHistory::add($logData);
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -230,6 +254,14 @@ class MessageController extends ApiController
         try {
             $message = Message::create($params);
 
+            $logData = [
+                'module' => ActionsHistory::MESSAGES,
+                'action' => ActionsHistory::TYPE_ADD,
+                'object' => $message->id
+            ];
+
+            ActionsHistory::add($logData);
+
             return $this->successResponse(['id' => $message->id], true);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
@@ -300,9 +332,26 @@ class MessageController extends ApiController
                     'voting_tour_id' => $votingTour->id,
                 ]);
                 $message->files()->save($fileModel);
+
+                $logData = [
+                    'module' => ActionsHistory::FILES_MESSAGE,
+                    'action' => ActionsHistory::TYPE_ADD,
+                    'object' => $message->id
+                ];
+
+                ActionsHistory::add($logData);
             }
 
             DB::commit();
+
+            $logData = [
+                'module' => ActionsHistory::MESSAGES,
+                'action' => ActionsHistory::TYPE_ADD,
+                'object' => $message->id
+            ];
+
+            ActionsHistory::add($logData);
+
             return $this->successResponse(['id' => $message->id], true);
         } catch (\Exception $e) {
             DB::rollback();

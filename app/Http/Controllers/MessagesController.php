@@ -25,6 +25,10 @@ class MessagesController extends BaseFrontendController
         $parent = [];
         if (!empty($messages)) {
             foreach ($messages as $message) {
+                if (($message->sender_org_id != \Auth::user()->org_id) && ($message->recipient_org_id != \Auth::user()->org_id)) {
+                    return redirect()->route('organisation.view');
+                }
+
                 // set parent
                 if (empty($parent) && $message->id == $id) {
                     $parent = $message;

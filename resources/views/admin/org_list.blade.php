@@ -261,7 +261,19 @@
         <div class="col-lg-12">
             <div class="display-flex justify-center">
                 @if (!empty($organisationList))
-                    {{ $organisationList->appends(['sort' => app('request')->sort, 'order' => app('request')->order])->links() }}
+                    {{
+                        $organisationList->appends([
+                            'sort'          => app('request')->sort,
+                            'order'         => app('request')->order,
+                            'status'        => app('request')->status,
+                            'eik'           => app('request')->eik,
+                            'is_candidate'  => app('request')->is_candidate,
+                            'email'         => app('request')->email,
+                            'name'          => app('request')->name,
+                            'reg_date_from' => app('request')->reg_date_from,
+                            'reg_date_to'   => app('request')->reg_date_to,
+                        ])->links()
+                    }}
                 @endif
             </div>
         </div>

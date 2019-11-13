@@ -30,7 +30,7 @@ class APIActionsHistoryTest extends TestCase
         } else {
             $data['filters']['voting_tour_id'] = $votingTour->id;
 
-            $this->post('http://voting.localhost/api/actionHistory/search', $data)
+            $this->post(url('api/actionHistory/search'), $data)
                 ->assertStatus(200)
                 ->assertJson(['success' => true]);
         }

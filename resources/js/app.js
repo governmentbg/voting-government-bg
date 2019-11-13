@@ -249,12 +249,12 @@ $(document).on('click', '.additional-info', function() {
 });
 
 $(function() {
-    $('#reg_date_from').click(function() {
-        $('[name="reg_date_from"], [name="filters[date_from]"]').datepicker('show');
+    $('#reg_date_from, #period_from').click(function() {
+        $('[name="reg_date_from"], [name="filters[date_from]"], [name="period_from"]').datepicker('show');
     });
 
-    $('#reg_date_to').click(function() {
-        $('[name="reg_date_to"], [name="filters[date_to]"]').datepicker('show');
+    $('#reg_date_to, #period_to').click(function() {
+        $('[name="reg_date_to"], [name="filters[date_to]"], [name="period_to"]').datepicker('show');
     });
 });
 

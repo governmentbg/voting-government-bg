@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
+use App\ActionsHistory;
 
 class LoginController extends Controller
 {
@@ -68,7 +69,7 @@ class LoginController extends Controller
     {
         return redirect()->route('home');
     }
-    
+
     /**
      * Redirect the user after determining they are locked out.
      *
@@ -85,5 +86,23 @@ class LoginController extends Controller
         throw ValidationException::withMessages([
             $this->username() => [Lang::get('auth.throttle', ['minutes' => round($seconds/60)])],
         ])->status(423);
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $logData = [
+            'module' => ActionsHistory::USERS,
+            'action' => ActionsHistory::TYPE_LOGGED_IN,
+            'object' => $user->id
+        ];
+
+        ActionsHistory::add($logData);
     }
 }

@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
 @php
-    if (request()->segment(1) == 'admin'){
+    if (request()->segment(1) == 'admin') {
         $changePasswordRoute = route('admin.change_password');
         $breadRoute = route('admin.org_list');
         $breadSettings = url('admin/settings');
-    } else{
+    } else {
         $changePasswordRoute = route('organisation.change_password');
         $breadRoute = route('organisation.view');
-        $breadSettings = url('settings');
+        $breadSettings = url('passwordChange');
     }
 @endphp
 
 @section('content')
 
-@if(request()->segment(1) == 'admin')
+@if (request()->segment(1) == 'admin')
     @include('partials.admin-nav-bar')
 @else
     @include('partials.user-nav-bar')
 @endif
 @php
     $breadcrumbs[] = (object) ['label' => 'Начало', 'link' => $breadRoute];
-    //$breadcrumbs[] = (object) ['label' => 'Настройки', 'link' => $breadSettings];
+    $breadcrumbs[] = (object) ['label' => 'Настройки', 'link' => $breadSettings];
     $breadcrumbs[] = (object) ['label' => 'Смяна на паролата'];
 @endphp
 @include('components.breadcrumbs', $breadcrumbs)
@@ -75,7 +75,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12 col-xs-6 p-r-none text-right">
-                            @include('components.button', ['buttonLabel' => __('custom.save')])
+                            @include('components.button', ['buttonLabel' => __('custom.save'), 'name' => 'save'])
                         </div>
                     </div>
                 </form>

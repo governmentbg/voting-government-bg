@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 use App\VotingTour;
+use App\ActionsHistory;
 
 class UserController extends ApiController
 {
@@ -138,6 +139,14 @@ class UserController extends ApiController
                     return $this->errorResponse(__('custom.incorrect_password'));
                 }
 
+                $logData = [
+                    'module' => ActionsHistory::USERS,
+                    'action' => ActionsHistory::TYPE_CHANGED_PASSWORD,
+                    'object' => $user->id,
+                ];
+
+                ActionsHistory::add($logData);
+
                 return $this->successResponse();
             } catch (QueryException $e) {
                 logger()->error($e->getMessage());
@@ -219,6 +228,18 @@ class UserController extends ApiController
 
             DB::commit();
 
+            $logData = [
+                'module' => ActionsHistory::USERS,
+                'action' => ActionsHistory::TYPE_ADD,
+                'object' => $user->id,
+            ];
+
+            if (!\Auth::user()) {
+                $logData['actor'] = $user->created_by;
+            }
+
+            ActionsHistory::add($logData);
+
             return $this->successResponse(['id' => $user->id], true);
         } catch (QueryException $ex) {
             DB::rollback();
@@ -278,6 +299,14 @@ class UserController extends ApiController
 
                 DB::commit();
 
+                $logData = [
+                    'module' => ActionsHistory::USERS,
+                    'action' => ActionsHistory::TYPE_MOD,
+                    'object' => $user->id,
+                ];
+
+                ActionsHistory::add($logData);
+
                 return $this->successResponse();
             } catch (QueryException $ex) {
                 DB::rollback();
@@ -307,6 +336,13 @@ class UserController extends ApiController
         try {
             $users = User::whereNull('org_id')->sort($field, $order)->paginate();
 
+            $logData = [
+                'module' => ActionsHistory::USERS,
+                'action' => ActionsHistory::TYPE_SEE
+            ];
+
+            ActionsHistory::add($logData);
+
             return $this->successResponse($users);
         } catch (QueryException $e) {
             logger()->error($e->getMessage());
@@ -335,6 +371,15 @@ class UserController extends ApiController
 
         $user = User::where('id', $id)->first();
         if ($user) {
+
+            $logData = [
+                'module' => ActionsHistory::USERS,
+                'action' => ActionsHistory::TYPE_SEE,
+                'object' => $user->id
+            ];
+
+            ActionsHistory::add($logData);
+
             return $this->successResponse($user);
         }
 

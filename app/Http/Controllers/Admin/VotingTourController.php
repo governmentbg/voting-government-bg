@@ -13,6 +13,7 @@ use App\Organisation;
 use App\Vote;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use App\ActionsHistory;
 
 class VotingTourController extends BaseAdminController
 {
@@ -127,17 +128,52 @@ class VotingTourController extends BaseAdminController
             if (Cache::has($cacheKey)) {
                 $dataFromCache = Cache::get($cacheKey);
                 $dataFromCache['listData'] = collect($dataFromCache['listData']);
+                if (request()->has('download')) {
+                    $filename = 'voteResults.csv';
+                    $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+                    $temp = fopen($tempname, 'w+');
+                    $path = stream_get_meta_data($temp)['uri'];
+
+                    fputcsv($temp, [
+                        __('custom.organisation'),
+                        __('custom.eik'),
+                        __('custom.votes')
+                    ]);
+
+                    $statuses = \App\Organisation::getStatuses();
+
+                    foreach($dataFromCache['listData'] as $singleOrgData) {
+                        fputcsv($temp, [
+                            $singleOrgData->name,
+                            $singleOrgData->eik,
+                            $singleOrgData->votes,
+                        ]);
+                    }
+
+                    $headers = ['Content-Type' => 'text/csv'];
+
+                    $logData = [
+                        'module' => ActionsHistory::VOTES,
+                        'action' => ActionsHistory::TYPE_DOWNLOADED
+                    ];
+
+                    ActionsHistory::add($logData);
+
+                    return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+                }
+
                 $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
 
                 return view('tours.ranking', [
                     'listTitle'      => $votingTour->name,
                     'listData'       => $dataFromCache['listData'],
-                    'route'          => 'admin.org_edit',
+                    'route'          => request()->segment(1) == 'admin' ? 'admin.ranking' : 'admin.org_edit',
                     'showBallotage'  => $dataFromCache['showBallotage'],
                     'stats'          => $dataFromCache['stats'],
                     'fullWidth'      => true,
                     'ajaxMethod'     => 'rankingAdminAjax',
-                    'orgNotEditable' => true
+                    'orgNotEditable' => true,
+                    'tourId'         => $id
                 ]);
             }
 
@@ -263,13 +299,13 @@ class VotingTourController extends BaseAdminController
         return view('tours.ranking', [
             'listTitle'      => $votingTour->name,
             'listData'       => collect($listData)->forPage(1, 100),
-            'route'          => 'admin.org_edit',
+            'route'          => request()->segment(1) == 'admin' ? 'list.ranking' : 'admin.org_edit',
             'showBallotage'  => $showBallotage,
             'stats'          => $stats,
             'fullWidth'      => true,
-            'fullWidth'      => true,
             'ajaxMethod'     => 'rankingAdminAjax',
-            'orgNotEditable' => true
+            'orgNotEditable' => true,
+            'tourId'         => $id
         ])->withErrors($errors);
     }
 

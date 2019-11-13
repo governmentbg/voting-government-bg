@@ -30,8 +30,11 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-                <form method="get" action="{{ route($route) }}" id="orgList">
-                    <div class="col-lg-12 text-right p-r-none p-b-15">
+                @php
+                    $tour['id'] = request()->segment(1) == 'admin' ? $tourId : '';
+                @endphp
+                <form method="get" action="{{ route($route, $tour['id']) }}" id="orgList">
+                    <div class="col-lg-12 text-right p-r-none p-b-15 {{ request()->segment(1) == 'admin' ? 'w-75' : 'w-100' }}">
                         <button
                             class="btn btn-primary add"
                             type="submit"
@@ -39,7 +42,7 @@
                         >{{ uctrans('custom.download') }}</button>
                     </div>
                 </form>
-                <div class="table-wrapper nano public-table">
+                <div class="table-wrapper nano public-table {{ request()->segment(1) == 'admin' ? 'w-75' : 'w-100' }}">
                     <div class="tableFixHead nano-content js-org-table">
                         <table
                             class="table table-striped table-responsive ams-table ranking js-orgs"

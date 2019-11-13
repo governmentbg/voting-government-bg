@@ -231,7 +231,7 @@ return [
     'ballotage_ranking_not_allowed'    => 'На този етап не може да бъде извършено класиране от балотаж',
     'send_vote_invites_failed'         => 'Възникна проблем с изпращането на електронни писма с покана за гласуване до всички допуснати участници!',
     'download'                         => 'Изтегли',
-    'actions_history'                  => 'История на действията',
+    'actions_history'                  => 'Системен журнал',
     'voted_action'                     => 'гласува',
     'organisations'                    => 'Организации',
     'voting_tours'                     => 'Турове',

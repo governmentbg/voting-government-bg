@@ -19,8 +19,12 @@ class ActionsHistoryController extends BaseAdminController
         $periodFrom = $request->offsetGet('period_from');
         $periodTo = $request->offsetGet('period_to');
 
+        $votingTourData = isset($votingTourId) ? \App\VotingTour::where('id', $votingTourId)->first() : \App\VotingTour::getLatestTour();
+
         $this->addBreadcrumb(__('breadcrumbs.start'), route('admin.org_list'));
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
+        $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
+        $this->addBreadcrumb($votingTourData->name, '');
         $this->addBreadcrumb(__('custom.actions_history'), '');
 
         $allFilters = [];

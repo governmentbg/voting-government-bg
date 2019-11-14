@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\VoteController as ApiVote;
 use App\Organisation;
 use App\VotingTour;
+use App\Vote;
+use Illuminate\Support\Facades\Cache;
 
 class VoteController extends BaseFrontendController
 {
@@ -25,7 +27,7 @@ class VoteController extends BaseFrontendController
 
         if ($votingTourData->status == VotingTour::STATUS_VOTING) {
             $memberStatus = [Organisation::STATUS_CANDIDATE];
-        } else if ($votingTourData->status == VotingTour::STATUS_BALLOTAGE) {
+        } elseif ($votingTourData->status == VotingTour::STATUS_BALLOTAGE) {
             $memberStatus = [Organisation::STATUS_BALLOTAGE];
         } else {
             $memberStatus = [];
@@ -33,9 +35,9 @@ class VoteController extends BaseFrontendController
 
         list($organisations, $orgErrors) = api_result(ApiOrganisation::class, 'search', [
             'filters' => [
-                'statuses' => $memberStatus,
-                'only_main_fields' => true
-            ]
+                'statuses'         => $memberStatus,
+                'only_main_fields' => true,
+            ],
         ]);
 
         list($latestVote, $latestVoteErrors) = api_result(ApiVote::class, 'getLatestVote', ['org_id' => \Auth::user()->org_id]);
@@ -45,23 +47,23 @@ class VoteController extends BaseFrontendController
         }
         
         $maxVotes = \App\Vote::MAX_VOTES;
-        if ($votingTourData->status == VotingTour::STATUS_BALLOTAGE){
+        if ($votingTourData->status == VotingTour::STATUS_BALLOTAGE) {
             //max votes for ballotage
-            $maxVotes = 3; //tODO
+            $maxVotes = $this->getMaxVotes($votingTourData);
         }
 
         if (!empty($latestVote) && !isset($request->change)) {
             return view('organisation.latest_vote', [
                 'latestVoteData'  => $latestVoteArray,
                 'orgList'         => $organisations,
-                'maxVotes'        => $maxVotes,  
+                'maxVotes'        => $maxVotes,
             ]);
         }
 
         return view('organisation.vote', [
             'orgList'        => $organisations,
             'latestVoteData' => $latestVoteArray,
-            'maxVotes'       => $maxVotes,  
+            'maxVotes'       => $maxVotes,
         ]);
     }
 
@@ -76,21 +78,21 @@ class VoteController extends BaseFrontendController
             if ($voteString == '') {
                 $voteString .= $orgId;
             } else {
-                $voteString .= ','. $orgId;
+                $voteString .= ',' . $orgId;
             }
         }
 
         list($vote, $voteErrors) = api_result(ApiVote::class, 'vote', [
             'org_id'   => $loggedUserOrg,
-            'org_list' => $voteString
+            'org_list' => $voteString,
         ]);
 
         if (empty($voteErrors)) {
             list($organisations, $orgErrors) = api_result(ApiOrganisation::class, 'search', [
                 'filters' => [
-                    'statuses' => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
-                    'only_main_fields' => true
-                ]
+                    'statuses'         => [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE],
+                    'only_main_fields' => true,
+                ],
             ]);
 
             list($latestVote, $latestVoteErrors) = api_result(ApiVote::class, 'getLatestVote', ['org_id' => \Auth::user()->org_id]);
@@ -100,7 +102,7 @@ class VoteController extends BaseFrontendController
             }
 
             list($loggedOrg, $loggedOrgErrors) = api_result(ApiOrganisation::class, 'getData', [
-                'org_id' => \Auth::user()->org_id
+                'org_id' => \Auth::user()->org_id,
             ]);
 
             $mailResult = sendEmail('emails/vote_confirmation', ['name' => $loggedOrg->name], $loggedOrg->email, __('custom.vote_successful'));
@@ -113,28 +115,38 @@ class VoteController extends BaseFrontendController
 
             return view('organisation.latest_vote', [
                 'latestVoteData'  => $latestVoteArray,
-                'orgList'         => $organisations
+                'orgList'         => $organisations,
             ]);
-        } else {
-            foreach ($voteErrors as $singleError) {
-                $request->session()->flash('alert-danger', $singleError);
-            }
-
-            return redirect()->back();
         }
+        foreach ($voteErrors as $singleError) {
+            $request->session()->flash('alert-danger', $singleError);
+        }
+
+        return redirect()->back();
     }
     
     /**
-     * @todo finish the method
-     * @param type $votingTour
-     * @return type
+     * Get maximut number of votes for ballotage. The number is MAX_VOTES minus number of elected orgs.
+     * @param  type $votingTour
+     * @return ineteger
      */
     private function getMaxVotes($votingTour)
     {
-        if ($votingTour->status == VotingTour::STATUS_VOTING){
+        if ($votingTour->status == VotingTour::STATUS_VOTING) {
             return \App\Vote::MAX_VOTES;
         }
-        //TODO calculate - max votes for ballotage
+
+        $cacheKey = VotingTour::getCacheKey($votingTour->id, 'max-votes');
+        if($votingTour->status == VotingTour::STATUS_BALLOTAGE){
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+        }
+
+        $params = [
+                    'tour_id' => $this->votingTour->id,
+                    'status'  => VotingTour::STATUS_VOTING,
+                ];
         list($listData, $listErrors) = api_result(ApiVote::class, 'ranking', $params);
         // calculate votes limit
         $votesLimit = -1;
@@ -150,12 +162,15 @@ class VoteController extends BaseFrontendController
         }
 
         // separate list data by votes limit
+        $electedOrgs = 0;
+
         foreach ($listData as $data) {
-            if ($setBallotage && $data->votes == $votesLimit) {
-                $data->for_ballotage = true;
-            } elseif ($data->votes < $votesLimit) {
-                $data->dropped_out = true;
+            if ($setBallotage && $data->votes > $votesLimit) {
+                $electedOrgs++;
             }
         }
+
+        Cache::put($cacheKey, Vote::MAX_VOTES - $electedOrgs, now()->addMinutes(60));
+        return Vote::MAX_VOTES - $electedOrgs;
     }
 }

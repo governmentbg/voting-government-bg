@@ -11,22 +11,28 @@ require('bootstrap-datepicker');
 require('nanoscroller');
 
 $('#vote_organisations').dblclick(function() {
+    let selected = $('#vote_organisations option:selected').clone();
     $('#vote_organisations option:selected').remove().appendTo($('#votefor'));
+    addRowNumber(selected);
     checkVoteSize();
 });
 
 $('#votefor').dblclick(function() {
-    $('#votefor option:selected').remove().appendTo($('#vote_organisations'));
+    $('#votefor option:selected').remove().appendTo($('#vote_organisations')).find('span').remove();
+    reorderRowNumbers();
     checkVoteSize();
 });
 
 $('#js-add-org').click(function() {
+    let selected = $('#vote_organisations option:selected').clone();
     $('#vote_organisations option:selected').remove().appendTo($('#votefor'));
+    addRowNumber(selected);
     checkVoteSize();
 });
 
 $('#js-remove-org').click(function() {
-    $('#votefor option:selected').remove().appendTo($('#vote_organisations'));
+    $('#votefor option:selected').remove().appendTo($('#vote_organisations')).find('span').remove();
+    reorderRowNumbers();
     checkVoteSize();
 });
 
@@ -35,7 +41,8 @@ $(document).ready(function() {
 });
 
 function checkVoteSize() {
-    if ($('#votefor option').length == 14) {
+    let maxVotes = $('#js-voteform').data('max-votes');
+    if ($('#votefor option').length == maxVotes) {
         $('#vote_organisations').attr('disabled', true);
     } else {
         $('#vote_organisations').attr('disabled', false);
@@ -46,6 +53,28 @@ function checkVoteSize() {
     } else {
         $('#votebtn').attr('disabled', false);
     }
+}
+
+/**
+ * Add row number to organisations list.
+ */
+function addRowNumber(selectedOrgs) {
+    selectedOrgs.each(function(i, org){
+        let orgInList = $('#votefor option[value="' + $(org).attr('value') +'"]');
+        let index = orgInList.index() + 1;
+        $('#votefor option[value="' + $(org).attr('value') +'"]').html('<span>'+ index +' - </span>' + $(org).text());
+    });
+}
+
+/**
+ * Reorder row numbers. After that there are only consecutive numbers.
+ * @returns {void}
+ */
+function reorderRowNumbers() {
+    $('#votefor option').each(function(i, org){
+        $(org).find('span').remove();
+        $(org).html('<span>'+ ($(org).index() + 1) +'- </span>' + $(org).text());
+    });
 }
 
 $(document).ready(function() {

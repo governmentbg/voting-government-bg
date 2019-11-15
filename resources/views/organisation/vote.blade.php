@@ -11,7 +11,7 @@
             <div class="row">
                 <h2 class="color-dark"><b>{{ __('custom.voting_title') }}</b></h2>
             </div>
-            <form method="POST" class="m-t-20" id="js-voteform" action="{{ route('organisation.vote_action') }}">
+            <form method="POST" class="m-t-20" id="js-voteform" action="{{ route('organisation.vote_action') }}" data-max-votes="{{ $maxVotes }}">
                 @include('components.modal', [
                     'title' => __('custom.confirm_vote'),
                     'body' => '',
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 vote-box-outline">
-                        <h3 class="m-t-15">{{ __('custom.selected_participants') }} {{ __('custom.max_14') }}</h3>
+                        <h3 class="m-t-15">{{ __('custom.selected_participants') }} {{ untrans('custom.max_n', 1, ['count' => $maxVotes]) }}</h3>
                         <hr class="hr-small">
                         <div class="m-t-53 nano vote-height m-b-15">
                             <select name="votefor[]" multiple="multiple" id="votefor" class="vote-box nano-content" size="13">

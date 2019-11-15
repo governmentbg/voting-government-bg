@@ -126,9 +126,9 @@ class VoteController extends BaseFrontendController
     }
     
     /**
-     * Get maximut number of votes for ballotage. The number is MAX_VOTES minus number of elected orgs.
-     * @param  type $votingTour
-     * @return ineteger
+     * Get maximum number of votes for ballotage. The number is MAX_VOTES minus number of elected orgs.
+     * @param  stdClass $votingTour
+     * @return integer
      */
     private function getMaxVotes($votingTour)
     {

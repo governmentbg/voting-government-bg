@@ -204,40 +204,39 @@ class VotingTourController extends ApiController
             'order_type'     => 'nullable|string'
         ]);
 
-        $orderColumns = [
-            'name',
-            'status',
-            'created_at',
-            'updated_at',
-        ];
+        if (!$validator->fails()) {
+            $orderField = isset($post['order_field']) ? $post['order_field'] : VotingTour::DEFAULT_ORDER_FIELD;
+            $orderType = isset($post['order_type']) ? $post['order_type'] : VotingTour::DEFAULT_ORDER_TYPE;
 
-        if (isset($post['order_field'])) {
-            if (!in_array($post['order_field'], $orderColumns)) {
+            $orderColumns = [
+                'name',
+                'status',
+                'created_at',
+                'updated_at',
+            ];
+
+            if (!in_array($orderField, $orderColumns)) {
                 return $this->errorResponse(__('custom.invalid_sort_field'));
             }
 
-            $orderField = $post['order_field'];
-            $orderType = $post['order_type'];
-        } else {
-            $orderField = VotingTour::DEFAULT_ORDER_FIELD;
-            $orderType = 'DESC';
+            $tourList = VotingTour::orderBy($orderField, $orderType)->get();
+
+            if ($tourList->first()) {
+
+                $logData = [
+                    'module' => ActionsHistory::VOTING_TOURS,
+                    'action' => ActionsHistory::TYPE_SEE
+                ];
+
+                ActionsHistory::add($logData);
+
+                return $this->successResponse($tourList);
+            } else {
+                return $this->errorResponse(__('custom.tour_list_not_found'));
+            }
         }
 
-        $tourList = VotingTour::orderBy($orderField, $orderType)->get();
-
-        if ($tourList->first()) {
-
-            $logData = [
-                'module' => ActionsHistory::VOTING_TOURS,
-                'action' => ActionsHistory::TYPE_SEE
-            ];
-
-            ActionsHistory::add($logData);
-
-            return $this->successResponse($tourList);
-        } else {
-            return $this->errorResponse(__('custom.tour_list_not_found'));
-        }
+        return $this->errorResponse(__('custom.tour_list_not_found'));
     }
 
     /**

@@ -51,8 +51,8 @@ class OrganisationController extends ApiController
                 'phone'             => 'required|string|max:40',
                 'in_av'             => 'bool',
                 'is_candidate'      => 'bool',
-                'description'       => 'nullable|max:8000',
-                'references'        => 'nullable|max:8000',
+                'description'       => 'nullable|max:8000|required_if:is_candidate,true',
+                'references'        => 'nullable|max:8000|required_if:is_candidate,true',
                 'status'            => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
                 'files'             => 'nullable|array',
@@ -62,18 +62,19 @@ class OrganisationController extends ApiController
             ]);
 
             $validator->after(function ($validator) use ($data) {
-                if ($data['description'] == '') {
+                if (isset($data['description']) && empty($data['description'])) {
                     if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
                         $validator->errors()->add('description', __('custom.org_descr_required'));
                     }
-                } else {
-                    if (!$validator->errors()->has('description')) {
-                        $words = preg_split( '|\s+|s', $data['description']);
-                        if (($words = count($words)) > 500) {
-                            $validator->errors()->add('description', __('custom.org_descr_words_exceeded', ['words' => $words]));
-                        }
+                }
+
+                if (!$validator->errors()->has('description') && !empty($data['description'])) {
+                    $words = preg_split( '|\s+|s', $data['description']);
+                    if (($words = count($words)) > 500) {
+                        $validator->errors()->add('description', __('custom.org_descr_words_exceeded', ['words' => $words]));
                     }
                 }
+
                 if (!$validator->errors()->has('files')) {
                     if (!(isset($data['in_av']) && $data['in_av'] == Organisation::IN_AV_TRUE) && empty($data['files'])) {
                         $validator->errors()->add('files', __('custom.org_files_required'));

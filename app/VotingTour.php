@@ -21,6 +21,7 @@ class VotingTour extends Model
 
     const DEFAULT_RECORDS_PER_PAGE = 50;
     const DEFAULT_ORDER_FIELD = 'created_at';
+    const DEFAULT_ORDER_TYPE = 'ASC';
 
     protected $hidden = ['updater', 'creator'];
 

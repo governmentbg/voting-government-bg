@@ -18,7 +18,7 @@ class CreateActionsHistoryTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('action');
-            $table->integer('module')->unsigned();
+            $table->unsignedTinyInteger('module');
             $table->integer('object')->unsigned()->nullable();
             $table->integer('voting_tour_id')->unsigned();
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');

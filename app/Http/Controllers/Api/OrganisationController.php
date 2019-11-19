@@ -207,14 +207,14 @@ class OrganisationController extends ApiController
                 'phone'          => 'string|max:40',
                 'in_av'          => 'bool',
                 'is_candidate'   => 'bool',
-                'description'    => 'nullable|max:8000',
-                'references'     => 'nullable|max:8000',
+                'description'    => 'nullable|max:8000|required_if:is_candidate,true',
+                'references'     => 'nullable|max:8000|required_if:is_candidate,true',
                 'status'         => 'int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
             ]);
 
             $validator->after(function ($validator) use ($data) {
-                if ($data['description'] != '' && !$validator->errors()->has('description')) {
+                if (!$validator->errors()->has('description') && !empty($data['description'])) {
                     $words = preg_split( '|\s+|s', $data['description']);
                     if (($words = count($words)) > 500) {
                         $validator->errors()->add('description', __('custom.org_descr_words_exceeded', ['words' => $words]));
@@ -230,12 +230,16 @@ class OrganisationController extends ApiController
 
                     if ($organisation) {
                         $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
+
                         if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
                             $description = (array_key_exists('description', $data) ? $data['description'] : $organisation->description);
+
                             if (trim($description) == '') {
                                 return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
                             }
+
                             $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
+
                             if (trim($references) == '') {
                                 $data['references'] = '';
                             }

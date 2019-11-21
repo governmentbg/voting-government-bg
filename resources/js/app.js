@@ -221,20 +221,22 @@ $('form.change-tour').submit(function(e) {
     e.preventDefault();
     let oldValue = $('form.change-tour [name="status"]').data('old-status');
     let status = $('form.change-tour [name="status"]').val();
+    let modal = $('#confirmEmailSending');
 
     if ((status == 3 || status == 5) && status != oldValue) { //status - voting
-        let modal = $('#confirmEmailSending');
-        if(status == 3){
-            $('.modal-title.voting', modal).removeClass('d-none');
-            $('.modal-title.ballotage', modal).addClass('d-none');
-        }
-
-        if(status == 5){
-            $('.modal-title.voting', modal).addClass('d-none');
-            $('.modal-title.ballotage', modal).removeClass('d-none');
-        }
-
         modal.modal();
+
+        if (status == 3) {
+            modal.find('.modal-title').text($('#translations').data('voting'));
+            modal.find('.modal-body').text($('#translations').data('status-change-confirm'));
+            modal.find('.modal-body').append($('#append-checkbox').show());
+        }
+
+        if (status == 5) {
+            modal.find('.modal-title').text($('#translations').data('ballotage'));
+            modal.find('.modal-body').text($('#translations').data('status-change-confirm'));
+            modal.find('.modal-body').append($('#append-checkbox').show());
+        }
 
         modal.find('input[name="send_emails"]').change(function() {
             if ($(this).prop('checked')) {
@@ -243,6 +245,26 @@ $('form.change-tour').submit(function(e) {
                 modal.find('.confirm').attr('disabled', true);
             }
         });
+    } else if (status == 1 && status != oldValue) {
+        modal.modal();
+        modal.find('.modal-title').text($('#translations').data('opened-reg'));
+        modal.find('.modal-body').text($('#translations').data('confirm'));
+        modal.find('.confirm').attr('disabled', false);
+    } else if (status == 2 && status != oldValue) {
+        modal.modal();
+        modal.find('.modal-title').text($('#translations').data('closed-reg'));
+        modal.find('.modal-body').text($('#translations').data('confirm'));
+        modal.find('.confirm').attr('disabled', false);
+    } else if (status == 4 && status != oldValue) {
+        modal.modal();
+        modal.find('.modal-title').text($('#translations').data('ranking'));
+        modal.find('.modal-body').text($('#translations').data('confirm'));
+        modal.find('.confirm').attr('disabled', false);
+    } else if (status == 6 && status != oldValue) {
+        modal.modal();
+        modal.find('.modal-title').text($('#translations').data('finished'));
+        modal.find('.modal-body').text($('#translations').data('confirm'));
+        modal.find('.confirm').attr('disabled', false);
     } else {
         $(this).unbind('submit').submit();
     }

@@ -257,5 +257,5 @@ return [
     'downloaded'                       => 'изтегли',
     'logged_in'                        => 'влезе',
     'changed_password'                 => 'промени парола',
-
+    'confirm_status_change'            => 'Моля потвърдете промяната на статус!'
 ];

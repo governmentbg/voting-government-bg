@@ -49,19 +49,30 @@
         </div>
     </div>
 
+    <div
+        id="translations"
+        data-status-change-confirm="{{ __('messages.status_change_confirmation') }}"
+        data-voting="{{ __('custom.voting') }}"
+        data-ballotage="{{ __('custom.ballotage') }}"
+        data-opened-reg="{{ __('custom.opened_for_reg') }}"
+        data-closed-reg="{{ __('custom.closed_for_reg') }}"
+        data-ranking="{{ __('custom.ranking') }}"
+        data-finished="{{ __('custom.finished') }}"
+        data-confirm="{{ __('custom.confirm_status_change') }}"
+    ></div>
+    <div id="append-checkbox" style="display:none" class="p-t-10">
+        @include('components.checkbox', ['name' => 'send_emails', 'label' => __('messages.send_n_messages', ['count' => $count])])
+    </div>
     <div class="modal" tabindex="-1" role="dialog" id='confirmEmailSending'>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title voting">{{ __('custom.voting') }}</h5>
-                    <h5 class="modal-title ballotage d-none">{{ __('custom.ballotage') }}</h5>
+                    <h5 class="modal-title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ __('messages.status_change_confirmation')}}</p>
-                    @include('components.checkbox', ['name' => 'send_emails', 'label' => __('messages.send_n_messages', ['count' => $count])])
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('custom.cancel')}}</button>

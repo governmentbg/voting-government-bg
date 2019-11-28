@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\File;
 use App\VotingTour;
 use App\ActionsHistory;
+use App\Organisation;
 
 class MessageController extends ApiController
 {
@@ -355,6 +356,83 @@ class MessageController extends ApiController
             return $this->successResponse(['id' => $message->id], true);
         } catch (\Exception $e) {
             DB::rollback();
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.message_not_send'), $e->getMessage());
+        }
+    }
+
+    /**
+     * Send message to organisations.
+     *
+     * @param array $query - required
+     *
+     * @return json $response - response with status
+     */
+    public function sendBulkMessagesToOrg(Request $request)
+    {
+        $batchData = $request->all();
+
+        $validator = \Validator::make($batchData, [
+            'sender_user_id'                 => 'required|int|exists:users,id',
+            'recipient_filters'              => 'nullable|array',
+            'recipient_filters.org_statuses' => 'nullable|array',
+            'subject'                        => 'required|string',
+            'body'                           => 'required|string',
+            'parent_id'                      => 'nullable|int|exists:messages,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
+
+        $organisations = Organisation::select('id');
+
+        if (isset($batchData['recipient_filters']['org_statuses']) && !empty($batchData['recipient_filters']['org_statuses'])) {
+            $organisations->whereIn('status', $batchData['recipient_filters']['org_statuses']);
+        }
+
+        $organisationsList = $organisations->where('voting_tour_id', VotingTour::getLatestTour()->id)->get();
+
+        if (empty($organisationsList)) {
+            return $this->errorResponse(__('custom.get_orgs_failure'));
+        }
+
+        $votinTourId = VotingTour::getLatestTour()->id;
+
+        foreach ($organisationsList as $index => $singleOrg) {
+            $queryString[] = [
+                'sender_user_id'   => $batchData['sender_user_id'],
+                'recipient_org_id' => $singleOrg->id,
+                'subject'          => $batchData['subject'],
+                'body'             => $batchData['body'],
+                'voting_tour_id'   => $votinTourId,
+                'parent_id'        => isset($batchData['parent_id']) ? $batchData['parent_id'] : null,
+                'created_by'       => $batchData['sender_user_id']
+            ];
+        }
+
+        if (sizeof($queryString) > Message::BATCH_SIZE) {
+            $arrayChunks = array_chunk($queryString, Message::BATCH_SIZE);
+        }
+
+        try {
+            if (sizeof($queryString) > Message::BATCH_SIZE) {
+                foreach ($arrayChunks as $index => $chunckData) {
+                    $messages = Message::insert($chunckData);
+                }
+            } else {
+                $messages = Message::insert($queryString);
+            }
+
+            $logData = [
+                'module' => ActionsHistory::MESSAGES,
+                'action' => ActionsHistory::TYPE_ADD
+            ];
+
+            ActionsHistory::add($logData);
+
+            return $this->successResponse();
+        } catch (\Exception $e) {
             logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.message_not_send'), $e->getMessage());
         }

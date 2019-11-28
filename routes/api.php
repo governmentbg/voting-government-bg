@@ -45,6 +45,7 @@ Route::middleware(['api'])->group(function () {
     Route::post('message/listStatuses', 'Api\MessageController@listStatuses');
     Route::post('message/sendMessageToOrg', 'Api\MessageController@sendMessageToOrg');
     Route::post('message/sendMessageFromOrg', 'Api\MessageController@sendMessageFromOrg');
+    Route::post('message/sendBulkMessagesToOrg', 'Api\MessageController@sendBulkMessagesToOrg');
 
     Route::post('organisation/register', 'Api\OrganisationController@register');
     Route::post('organisation/edit', 'Api\OrganisationController@edit');

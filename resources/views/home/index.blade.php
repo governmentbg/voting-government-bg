@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="col-lg-5 col-md-5 col-sm-5 col-11 p-l-40">
-        @if (!auth()->check() && !isset($reset_password))
+        @if (!auth()->check() && !isset($reset_password) && !auth()->guard('backend')->check())
         <div>
             <form method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
@@ -82,7 +82,7 @@
                 @endif
             </div>
         </div>
-        @elseif (!auth()->check())
+        @elseif (!auth()->check() && !auth()->guard('backend')->check())
             <!-- Forgotten password form -->
             <form method="POST" action="{{ route('password.email') }}">
                 {{ csrf_field() }}
@@ -121,7 +121,7 @@
     </div>
 </div>
 
-@if (!auth()->check() && isset($listData))
+@if (isset($listData))
     <hr class="hr-thin">
     @if (isset($isRanking) && $isRanking)
         @include('partials.public-ranking')

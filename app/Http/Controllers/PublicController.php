@@ -29,10 +29,6 @@ class PublicController extends BaseFrontendController
             return redirect()->route('admin.org_list');
         }
 
-        if (auth()->check()) {
-            return redirect()->route('organisation.view');
-        }
-
         if (!empty($this->votingTour) && $this->votingTour->status != VotingTour::STATUS_UPCOMING) {
             return redirect()->action('PublicController@listRegistered');
         }

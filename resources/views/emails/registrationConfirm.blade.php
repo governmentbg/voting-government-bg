@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{ __('custom.greetings') }}, {{ $name }}!<br><br>
+{{ __('custom.greetings') }}, {{ $name }},<br><br>
 
 {{ __('custom.register_account') }}<br><br>
 

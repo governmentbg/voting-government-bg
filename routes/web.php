@@ -15,16 +15,16 @@ Auth::routes();
 
 Route::get('/','PublicController@index')->name('home');
 
-Route::group(['middleware' => ['guest', 'guest:backend']], function () {
-    Route::get('/publicLists/registered', 'PublicController@listRegistered')->name('list.registered');
-    Route::get('/publicLists/candidates', 'PublicController@listCandidates')->name('list.candidates');
-    Route::get('/publicLists/voted', 'PublicController@listVoted')->name('list.voted');
-    Route::get('/publicLists/ranking', 'PublicController@listRanking')->name('list.ranking');
-    Route::get('/publicLists/registeredAjax', 'PublicController@listRegisteredAjax');
-    Route::get('/publicLists/candidatesAjax', 'PublicController@listCandidatesAjax');
-    Route::get('/publicLists/votedAjax', 'PublicController@listVotedAjax');
-    Route::get('/publicLists/rankingAjax', 'PublicController@listRankingAjax');
+Route::get('/publicLists/registered', 'PublicController@listRegistered')->name('list.registered');
+Route::get('/publicLists/candidates', 'PublicController@listCandidates')->name('list.candidates');
+Route::get('/publicLists/voted', 'PublicController@listVoted')->name('list.voted');
+Route::get('/publicLists/ranking', 'PublicController@listRanking')->name('list.ranking');
+Route::get('/publicLists/registeredAjax', 'PublicController@listRegisteredAjax');
+Route::get('/publicLists/candidatesAjax', 'PublicController@listCandidatesAjax');
+Route::get('/publicLists/votedAjax', 'PublicController@listVotedAjax');
+Route::get('/publicLists/rankingAjax', 'PublicController@listRankingAjax');
 
+Route::group(['middleware' => ['guest', 'guest:backend']], function () {
     Route::get('/register', 'OrganisationController@register')->name('organisation.register');
     Route::post('/predefinedData', 'PredefinedOrganisationController@readData');
     Route::post('/organisations', 'OrganisationController@store')->name('organisation.store');

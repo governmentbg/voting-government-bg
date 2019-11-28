@@ -51,13 +51,13 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12">{{ __('custom.email') }}:</label>
+                    <label class="col-sm-4 col-xs-12" title="{{ __('custom.email_hint') }}">{{ __('custom.email') }}:</label>
                     <div class="col-sm-4">
                         <span>{{ $organisation->email }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-xs-12">{{ __('custom.in_av') }}:</label>
+                    <label class="col-sm-4 col-xs-12" title="{{ __('custom.av_hint') }}">{{ __('custom.in_av') }}:</label>
                     <div class="col-sm-4">
                         @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->in_av])
                     </div>

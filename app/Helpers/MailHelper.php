@@ -17,10 +17,10 @@ function sendEmail($template, $mailData, $to, $subject) {
             $m->to($to);
             $m->subject($subject);
         });
-     } catch (\Exception $e) {
+    } catch (\Exception $e) {
         logger()->error('Send email error: '. $e->getMessage());
         return false;
-     }
+    }
 
-     return empty(\Mail::failures());
+    return empty(\Mail::failures());
 }

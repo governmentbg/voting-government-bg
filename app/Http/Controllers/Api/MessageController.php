@@ -416,8 +416,12 @@ class MessageController extends ApiController
         }
 
         try {
-            foreach ($arrayChunks as $index => $chunckData) {
-                $messages = Message::insert($chunckData);
+            if (sizeof($queryString) > Message::BATCH_SIZE) {
+                foreach ($arrayChunks as $index => $chunckData) {
+                    $messages = Message::insert($chunckData);
+                }
+            } else {
+                $messages = Message::insert($queryString);
             }
 
             $logData = [

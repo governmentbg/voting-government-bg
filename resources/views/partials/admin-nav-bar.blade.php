@@ -10,6 +10,12 @@
         <div class="navbar-collapse order-3 justify-content-end align-top mt-md-0 mt-xl-0 mt-4">
         @if (auth()->guard('backend')->check())
             <div class="p-r-20 f-s-21">{{ auth()->guard('backend')->user()->username }}</div>
+            <div class="p-r-20">
+                <a
+                    href="{{ route('list.registered') }}"
+                    class="f-s-21 color-black text-decoration-none"
+                >{{ __('custom.public_lists') }}</a>
+            </div>
             <div class="p-r-20 text-truncate">
                 <a
                     href="{{ route('admin.org_list') }}"

@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 col-xs-12">{{ __('custom.email') }}:</label>
+                        <label class="col-sm-4 col-xs-12" title="{{ __('custom.email_hint') }}">{{ __('custom.email') }}:</label>
                         <div class="row col-lg-8">
                             <div class="col-lg-12">
                                 <input
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-4">{{ __('custom.in_av') }}:</label>
+                        <label class="col-lg-4" title="{{ __('custom.av_hint') }}">{{ __('custom.in_av') }}:</label>
                         <div class="col-lg-8">
                             @include('components.checkbox', ['name' => 'in_av', 'checked' => old('in_av', $orgData->in_av)])
                         </div>

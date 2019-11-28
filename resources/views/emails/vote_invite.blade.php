@@ -2,7 +2,7 @@
 
 @section('content')
 {{__('custom.greetings')}}, {{ $name }}, <br><br>
-Регистрирани сте за участие в изборите за членове на Съвета за развитие на гражданско общество.<br>
-За да упражните правото си на вот, моля използвайте линка отдолу.<br>
+{{ __('custom.you_are_registered') }}.<br>
+{{ __('custom.to_vote_link') }}.<br>
 <a href="{{ route('organisation.vote') }}" style="text-decoration: none;">{{__('custom.vote')}}</a>
 @endsection

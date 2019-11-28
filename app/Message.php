@@ -12,6 +12,7 @@ class Message extends Model
     const STATUS_ALL = 0;
     const STATUS_NOT_READ = 1;
     const STATUS_READ = 2;
+    const BATCH_SIZE = 2048;
 
     protected $perPage = 15;
 

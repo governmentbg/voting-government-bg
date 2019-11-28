@@ -60,9 +60,6 @@
         data-finished="{{ __('custom.finished') }}"
         data-confirm="{{ __('custom.confirm_status_change') }}"
     ></div>
-    <div id="append-checkbox" style="display:none" class="p-t-10">
-        @include('components.checkbox', ['name' => 'send_emails', 'label' => __('messages.send_n_messages', ['count' => $count])])
-    </div>
     <div class="modal" tabindex="-1" role="dialog" id='confirmEmailSending'>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -73,6 +70,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="text p-b-15">
+
+                    </div>
+                    @include('components.checkbox', ['name' => 'send_emails', 'label' => __('messages.send_n_messages', ['count' => $count])])
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('custom.cancel')}}</button>

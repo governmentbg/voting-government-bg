@@ -7,8 +7,11 @@ ini_set('max_execution_time', 300);
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\VoteController as ApiVote;
+use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
+use App\Http\Controllers\Api\MessageController as ApiMessage;
 use App\VotingTour;
 use App\Jobs\SendAllVoteInvites;
+use App\Jobs\SendResultsInvitation;
 use App\Organisation;
 use App\Vote;
 use Illuminate\Support\Facades\Cache;
@@ -76,7 +79,31 @@ class VotingTourController extends BaseAdminController
         if (empty($errors)) {
             if ($oldStatus != $status && ($status == VotingTour::STATUS_VOTING || $status == VotingTour::STATUS_BALLOTAGE)) {
                 //send emails to all orgs - voting is open
+                $sender = auth()->guard('backend')->user()->id;
+
+                $bulkData = [
+                    'sender_user_id'   => $sender,
+                    'subject'          => __('custom.vote_invite'),
+                    'body'             => __('custom.tour') .' '. $votingTour->name .' '. __('custom.use_right_vote'). '<a href="'. route('organisation.vote').'"> Гласуване</a>',
+                ];
+
+                list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg',  $bulkData);
+
                 $this->sendEmails($status);
+            }
+
+            if ($oldStatus != $status && ($status == VotingTour::STATUS_RANKING)) {
+                $sender = auth()->guard('backend')->user()->id;
+
+                $bulkData = [
+                    'sender_user_id'   => $sender,
+                    'subject'          => __('custom.results_invite'),
+                    'body'             => __('custom.results_from_last_tour') .' '. $votingTour->name .' '. __('custom.are_available') .' <a href="'. route('list.ranking').'">Резултати</a>',
+                ];
+
+                list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg', $bulkData);
+
+                $this->sendResultsEmails($votingTour);
             }
 
             session()->flash('alert-success', trans(self::UPDATE_SUCCESS));
@@ -96,6 +123,16 @@ class VotingTourController extends BaseAdminController
         }
 
         return redirect()->back()->withErrors($errors)->withInput();
+    }
+
+    private function sendResultsEmails($votingTour)
+    {
+        try {
+            SendResultsInvitation::dispatch($votingTour);
+        } catch (\Exception $e) {
+            logger()->error('Send results invites error: '. $e->getMessage());
+            session()->flash('alert-info', __('custom.send_results_invites_failed'));
+        }
     }
 
     private function sendEmails($status)

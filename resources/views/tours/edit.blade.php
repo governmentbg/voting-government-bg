@@ -18,8 +18,8 @@
                     <label for="status" class="col-sm-4 col-xs-12"> {{ __('custom.status') }}:</label>
                     <div class="headerDropdown col-lg-8">
                         <select name="status" class="ams-dropdown custom-select" data-old-status="{{ $votingTour->status }}">
-                            @foreach(\App\VotingTour::getStatuses() as $key => $status)
-                            <option value="{{$key}}" {{$votingTour->status == $key? 'selected' : '' }}>{{$status}}</option>
+                            @foreach($statuses as $key => $status)
+                                <option value="{{$key}}" {{ in_array($key, $disabledStatuses) ? 'disabled' : '' }} {{$votingTour->status == $key ? 'selected' : '' }}>{{$status}}</option>
                             @endforeach
                         </select>
                         <i class="caret"></i>

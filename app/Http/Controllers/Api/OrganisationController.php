@@ -194,7 +194,8 @@ class OrganisationController extends ApiController
     public function edit(Request $request)
     {
         $votingTour = VotingTour::getLatestTour();
-        if (!empty($votingTour) && !array_key_exists($votingTour->status, VotingTour::getActiveStatuses())) {
+
+        if (!empty($votingTour) && !array_key_exists($votingTour->status, VotingTour::getNonEditableStatuses())) {
             $data = $request->get('org_data', []);
             $data['org_id'] = $request->get('org_id', null);
 

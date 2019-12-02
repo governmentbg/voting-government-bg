@@ -23,6 +23,8 @@ class VotingTour extends Model
     const DEFAULT_ORDER_FIELD = 'created_at';
     const DEFAULT_ORDER_TYPE = 'ASC';
 
+    const STATUS_STEP = 1;
+
     protected $hidden = ['updater', 'creator'];
 
     /**
@@ -102,9 +104,14 @@ class VotingTour extends Model
     public static function getActiveStatuses()
     {
         return [
-            self::STATUS_VOTING => __('custom.voting'),
+            self::STATUS_VOTING    => __('custom.voting'),
             self::STATUS_BALLOTAGE => __('custom.ballotage')
         ];
+    }
+
+    public static function getNonEditableStatuses()
+    {
+        return self::getActiveStatuses() + [self::STATUS_FINISHED => __('custom.finished')];
     }
 
     public function scopeActive($query)

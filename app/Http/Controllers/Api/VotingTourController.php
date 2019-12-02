@@ -90,6 +90,21 @@ class VotingTourController extends ApiController
         if (!$validator->fails()) {
             $editVotingTour = VotingTour::getLatestTour();
 
+            if ($editVotingTour->status + VotingTour::STATUS_STEP < $post['new_status']) {
+                if (!($post['new_status'] == VotingTour::STATUS_FINISHED)) {
+                    return $this->errorResponse(__('custom.status_skipping'));
+                }
+            }
+
+            if ($editVotingTour->status > $post['new_status']) {
+                if (!($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_VOTING)
+                    &&
+                    !($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_RANKING)
+                ) {
+                    return $this->errorResponse(__('custom.backward_status'));
+                }
+            }
+
             if ($editVotingTour) {
                 try {
                     DB::beginTransaction();

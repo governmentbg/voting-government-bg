@@ -64,8 +64,30 @@ class VotingTourController extends BaseAdminController
         $this->addBreadcrumb($votingTour->name, '');
 
         $count = Organisation::countRegistered($votingTour->id);
+        $statuses = VotingTour::getStatuses();
 
-        return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors, 'count' => $count]);
+        switch ($votingTour->status) {
+            case VotingTour::STATUS_UPCOMING:
+                $disabledStatuses = array_diff_key(array_keys($statuses), array_flip([VotingTour::STATUS_UPCOMING, VotingTour::STATUS_OPENED_REG, VotingTour::STATUS_FINISHED]));
+                break;
+            case VotingTour::STATUS_OPENED_REG:
+                $disabledStatuses = array_diff_key(array_keys($statuses), array_flip([VotingTour::STATUS_OPENED_REG, VotingTour::STATUS_CLOSED_REG, VotingTour::STATUS_FINISHED]));
+                break;
+            case VotingTour::STATUS_CLOSED_REG:
+                $disabledStatuses = array_diff_key(array_keys($statuses), array_flip([VotingTour::STATUS_CLOSED_REG, VotingTour::STATUS_VOTING, VotingTour::STATUS_FINISHED]));
+                break;
+            case VotingTour::STATUS_VOTING:
+                $disabledStatuses = array_diff_key(array_keys($statuses), array_flip([VotingTour::STATUS_VOTING, VotingTour::STATUS_RANKING, VotingTour::STATUS_FINISHED]));
+                break;
+            case VotingTour::STATUS_RANKING:
+                $disabledStatuses = array_diff_key(array_keys($statuses), array_flip([VotingTour::STATUS_RANKING, VotingTour::STATUS_BALLOTAGE, VotingTour::STATUS_FINISHED]));
+                break;
+            case VotingTour::STATUS_BALLOTAGE:
+                $disabledStatuses = array_diff_key(array_keys($statuses), array_flip([VotingTour::STATUS_BALLOTAGE, VotingTour::STATUS_RANKING, VotingTour::STATUS_FINISHED]));
+                break;
+        }
+
+        return view('tours.edit', ['votingTour' => $votingTour, 'errors' => $errors, 'count' => $count, 'statuses' => $statuses, 'disabledStatuses' => $disabledStatuses]);
     }
 
     public function update($id)

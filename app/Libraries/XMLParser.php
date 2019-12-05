@@ -8,6 +8,8 @@ namespace App\Libraries;
 class XMLParser
 {
     private $data;
+
+    const LEGAL_FORMS = ['ASSOC', 'FOUND', 'CC', /*'BFLE'*/];
     
     public function __construct()
     {
@@ -84,13 +86,15 @@ class XMLParser
             $orgArray['email'] = (string)(isset($contact->EMail) ? $contact->EMail : '');
         }
 
+        $orgArray['goals'] = (string)(isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');
+        $orgArray['tools'] = (string)(isset($org->SubDeed->MeansOfAchievingTheObjectives) ? $org->SubDeed->MeansOfAchievingTheObjectives : '');
+
         return $orgArray;
     }
 
     private function isOrgRelevant($org)
     {
-        return true; //TODO add condition to filter relevant orgs
-        return isset($org->attributes()['LegalForm']) && $org->attributes()['LegalForm'] == 'ASSOC';
+        return isset($org->attributes()['LegalForm']) && in_array((string)$org->attributes()['LegalForm'], self::LEGAL_FORMS);
     }
 }
 

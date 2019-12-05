@@ -38,6 +38,7 @@ $('#js-remove-org').click(function() {
 
 $(document).ready(function() {
     checkVoteSize();
+    reorderRowNumbers();
 });
 
 function checkVoteSize() {
@@ -73,7 +74,7 @@ function addRowNumber(selectedOrgs) {
 function reorderRowNumbers() {
     $('#votefor option').each(function(i, org){
         $(org).find('span').remove();
-        $(org).html('<span>'+ ($(org).index() + 1) +'- </span>' + $(org).text());
+        $(org).html('<span>'+ ($(org).index() + 1) +' - </span>' + $(org).text());
     });
 }
 

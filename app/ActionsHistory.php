@@ -24,6 +24,7 @@ class ActionsHistory extends Model
     const TYPE_LOGGED_IN = 5;
     const TYPE_DOWNLOADED = 6;
     const TYPE_CHANGED_PASSWORD = 7;
+    const TYPE_RANKED = 8;
 
     /*
      * Modules
@@ -52,7 +53,8 @@ class ActionsHistory extends Model
             self::TYPE_VOTED            => __('custom.voted_action'),
             self::TYPE_LOGGED_IN        => __('custom.logged_in'),
             self::TYPE_DOWNLOADED       => __('custom.downloaded'),
-            self::TYPE_CHANGED_PASSWORD => __('custom.changed_password')
+            self::TYPE_CHANGED_PASSWORD => __('custom.changed_password'),
+            self::TYPE_RANKED           => __('custom.ranked'),
         ];
     }
 
@@ -70,7 +72,7 @@ class ActionsHistory extends Model
             self::FILES_MESSAGE         => __('custom.file_to_message'),
             self::FILES_REGISTRATION    => __('custom.file_to_reg'),
             self::MESSAGES              => __('custom.messages'),
-            self::VOTES                 => __('custom.votes'),
+            self::VOTES                 => __('custom.votingmenu'),
             self::ORGANISATION_MESSAGES => __('custom.organisation_messages'),
             self::ORGANISATIONS_FILES   => __('custom.organisation_files'),
         ];

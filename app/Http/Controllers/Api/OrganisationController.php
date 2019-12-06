@@ -467,13 +467,15 @@ class OrganisationController extends ApiController
                 $organisation = Organisation::where($orgKey, $orgVal)->where('voting_tour_id', $votingTour->id)->first();
 
                 if ($organisation) {
-                    $logData = [
-                        'module' => ActionsHistory::ORGANISATIONS,
-                        'action' => ActionsHistory::TYPE_SEE,
-                        'object' => $organisation->id
-                    ];
+                    if (\Auth::user()) {
+                        $logData = [
+                            'module' => ActionsHistory::ORGANISATIONS,
+                            'action' => ActionsHistory::TYPE_SEE,
+                            'object' => $organisation->id
+                        ];
 
-                    ActionsHistory::add($logData);
+                        ActionsHistory::add($logData);
+                    }
 
                     return $this->successResponse($organisation);
                 }

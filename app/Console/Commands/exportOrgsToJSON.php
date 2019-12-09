@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use App\Libraries\XMLParser;
 use Illuminate\Support\Facades\Storage;
 
@@ -75,6 +76,10 @@ class exportOrgsToJSON extends Command
 
     private function searchFilesDirectory($path)
     {
+        if(File::exists($path)) {
+            return [$path];
+        }
+        
         $fileSystemIterator = new \FilesystemIterator($path);
 
         $files = [];

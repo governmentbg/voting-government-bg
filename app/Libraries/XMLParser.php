@@ -9,7 +9,17 @@ class XMLParser
 {
     private $data;
 
-    const LEGAL_FORMS = ['ASSOC', 'FOUND', 'CC', /*'BFLE'*/];
+    const LEGAL_FORMS = ['ASSOC', 'FOUND', 'CC', 'BFLE'];
+    //    ASSOC = 24,// Сдружение - юридическо лице с нестопанска цел
+    //    FOUND = 25,// Фондация - юридическо лице с нестопанска цел
+    //    BFLE  = 26,// Клон на чуждестранно юридическо лице с нестопанска цел
+    //    CC    = 27 // Читалище - юридическо лице с нестопанска цел
+
+    const STATUSES = ['E', 'C', 'L', 'N'];
+    // N - Нова
+    // Е - Пререгистрирана фирма по Булстат
+    // L - Пререгистрирана фирма по Булстат затворена
+    // C - Нова партида затворена
     
     public function __construct()
     {
@@ -85,6 +95,16 @@ class XMLParser
             $orgArray['phone'] = (string)(isset($contact->Phone) ? $contact->Phone : '');
             $orgArray['email'] = (string)(isset($contact->EMail) ? $contact->EMail : '');
         }
+
+        $publicBenefit = 0;
+        foreach($org->SubDeed as $key => $deed) {
+            if(isset($deed->attributes()['SubUICType']) && (string)$deed->attributes()['SubUICType'] == 'MainCircumstances'){
+                $publicBenefit += (string)$deed[0]->DesignatedToPerformPublicBenefit;
+                break;
+            }
+        }
+        $orgArray['public_benefit'] = $publicBenefit;
+        $orgArray['status'] = (string)$org->attributes()['DeedStatus'];
 
         $orgArray['goals'] = (string)(isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');
         $orgArray['tools'] = (string)(isset($org->SubDeed->MeansOfAchievingTheObjectives) ? $org->SubDeed->MeansOfAchievingTheObjectives : '');

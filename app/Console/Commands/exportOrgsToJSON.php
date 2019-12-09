@@ -76,7 +76,7 @@ class exportOrgsToJSON extends Command
 
     private function searchFilesDirectory($path)
     {
-        if(File::exists($path)) {
+        if(is_file($path)) {
             return [$path];
         }
         

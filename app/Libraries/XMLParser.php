@@ -103,7 +103,7 @@ class XMLParser
                 break;
             }
         }
-        $orgArray['public_benefit'] = $publicBenefit;
+        $orgArray['public_benefits'] = $publicBenefit;
         $orgArray['status'] = (string)$org->attributes()['DeedStatus'];
 
         $orgArray['goals'] = (string)(isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');

@@ -208,8 +208,8 @@ class OrganisationController extends ApiController
                 'phone'          => 'string|max:40',
                 'in_av'          => 'bool',
                 'is_candidate'   => 'bool',
-                'description'    => 'nullable|max:8000|required_if:is_candidate,true',
-                'references'     => 'nullable|max:8000|required_if:is_candidate,true',
+                'description'    => 'nullable|max:8000|required_if:is_candidate,1',
+                'references'     => 'nullable|max:8000|required_if:is_candidate,1',
                 'status'         => 'int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
             ]);

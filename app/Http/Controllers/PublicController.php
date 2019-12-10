@@ -25,6 +25,8 @@ class PublicController extends BaseFrontendController
 
     public function index()
     {
+        session()->reflash();
+
         if (auth()->guard('backend')->check()) {
             return redirect()->route('admin.org_list');
         }

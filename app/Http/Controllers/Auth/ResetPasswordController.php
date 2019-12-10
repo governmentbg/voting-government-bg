@@ -90,6 +90,7 @@ class ResetPasswordController extends Controller
             $this->redirectTo = 'admin/';
         }
 
+        session(['alert-success' => __('passwords.changed')]);
         return $this->sendResetResponse(Password::PASSWORD_RESET);
     }
 

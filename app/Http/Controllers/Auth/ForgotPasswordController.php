@@ -104,6 +104,6 @@ class ForgotPasswordController extends Controller
 
         $route = $response['isAdmin'] ? 'admin.index' : 'home';
 
-        return redirect()->route($route)->with('status', trans($response['status']));
+        return redirect()->route($route);
     }
 }

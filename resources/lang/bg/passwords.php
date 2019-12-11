@@ -15,9 +15,9 @@ return [
 
     'password' => 'Passwords must be at least eight characters and match the confirmation.',
     'reset' => 'Your password has been reset!',
-    'sent' => 'Линкът за смяна на парола беше изпратен на вашия имейл.',
+    'sent' => 'Линкът за смяна на парола беше изпратен на вашата електронна поща.',
     'token' => 'This password reset token is invalid.',
-    'user' => "Не е намерен потребител с този имейл адрес.",
+    'user' => "Не е намерен потребител с тази електронна поща.",
     'changed' => 'Вашата парола беше сменена успешно.'
 
 ];

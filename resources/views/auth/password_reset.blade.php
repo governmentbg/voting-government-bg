@@ -20,8 +20,8 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                            <input type="password" class="input-box" name="password">
-                            <span class="error">{{ $errors->first('password') }}</span>
+                        <input type="password" class="input-box" name="password">
+                        <span class="error">{{ $errors->first('password') }}</span>
                     </div>
                 </div>
                 <div class="form-group row m-b-none">
@@ -29,8 +29,8 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-9 p-l-none">
-                            <input type="password" class="input-box" name="password_confirmation">
-                            <span class="error">{{ $errors->first('password_confirmation') }}</span>
+                        <input type="password" class="input-box" name="password_confirmation">
+                        <span class="error">{{ $errors->first('password_confirmation') }}</span>
                     </div>
                 </div>
                 <div class="form-group row p-t-15">

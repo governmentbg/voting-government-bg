@@ -45,8 +45,9 @@
                                 class="input-box"
                                 name="password"
                                 value=""
+                                required
                             >
-                            <span class="error">{{ $errors->first('old_password') }}</span>
+                            <span class="error">{{ $errors->first('password') }}</span>
                         </div>
                     </div>
                     <div class="form-group row required">
@@ -57,6 +58,7 @@
                                 class="input-box"
                                 name="new_password"
                                 value=""
+                                required
                             >
                             <span class="error">{{ $errors->first('new_password') }}</span>
                         </div>
@@ -69,6 +71,7 @@
                                 class="input-box"
                                 name="new_password_confirmation"
                                 value=""
+                                required
                             >
                             <span class="error">{{ $errors->first('new_password_repeat') }}</span>
                         </div>

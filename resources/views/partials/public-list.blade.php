@@ -40,7 +40,7 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-                <div class="table-wrapper nano public-table">
+                <div class="table-wrapper nano public-table rest">
                     <div class="tableFixHead nano-content js-org-table">
                         <table class="table table-striped table-responsive ams-table js-orgs" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
                             <thead>

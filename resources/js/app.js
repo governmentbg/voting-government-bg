@@ -162,10 +162,14 @@ $('.js-showTerms').on('click', function() {
     $('#info').modal('show');
 });
 
-var $th = $('.tableFixHead').find('thead th')
+var $th = $('.tableFixHead').find('thead');
+
+$(document).ready(function () {
+    $th.css('transform', 'translateY(1px)');
+});
+
 $('.tableFixHead').on('scroll', function() {
     $th.css('transform', 'translateY('+ this.scrollTop + 'px)');
-    $th.css('background-color', '#3e7ea9');
 });
 
 $(document).ready(function() {
@@ -392,6 +396,13 @@ $('.js-org-table').on('scroll', function() {
 // General initialization of nanoscroll for project
 $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 
+if ($('.ranking').length > 0) {
+    $('.rank-scroll .nano-pane').css('margin-top', '114px');
+}
+
+if ($('.rest').length > 0) {
+    $('.rest .nano-pane').css('margin-top', '56px');
+}
 // Fixes a bug where nanoscroller is not initialized on front page
 $(document).ready(function() {
     $('.nano').nanoScroller({ sliderMaxHeight: 100 });

@@ -145,7 +145,6 @@ class VoteController extends ApiController
                 }
                 $vote->orderBy('id', 'DESC');
 
-
                 $lastVote = $vote->first();
 
                 if (!$lastVote) {

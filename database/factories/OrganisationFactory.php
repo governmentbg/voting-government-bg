@@ -18,7 +18,7 @@ $factory->define(App\Organisation::class, function (Faker $faker) {
         'name' => $faker->name,
         'address' => $faker->address,
         'representative' => $faker->name,
-        'email' => $faker->email,
+        'email' => $faker->unique()->email,
         'phone' => $faker->phoneNumber,
         'in_av' => 1,
         'is_candidate' => 1,

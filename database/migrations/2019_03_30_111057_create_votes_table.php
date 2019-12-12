@@ -15,17 +15,20 @@ class CreateVotesTable extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('voter_id')->unsigned();
+            $table->integer('voter_id')->unsigned()->nullable();
             $table->foreign('voter_id')->references('id')->on('organisations');
             $table->integer('voting_tour_id')->unsigned();
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');
-            $table->string('vote_data');
             $table->tinyInteger('tour_status');
             $table->string('prev_hash');
         });
 
         DB::unprepared("
             ALTER TABLE votes ADD COLUMN vote_time DATETIME(6) AFTER id;
+        ");
+
+        DB::unprepared("
+            ALTER TABLE votes ADD COLUMN vote_data MEDIUMBLOB AFTER voting_tour_id;
         ");
     }
 

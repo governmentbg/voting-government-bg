@@ -102,6 +102,9 @@ class ActionsHistoryController extends ApiController
             }
 
             $query->orderBy($filters['order_field'], $filters['order_type']);
+            if ($filters['order_field'] != 'id') {
+                $query->orderBy('id', $filters['order_type']);
+            }
 
             if (isset($filters['page_number'])) {
                 $request->request->add(['page' => $filters['page_number']]);

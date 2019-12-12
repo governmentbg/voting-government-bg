@@ -24,8 +24,7 @@ class ActionsHistoryController extends BaseAdminController
         $this->addBreadcrumb(__('breadcrumbs.start'), route('admin.org_list'));
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.voting_tours'), route('admin.voting_tour.list'));
-        $this->addBreadcrumb($votingTourData->name, '');
-        $this->addBreadcrumb(__('custom.actions_history'), '');
+        $this->addBreadcrumb($votingTourData->name .' - '. __('custom.actions_history'), '');
 
         $allFilters = [];
         if (isset($module) && $module != 'all') {

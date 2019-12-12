@@ -45,7 +45,7 @@ class VoteController extends BaseFrontendController
         if (!empty($latestVote)) {
             $latestVoteArray = explode(',', $latestVote->vote_data);
         }
-        
+
         $maxVotes = \App\Vote::MAX_VOTES;
         if ($votingTourData->status == VotingTour::STATUS_BALLOTAGE) {
             //max votes for ballotage
@@ -97,6 +97,8 @@ class VoteController extends BaseFrontendController
 
             list($latestVote, $latestVoteErrors) = api_result(ApiVote::class, 'getLatestVote', ['org_id' => \Auth::user()->org_id]);
 
+            $latestVoteArray = [];
+
             if (!empty($latestVote)) {
                 $latestVoteArray = explode(',', $latestVote->vote_data);
             }
@@ -124,7 +126,7 @@ class VoteController extends BaseFrontendController
 
         return redirect()->back();
     }
-    
+
     /**
      * Get maximum number of votes for ballotage. The number is MAX_VOTES minus number of elected orgs.
      * @param  stdClass $votingTour

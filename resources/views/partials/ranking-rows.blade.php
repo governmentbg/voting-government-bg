@@ -1,12 +1,12 @@
 @foreach ($listData as $organisation)
     @php
-        $class = '';
-        if (isset($organisation->for_ballotage) && $organisation->for_ballotage) {
+        if (isset($organisation->elected) && $organisation->elected) {
+            $class = '';
+        } elseif (isset($organisation->for_ballotage) && $organisation->for_ballotage) {
             $class = 'for-ballotage ';
-        } elseif (isset($organisation->dropped_out) && $organisation->dropped_out) {
+        } else {
             $class = 'dropped-out ';
         }
-
     @endphp
     <tr class="{{ $class }}">
         <td class="text-right">{{ ++$counter }}</td>
@@ -26,9 +26,8 @@
             {{ $organisation->name }}
         </td>
         <td>{{ $organisation->eik }}</td>
-        <td class="text-right">{{ $organisation->votes }}</td>
-        @if (isset($showBallotage) && $showBallotage)
-            <td class="text-right">{{ isset($organisation->ballotage_votes) ? $organisation->ballotage_votes : '' }}</td>
-        @endif
+        @for ($i = 0; $i < $votingCount; $i++)
+            <td class="text-right">{{ isset($organisation->votes->{$i}) ? $organisation->votes->{$i} : '' }}</td>
+        @endfor
     </tr>
 @endforeach

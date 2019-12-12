@@ -59,7 +59,7 @@ class VoteController extends ApiController
                             }
 
                             $vote = new Vote;
-                            $prevRecord = Vote::orderBy('vote_time', 'DESC')->first();
+                            $prevRecord = Vote::orderBy('id', 'DESC')->first();
 
                             $t = microtime(true);
                             $micro = sprintf('%06d',($t - floor($t)) * 1000000);
@@ -69,7 +69,12 @@ class VoteController extends ApiController
                             $vote->voter_id = $post['org_id'];
                             $vote->voting_tour_id = $votingTour->id;
                             $vote->vote_data = $post['org_list'];
-                            $vote->tour_status = $votingTour->status;
+
+                            if ($votingTour->status == VotingTour::STATUS_VOTING) {
+                                $vote->tour_status = Vote::TOUR_VOTING;
+                            } else {
+                                $vote->tour_status = Vote::TOUR_BALLOTAGE;
+                            }
 
                             if (!is_null($prevRecord)) {
                                 $vote->prev_hash = hash('sha256',
@@ -90,6 +95,7 @@ class VoteController extends ApiController
                             ];
 
                             ActionsHistory::add($logData);
+
                             return $this->successResponse(['id' => $vote->id], true);
                         }
                     }
@@ -113,6 +119,7 @@ class VoteController extends ApiController
     public function getLatestVote(Request $request)
     {
         $votingTour = VotingTour::getLatestTour();
+
         if (empty($votingTour)) {
             return $this->errorResponse(__('custom.voting_tour_not_found'));
         }
@@ -124,16 +131,22 @@ class VoteController extends ApiController
         ]);
 
         if (!$validator->fails()) {
-            $voteStatus = $this->prepareVoteStatus($votingTour->id, $votingTour->status);
-            if (is_null($voteStatus)) {
-                return $this->errorResponse(__('custom.get_vote_not_allowed'));
-            }
-
             try {
-                $lastVote = Vote::where('voter_id', $post['org_id'])
-                                ->where('voting_tour_id', $votingTour->id)
-                                ->where('tour_status', $voteStatus)
-                                ->orderBy('vote_time', 'DESC')->first();
+                $voteLimits = $this->prepareVoteLimits($votingTour->id, $votingTour->status);
+                if (!isset($voteLimits['status'])) {
+                    return $this->errorResponse(__('custom.get_vote_not_allowed'));
+                }
+
+                $vote = Vote::where('voter_id', $post['org_id'])
+                    ->where('voting_tour_id', $votingTour->id)
+                    ->where('tour_status', $voteLimits['status']);
+                if (isset($voteLimits['minId'])) {
+                    $vote->where('id', '>', $voteLimits['minId']);
+                }
+                $vote->orderBy('id', 'DESC');
+
+
+                $lastVote = $vote->first();
 
                 if (!$lastVote) {
                     $lastVote = new Vote;
@@ -185,73 +198,173 @@ class VoteController extends ApiController
         $post = $request->all();
 
         $validator = Validator::make($post, [
-            'tour_id' => 'required|int|exists:voting_tour,id',
-            'status'  => 'required|int|in:'. implode(',', array_keys(VotingTour::getActiveStatuses())),
+            'status'         => 'required|int|in:'. implode(',', Vote::getRankingStatuses()),
+            'declass_org_id' => 'nullable|int|exists:organisations,id|required_if:status,'. Vote::TOUR_ORGANISATION_DECLASSED_RANKING
         ]);
 
         if (!$validator->fails()) {
             try {
-                $votingTour = VotingTour::where('id', $post['tour_id'])->first();
-                if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
-                    if ($votingTour->status == VotingTour::STATUS_BALLOTAGE && $post['status'] == VotingTour::STATUS_BALLOTAGE) {
-                        return $this->errorResponse(__('custom.ballotage_ranking_not_allowed'));
+                $votingTour = VotingTour::getLatestTour();
+                if (!empty($votingTour) && $votingTour->status == VotingTour::STATUS_RANKING) {
+                    if ($post['status'] == Vote::TOUR_RANKING) {
+                        $voteRankingData = [];
+                        $votingCount = 0;
+                    } else {
+                        $voteRankingData = Vote::getLatestRankingData($votingTour->id);
+                        $votingCount = Vote::getVotingCount($votingTour->id);
                     }
 
-                    if ($post['status'] == VotingTour::STATUS_VOTING) {
-                        $candidateStatus = [Organisation::STATUS_BALLOTAGE, Organisation::STATUS_CANDIDATE];
-                    } elseif ($post['status'] == VotingTour::STATUS_BALLOTAGE) {
-                        $candidateStatus = [Organisation::STATUS_BALLOTAGE];
-                    }
+                    $voteRecordData = [];
 
-                    $listOfCandidates = Organisation::select('id', 'eik', 'name', DB::raw('0 as votes'))
-                                            ->where('voting_tour_id', $post['tour_id'])
-                                            ->whereIn('status', $candidateStatus)
-                                            ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
+                    if (!empty($voteRankingData)) {
+                        $voteRankingData = json_decode($voteRankingData['vote_data'], true);
 
-                    $listOfCandidates = $listOfCandidates->keyBy('id');
+                        if (is_null($voteRankingData)) {
+                            return $this->errorResponse(__('custom.ranking_failed'));
+                        }
 
-                    if ($listOfCandidates->isNotEmpty()) {
-                        $tourVoteData = Vote::select('votes.vote_data', 'votes.vote_time', 'votes.voter_id', 'votes.tour_status')
-                                            ->join(DB::raw(
-                                                '(SELECT voter_id, MAX(vote_time) AS voteTime '.
-                                                'FROM votes '.
-                                                'WHERE voting_tour_id = '. $post['tour_id'] .' '.
-                                                'AND tour_status = '. $post['status'] .' '.
-                                                'GROUP BY voter_id) innerv'
-                                            ), 'votes.voter_id', '=', 'innerv.voter_id')
-                                            ->join('organisations', 'organisations.id', '=', 'votes.voter_id')
-                                            ->whereIn('organisations.status', Organisation::getApprovedStatuses())
-                                            ->where('votes.voting_tour_id', $post['tour_id'])
-                                            ->where('votes.tour_status', $post['status'])
-                                            ->whereRaw('votes.vote_time = innerv.voteTime')
-                                            ->where('votes.id', '!=', Vote::GENESIS_RECORD)
-                                            ->groupBy('votes.voter_id')
-                                            ->get();
+                        foreach ($voteRankingData as $orgId => $data) {
+                            if ($post['status'] == Vote::TOUR_ORGANISATION_DECLASSED_RANKING) {
+                                if ($orgId == $post['declass_org_id']) {
+                                   continue;
+                                }
+                            }
 
-                        if ($tourVoteData->isNotEmpty()) {
-                            foreach ($tourVoteData as $singleVote) {
-                                $votes = explode(',', $singleVote->vote_data);
-                                foreach ($votes as $orgId) {
-                                    if (isset($listOfCandidates[$orgId])) {
-                                        $listOfCandidates[$orgId]->votes += 1;
-                                    }
+                            for ($i = 0; $i < $votingCount; $i++) {
+                                if (isset($data[$i])) {
+                                    $voteRecordData[$orgId][$i] = $data[$i];
                                 }
                             }
                         }
                     }
 
-                    $listOfCandidates = $listOfCandidates->sort(function ($a, $b) {
-                        if ($a->votes === $b->votes) {
-                            if ($a->eik === $b->eik) {
-                                return 0;
+                    if ($post['status'] != Vote::TOUR_ORGANISATION_DECLASSED_RANKING) {
+                        $limitVoteCounting = '';
+
+                        if ($post['status'] == Vote::TOUR_RANKING) {
+                            $candidateStatus = [Organisation::STATUS_CANDIDATE];
+                            $votesStatus = Vote::TOUR_VOTING;
+                        } else {
+                            $candidateStatus = [Organisation::STATUS_BALLOTAGE];
+                            $votesStatus = Vote::TOUR_BALLOTAGE;
+
+                            $latestRankingId = Vote::getLatestRankingId($votingTour->id);
+                            if (!empty($latestRankingId)) {
+                                $limitVoteCounting = 'AND id > '. $latestRankingId .' ';
                             }
-                            return $a->eik < $b->eik ? -1 : 1;
-                       }
-                       return $a->votes > $b->votes ? -1 : 1;
-                    });
+                        }
 
+                        $listOfCandidates = Organisation::select('id', 'eik', DB::raw('0 as votes'))
+                            ->where('voting_tour_id', $votingTour->id)
+                            ->whereIn('status', $candidateStatus)
+                            ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE)->get();
 
-                    return $this->successResponse($listOfCandidates);
+                        $listOfCandidates = $listOfCandidates->keyBy('id');
+
+                        if ($listOfCandidates->isNotEmpty()) {
+                            $tourVoteData = Vote::select('votes.vote_data', 'votes.vote_time', 'votes.voter_id', 'votes.tour_status')
+                                ->join(DB::raw(
+                                    '(SELECT voter_id, MAX(vote_time) AS voteTime '.
+                                    'FROM votes '.
+                                    'WHERE voting_tour_id = '. $votingTour->id .' '.
+                                    'AND tour_status = '. $votesStatus .' '.
+                                    $limitVoteCounting .
+                                    'GROUP BY voter_id) innerv'
+                                ), 'votes.voter_id', '=', 'innerv.voter_id')
+                                ->join('organisations', 'organisations.id', '=', 'votes.voter_id')
+                                ->whereIn('organisations.status', Organisation::getApprovedStatuses())
+                                ->where('votes.voting_tour_id', $votingTour->id)
+                                ->where('votes.tour_status', $votesStatus)
+                                ->whereRaw('votes.vote_time = innerv.voteTime')
+                                ->where('votes.id', '!=', Vote::GENESIS_RECORD)
+                                ->groupBy('votes.voter_id')
+                                ->get();
+
+                            if ($tourVoteData->isNotEmpty()) {
+                                foreach ($tourVoteData as $singleVote) {
+                                    $votes = explode(',', $singleVote->vote_data);
+                                    foreach ($votes as $orgId) {
+                                        if (isset($listOfCandidates[$orgId])) {
+                                            $listOfCandidates[$orgId]->votes += 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // sort list of candidates by votes, eik
+                        $listOfCandidates = $listOfCandidates->sort(function ($a, $b) {
+                            if ($a->votes === $b->votes) {
+                                if ($a->eik === $b->eik) {
+                                    return 0;
+                                }
+                                return $a->eik < $b->eik ? -1 : 1;
+                            }
+
+                            return $a->votes > $b->votes ? -1 : 1;
+                        });
+
+                        if (empty($voteRecordData)) {
+                            foreach ($listOfCandidates as $candidate) {
+                                $voteRecordData[$candidate->id][$votingCount] = intval($candidate->votes);
+                            }
+                        } else {
+                            $electedOrgsData = [];
+                            if (!empty($voteRecordData)) {
+                                // calculate vote limit
+                                $limits = Vote::calculateVoteLimit($voteRecordData, $votingCount);
+
+                                // excract elected orgs data
+                                $electedOrgsData = array_slice($voteRecordData, 0, $limits['orgPos'] + 1, true);
+                                $voteRecordData = array_slice($voteRecordData, $limits['orgPos'] + 1, null, true);
+                            }
+                            $ballotageOrgsData = [];
+                            foreach ($listOfCandidates as $candidate) {
+                                $voteRecordData[$candidate->id][$votingCount] = intval($candidate->votes);
+
+                                // excract ballotage orgs data
+                                $ballotageOrgsData[$candidate->id] = $voteRecordData[$candidate->id];
+                                unset($voteRecordData[$candidate->id]);
+                            }
+                            // reorder list data based on ballotage votes
+                            $voteRecordData = $electedOrgsData + $ballotageOrgsData + $voteRecordData;
+                        }
+                    }
+
+                    $prevRecord = Vote::orderBy('id', 'DESC')->first();
+
+                    $prevHash = null;
+                    if (!is_null($prevRecord)) {
+                        $prevHash = hash('sha256',
+                            $prevRecord->vote_time .
+                            $prevRecord->voter_id .
+                            $prevRecord->voting_tour_id .
+                            $prevRecord->vote_data .
+                            $prevRecord->tour_status .
+                            $prevRecord->prev_hash
+                        );
+                    }
+
+                    $t = microtime(true);
+                    $micro = sprintf('%06d',($t - floor($t)) * 1000000);
+                    $d = new \DateTime(date('Y-m-d H:i:s.'. $micro, $t));
+
+                    Vote::create([
+                        'vote_time'      => $d->format('Y-m-d H:i:s.u'),
+                        'voting_tour_id' => $votingTour->id,
+                        'vote_data'      => json_encode($voteRecordData, JSON_FORCE_OBJECT),
+                        'tour_status'    => $post['status'],
+                        'prev_hash'      => $prevHash
+                    ]);
+
+                    $logData = [
+                        'module' => ActionsHistory::VOTES,
+                        'action' => ActionsHistory::TYPE_RANKED
+                    ];
+
+                    ActionsHistory::add($logData);
+
+                    return $this->successResponse();
                 }
 
                 return $this->errorResponse(__('custom.ranking_not_allowed'));
@@ -264,9 +377,18 @@ class VoteController extends ApiController
         return $this->errorResponse(__('custom.ranking_failed'), $validator->errors()->messages());
     }
 
-    public function getVoteStatus(Request $request)
+    /**
+     * Get latest ranking
+     *
+     * @param integer tour_id - required
+     * @param boolean with_voter_turnout - optional
+     *
+     * @return json - response with status code and ranking data or errors
+     */
+    public function getLatestRanking(Request $request)
     {
         $post = $request->all();
+        $withVoterTurnout = $request->get('with_voter_turnout', true);
 
         $validator = Validator::make($post, [
             'tour_id' => 'required|int|exists:voting_tour,id'
@@ -275,43 +397,112 @@ class VoteController extends ApiController
         if (!$validator->fails()) {
             try {
                 $votingTour = VotingTour::where('id', $post['tour_id'])->first();
+                if (!empty($votingTour) && in_array($votingTour->status, VotingTour::getRankingStatuses())) {
+                    $result = [];
 
-                if ($votingTour) {
-                    if (in_array($votingTour->status, [VotingTour::STATUS_RANKING, VotingTour::STATUS_BALLOTAGE])) {
-                        $voteStatus = VotingTour::STATUS_VOTING;
-                    } elseif ($votingTour->status == VotingTour::STATUS_FINISHED) {
-                        if (Organisation::hasOrgsForBallotage($votingTour->id)) {
-                            $voteStatus = VotingTour::STATUS_BALLOTAGE;
-                        } else {
-                            $voteStatus = VotingTour::STATUS_VOTING;
+                    // get ids of ranking records
+                    $rankingIds = Vote::getRankingIds($votingTour->id);
+
+                    if (empty($rankingIds)) {
+                        if ($votingTour->status != VotingTour::STATUS_FINISHED) {
+                            return $this->errorResponse(__('custom.ranking_not_found'));
+                        }
+
+                        $result['ranking'] = [];
+                        $result['voting_count'] = 0;
+                        if ($withVoterTurnout) {
+                            $result['voter_turnout'] = [];
                         }
                     } else {
-                        return $this->errorResponse(__('custom.vote_status_not_found'));
+                        // get latest ranking data
+                        $result['ranking'] = Vote::getLatestRankingData($votingTour->id);
+
+                        if (empty($result['ranking'])) {
+                            return $this->errorResponse(__('custom.ranking_not_found'));
+                        }
+
+                        $result['ranking'] = json_decode($result['ranking']['vote_data'], true);
+                        if (is_null($result['ranking'])) {
+                            return $this->errorResponse(__('custom.list_ranking_fail'));
+                        }
+
+                        $result['voting_count'] = count($rankingIds);
+
+                        // calculate votes limit
+                        $limits = Vote::calculateVoteLimit($result['ranking'], $result['voting_count']);
+
+                        $orgPos = 0;
+                        foreach ($result['ranking'] as $orgId => $data) {
+                            $orgData = Organisation::select('id', 'eik', 'name', DB::raw('NULL as votes'))
+                                ->where('id', $orgId)
+                                ->where('voting_tour_id', $votingTour->id)
+                                ->first();
+
+                            if (empty($orgData)) {
+                                return $this->errorResponse(__('custom.org_not_found'));
+                            }
+
+                            $orgData->votes = $data;
+                            if ($orgPos <= $limits['orgPos']) {
+                                $orgData->elected = true;
+                            } else {
+                                for ($i = $result['voting_count']; $i > 0; $i--) {
+                                    if (isset($limits['votes'][$i - 1]) && isset($orgData->votes[$i - 1]) &&
+                                        $orgData->votes[$i - 1] == $limits['votes'][$i - 1]) {
+                                        $orgData->for_ballotage = true;
+                                    }
+                                }
+                            }
+                            $result['ranking'][$orgId] = $orgData;
+                            $orgPos++;
+                        }
+
+                        if ($withVoterTurnout) {
+                            $result['voter_turnout'] = [];
+
+                            // count registered organisations
+                            $registered = Organisation::countRegistered($votingTour->id);
+
+                            for ($votingIndex = 0; $votingIndex < $result['voting_count']; $votingIndex++) {
+                                // get vote limits
+                                $voteLimits = Vote::getVoteLimits($votingTour->id, $votingIndex, $rankingIds);
+
+                                // count voted organisations
+                                $voted = Organisation::countVoted($votingTour->id, $voteLimits);
+
+                                // calculate voter turnout
+                                $result['voter_turnout'][$votingIndex] = [
+                                    'all'     => $registered,
+                                    'voted'   => $voted,
+                                    'percent' => ($registered > 0 ? round($voted / $registered * 100, 2) : 0)
+                                ];
+                            }
+                        }
                     }
 
-                    return $this->successResponse([
-                        'id' => $voteStatus,
-                        'name' => VotingTour::getStatuses()[$voteStatus]
-                    ]);
+                    return $this->successResponse($result, false, JSON_FORCE_OBJECT);
                 }
+
+                return $this->errorResponse(__('custom.ranking_not_allowed'));
+
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.get_vote_status_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_ranking_fail'), $e->getMessage());
             }
         }
 
-        return $this->errorResponse(__('custom.voting_tour_not_found'), $validator->errors()->messages());
+        return $this->errorResponse(__('custom.list_ranking_fail'), $validator->errors()->messages());
     }
 
     /**
      * List already voted organisations
      *
      * @param array filters - optional
-     * @param integer filters[tour_id] - required with status
-     * @param integer filters[status] - required with tour_id
      * @param big integer filters[eik] - optional
+     * @param boolean with_pagination - optional
      *
      * @return json - response with status code and list of voted organisations or errors
+     *
      */
     public function listVoters(Request $request)
     {
@@ -319,30 +510,19 @@ class VoteController extends ApiController
         $withPagination = $request->get('with_pagination', true);
 
         $validator = Validator::make($filters, [
-            'tour_id' => 'required_with:status|int|exists:voting_tour,id',
-            'status'  => 'required_with:tour_id|int|in:'. implode(',', array_keys(VotingTour::getActiveStatuses())),
-            'eik'     => 'nullable|digits_between:1,19',
+            'eik' => 'nullable|digits_between:1,19',
         ]);
 
         if (!$validator->fails()) {
             try {
-                if (!empty($filters['tour_id']) && !empty($filters['status'])) {
-                    $votingTour = VotingTour::where('id', $filters['tour_id'])->first();
-                    if (empty($votingTour)) {
-                        return $this->errorResponse(__('custom.voting_tour_not_found'));
-                    }
+                $votingTour = VotingTour::getLatestTour();
+                if (empty($votingTour)) {
+                    return $this->errorResponse(__('custom.voting_tour_not_found'));
+                }
 
-                    $voteStatus = $filters['status'];
-                } else {
-                    $votingTour = VotingTour::getLatestTour();
-                    if (empty($votingTour)) {
-                        return $this->errorResponse(__('custom.voting_tour_not_found'));
-                    }
-
-                    $voteStatus = $this->prepareVoteStatus($votingTour->id, $votingTour->status);
-                    if (is_null($voteStatus)) {
-                        return $this->errorResponse(__('custom.get_vote_not_allowed'));
-                    }
+                $voteLimits = $this->prepareVoteLimits($votingTour->id, $votingTour->status, true);
+                if (!isset($voteLimits['status'])) {
+                    return $this->errorResponse(__('custom.list_voters_not_allowed'));
                 }
 
                 $voters = Organisation::select('id', 'eik', 'name', 'is_candidate', 'created_at');
@@ -352,8 +532,11 @@ class VoteController extends ApiController
 
                 $voters->where('voting_tour_id', $votingTour->id)
                        ->whereIn('status', Organisation::getApprovedStatuses())
-                       ->whereHas('votes', function($query) use ($voteStatus) {
-                           $query->where('tour_status', $voteStatus);
+                       ->whereHas('votes', function($query) use ($voteLimits) {
+                           $query->where('tour_status', $voteLimits['status']);
+                           if (isset($voteLimits['minId'])) {
+                               $query->where('votes.id', '>', $voteLimits['minId']);
+                           }
                        })
                       ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
 
@@ -369,22 +552,84 @@ class VoteController extends ApiController
         return $this->errorResponse(__('custom.list_voters_fail'), $validator->errors()->messages());
     }
 
-    private function prepareVoteStatus($tourId, $tourStatus)
+    public function cancelTour(Request $request)
     {
-        $voteStatus = null;
+        try {
+            $votingTour = VotingTour::getLatestTour();
+            if (!empty($votingTour) && $votingTour->status == VotingTour::STATUS_FINISHED) {
+                $prevRecord = Vote::orderBy('id', 'DESC')->first();
 
-        if (in_array($tourStatus, [VotingTour::STATUS_VOTING, VotingTour::STATUS_RANKING])) {
-            $voteStatus = VotingTour::STATUS_VOTING;
+                $prevHash = null;
+                if (!is_null($prevRecord)) {
+                    $prevHash = hash('sha256',
+                        $prevRecord->vote_time .
+                        $prevRecord->voter_id .
+                        $prevRecord->voting_tour_id .
+                        $prevRecord->vote_data .
+                        $prevRecord->tour_status .
+                        $prevRecord->prev_hash
+                    );
+                }
+
+                $t = microtime(true);
+                $micro = sprintf('%06d',($t - floor($t)) * 1000000);
+                $d = new \DateTime(date('Y-m-d H:i:s.'. $micro, $t));
+
+                Vote::create([
+                    'vote_time'      => $d->format('Y-m-d H:i:s.u'),
+                    'voting_tour_id' => $votingTour->id,
+                    'tour_status'    => Vote::TOUR_CANCELLED_NO_RANKING,
+                    'prev_hash'      => $prevHash
+                ]);
+
+                $logData = [
+                    'module' => ActionsHistory::VOTES,
+                    'action' => ActionsHistory::TYPE_CANCELLED_TOUR
+                ];
+
+                ActionsHistory::add($logData);
+
+                return $this->successResponse();
+            }
+
+            return $this->errorResponse(__('custom.cancel_tour_not_allowed'));
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.cancel_tour_fail'), $e->getMessage());
+        }
+    }
+
+    private function prepareVoteLimits($tourId, $tourStatus, $allowRanking = false)
+    {
+        $voteLimits = [];
+
+        if ($tourStatus == VotingTour::STATUS_VOTING) {
+            $voteLimits['status'] = Vote::TOUR_VOTING;
         } elseif ($tourStatus == VotingTour::STATUS_BALLOTAGE) {
-            $voteStatus = VotingTour::STATUS_BALLOTAGE;
-        } elseif ($tourStatus == VotingTour::STATUS_FINISHED) {
-            if (Organisation::hasOrgsForBallotage($tourId)) {
-                $voteStatus = VotingTour::STATUS_BALLOTAGE;
-            } else {
-                $voteStatus = VotingTour::STATUS_VOTING;
+            $voteLimits['status'] = Vote::TOUR_BALLOTAGE;
+            $voteLimits['minId'] = Vote::getLatestRankingId($tourId, Vote::TOUR_BALLOTAGE_RANKING);
+        } elseif ($allowRanking) {
+            if ($tourStatus == VotingTour::STATUS_RANKING) {
+                $votingCount = Vote::getVotingCount($tourId);
+                if ($votingCount > 1) {
+                    $voteLimits['status'] = Vote::TOUR_BALLOTAGE;
+                    $voteLimits['minId'] = Vote::getLatestRankingId($tourId, Vote::TOUR_BALLOTAGE_RANKING, 1);
+                } else {
+                    $voteLimits['status'] = Vote::TOUR_VOTING;
+                }
+            } elseif ($tourStatus = VotingTour::STATUS_FINISHED) {
+                $votingCount = Vote::getVotingCount($tourId);
+                $tourCancelled = (Vote::getLatestRankingId($tourId, Vote::TOUR_CANCELLED_NO_RANKING) != null);
+                if ($tourCancelled) {
+                    $voteLimits['status'] = ($votingCount > 0) ? Vote::TOUR_BALLOTAGE : Vote::TOUR_VOTING;
+                    $voteLimits['minId'] = Vote::getLatestRankingId($tourId);
+                } else {
+                    $voteLimits['status'] = ($votingCount > 1) ? Vote::TOUR_BALLOTAGE : Vote::TOUR_VOTING;
+                    $voteLimits['minId'] = Vote::getLatestRankingId($tourId, null, 1);
+                }
             }
         }
 
-        return $voteStatus;
+        return $voteLimits;
     }
 }

@@ -34,9 +34,10 @@ Route::middleware(['api'])->group(function () {
     Route::post('vote/getLatestVote', 'Api\VoteController@getLatestVote');
     Route::post('vote/isBlockChainValid', 'Api\VoteController@isBlockChainValid');
     Route::post('vote/ranking', 'Api\VoteController@ranking');
+    Route::post('vote/getLatestRanking', 'Api\VoteController@getLatestRanking');
     Route::post('vote/vote', 'Api\VoteController@vote');
-    Route::post('vote/getVoteStatus', 'Api\VoteController@getVoteStatus');
     Route::post('vote/listVoters', 'Api\VoteController@listVoters');
+    Route::post('vote/cancelTour', 'Api\VoteController@cancelTour');
 
     Route::post('message/markAsRead', 'Api\MessageController@markAsRead');
     Route::post('message/listByOrg', 'Api\MessageController@listByOrg');

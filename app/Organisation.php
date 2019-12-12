@@ -116,18 +116,16 @@ class Organisation extends Model
             self::STATUS_PARTICIPANT,
             self::STATUS_CANDIDATE,
             self::STATUS_BALLOTAGE,
+            self::STATUS_DECLASSED,
         ];
     }
 
-    public static function hasOrgsForBallotage($votingTourId)
+    public static function getApprovedCandidateStatuses()
     {
-        $orgs = self::where('voting_tour_id', $votingTourId)->where('status', self::STATUS_BALLOTAGE);
-
-        if ($orgs->count() > 0) {
-            return true;
-        }
-
-        return false;
+        return [
+            self::STATUS_CANDIDATE,
+            self::STATUS_BALLOTAGE,
+        ];
     }
 
     public function scopeCountRegistered($query, $tourId)
@@ -137,11 +135,17 @@ class Organisation extends Model
         return $query->count();
     }
 
-    public function scopeCountVoted($query, $tourId, $voteStatus)
+    public function scopeCountVoted($query, $tourId, $voteLimits)
     {
         $query->where('voting_tour_id', $tourId)->whereIn('status', self::getApprovedStatuses())
-              ->whereHas('votes', function($query) use ($voteStatus) {
-                  $query->where('tour_status', $voteStatus);
+              ->whereHas('votes', function($query) use ($voteLimits) {
+                  $query->where('tour_status', $voteLimits['status']);
+                  if (isset($voteLimits['minId'])) {
+                      $query->where('votes.id', '>', $voteLimits['minId']);
+                  }
+                  if (isset($voteLimits['maxId'])) {
+                      $query->where('votes.id', '<', $voteLimits['maxId']);
+                  }
               });
 
         return $query->count();

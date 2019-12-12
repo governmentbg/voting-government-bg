@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ActionsHistory;
+use App\Organisation;
+use App\Vote;
+use App\VotingTour;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Http\Controllers\Api\MessageController as ApiMessage;
+use App\Http\Controllers\Api\VoteController as ApiVote;
+use Illuminate\Support\Facades\Cache;
 
 class OrganisationController extends BaseAdminController
 {
@@ -104,9 +109,7 @@ class OrganisationController extends BaseAdminController
                 __('custom.email')
             ]);
 
-            $statuses = \App\Organisation::getStatuses();
-
-            foreach($exportOrgs as $singleOrg) {
+            foreach ($exportOrgs as $singleOrg) {
                 fputcsv($temp, [
                     $singleOrg->name,
                     $singleOrg->eik,
@@ -193,6 +196,10 @@ class OrganisationController extends BaseAdminController
         $description = $request->get('description', '');
         $references = $request->get('references', '');
         $status = $request->offsetGet('status');
+        $rankErrors = [];
+        $editErrors = [];
+
+        \DB::beginTransaction();
 
         list($edit, $editErrors) = api_result(ApiOrganisation::class, 'edit', [
             'org_id'   => $id,
@@ -211,10 +218,26 @@ class OrganisationController extends BaseAdminController
             ]
         ]);
 
-        if (empty($editErrors)) {
+        $ranking = [];
+        if ($status == Organisation::STATUS_DECLASSED) {
+            list($ranking, $rankErrors) = api_result(ApiVote::class, 'ranking', ['status' => Vote::TOUR_ORGANISATION_DECLASSED_RANKING, 'declass_org_id' => $id]);
+        }
+
+        if (empty($editErrors) && empty($rankErrors)) {
+            \DB::commit();
+
+            // clear cached ranking
+            if (!empty($ranking) && !empty($this->votingTour)) {
+                $cacheKey = VotingTour::getCacheKey($this->votingTour->id);
+                if (Cache::has($cacheKey)) {
+                    Cache::forget($cacheKey);
+                }
+            }
+
             $request->session()->flash('alert-success', __('custom.edit_success'));
             return redirect()->back();
         } else {
+            \DB::rollBack();
             $request->session()->flash('alert-danger', __('custom.edit_error'));
             return redirect()->back()->withErrors($editErrors)->withInput();
         }

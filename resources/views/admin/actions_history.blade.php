@@ -54,7 +54,7 @@
                         <label for="action" class="col-form-label col-lg-3" style="min-width: 85px">{{ __('custom.actions') }}:</label>
                         <div class="headerDropdown col-lg-8">
                             <select name="action" class="ams-dropdown custom-select js-drop-filter p-t-3">
-                                <option value="all">{{ __('custom.all') }}</option>
+                                <option value="all">{{ ultrans('custom.all') }}</option>
                                 @if (isset($actions))
                                     @foreach ($actions as $actionIndex => $actionName)
                                         <option
@@ -199,7 +199,7 @@
                                     </td>
                                     <td>
                                         @if ($singleRecord->action != \App\ActionsHistory::TYPE_VOTED)
-                                            {{ $singleRecord->object == null ? __('custom.all') : $singleRecord->object }}
+                                            {{ $singleRecord->object == null ? '' : $singleRecord->object }}
                                         @endif
                                     </td>
                                     <td>{{ $singleRecord->ip_address }}</td>

@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -47,7 +45,7 @@ class ApiController extends Controller
      *
      * @return json - response data
      */
-    public static function successResponse($data = [], $dataMerge = false)
+    public static function successResponse($data = [], $dataMerge = false, $rsOptions = 0)
     {
         $response = ['success' => true];
 
@@ -59,6 +57,6 @@ class ApiController extends Controller
             }
         }
 
-        return new JsonResponse($response, 200);
+        return new JsonResponse($response, 200, [], $rsOptions);
     }
 }

@@ -3,21 +3,19 @@
         <div class="p-l-40">
             <h3 class="p-b-15"><b>{{ isset($listTitle) ? $listTitle : '' }}</b></h3>
         </div>
-        @if (isset($stats['voting']) && !empty($stats['voting']))
-        <div class="p-l-40">
-            <h3 class="p-b-15">
-                {{ __('custom.voter_turnout') .': '.
-                $stats['voting']['percent'] . __('custom.percent') .' ('. $stats['voting']['voted'] .' / '. $stats['voting']['all'] .')' }}
-            </h3>
-        </div>
-        @endif
-        @if (isset($showBallotage) && $showBallotage && !empty($stats['ballotage']))
-        <div class="p-l-40">
-            <h3 class="p-b-15">
-                {{ __('custom.voter_turnout_ballotage') .': '.
-                $stats['ballotage']['percent'] . __('custom.percent') .' ('. $stats['ballotage']['voted'] .' / '. $stats['ballotage']['all'] .')' }}
-            </h3>
-        </div>
+        @if (!empty($stats))
+            @for ($i = 0; $i < $votingCount; $i++)
+                @if (isset($stats->$i) && !empty($stats->$i))
+                    <div class="p-l-40">
+                        <h3 class="p-b-15">
+                            {{ ($i == 0 ? __('custom.voter_turnout') : ($votingCount > 2
+                                ? __('custom.voter_turnout_ballotage_n', ['index' => $i])
+                                : __('custom.voter_turnout_ballotage'))) .': '.
+                            $stats->{$i}->percent . __('custom.percent') .' ('. $stats->{$i}->voted .' / '. $stats->{$i}->all .')' }}
+                        </h3>
+                    </div>
+                @endif
+            @endfor
         @endif
     </div>
 </div>
@@ -26,10 +24,10 @@
         <div class="p-l-40">
             @if (!empty($errors) && $errors->has('message'))
                 @include('components.errors')
-            @elseif (empty($listData))
+            @elseif ($listData->isEmpty())
                 <div>{{ __('custom.no_info') }}</div>
             @endif
-            @if (!empty($listData))
+            @if ($listData->isNotEmpty())
                 @php
                     $tour['id'] = request()->segment(1) == 'admin' ? $tourId : '';
                 @endphp
@@ -51,13 +49,25 @@
                             <thead>
                                 <tr>
                                     <th class="w-5">{{ __('custom.number') }}</th>
-                                    <th class="{{ (isset($showBallotage) && $showBallotage) ? 'w-55' : 'w-75' }}">{{ __('custom.organisation') }}</th>
+                                    <th class="{{ ($votingCount > 0) ? 'w-55' : 'w-75' }}">{{ __('custom.organisation') }}</th>
                                     <th class="w-10">{{ __('custom.eik') }}</th>
-                                    <th class="w-10">{{ __('custom.votes') }}</th>
-                                    @if (isset($showBallotage) && $showBallotage)
-                                        <th class="w-20">{{ __('custom.ballotage_votes') }}</th>
+                                    <th class="w-5">{{ __('custom.votes') }}</th>
+                                    @if ($votingCount > 1)
+                                        @if ($votingCount == 2)
+                                            <th class="w-25">{{ __('custom.ballotage_votes') }}</th>
+                                        @else
+                                            <th class="w-25" colspan="{{ $votingCount - 1 }}">{{ __('custom.ballotage_votes') }}</th>
+                                        @endif
                                     @endif
                                 </tr>
+                            @if ($votingCount > 2)
+                                <tr>
+                                    <th colspan="4"></th>
+                                    @for ($i = 1; $i < $votingCount; $i++)
+                                        <th>{{ $i }}</th>
+                                    @endfor
+                                </tr>
+                            @endif
                             </thead>
                             <tbody class="text-left">
                                 @include('partials.ranking-rows', ['counter' => 0, 'orgNotEditable' => $orgNotEditable])

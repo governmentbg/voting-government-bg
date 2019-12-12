@@ -25,6 +25,7 @@ class ActionsHistory extends Model
     const TYPE_DOWNLOADED = 6;
     const TYPE_CHANGED_PASSWORD = 7;
     const TYPE_RANKED = 8;
+    const TYPE_CANCELLED_TOUR = 9;
 
     /*
      * Modules
@@ -55,6 +56,7 @@ class ActionsHistory extends Model
             self::TYPE_DOWNLOADED       => __('custom.downloaded'),
             self::TYPE_CHANGED_PASSWORD => __('custom.changed_password'),
             self::TYPE_RANKED           => __('custom.ranked'),
+            self::TYPE_CANCELLED_TOUR   => __('custom.cancelled_tour'),
         ];
     }
 

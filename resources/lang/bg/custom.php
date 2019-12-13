@@ -290,4 +290,6 @@ return [
     'cancelled_tour'                   => 'прекрати тур',
     'cancel_tour_not_allowed'          => 'На този етап не е позволено прекратяване на тур',
     'cancel_tour_fail'                 => 'Грешка при прекратяване на тур',
+    'tour_cancelled'                   => 'Прекратен тур',
+    'org_declass_ranking'              => 'Класиране - декласирана организация',
 ];

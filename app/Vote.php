@@ -48,9 +48,9 @@ class Vote extends Model
     public static function getRankingStatuses()
     {
         return [
-            self::TOUR_RANKING,
-            self::TOUR_BALLOTAGE_RANKING,
-            self::TOUR_ORGANISATION_DECLASSED_RANKING
+            self::TOUR_RANKING                        => __('custom.ranking'),
+            self::TOUR_BALLOTAGE_RANKING              => __('custom.ranking_ballotage'),
+            self::TOUR_ORGANISATION_DECLASSED_RANKING => __('custom.org_declass_ranking')
         ];
     }
 
@@ -69,7 +69,7 @@ class Vote extends Model
         $latestRankingData = self::select('*')
             ->where('voter_id', null)
             ->where('voting_tour_id', $tourId)
-            ->whereIn('tour_status', self::getRankingStatuses())
+            ->whereIn('tour_status', array_keys(self::getRankingStatuses()))
             ->orderBy('id', 'DESC')
             ->first();
 

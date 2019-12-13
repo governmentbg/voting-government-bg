@@ -38,6 +38,7 @@ Route::middleware(['api'])->group(function () {
     Route::post('vote/vote', 'Api\VoteController@vote');
     Route::post('vote/listVoters', 'Api\VoteController@listVoters');
     Route::post('vote/cancelTour', 'Api\VoteController@cancelTour');
+    Route::post('vote/listRankingStatuses', 'Api\VoteController@listRankingStatuses');
 
     Route::post('message/markAsRead', 'Api\MessageController@markAsRead');
     Route::post('message/listByOrg', 'Api\MessageController@listByOrg');

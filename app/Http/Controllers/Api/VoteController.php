@@ -197,7 +197,7 @@ class VoteController extends ApiController
         $post = $request->all();
 
         $validator = Validator::make($post, [
-            'status'         => 'required|int|in:'. implode(',', Vote::getRankingStatuses()),
+            'status'         => 'required|int|in:'. implode(',', array_keys(Vote::getRankingStatuses())),
             'declass_org_id' => 'nullable|int|exists:organisations,id|required_if:status,'. Vote::TOUR_ORGANISATION_DECLASSED_RANKING
         ]);
 
@@ -595,6 +595,31 @@ class VoteController extends ApiController
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
             return $this->errorResponse(__('custom.cancel_tour_fail'), $e->getMessage());
+        }
+    }
+
+    /**
+     * List ranking statuses
+     *
+     * @param none
+     *
+     * @return json - response with status code and list of statuses or errors
+     */
+    public function listRankingStatuses(Request $request)
+    {
+        $statuses = Vote::getRankingStatuses();
+
+        foreach ($statuses as $statusId => $statusName) {
+            $results[] = [
+                'id'     => $statusId,
+                'name'   => $statusName
+            ];
+        }
+
+        if ($results) {
+            return $this->successResponse($results);
+        } else {
+            return $this->errorResponse('custom.status_list_not_found');
         }
     }
 

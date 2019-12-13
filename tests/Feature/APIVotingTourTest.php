@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class VotingTourTest extends TestCase
+class APIVotingTourTest extends TestCase
 {
     use WithFaker;
     use DatabaseTransactions;
@@ -27,7 +27,7 @@ class VotingTourTest extends TestCase
         if (!$this->votingTour) {
             $this->votingTour = VotingTour::create([
                 'name'   => $this->faker->name(),
-                'status' => $this->faker->name(),
+                'status' => VotingTour::STATUS_UPCOMING,
             ]);
         }
     }
@@ -59,7 +59,13 @@ class VotingTourTest extends TestCase
      */
     public function testChangeTourStatus()
     {
-        $this->post(url('api/votingTour/changeStatus'), ['new_status' => rand(0, 6)])
+        if ($this->votingTour->status == VotingTour::STATUS_FINISHED) {
+            $newStatus = VotingTour::STATUS_FINISHED;
+        } else {
+            $newStatus = $this->votingTour->status + VotingTour::STATUS_STEP;
+        }
+
+        $this->post(url('api/votingTour/changeStatus'), ['new_status' => $newStatus])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }
@@ -107,9 +113,7 @@ class VotingTourTest extends TestCase
      */
     public function testGetTourData()
     {
-        $votingTour = VotingTour::select('id')->first();
-
-        $this->post(url('api/votingTour/getData'), ['id' => $this->votingTour->id])
+        $this->post(url('api/votingTour/getData'), ['tour_id' => $this->votingTour->id])
             ->assertStatus(200)
             ->assertJson(['success' => true]);
     }

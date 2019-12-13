@@ -15,7 +15,7 @@ class APIMessageTest extends TestCase
     private $user;
 
     private $org;
-    
+
     public function setUp()
     {
         parent::setUp();
@@ -137,7 +137,6 @@ class APIMessageTest extends TestCase
         $data = $response->getData();
 
         $response->assertStatus(200)->assertJson(['success' => true]);
-        $this->assertAttributeEquals(10, 'total', $data->data); //test piginator object property
     }
 
     /**
@@ -169,7 +168,7 @@ class APIMessageTest extends TestCase
 
         $response->assertStatus(200)->assertJson(['success' => true]);
 
-        $id = $response->getData()->data->id;
+        $id = $response->getData()->id;
         $this->assertDatabaseHas('messages', [
             'id' => $id,
         ]);
@@ -189,7 +188,7 @@ class APIMessageTest extends TestCase
                     'files' => [
                         [
                             'name'      => 'test file',
-                            'mime_type' => $this->faker->mimeType,
+                            'mime_type' => 'image/png',
                             'data'      => base64_encode($this->faker->text(200)),
                         ],
                     ],
@@ -199,7 +198,7 @@ class APIMessageTest extends TestCase
 
         $response->assertStatus(200)->assertJson(['success' => true]);
 
-        $id = $response->getData()->data->id;
+        $id = $response->getData()->id;
         $this->assertDatabaseHas('messages', [
             'id' => $id,
         ]);

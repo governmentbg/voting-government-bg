@@ -25,7 +25,12 @@ class APIUserTest extends TestCase
             'password_confirm' => $password,
         ]);
 
-        $response = $this->json('POST', '/api/user/add', ['user_data' => $user->toArray()]);
+        $user = $user->toArray();
+        if (!isset($user['password'])) {
+            $user['password'] = $password;
+        }
+
+        $response = $this->json('POST', '/api/user/add', ['user_data' => $user]);
 
         $response
             ->assertStatus(200)
@@ -102,7 +107,7 @@ class APIUserTest extends TestCase
             'org_id'         => null,
             'voting_tour_id' => null,
         ]);
-        
+
         $response = $this->json('POST', '/api/user/generatePasswordHash', ['username' => $user->username, 'email' => $user->email]);
 
         $response->assertStatus(200)
@@ -141,7 +146,7 @@ class APIUserTest extends TestCase
 
         $response->assertStatus(200)->assertJson(['success' => true]);
     }
-    
+
     /**
      * Test user change password fumctionality.
      *

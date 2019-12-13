@@ -27,7 +27,7 @@
         </td>
         <td>{{ $organisation->eik }}</td>
         @for ($i = 0; $i < $votingCount; $i++)
-            <td class="text-right">{{ isset($organisation->votes->{$i}) ? $organisation->votes->{$i} : '' }}</td>
+            <td class="{{ $votingCount > 2 ? 'text-right' : 'text-center' }}">{{ isset($organisation->votes->{$i}) ? $organisation->votes->{$i} : '' }}</td>
         @endfor
     </tr>
 @endforeach

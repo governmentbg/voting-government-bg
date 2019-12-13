@@ -397,7 +397,11 @@ $('.js-org-table').on('scroll', function() {
 $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 
 if ($('.ranking').length > 0) {
-    $('.rank-scroll .nano-pane').css('margin-top', '114px');
+    if ($('.rank-scroll').data('vote-count') > 2) {
+        $('.rank-scroll .nano-pane').css('margin-top', '114px');
+    } else {
+        $('.rank-scroll .nano-pane').css('margin-top', '56px');
+    }
 }
 
 if ($('.rest').length > 0) {

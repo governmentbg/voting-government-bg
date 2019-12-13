@@ -40,7 +40,7 @@
                         >{{ uctrans('custom.download') }}</button>
                     </div>
                 </form>
-                <div class="table-wrapper nano public-table {{ request()->segment(1) == 'admin' ? 'w-75' : 'w-100' }} rank-scroll">
+                <div class="table-wrapper nano public-table {{ request()->segment(1) == 'admin' ? 'w-75' : 'w-100' }} rank-scroll" data-vote-count="{{$votingCount}}">
                     <div class="tableFixHead nano-content js-org-table">
                         <table
                             class="table table-striped table-responsive ams-table ranking js-orgs"
@@ -60,14 +60,14 @@
                                         @endif
                                     @endif
                                 </tr>
-                            @if ($votingCount > 2)
-                                <tr class="align-top">
-                                    <th colspan="4"></th>
-                                    @for ($i = 1; $i < $votingCount; $i++)
-                                        <th class="text-right">{{ $i }}</th>
-                                    @endfor
-                                </tr>
-                            @endif
+                                @if ($votingCount > 2)
+                                    <tr class="align-top">
+                                        <th colspan="4"></th>
+                                        @for ($i = 1; $i < $votingCount; $i++)
+                                            <th class="text-right">{{ $i }}</th>
+                                        @endfor
+                                    </tr>
+                                @endif
                             </thead>
                             <tbody class="text-left">
                                 @include('partials.ranking-rows', ['counter' => 0, 'orgNotEditable' => $orgNotEditable])

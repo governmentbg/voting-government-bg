@@ -120,6 +120,7 @@ class VoteController extends BaseFrontendController
                 'orgList'         => $organisations,
             ]);
         }
+
         foreach ($voteErrors as $singleError) {
             $request->session()->flash('alert-danger', $singleError);
         }

@@ -111,22 +111,24 @@ class ActionsHistory extends Model
                 $actor = 1;
             }
         }
-
+        $tour = VotingTour::getLatestTour();
         if (!$validator->fails()) {
-            try {
-                $dbData = [
-                    'user_id'        => $actor,
-                    'action'         => $request['action'],
-                    'module'         => $request['module'],
-                    'object'         => $object,
-                    'voting_tour_id' => VotingTour::getLatestTour()->id,
-                    'occurrence'     => date('Y-m-d H:i:s'),
-                    'ip_address'     => !empty($ip) ? $ip : 'N/A',
-                ];
+            if (!empty($tour)) {
+                try {
+                    $dbData = [
+                        'user_id'        => $actor,
+                        'action'         => $request['action'],
+                        'module'         => $request['module'],
+                        'object'         => $object,
+                        'voting_tour_id' => $tour->id,
+                        'occurrence'     => date('Y-m-d H:i:s'),
+                        'ip_address'     => !empty($ip) ? $ip : 'N/A',
+                    ];
 
-                ActionsHistory::create($dbData);
-            } catch (QueryException $ex) {
-                logger()->error($ex);
+                    ActionsHistory::create($dbData);
+                } catch (QueryException $ex) {
+                    logger()->error($ex);
+                }
             }
         }
     }

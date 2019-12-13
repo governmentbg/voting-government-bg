@@ -20,7 +20,7 @@ class CreateActionsHistoryTable extends Migration
             $table->unsignedTinyInteger('action');
             $table->unsignedTinyInteger('module');
             $table->integer('object')->unsigned()->nullable();
-            $table->integer('voting_tour_id')->unsigned();
+            $table->integer('voting_tour_id')->unsigned()->nullable();
             $table->foreign('voting_tour_id')->references('id')->on('voting_tour');
             $table->timestamp('occurrence');
             $table->string('ip_address', 15);

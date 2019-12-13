@@ -95,7 +95,7 @@ class VotingTourController extends BaseAdminController
         $status = request()->get('status');
         list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
         $oldStatus = $votingTour ? $votingTour->status : VotingTour::STATUS_FINISHED;
-
+        $addition = '';
         list($data, $errors) = api_result(ApiVotingTour::class, 'changeStatus', ['new_status' => $status]);
 
         if (empty($errors)) {
@@ -103,10 +103,14 @@ class VotingTourController extends BaseAdminController
                 //send emails to all orgs - voting is open
                 $sender = auth()->guard('backend')->user()->id;
 
+                if ($status == VotingTour::STATUS_BALLOTAGE) {
+                    $addition = ' - ' . __('custom.ballotage');
+                }
+
                 $bulkData = [
                     'sender_user_id'   => $sender,
-                    'subject'          => __('custom.vote_invite'),
-                    'body'             => __('custom.tour') .' '. $votingTour->name .' '. __('custom.use_right_vote'). '<a href="'. route('organisation.vote').'"> Гласуване</a>',
+                    'subject'          => __('custom.vote_invite') . $addition,
+                    'body'             => __('custom.use_right_vote', ['name' => $votingTour->name]). '<a href="'. route('organisation.vote').'"> '. __('custom.votingmenu'). '</a>',
                 ];
 
                 list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg',  $bulkData);
@@ -120,7 +124,7 @@ class VotingTourController extends BaseAdminController
                 $bulkData = [
                     'sender_user_id'   => $sender,
                     'subject'          => __('custom.results_invite'),
-                    'body'             => __('custom.results_from_last_tour') .' '. $votingTour->name .' '. __('custom.are_available') .' <a href="'. route('list.ranking').'">Резултати</a>',
+                    'body'             => __('custom.results_from_last_tour', ['name' => $votingTour->name]) .' <a href="'. route('list.ranking').'"> '. __('custom.results'). '</a>',
                 ];
 
                 list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg', $bulkData);

@@ -75,7 +75,7 @@
             </form>
         @else
             <div class="row">
-                <div class="col-lg-12 display-flex justify-center w-100">
+                <div class="col-lg-12 display-flex w-100">
                     <h2 class="color-dark h2-custom"><b>{{ __('custom.no_tours_available') }}</b></h2>
                 </div>
             </div>

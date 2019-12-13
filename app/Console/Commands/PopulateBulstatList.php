@@ -3,19 +3,16 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use App\TradeRegister;
+use App\BulstatRegister;
 
-class PopulateTrList extends Command
+class PopulateBulstatList extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'populate:trList {path? : Path to JSON file from TR Register. } { --filename= : Name of the JSON file to be loaded.}';
+    protected $signature = 'populate:bulstatList {path? : Path to JSON file from TR Register. }';
 
     /**
      * The console command description.
@@ -52,7 +49,7 @@ class PopulateTrList extends Command
                 }
             }
             else{
-                $data = Storage::disk('local')->exists('predefined_list.json') ? json_decode(Storage::disk('local')->get('predefined_list.json')) : [];
+                $data = Storage::disk('local')->exists('bulstat_predefined_list.json') ? json_decode(Storage::disk('local')->get('bulstat_predefined_list.json')) : [];
             }
 
             $bar = $this->output->createProgressBar(count($data));
@@ -65,7 +62,7 @@ class PopulateTrList extends Command
                 try{
                     $eik = $org['eik'];
                     unset($org['eik']);
-                    TradeRegister::updateOrCreate(['eik' => $eik], $org);
+                    BulstatRegister::updateOrCreate(['eik' => $eik], $org);
                 }
                 catch(QueryException $e){
                     $this->error('Organisation ' . $org['name'] . ' EIK:'. $org['eik'] . ' could not be imported.' );

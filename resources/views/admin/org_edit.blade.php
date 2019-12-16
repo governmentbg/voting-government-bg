@@ -172,6 +172,7 @@
                                     @foreach ($statuses as $statusIndex => $status)
                                         <option
                                             value="{{ $statusIndex }}"
+                                            {{ in_array($statusIndex, $disabledStatuses) ? 'disabled' : '' }}
                                             @if (old('status'))
                                                 {{ old('status') == $statusIndex ? 'selected' : ''}}
                                             @else

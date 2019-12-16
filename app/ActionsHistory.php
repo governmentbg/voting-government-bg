@@ -102,13 +102,20 @@ class ActionsHistory extends Model
         $object = isset($request['object']) ? $request['object'] : null;
         $ip = request()->ip();
 
+
         if (isset($request['actor'])) {
             $actor = $request['actor'];
         } else {
-            if (isset(\Auth::user()->id)) {
-                $actor = \Auth::user()->id;
+            $userId = isset(\Auth::guard('backend')->user()->id) ? \Auth::guard('backend')->user()->id : null;
+
+            if (!$userId) {
+                $userId = isset(\Auth::user()->id) ? \Auth::user()->id : null;
+            }
+
+            if ($userId) {
+                $actor = $userId;
             } else {
-                $actor = 1;
+                $actor = null;
             }
         }
 

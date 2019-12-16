@@ -94,6 +94,15 @@ class UserController extends ApiController
             try {
                 $user->update(['password' => Hash::make($new_password)]);
 
+                $logData = [
+                    'module' => ActionsHistory::USERS,
+                    'action' => ActionsHistory::TYPE_CHANGED_PASSWORD,
+                    'object' => $user->id,
+                    'actor'  => $user->id,
+                ];
+
+                ActionsHistory::add($logData);
+
                 return $this->successResponse(['id' => $user->id], true);
             } catch (QueryException $e) {
                 logger()->error($e->getMessage());

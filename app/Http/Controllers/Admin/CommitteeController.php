@@ -93,9 +93,9 @@ class CommitteeController extends BaseAdminController
         $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
         $data['isAdmin'] = true;
         if (sendEmail('emails.registrationConfirm', $data, $data['email'], __('custom.register_subject'))) {
-            session()->flash('alert-info', __('custom.register_send_mail_success'));
+            session()->flash('alert-info', __('custom.register_send_mail_success_user'));
         } else {
-            session()->flash('alert-info', __('custom.register_send_mail_failed'));
+            session()->flash('alert-info', __('custom.register_send_mail_failed_user'));
         }
 
         return redirect()->route('admin.committee.list');

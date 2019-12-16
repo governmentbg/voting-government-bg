@@ -178,7 +178,7 @@
                                     }}"
                                 >{{ __('custom.status') }}<img src="{{ app('request')->sort == 'status' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
-                            <th class="w-10">
+                            <th class="w-5">
                                 <a
                                     class="c-white {{ app('request')->sort == 'is_candidate' ? 'sort-active' : '' }}"
                                     href="{{
@@ -192,7 +192,7 @@
                                     }}"
                                 >{{ __('custom.candidate') }}<img src="{{ app('request')->sort == 'is_candidate' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
-                            <th class="w-10">
+                            <th class="w-15">
                                 <a
                                     class="c-white {{ app('request')->sort == 'created_at' ? 'sort-active' : '' }}"
                                     href="{{

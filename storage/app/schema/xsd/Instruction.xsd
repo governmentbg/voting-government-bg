@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Instruction" xmlns:tns="http://www.bulstat.bg/Instruction"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T33="http://www.bulstat.bg/PostApplication">
+
+	<xs:import schemaLocation="PostApplication.xsd"
+		namespace="http://www.bulstat.bg/PostApplication" />
+
+	<xs:complexType name="Instruction">
+		<xs:annotation>
+			<xs:documentation>Указание за изправяне на грешки</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T33:PostApplication" />
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

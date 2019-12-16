@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/PutApplicationRequest"
+	xmlns:tns="http://www.bulstat.bg/PutApplicationRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T9="http://www.bulstat.bg/Application" xmlns:T3="http://www.bulstat.bg/NomenclatureEntry"
+	xmlns:T7="http://www.bulstat.bg/Employee">
+
+	<xs:import schemaLocation="Application.xsd" namespace="http://www.bulstat.bg/Application" />
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+
+	<xs:complexType name="PutApplicationRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за входиране на заявление</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Employee" minOccurs="0" maxOccurs="1"
+				type="T7:Employee">
+				<xs:annotation>
+					<xs:documentation>Служител, входирал заявлението и структура, от
+						чието име работи
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Application" minOccurs="1" maxOccurs="1"
+				type="T9:Application">
+				<xs:annotation>
+					<xs:documentation>Заявление
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FeeType" minOccurs="1" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Вид услуга (използва се за ценообразуване)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

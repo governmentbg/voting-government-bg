@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Applicant" xmlns:tns="http://www.bulstat.bg/Applicant"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T10="http://www.bulstat.bg/Subject" xmlns:T3="http://www.bulstat.bg/NomenclatureEntry"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:import schemaLocation="Subject.xsd" namespace="http://www.bulstat.bg/Subject" />
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="Applicant">
+		<xs:annotation>
+			<xs:documentation>Заявител</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="ApplicantType" minOccurs="1"
+						maxOccurs="1" type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Качество на заявителя (представляващ,
+								пълномощник)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="Subject" minOccurs="1" maxOccurs="1"
+						type="T10:Subject">
+						<xs:annotation>
+							<xs:documentation>Субект
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

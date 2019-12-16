@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Nomenclatures" xmlns:tns="http://www.bulstat.bg/Nomenclatures"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T0="http://www.bulstat.bg/MetaDefinition">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:import schemaLocation="MetaDefinition.xsd"
+		namespace="http://www.bulstat.bg/MetaDefinition" />
+
+	<xs:element name="Nomenclatures" type="tns:Nomenclatures" />
+
+	<xs:complexType name="Nomenclatures">
+		<xs:annotation>
+			<xs:documentation>Резултат от операцията
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CountryNomElement" minOccurs="0"
+				maxOccurs="unbounded" type="tns:CountryMultilangNomElement">
+				<xs:annotation>
+					<xs:documentation>Съдържание на номенклатурата с държавите
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SimpleNomenclature" minOccurs="1"
+				maxOccurs="unbounded" type="tns:SimpleNomenclature">
+				<xs:annotation>
+					<xs:documentation>Линейни номенклатури</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SimpleNomenclature">
+		<xs:annotation>
+			<xs:documentation>Линейна номенклатура
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Definition" minOccurs="1" maxOccurs="1"
+				type="T0:MetaDefinition">
+				<xs:annotation>
+					<xs:documentation>Дефиниция на номенклатурата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NomElement" minOccurs="0" maxOccurs="unbounded"
+				type="tns:MultilangNomElement">
+				<xs:annotation>
+					<xs:documentation>Съдържание на номенклатурата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="MultilangNomElement">
+		<xs:annotation>
+			<xs:documentation>Номенклатурна стойност
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T3:NomenclatureEntry">
+				<xs:sequence>
+					<xs:element name="NameBG" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Наименование на български език
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="180" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="NameEN" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Наименование на английски език
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="180" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Ordering" default="0" maxOccurs="1"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Подредба</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="-2147483648" />
+								<xs:maxInclusive value="2147483647" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Active" maxOccurs="1" minOccurs="1"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Посочва дали понятието е актуално или не
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="CountryMultilangNomElement">
+		<xs:annotation>
+			<xs:documentation>Номенклатурна стойност - Държава
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:MultilangNomElement">
+				<xs:sequence>
+					<xs:element name="ISO2" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>ISO2 - двубуквен код на държава
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="2" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="ISO3" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>ISO3 - трибуквен код на държава
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="3" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

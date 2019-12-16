@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Event" xmlns:tns="http://www.bulstat.bg/Event"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T17="http://www.bulstat.bg/Document" xmlns:T3="http://www.bulstat.bg/NomenclatureEntry"
+	xmlns:T27="http://www.bulstat.bg/Case" xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:import schemaLocation="Document.xsd" namespace="http://www.bulstat.bg/Document" />
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Case.xsd" namespace="http://www.bulstat.bg/Case" />
+
+	<xs:complexType name="Event">
+		<xs:annotation>
+			<xs:documentation>Събитие</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="Document" minOccurs="1" maxOccurs="1"
+						type="T17:Document">
+						<xs:annotation>
+							<xs:documentation>Документ
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="EventType" minOccurs="1" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид събитие
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="EventDate" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Дата на събитие във формат
+								(yyyy-MM-dd)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:date">
+								<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+								<xs:minInclusive value="0001-01-01" />
+								<xs:maxInclusive value="9999-12-31" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="LegalBase" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид основание
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="EntryType" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид на вписването (първоначално/промяна в
+								обстоятелствата и др.)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Case" minOccurs="0" maxOccurs="1"
+						type="T27:Case">
+						<xs:annotation>
+							<xs:documentation>Фирмено дело
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

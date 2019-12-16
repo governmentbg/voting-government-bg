@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/PaymentOrderPartition"
+	xmlns:tns="http://www.bulstat.bg/PaymentOrderPartition"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T14="http://www.bulstat.bg/PaymentOrder" xmlns:T7="http://www.bulstat.bg/Employee"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:import schemaLocation="PaymentOrder.xsd"
+		namespace="http://www.bulstat.bg/PaymentOrder" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+
+	<xs:complexType name="PaymentOrderPartition">
+		<xs:annotation>
+			<xs:documentation>Усвоена част от платежно нареждане
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="PaymentOrderUID" maxOccurs="1"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Уникален идентификатор на платежно нареждане
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="50" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="UsedAmount" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Използвана сума
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="2" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="UsedByEmployee" minOccurs="0"
+						maxOccurs="1" type="T7:Employee">
+						<xs:annotation>
+							<xs:documentation>Служител, усвоил сумите
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="UsedOnDate" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Дата на усвояване на сумите във формат
+								(yyyy-MM-dd)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:date">
+								<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+								<xs:minInclusive value="0001-01-01" />
+								<xs:maxInclusive value="9999-12-31" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

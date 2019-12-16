@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Attachment" xmlns:tns="http://www.bulstat.bg/Attachment"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T7="http://www.bulstat.bg/Employee"
+	xmlns:T13="http://www.bulstat.bg/File" xmlns:E="http://www.bulstat.bg/Entry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+	<xs:import schemaLocation="File.xsd" namespace="http://www.bulstat.bg/File" />
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:complexType name="Attachment">
+		<xs:annotation>
+			<xs:documentation>Приложение</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="UID" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Уникален идентификатор</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="50" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="AttachmentType" minOccurs="1"
+						maxOccurs="1" type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид на приложение
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Original" maxOccurs="1" minOccurs="1"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Оригинал (да/не)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Description" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Описание
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Employee" minOccurs="0" maxOccurs="1"
+						type="T7:Employee">
+						<xs:annotation>
+							<xs:documentation>Служител, сканирал (прикачил) приложението
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Files" minOccurs="0" maxOccurs="unbounded"
+						type="T13:File">
+						<xs:annotation>
+							<xs:documentation>Файлове
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RegisterInstructionResponse"
+	xmlns:tns="http://www.bulstat.bg/RegisterInstructionResponse"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T9="http://www.bulstat.bg/Instruction" xmlns:R15="http://www.bulstat.bg/WSResponse">
+
+	<xs:import schemaLocation="Instruction.xsd" namespace="http://www.bulstat.bg/Instruction" />
+	<xs:import schemaLocation="WSResponse.xsd" namespace="http://www.bulstat.bg/WSResponse" />
+
+	<xs:complexType name="RegisterInstructionResponse">
+		<xs:annotation>
+			<xs:documentation>Резултат от операцията
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="R15:WSResponse">
+				<xs:sequence>
+					<xs:element name="Instruction" minOccurs="1" maxOccurs="1"
+						type="T9:Instruction">
+						<xs:annotation>
+							<xs:documentation>Инструкция
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

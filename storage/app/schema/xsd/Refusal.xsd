@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Refusal" xmlns:tns="http://www.bulstat.bg/Refusal"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T33="http://www.bulstat.bg/PostApplication">
+
+<xs:import schemaLocation="PostApplication.xsd" namespace="http://www.bulstat.bg/PostApplication" />
+
+	<xs:complexType name="Refusal">
+		<xs:annotation>
+			<xs:documentation>Отказ за вписване</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T33:PostApplication" />
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

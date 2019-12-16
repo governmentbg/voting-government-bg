@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/PayResponse" xmlns:tns="http://www.bulstat.bg/PayResponse"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:R15="http://www.bulstat.bg/WSResponse">
+
+	<xs:import schemaLocation="WSResponse.xsd" namespace="http://www.bulstat.bg/WSResponse" />
+
+	<xs:complexType name="PayResponse">
+		<xs:annotation>
+			<xs:documentation>Резултат от операцията
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="R15:WSResponse">
+				<xs:sequence>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

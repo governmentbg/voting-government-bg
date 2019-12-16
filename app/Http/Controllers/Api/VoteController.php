@@ -9,6 +9,8 @@ use App\Organisation;
 use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\ApiController;
 
 class VoteController extends ApiController
@@ -36,7 +38,13 @@ class VoteController extends ApiController
             }
 
             $validator = Validator::make($post, [
-                'org_id'      => 'required|int|exists:organisations,id',
+                'org_id'      => [
+                    'required',
+                    'int',
+                    Rule::exists('organisations', 'id')->where(function ($query) {
+                        $query->whereIn('status', Organisation::getApprovedStatuses());
+                    }),
+                ],
                 'org_list'    => 'required|string'
             ]);
 
@@ -47,14 +55,15 @@ class VoteController extends ApiController
                         $votedForOrgArray = explode(',', str_replace(' ', '', $post['org_list']));
 
                         $votedForListSize = sizeof($votedForOrgArray);
+                        $maxVotes = $this->prepareMaxVotes($votingTour);
 
-                        if ($votedForListSize <= Vote::MAX_VOTES && ($votedForListSize >= Vote::MIN_VOTES)) {
-                            $currentTourOrgList = Organisation::where('voting_tour_id', VotingTour::getLatestTour()->id)
+                        if ($votedForListSize >= Vote::MIN_VOTES && $votedForListSize <= $maxVotes) {
+                            $currentTourOrgCount = Organisation::where('voting_tour_id', $votingTour->id)
                                 ->whereIn('id', $votedForOrgArray)
-                                ->whereIn('status', [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE])
-                                ->get()->toArray();
+                                ->whereIn('status', Organisation::getApprovedCandidateStatuses())
+                                ->count();
 
-                            if (sizeof($currentTourOrgList) != $votedForListSize) {
+                            if ($currentTourOrgCount != $votedForListSize) {
                                 return $this->errorResponse(__('custom.invalid_org_in_vote_list'));
                             }
 
@@ -598,6 +607,28 @@ class VoteController extends ApiController
         }
     }
 
+    public function getMaxVotes(Request $request)
+    {
+        try {
+            $votingTour = VotingTour::getLatestTour();
+
+            if (!empty($votingTour) && array_key_exists($votingTour->status, VotingTour::getActiveStatuses())) {
+                $maxVotes = $this->prepareMaxVotes($votingTour);
+
+                if ($maxVotes >= 0) {
+                    return $this->successResponse(['max_votes' => $maxVotes], true);
+                }
+
+                return $this->errorResponse(__('custom.get_max_votes_fail'));
+            }
+
+            return $this->errorResponse(__('custom.get_max_votes_not_allowed'));
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.get_max_votes_fail'), $e->getMessage());
+        }
+    }
+
     /**
      * List ranking statuses
      *
@@ -655,5 +686,49 @@ class VoteController extends ApiController
         }
 
         return $voteLimits;
+    }
+
+    /**
+     * Get maximum number of votes.
+     * For ballotage the number is MAX_VOTES minus number of elected orgs.
+     *
+     * @param stdClass $votingTour
+     *
+     * @return integer
+     */
+    private function prepareMaxVotes($votingTour)
+    {
+        if ($votingTour->status == VotingTour::STATUS_VOTING) {
+            return Vote::MAX_VOTES;
+        }
+
+        $cacheKey = VotingTour::getCacheKey($votingTour->id, 'max-votes');
+        if ($votingTour->status == VotingTour::STATUS_BALLOTAGE) {
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+        }
+
+        $maxVotes = -1;
+
+        // get voting count
+        $votingCount = Vote::getVotingCount($votingTour->id);
+
+        if ($votingCount > 0) {
+            // get latest ranking data
+            $latestRanking = Vote::getLatestRankingData($votingTour->id);
+            $latestRanking = !empty($latestRanking) ? json_decode($latestRanking['vote_data'], true) : null;
+
+            if (!is_null($latestRanking)) {
+                // calculate votes limit
+                $limits = Vote::calculateVoteLimit($latestRanking, $votingCount);
+
+                $maxVotes = Vote::MAX_VOTES - ($limits['orgPos'] + 1);
+            }
+        }
+
+        Cache::put($cacheKey, $maxVotes, now()->addMinutes(60));
+
+        return $maxVotes;
     }
 }

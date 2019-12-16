@@ -5,9 +5,9 @@
 @include('components.breadcrumbs')
 @include('components.status')
 
-<div class="row p-l-15 p-r-15">
-    <div class="offset-lg-2 offset-md-2 col-lg-10 col-md-10 col-sm-12">
-        @if (!empty($orgList))
+@if (!empty($orgList))
+    <div class="row p-l-15 p-r-15">
+        <div class="offset-lg-2 offset-md-2 col-lg-10 col-md-10 col-sm-12">
             <div class="row">
                 <h2 class="color-dark"><b>{{ __('custom.voting_title') }}</b></h2>
             </div>
@@ -73,14 +73,14 @@
                     </div>
                 </div>
             </form>
-        @else
-            <div class="row">
-                <div class="col-lg-12 display-flex w-100">
-                    <h2 class="color-dark h2-custom"><b>{{ __('custom.no_tours_available') }}</b></h2>
-                </div>
-            </div>
-        @endif
+        </div>
     </div>
-</div>
+@elseif (!empty($infoLabel))
+    <div class="row">
+        <div class="col-lg-12 display-flex justify-center">
+            <h2 class="color-dark h2-custom"><b>{{ __($infoLabel) }}</b></h2>
+        </div>
+    </div>
+@endif
 
 @endsection

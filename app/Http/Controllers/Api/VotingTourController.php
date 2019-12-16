@@ -8,6 +8,7 @@ use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 
@@ -90,22 +91,30 @@ class VotingTourController extends ApiController
         if (!$validator->fails()) {
             $editVotingTour = VotingTour::getLatestTour();
 
-            if ($editVotingTour->status + VotingTour::STATUS_STEP < $post['new_status']) {
-                if (!($post['new_status'] == VotingTour::STATUS_FINISHED)) {
-                    return $this->errorResponse(__('custom.status_skipping'));
-                }
-            }
-
-            if ($editVotingTour->status > $post['new_status']) {
-                if (!($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_VOTING)
-                    &&
-                    !($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_RANKING)
-                ) {
-                    return $this->errorResponse(__('custom.backward_status'));
-                }
-            }
-
             if ($editVotingTour) {
+                if ($editVotingTour->status + VotingTour::STATUS_STEP < $post['new_status']) {
+                    if (!($post['new_status'] == VotingTour::STATUS_FINISHED)) {
+                        return $this->errorResponse(__('custom.status_skipping'));
+                    }
+                }
+
+                if ($editVotingTour->status > $post['new_status']) {
+                    if (!($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_VOTING)
+                        &&
+                        !($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_RANKING)
+                    ) {
+                        return $this->errorResponse(__('custom.backward_status'));
+                    }
+                }
+
+                if ($editVotingTour->status != $post['new_status'] && array_key_exists($post['new_status'], VotingTour::getActiveStatuses())) {
+                    // clear cached max votes
+                    $cacheKey = VotingTour::getCacheKey($editVotingTour->id, 'max-votes');
+                    if (Cache::has($cacheKey)) {
+                        Cache::forget($cacheKey);
+                    }
+                }
+
                 try {
                     DB::beginTransaction();
 

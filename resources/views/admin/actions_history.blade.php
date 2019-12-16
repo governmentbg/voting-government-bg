@@ -12,9 +12,6 @@
                 <input type="hidden" name="sort" value="{{ request()->get('sort')}}">
                 <input type="hidden" name="order" value="{{ request()->get('order')}}">
             @endif
-            @if (request()->has('voting_tour_id'))
-                <input type="hidden" name="voting_tour_id" value="{{ request()->get('voting_tour_id')}}">
-            @endif
             <div class="row">
                 <div class="col-lg-3">
                     <div class="row form-group">
@@ -70,7 +67,26 @@
                 </div>
             </div>
             <div class="from-group row">
-                <div class="offset-lg-3 col-lg-5">
+                <div class="col-lg-3">
+                    <div class="form-group row">
+                        <label for="module" class="col-form-label col-lg-3">{{ __('custom.tour') }}:</label>
+                        <div class="headerDropdown col-lg-8">
+                            <select name="voting_tour_id" class="ams-dropdown custom-select js-drop-filter p-t-3">
+                                <option value="">{{ __('custom.no_tour') }}</option>
+                                @if (!empty($toursList))
+                                    @foreach ($toursList as $index => $tourData)
+                                        <option
+                                            value="{{ $tourData->id }}"
+                                            {{ isset($filters['voting_tour_id']) && $filters['voting_tour_id'] == $tourData->id ? 'selected' : '' }}
+                                        >{{ $tourData->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
                     <div class="form-group row">
                         <label for="ip_address" class="col-form-label col-lg-3">{{ __('custom.ip_address') }}:</label>
                         <div class="col-lg-8">

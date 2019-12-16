@@ -97,11 +97,14 @@ class ActionsHistoryController extends ApiController
                 $query->where('ip_address', $filters['ip_address']);
             }
 
-            if (isset($filters['voting_tour_id'])) {
+            if (empty($filters['voting_tour_id'])) {
+                $query->whereNull('actions_history.voting_tour_id');
+            } else {
                 $query->where('actions_history.voting_tour_id', $filters['voting_tour_id']);
             }
 
             $query->orderBy($filters['order_field'], $filters['order_type']);
+
             if ($filters['order_field'] != 'id') {
                 $query->orderBy('id', $filters['order_type']);
             }

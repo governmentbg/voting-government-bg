@@ -13,4 +13,10 @@ class TradeRegister extends Model
     public $timestamps = false;
 
     protected $primaryKey = 'eik';
+
+    const STATUSES = ['E', 'C', 'L', 'N'];
+    // N - Нова
+    // Е - Пререгистрирана фирма по Булстат
+    // L - Пререгистрирана фирма по Булстат затворена
+    // C - Нова партида затворена
 }

@@ -3,24 +3,12 @@
 namespace App\Libraries;
 
 /**
- * XML parser specific for trade register xml files format
+ * XML parser specific for Bulstat register xml files format
  */
-class XMLParser implements IXMLParser
+class XMLParserBulstat implements IXMLParser
 {
     private $data;
 
-    const LEGAL_FORMS = ['ASSOC', 'FOUND', 'CC', 'BFLE'];
-    //    ASSOC = 24,// Сдружение - юридическо лице с нестопанска цел
-    //    FOUND = 25,// Фондация - юридическо лице с нестопанска цел
-    //    BFLE  = 26,// Клон на чуждестранно юридическо лице с нестопанска цел
-    //    CC    = 27 // Читалище - юридическо лице с нестопанска цел
-
-    const STATUSES = ['E', 'C', 'L', 'N'];
-    // N - Нова
-    // Е - Пререгистрирана фирма по Булстат
-    // L - Пререгистрирана фирма по Булстат затворена
-    // C - Нова партида затворена
-    
     public function __construct()
     {
         ;
@@ -29,15 +17,15 @@ class XMLParser implements IXMLParser
     /**
      * Tries to parse XML file from a given path.
      * @param string $path
-     * @return boolean 
+     * @return boolean
      */
     public function loadFile($path)
     {
         $this->data = simplexml_load_file($path);
-        
+
         return $this->data === false ? false : true;
     }
-    
+
     /**
      * Return parsed data as array.
      * @param string $path
@@ -45,12 +33,12 @@ class XMLParser implements IXMLParser
      */
     public function getParsedData()
     {
-        if(!isset($this->data->Body->Deeds[0])){
+        if(!isset($this->data->Body->StateOfPlay[0])){
             return [];
         }
 
         $result = [];
-        foreach($this->data->Body->Deeds[0] as $org) {
+        foreach($this->data->Body->StateOfPlay[0] as $org) {
             if(isset($org->attributes()['UIC']) && $this->isOrgRelevant($org)){
                 $parsedOrg = $this->getRelevantFields($org);
                 if($parsedOrg){
@@ -114,7 +102,8 @@ class XMLParser implements IXMLParser
 
     private function isOrgRelevant($org)
     {
-        return isset($org->attributes()['LegalForm']) && in_array((string)$org->attributes()['LegalForm'], self::LEGAL_FORMS);
+        return true; //TODO
     }
 }
+
 

@@ -37,8 +37,8 @@ class OrganisationController extends BaseAdminController
         $this->addBreadcrumb(__('custom.registered_orgs'), '');
 
         $allFilters = [];
-        if (isset($status) && $status != 'all') {
-            $allFilters['statuses'] = [(int) $status];
+        if (isset($status)) {
+            $allFilters['statuses'] = $status == 'all' ? null : [(int) $status];
         }
         if (isset($eik) && $eik != '') {
             $allFilters['eik'] = $eik;
@@ -73,9 +73,7 @@ class OrganisationController extends BaseAdminController
         }
 
         if (!empty(session('filters'))) {
-            if (!empty($allFilters) && (session('filters') == $allFilters)) {
-                $allFilters = session('filters');
-            } else if (empty($allFilters)) {
+            if (empty($allFilters)) {
                 $allFilters = session('filters');
             }
         }

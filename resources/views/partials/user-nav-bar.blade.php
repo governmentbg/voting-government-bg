@@ -9,20 +9,22 @@
         </div>
         <div class="navbar-collapse order-3 justify-content-end align-top mt-md-0 mt-xl-0 mt-4">
         @if (auth()->check())
-            <a
-                href="{{ route('organisation.view') }}"
-                class="{{ Route::currentRouteName() == 'organisation.view' ? 'c-darkBlue' : 'color-black' }} {{ request()->segment(1) == 'publicLists' ? '' : 'p-r-20' }} f-s-21 text-decoration-none"
-            >{{ request()->segment(1) == 'publicLists' ? __('custom.profile') : auth()->user()->username }}</a>
+            <div class="text-right">
+                <a
+                    href="{{ route('organisation.view') }}"
+                    class="{{ Route::currentRouteName() == 'organisation.view' ? 'c-darkBlue' : 'color-black' }} p-r-20 f-s-21 text-decoration-none"
+                >{{ request()->segment(1) == 'publicLists' ? __('custom.profile') : auth()->user()->username }}</a>
+            </div>
             @if (request()->segment(1) == 'publicLists')
                 @include('partials.public-nav-bar')
             @else
-                <div class="p-r-20">
+                <div class="p-r-20 text-right">
                     <a
                         href="{{ route('list.registered') }}"
                         class="f-s-21 color-black text-decoration-none"
                     >{{ __('custom.public_lists') }}</a>
                 </div>
-                <div class="p-r-20">
+                <div class="p-r-20 text-right">
                     <a
                         href="{{ route('organisation.vote') }}"
                         class="f-s-21 color-black text-decoration-none {{ in_array(Route::currentRouteName(), [
@@ -31,7 +33,7 @@
                         ]) ? 'c-darkBlue' : 'color-black' }}"
                     >{{ __('custom.votingmenu') }}</a>
                 </div>
-                <div class="p-r-20">
+                <div class="p-r-20 text-right">
                     <a
                         href="{{ route('organisation.change_password')}}"
                         class="f-s-21 color-black text-decoration-none {{ in_array(Route::currentRouteName(), [
@@ -41,7 +43,7 @@
                     >{{ __('custom.settings') }}</a>
                 </div>
             @endif
-            <div>
+            <div class="text-right p-r-15">
                 <form id="logout" action="{{ route('logout') }}" method="POST">
                     {{ csrf_field() }}
                     <a href="#" onclick="document.getElementById('logout').submit();" class="f-s-21 color-black text-decoration-none">{{ __('custom.exit') }}</a>

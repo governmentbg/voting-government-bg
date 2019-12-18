@@ -141,8 +141,8 @@
                                 cols="40"
                                 maxlength="8000"
                             >{{ old('description') }}</textarea>
-                            <span class="error">{{ $errors->first('description') }}</span>
                         </div>
+                        <span class="error p-l-15">{{ str_replace('когато кандидат е 1', __('custom.if_selected'), $errors->first('description')) }}</span>
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
                         <label for="references" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
@@ -155,8 +155,8 @@
                                 cols="40"
                                 maxlength="8000"
                             >{{ old('references') }}</textarea>
-                            <span class="error">{{ $errors->first('references') }}</span>
                         </div>
+                        <span class="error p-l-15">{{ str_replace('когато кандидат е 1', __('custom.if_selected'), $errors->first('references')) }}</span>
                     </div>
                 </div>
                     <hr class="hr-thin">

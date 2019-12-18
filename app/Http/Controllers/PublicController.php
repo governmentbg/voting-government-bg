@@ -296,40 +296,10 @@ class PublicController extends BaseFrontendController
                 if (isset($dataFromCache['listData']) && isset($dataFromCache['stats']) && isset($dataFromCache['votingCount'])) {
                     $dataFromCache['listData'] = collect($dataFromCache['listData']);
 
-                    // csv download
                     if ($request->has('download')) {
-                        $filename = 'voteResults.csv';
-                        $tempname = tempnam(sys_get_temp_dir(), 'csv_');
-                        $temp = fopen($tempname, 'w+');
-                        $path = stream_get_meta_data($temp)['uri'];
-
-                        $csvRow = [
-                            __('custom.number'),
-                            __('custom.organisation'),
-                            __('custom.eik'),
-                            __('custom.votes')
-                        ];
-                        for ($votingIndex = 1; $votingIndex < $dataFromCache['votingCount']; $votingIndex++) {
-                            $csvRow[] = __('custom.ballotage_votes') . ($dataFromCache['votingCount'] > 1 ? ' '. $votingIndex : '');
-                        }
-                        fputcsv($temp, $csvRow);
-
-                        $counter = 0;
-                        foreach ($dataFromCache['listData'] as $singleOrgData) {
-                            $csvRow = [
-                                ++$counter,
-                                $singleOrgData->name,
-                                $singleOrgData->eik,
-                            ];
-                            for ($votingIndex = 0; $votingIndex < $dataFromCache['votingCount']; $votingIndex++) {
-                                $csvRow[] = isset($singleOrgData->votes->{$votingIndex}) ? $singleOrgData->votes->{$votingIndex} : null;
-                            }
-                            fputcsv($temp, $csvRow);
-                        }
-
-                        $headers = ['Content-Type' => 'text/csv'];
-
-                        return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
+                        error_log(var_export('cache', true));
+                        $fileData = $this->generateCSV($dataFromCache);
+                        return response()->download($fileData['path'], $fileData['filename'], $fileData['headers'])->deleteFileAfterSend(true);
                     }
 
                     $dataFromCache['listData'] = $dataFromCache['listData']->forPage(1, 100);
@@ -364,6 +334,12 @@ class PublicController extends BaseFrontendController
                     $errors['message'] = __('custom.voter_turnout_fail');
                 }
                 $listData = $listData->ranking;
+            }
+
+            if ($request->has('download')) {
+                error_log(var_export('nocache', true));
+                $fileData = $this->generateCSV(['listData' => $listData, 'votingCount' => $votingCount]);
+                return response()->download($fileData['path'], $fileData['filename'], $fileData['headers'])->deleteFileAfterSend(true);
             }
 
             Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'votingCount' => $votingCount], now()->addMinutes(60));
@@ -475,5 +451,40 @@ class PublicController extends BaseFrontendController
             'counter'  => $request->offsetGet('consecNum'),
             'orgNotEditable' => false
         ]);
+    }
+
+    private function generateCSV($data) {
+        $filename = 'voteResults.csv';
+        $tempname = tempnam(sys_get_temp_dir(), 'csv_');
+        $temp = fopen($tempname, 'w+');
+        $path = stream_get_meta_data($temp)['uri'];
+
+        $csvRow = [
+            __('custom.number'),
+            __('custom.organisation'),
+            __('custom.eik'),
+            __('custom.votes')
+        ];
+        for ($votingIndex = 1; $votingIndex < $data['votingCount']; $votingIndex++) {
+            $csvRow[] = __('custom.ballotage_votes') . ($data['votingCount'] > 1 ? ' '. $votingIndex : '');
+        }
+        fputcsv($temp, $csvRow);
+
+        $counter = 0;
+        foreach ($data['listData'] as $singleOrgData) {
+            $csvRow = [
+                ++$counter,
+                $singleOrgData->name,
+                $singleOrgData->eik,
+            ];
+            for ($votingIndex = 0; $votingIndex < $data['votingCount']; $votingIndex++) {
+                $csvRow[] = isset($singleOrgData->votes->{$votingIndex}) ? $singleOrgData->votes->{$votingIndex} : null;
+            }
+            fputcsv($temp, $csvRow);
+        }
+
+        $headers = ['Content-Type' => 'text/csv'];
+
+        return $fileData = ['path' => $path, 'filename' => $filename, 'headers' => $headers];
     }
 }

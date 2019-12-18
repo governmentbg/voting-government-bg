@@ -72,6 +72,21 @@ class OrganisationController extends BaseAdminController
             $orderType = 'desc';
         }
 
+        if (!empty(session('filters'))) {
+            if (!empty($allFilters) && (session('filters') == $allFilters)) {
+                $allFilters = session('filters');
+            } else if (empty($allFilters)) {
+                $allFilters = session('filters');
+            }
+        }
+
+        session(['filters' => $allFilters]);
+
+        if ($request->has('forget')) {
+            session()->forget('filters');
+            return redirect(route('admin.org_list'));
+        }
+
         if (!empty($this->votingTour)) {
             list($organisations, $errors) = api_result(ApiOrganisation::class, 'search', [
                 'with_pagination' => $request->has('download') ? false : true,
@@ -154,6 +169,11 @@ class OrganisationController extends BaseAdminController
 
         $id = $request->offsetGet('id');
         list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+
+        if (empty($orgData)) {
+            return back();
+        }
+
         $votingTour = VotingTour::getLatestTour();
 
         if (($orgData->status != Organisation::STATUS_CANDIDATE) && ($votingTour->status != VotingTour::STATUS_RANKING)) {

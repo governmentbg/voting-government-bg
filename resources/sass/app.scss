@@ -691,3 +691,11 @@ html {
         @include table-mixin();
     }
 }
+
+@media (max-width: 521px) {
+    .sm-view {
+        width: 100%;
+        padding-right: 0px !important;
+        text-align: right;
+    }
+}

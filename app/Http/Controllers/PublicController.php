@@ -297,7 +297,6 @@ class PublicController extends BaseFrontendController
                     $dataFromCache['listData'] = collect($dataFromCache['listData']);
 
                     if ($request->has('download')) {
-                        error_log(var_export('cache', true));
                         $fileData = $this->generateCSV($dataFromCache);
                         return response()->download($fileData['path'], $fileData['filename'], $fileData['headers'])->deleteFileAfterSend(true);
                     }
@@ -337,7 +336,6 @@ class PublicController extends BaseFrontendController
             }
 
             if ($request->has('download')) {
-                error_log(var_export('nocache', true));
                 $fileData = $this->generateCSV(['listData' => $listData, 'votingCount' => $votingCount]);
                 return response()->download($fileData['path'], $fileData['filename'], $fileData['headers'])->deleteFileAfterSend(true);
             }

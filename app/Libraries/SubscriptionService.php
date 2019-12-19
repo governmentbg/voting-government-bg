@@ -35,9 +35,13 @@ class SubscriptionService
         return $this->SendSubscriptionResponse(self::STATUS_OK);
     }
     
-    public function SendSubscriptionResponse($status, $message = '')
+    public function SendSubscriptionResponse($status, $message = null)
     {
-        return ['WSResponse' => ['Status' => $status, 'Message' => $message]];
+        if(isset($message) && !empty($message)){
+            return ['WSResponse' => ['Status' => $status, 'Message' => $message]];
+        }
+        
+        return ['WSResponse' => ['Status' => $status]];
     }
 }
 

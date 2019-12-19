@@ -315,13 +315,15 @@ class OrganisationController extends ApiController
 
                         DB::commit();
 
-                        $logData = [
-                            'module' => ActionsHistory::ORGANISATIONS,
-                            'action' => ActionsHistory::TYPE_MOD,
-                            'object' => $organisation->id
-                        ];
+                        if (\Auth::user()) {
+                            $logData = [
+                                'module' => ActionsHistory::ORGANISATIONS,
+                                'action' => ActionsHistory::TYPE_MOD,
+                                'object' => $organisation->id
+                            ];
 
-                        ActionsHistory::add($logData);
+                            ActionsHistory::add($logData);
+                        }
 
                         return $this->successResponse();
                     } else {
@@ -539,13 +541,15 @@ class OrganisationController extends ApiController
                             ->where('voting_tour_id', $votingTour->id)
                             ->orderBy('id')->get();
 
-                $logData = [
-                    'module' => ActionsHistory::ORGANISATIONS_FILES,
-                    'action' => ActionsHistory::TYPE_SEE,
-                    'object' => $orgId
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::ORGANISATIONS_FILES,
+                        'action' => ActionsHistory::TYPE_SEE,
+                        'object' => $orgId
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse($files);
             } catch (\Exception $e) {

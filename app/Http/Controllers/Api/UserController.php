@@ -152,6 +152,7 @@ class UserController extends ApiController
                     'module' => ActionsHistory::USERS,
                     'action' => ActionsHistory::TYPE_CHANGED_PASSWORD,
                     'object' => $user->id,
+                    'actor'  => $user->id
                 ];
 
                 ActionsHistory::add($logData);
@@ -308,13 +309,15 @@ class UserController extends ApiController
 
                 DB::commit();
 
-                $logData = [
-                    'module' => ActionsHistory::USERS,
-                    'action' => ActionsHistory::TYPE_MOD,
-                    'object' => $user->id,
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::USERS,
+                        'action' => ActionsHistory::TYPE_MOD,
+                        'object' => $user->id,
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse();
             } catch (QueryException $ex) {
@@ -345,12 +348,14 @@ class UserController extends ApiController
         try {
             $users = User::whereNull('org_id')->sort($field, $order)->paginate();
 
-            $logData = [
-                'module' => ActionsHistory::USERS,
-                'action' => ActionsHistory::TYPE_SEE
-            ];
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::USERS,
+                    'action' => ActionsHistory::TYPE_SEE
+                ];
 
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse($users);
         } catch (QueryException $e) {
@@ -380,14 +385,15 @@ class UserController extends ApiController
 
         $user = User::where('id', $id)->first();
         if ($user) {
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::USERS,
+                    'action' => ActionsHistory::TYPE_SEE,
+                    'object' => $user->id
+                ];
 
-            $logData = [
-                'module' => ActionsHistory::USERS,
-                'action' => ActionsHistory::TYPE_SEE,
-                'object' => $user->id
-            ];
-
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse($user);
         }

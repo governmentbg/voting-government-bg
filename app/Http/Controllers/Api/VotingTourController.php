@@ -58,13 +58,15 @@ class VotingTourController extends ApiController
             }
 
             if (isset($saved)) {
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_ADD,
-                    'object' => $saved->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_ADD,
+                        'object' => $saved->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse(['id' => $saved->id], true);
             }
@@ -128,13 +130,15 @@ class VotingTourController extends ApiController
                     Log::error($e->getMessage());
                 }
 
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_MOD,
-                    'object' => $editVotingTour->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_MOD,
+                        'object' => $editVotingTour->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse();
             }
@@ -176,13 +180,15 @@ class VotingTourController extends ApiController
                     Log::error($e->getMessage());
                 }
 
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_MOD,
-                    'object' => $editVotingTour->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_MOD,
+                        'object' => $editVotingTour->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse();
             }
@@ -246,13 +252,14 @@ class VotingTourController extends ApiController
             $tourList = VotingTour::orderBy($orderField, $orderType)->get();
 
             if ($tourList->first()) {
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_SEE
+                    ];
 
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_SEE
-                ];
-
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse($tourList);
             } else {
@@ -282,13 +289,15 @@ class VotingTourController extends ApiController
             $votingTourData = VotingTour::where('id', $post['tour_id'])->first();
 
             if ($votingTourData) {
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_SEE,
-                    'object' => $votingTourData->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_SEE,
+                        'object' => $votingTourData->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse($votingTourData);
             } else {

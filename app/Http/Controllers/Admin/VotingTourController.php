@@ -259,12 +259,14 @@ class VotingTourController extends BaseAdminController
 
                         $headers = ['Content-Type' => 'text/csv'];
 
-                        $logData = [
-                            'module' => ActionsHistory::VOTES,
-                            'action' => ActionsHistory::TYPE_DOWNLOADED
-                        ];
+                        if (\Auth::user()) {
+                            $logData = [
+                                'module' => ActionsHistory::VOTES,
+                                'action' => ActionsHistory::TYPE_DOWNLOADED
+                            ];
 
-                        ActionsHistory::add($logData);
+                            ActionsHistory::add($logData);
+                        }
 
                         return response()->download($path, $filename, $headers)->deleteFileAfterSend(true);
                     }

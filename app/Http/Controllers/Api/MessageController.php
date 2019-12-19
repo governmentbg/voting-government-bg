@@ -48,13 +48,15 @@ class MessageController extends ApiController
                             $query->where('sender_org_id', $orgId)->orWhere('recipient_org_id', $orgId);
                         })->where('voting_tour_id', $votingTour->id)->sort($field, $order)->paginate();
 
-            $logData = [
-                'module' => ActionsHistory::ORGANISATION_MESSAGES,
-                'action' => ActionsHistory::TYPE_SEE,
-                'object' => $orgId
-            ];
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::ORGANISATION_MESSAGES,
+                    'action' => ActionsHistory::TYPE_SEE,
+                    'object' => $orgId
+                ];
 
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -98,13 +100,15 @@ class MessageController extends ApiController
                             $query->select('id', 'name', 'mime_type', 'message_id', 'org_id', 'created_at');
                         }])->sort($field, $order)->get();
 
-            $logData = [
-                'module' => ActionsHistory::MESSAGES,
-                'action' => ActionsHistory::TYPE_SEE,
-                'object' => $parentId
-            ];
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::MESSAGES,
+                    'action' => ActionsHistory::TYPE_SEE,
+                    'object' => $parentId
+                ];
 
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -150,12 +154,14 @@ class MessageController extends ApiController
 
             $messages = Message::where('voting_tour_id', $votingTour->id)->search($filters, $field, $order)->paginate();
 
-            $logData = [
-                'module' => ActionsHistory::MESSAGES,
-                'action' => ActionsHistory::TYPE_SEE
-            ];
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::MESSAGES,
+                    'action' => ActionsHistory::TYPE_SEE
+                ];
 
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse($messages);
         } catch (\Exception $e) {
@@ -255,13 +261,15 @@ class MessageController extends ApiController
         try {
             $message = Message::create($params);
 
-            $logData = [
-                'module' => ActionsHistory::MESSAGES,
-                'action' => ActionsHistory::TYPE_ADD,
-                'object' => $message->id
-            ];
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::MESSAGES,
+                    'action' => ActionsHistory::TYPE_ADD,
+                    'object' => $message->id
+                ];
 
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse(['id' => $message->id], true);
         } catch (\Exception $e) {
@@ -334,13 +342,15 @@ class MessageController extends ApiController
                 ]);
                 $message->files()->save($fileModel);
 
-                $logData = [
-                    'module' => ActionsHistory::FILES_MESSAGE,
-                    'action' => ActionsHistory::TYPE_ADD,
-                    'object' => $message->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::FILES_MESSAGE,
+                        'action' => ActionsHistory::TYPE_ADD,
+                        'object' => $message->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
             }
 
             DB::commit();
@@ -424,12 +434,14 @@ class MessageController extends ApiController
                 $messages = Message::insert($queryString);
             }
 
-            $logData = [
-                'module' => ActionsHistory::MESSAGES,
-                'action' => ActionsHistory::TYPE_ADD
-            ];
+            if (\Auth::user()) {
+                $logData = [
+                    'module' => ActionsHistory::MESSAGES,
+                    'action' => ActionsHistory::TYPE_ADD
+                ];
 
-            ActionsHistory::add($logData);
+                ActionsHistory::add($logData);
+            }
 
             return $this->successResponse();
         } catch (\Exception $e) {

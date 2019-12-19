@@ -83,7 +83,7 @@ $(document).ready(function() {
 
     $('#vote_organisations').on('change', function(event) {
 
-      if ($(this).val().length > (14 - $('#votefor option').length)) {
+      if ($(this).val().length > ($('#js-voteform').data('max-votes') - $('#votefor option').length)) {
 
         $(this).val(lastSelect);
       } else {

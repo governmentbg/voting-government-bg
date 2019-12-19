@@ -98,12 +98,14 @@ class VoteController extends ApiController
 
                             $vote->save();
 
-                            $logData = [
-                                'module' => ActionsHistory::VOTES,
-                                'action' => ActionsHistory::TYPE_VOTED
-                            ];
+                            if (\Auth::user()) {
+                                $logData = [
+                                    'module' => ActionsHistory::VOTES,
+                                    'action' => ActionsHistory::TYPE_VOTED
+                                ];
 
-                            ActionsHistory::add($logData);
+                                ActionsHistory::add($logData);
+                            }
 
                             return $this->successResponse(['id' => $vote->id], true);
                         }
@@ -365,12 +367,14 @@ class VoteController extends ApiController
                         'prev_hash'      => $prevHash
                     ]);
 
-                    $logData = [
-                        'module' => ActionsHistory::VOTES,
-                        'action' => ActionsHistory::TYPE_RANKED
-                    ];
+                    if (\Auth::user()) {
+                        $logData = [
+                            'module' => ActionsHistory::VOTES,
+                            'action' => ActionsHistory::TYPE_RANKED
+                        ];
 
-                    ActionsHistory::add($logData);
+                        ActionsHistory::add($logData);
+                    }
 
                     return $this->successResponse();
                 }
@@ -590,13 +594,14 @@ class VoteController extends ApiController
                     'prev_hash'      => $prevHash
                 ]);
 
-                $logData = [
-                    'module' => ActionsHistory::VOTES,
-                    'action' => ActionsHistory::TYPE_CANCELLED_TOUR
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTES,
+                        'action' => ActionsHistory::TYPE_CANCELLED_TOUR
+                    ];
 
-                ActionsHistory::add($logData);
-
+                    ActionsHistory::add($logData);
+                }
                 return $this->successResponse();
             }
 

@@ -7,6 +7,8 @@ namespace App\Libraries;
  */
 class XMLParserBulstat implements IXMLParser
 {
+    const LEGAL_FORMS = ['Сдружение', /*'ASSOC', 'FOUND', 'CC', 'BFLE'*/]; //todo check forms
+    
     private $data;
 
     public function __construct()
@@ -33,7 +35,7 @@ class XMLParserBulstat implements IXMLParser
      */
     public function getParsedData()
     {
-        if(!isset($this->data->Body->StateOfPlay[0])){
+        if(!isset($this->data->Body->StateOfPlay)){
             return [];
         }
 
@@ -50,51 +52,49 @@ class XMLParserBulstat implements IXMLParser
         return $result;
     }
 
-    private function getRelevantFields($org)
+    public static function getRelevantFields($org)
     {
         $orgArray = [];
 
-        if(isset($org->attributes()['UIC'])){
-            $orgArray['eik'] = (string)$org->attributes()['UIC'];
+        if(isset($org->Subject->UIC)){
+            $orgArray['eik'] = (string)$org->Subject->UIC;
         }
         else{
             return false;
         }
 
-        if(isset($org->attributes()['CompanyName'])){
-            $orgArray['name'] = (string)$org->attributes()['CompanyName'];
+        if(isset($org->Subject->LegalEntitySubject) && isset($org->Subject->LegalEntitySubject->LatinFullName)){
+             $orgArray['name'] = (string)$org->Subject->LegalEntitySubject->LatinFullName;
         }
         else{
             return false;
         }
 
-        if(isset($org->SubDeed->Seat->Address)){
-            $address = $org->SubDeed->Seat->Address;
-            $orgArray['city'] = (string)(isset($address->Settlement) ? $address->Settlement : '');
-            $orgArray['address'] = (string)(isset($address->Street) ? $address->Street : '') . ' ' .
-                    ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
-                    ((isset($address->Entrance) && !empty((string)$address->Entrance) ? ' вх. ' . (string)$address->Entrance : '')) .
-                    ((isset($address->Floor) && !empty((string)$address->Floor) ? ' ет. ' . (string)$address->Floor : '')) .
-                    ((isset($address->Apartment) && !empty((string)$address->Apartment) ? ' ап. ' . (string)$address->Apartment : ''));
+        $orgArray['address'] = '';
+        foreach($org->Subject->Addresses as $key => $address) {
+                $orgArray['city'] = (string)(isset($address->Location) ? $address->Location : '');
+                $orgArray['address'] .= (string)(isset($address->AddressType) ? $address->AddressType : '') . ': ' .(string)(isset($address->Street) ? $address->Street : '') . ' ' .
+                        ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
+                        ((isset($address->Entrance) && !empty((string)$address->Entrance) ? ' вх. ' . (string)$address->Entrance : '')) .
+                        ((isset($address->Floor) && !empty((string)$address->Floor) ? ' ет. ' . (string)$address->Floor : '')) .
+                        ((isset($address->Apartment) && !empty((string)$address->Apartment) ? ' ап. ' . (string)$address->Apartment : ''));
         }
 
-        if(isset($org->SubDeed->Seat->Contacts)){
-            $contact = $org->SubDeed->Seat->Contacts;
-            $orgArray['phone'] = (string)(isset($contact->Phone) ? $contact->Phone : '');
-            $orgArray['email'] = (string)(isset($contact->EMail) ? $contact->EMail : '');
-        }
-
-        $publicBenefit = 0;
-        foreach($org->SubDeed as $key => $deed) {
-            if(isset($deed->attributes()['SubUICType']) && (string)$deed->attributes()['SubUICType'] == 'MainCircumstances'){
-                $publicBenefit += (string)$deed[0]->DesignatedToPerformPublicBenefit;
-                break;
+        if(isset($org->Subject->Communications)){
+            foreach($org->Subject->Communications as $key => $communication) {
+                if($communication->Type == 'телефон'){ //todo Code
+                    $orgArray['phone'] = (string)(isset($contact->Value) ? $contact->Value : '');
+                }
+                if($communication->Type == 'имейл'){ //todo Code
+                    $orgArray['email'] = (string)(isset($contact->Value) ? $contact->Value : '');
+                }
             }
         }
-        $orgArray['public_benefits'] = $publicBenefit;
-        $orgArray['status'] = (string)$org->attributes()['DeedStatus'];
 
-        $orgArray['goals'] = (string)(isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');
+        $orgArray['public_benefits'] = 0; //TODO check
+        $orgArray['status'] = 'Y';
+
+        $orgArray['goals'] = (string)(isset($org->Subject->ScopeOfActivity->Description) ? $org->Subject->ScopeOfActivity->Description : '');
         $orgArray['tools'] = (string)(isset($org->SubDeed->MeansOfAchievingTheObjectives) ? $org->SubDeed->MeansOfAchievingTheObjectives : '');
 
         return $orgArray;
@@ -102,7 +102,8 @@ class XMLParserBulstat implements IXMLParser
 
     private function isOrgRelevant($org)
     {
-        return true; //TODO
+        //sub element Code
+        return isset($org->Subject->LegalEntitySubject) && in_array($org->Subject->LegalEntitySubject->LegalForm, self::LEGAL_FORMS);
     }
 }
 

@@ -24,7 +24,7 @@ class PopulateList extends Command
      */
     protected $description = 'Command description';
     
-    const COlUMN_MAP = [
+    const COLUMN_MAP = [
         0 => 'eik',
         1 => 'reg_number',
         2 => 'reg_date',
@@ -92,7 +92,7 @@ class PopulateList extends Command
 
             $bar = $this->output->createProgressBar(count($data));
             
-            $columns = self::COlUMN_MAP;
+            $columns = self::COLUMN_MAP;
             $bar->start();
 
             DB::beginTransaction();

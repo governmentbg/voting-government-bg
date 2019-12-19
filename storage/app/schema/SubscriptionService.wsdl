@@ -25,10 +25,10 @@
 	</message>
 	<portType name="SubscriptionPortType">
 		<operation name="SendSubscription">
-			<input wsam:Action="ams.localhost/SubscriptionService/SendSubscription"
+			<input wsam:Action="http://www.bulstat.bg/SubscriptionService/SendSubscription"
 				message="tns:SendSubscription"></input>
 			<output
-				wsam:Action="ams.localhost/SubscriptionService/SendSubscriptionResponse"
+				wsam:Action="http://www.bulstat.bg/SubscriptionService/SendSubscriptionResponse"
 				message="tns:SendSubscriptionResponse"></output>
 			<fault message="tns:SubscriptionException" name="SubscriptionException"
 				wsam:Action="http://www.bulstat.bg/SubscriptionException"></fault>
@@ -39,7 +39,7 @@
 			style="document"></soap:binding>
 		<operation name="SendSubscription">
 			<soap:operation
-				soapAction="http://ams.localhost/SubscriptionService/SendSubscription"></soap:operation>
+				soapAction="http://www.bulstat.bg/SubscriptionService/SendSubscription"></soap:operation>
 			<input>
 				<soap:body use="literal"></soap:body>
 			</input>
@@ -54,7 +54,7 @@
 	<service name="SubscriptionService">
 		<port name="SubscriptionPort" binding="tns:SubscriptionPortBinding">
 			<soap:address
-				location="http://ams.localhost/SubscriptionService/SendSubscription"></soap:address>
+				location="http://my.me/SubscriptionService/SendSubscription"></soap:address>
 		</port>
 	</service>
 </definitions>

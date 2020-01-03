@@ -194,7 +194,7 @@ class VotingTourController extends ApiController
             }
         }
 
-        return $this->errorResponse(__('custom.error_changing_status'), $validator->errors()->messages());
+        return $this->errorResponse(__('custom.error_renaming_tour'), $validator->errors()->messages());
     }
 
     /**

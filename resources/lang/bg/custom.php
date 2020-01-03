@@ -5,6 +5,7 @@ return [
     'unknown_error'                    => 'Непознат метод',
     'error_adding_tour'                => 'Грешка при добавяне на тур',
     'error_changing_status'            => 'Грешка при промяна на статус',
+    'error_renaming_tour'              => 'Грешка при промяна на наименование',
     'active_tour_exists'               => 'Към момента съществува активен тур',
     'voting_tour_not_found'            => 'Не е открит тур',
     'invalid_sort_field'               => 'Невалидна колона за сортиране',

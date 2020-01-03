@@ -1,12 +1,12 @@
-<div class="row">
+<div class="row m-l-none m-r-none">
     <div class="p-l-25">
-        <div class="p-l-40">
+        <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-none' : 'p-l-40' }}">
             <h3 class="p-b-15"><b>{{ isset($listTitle) ? $listTitle : '' }}</b></h3>
         </div>
         @if (!empty($stats))
             @for ($i = 0; $i < $votingCount; $i++)
                 @if (isset($stats->$i) && !empty($stats->$i))
-                    <div class="p-l-40">
+                    <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-none' : 'p-l-40' }}">
                         <h3 class="p-b-15">
                             {{ ($i == 0 ? __('custom.voter_turnout') : ($votingCount > 2
                                 ? __('custom.voter_turnout_ballotage_n', ['index' => $i])
@@ -19,9 +19,9 @@
         @endif
     </div>
 </div>
-<div class="row">
-    <div class="{{ isset($fullWidth) && $fullWidth ? 'col-lg-12' : 'col-lg-6' }} p-l-25">
-        <div class="p-l-40">
+<div class="row m-l-none m-r-none">
+    <div class="{{ isset($fullWidth) && $fullWidth ? 'col-lg-12' : 'col-lg-7' }}">
+        <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-none' : 'p-l-40' }}">
             @if (!empty($errors) && $errors->has('message'))
                 @include('components.errors')
             @elseif ($listData->isEmpty())
@@ -30,9 +30,10 @@
             @if ($listData->isNotEmpty())
                 @php
                     $tour['id'] = request()->segment(1) == 'admin' ? $tourId : '';
+                    $mainColumnsCount = 4;
                 @endphp
                 <form method="get" action="{{ route($route, $tour['id']) }}" id="orgList">
-                    <div class="col-lg-12 text-right p-r-none p-b-15 {{ request()->segment(1) == 'admin' ? 'w-75' : 'w-100' }}">
+                    <div class="col-lg-12 text-right p-r-none p-b-15">
                         <button
                             class="btn btn-primary add"
                             type="submit"
@@ -40,7 +41,7 @@
                         >{{ uctrans('custom.download') }}</button>
                     </div>
                 </form>
-                <div class="table-wrapper nano public-table {{ request()->segment(1) == 'admin' ? 'w-75' : 'w-100' }} rank-scroll" data-vote-count="{{$votingCount}}">
+                <div class="table-wrapper nano public-table" data-vote-count="{{ $votingCount }}">
                     <div class="tableFixHead nano-content js-org-table">
                         <table
                             class="table table-striped table-responsive ams-table ranking js-orgs"
@@ -49,7 +50,13 @@
                             <thead>
                                 <tr>
                                     <th class="w-5">{{ __('custom.number') }}</th>
-                                    <th class="{{ ($votingCount > 0) ? 'w-55' : 'w-75' }}">{{ __('custom.organisation') }}</th>
+                                    @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
+                                        <th class="w-5"></th>
+                                        @php
+                                            $mainColumnsCount++;
+                                        @endphp
+                                    @endif
+                                    <th>{{ __('custom.organisation') }}</th>
                                     <th class="w-10">{{ __('custom.eik') }}</th>
                                     <th class="w-5">{{ __('custom.votes') }}</th>
                                     @if ($votingCount > 1)
@@ -62,7 +69,7 @@
                                 </tr>
                                 @if ($votingCount > 2)
                                     <tr class="align-top">
-                                        <th colspan="4"></th>
+                                        <th colspan="{{ $mainColumnsCount }}"></th>
                                         @for ($i = 1; $i < $votingCount; $i++)
                                             <th class="text-right">{{ $i }}</th>
                                         @endfor

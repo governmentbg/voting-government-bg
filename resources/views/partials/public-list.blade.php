@@ -5,8 +5,8 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-7 p-l-25">
+<div class="row m-l-none m-r-none">
+    <div class="col-lg-7">
         <div class="p-l-40">
             <form method="get" action="{{ route($route) }}" id="orgList">
                 <div class="col-lg-12">
@@ -40,16 +40,20 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-                <div class="table-wrapper nano public-table rest">
+                <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
-                        <table class="table table-striped table-responsive ams-table js-orgs" data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}">
+                        <table
+                            class="table table-striped table-responsive ams-table public js-orgs"
+                            data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}"
+                        >
                             <thead>
                                 <tr>
-                                    <th class="w-5 no-top">{{ __('custom.number') }}</th>
-                                    <th class="w-55 text-left no-top">{{ __('custom.organisation') }}</th>
-                                    <th class="w-5 no-top">{{ __('custom.candidate') }}</th>
-                                    <th class="w-10 no-top">{{ __('custom.eik') }}</th>
-                                    <th class="w-15 no-top">{{ __('custom.registered_at') }}</th>
+                                    <th class="w-5">{{ __('custom.number') }}</th>
+                                    <th class="w-5"></th>
+                                    <th>{{ __('custom.organisation') }}</th>
+                                    <th class="w-5">{{ __('custom.candidate') }}</th>
+                                    <th class="w-10">{{ __('custom.eik') }}</th>
+                                    <th class="w-15">{{ __('custom.registered_at') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="text-left">

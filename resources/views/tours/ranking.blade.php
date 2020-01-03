@@ -7,7 +7,7 @@
     <div class="row">
         @include('components.errors')
         @include('components.status')
-        <div class="col-md-10 offset-md-1">
+        <div class="col-lg-12">
             @include('partials.public-ranking', ['orgNotEditable' => $orgNotEditable])
         </div>
     </div>

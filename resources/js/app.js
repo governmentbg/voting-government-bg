@@ -60,7 +60,7 @@ function checkVoteSize() {
  * Add row number to organisations list.
  */
 function addRowNumber(selectedOrgs) {
-    selectedOrgs.each(function(i, org){
+    selectedOrgs.each(function(i, org) {
         let orgInList = $('#votefor option[value="' + $(org).attr('value') +'"]');
         let index = orgInList.index() + 1;
         $('#votefor option[value="' + $(org).attr('value') +'"]').html('<span>'+ index +' - </span>' + $(org).text());
@@ -72,7 +72,7 @@ function addRowNumber(selectedOrgs) {
  * @returns {void}
  */
 function reorderRowNumbers() {
-    $('#votefor option').each(function(i, org){
+    $('#votefor option').each(function(i, org) {
         $(org).find('span').remove();
         $(org).html('<span>'+ ($(org).index() + 1) +' - </span>' + $(org).text());
     });
@@ -162,14 +162,23 @@ $('.js-showTerms').on('click', function() {
     $('#info').modal('show');
 });
 
-var $th = $('.tableFixHead').find('thead');
+var $th1 = $('.tableFixHead').find('thead tr:first-child th');
+var $th2 = $('.tableFixHead').find('thead tr:nth-child(2) th');
 
 $(document).ready(function () {
-    $th.css('transform', 'translateY(1px)');
+    $th1.css('transform', 'translateY(0px)');
+    if ($th2.length > 0) {
+        $th2.css('transform', 'translateY(-1px)');
+    }
 });
 
 $('.tableFixHead').on('scroll', function() {
-    $th.css('transform', 'translateY('+ this.scrollTop + 'px)');
+    $th1.css('transform', 'translateY('+ this.scrollTop + 'px)');
+    $th1.css('background-color', '#3e7ea9');
+    if ($th2.length > 0) {
+        $th2.css('transform', 'translateY('+ (this.scrollTop - 1) + 'px)');
+        $th2.css('background-color', '#3e7ea9');
+    }
 });
 
 $(document).ready(function() {
@@ -221,7 +230,7 @@ $('#votebtn').click(function(ev) {
     return false;
 });
 
-//voting tour update - send vote invites confirmation
+// voting tour update - send vote invites confirmation
 $('form.change-tour').submit(function(e) {
     e.preventDefault();
     let oldValue = $('form.change-tour [name="status"]').data('old-status');
@@ -371,9 +380,8 @@ $('.ams-dropdown').on('blur', function() {
 var initialPage = 2;
 
 $('.js-org-table').on('scroll', function() {
-
     if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-        var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
+        var lastEntryNumber = parseInt($('.js-orgs tr:last-child > td:first-child').text());
 
         $.ajax({
             type: 'GET',
@@ -396,17 +404,17 @@ $('.js-org-table').on('scroll', function() {
 // General initialization of nanoscroll for project
 $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 
-if ($('.ranking').length > 0) {
-    if ($('.rank-scroll').data('vote-count') > 2) {
-        $('.rank-scroll .nano-pane').css('margin-top', '114px');
+if ($('.public-table').length > 0) {
+    var theadHeight = $('.tableFixHead').find('thead').innerHeight();
+    if ($th2.length > 0) {
+        $('.public-table .nano-pane').css('margin-top', (theadHeight - 1) +'px');
+        $('.public-table .nano-pane .nano-slider').css('margin-top', '-1px');
     } else {
-        $('.rank-scroll .nano-pane').css('margin-top', '56px');
+        $('.public-table .nano-pane').css('margin-top', theadHeight +'px');
+        $('.public-table .nano-pane .nano-slider').css('margin-top', '-2px');
     }
 }
 
-if ($('.rest').length > 0) {
-    $('.rest .nano-pane').css('margin-top', '56px');
-}
 // Fixes a bug where nanoscroller is not initialized on front page
 $(document).ready(function() {
     $('.nano').nanoScroller({ sliderMaxHeight: 100 });

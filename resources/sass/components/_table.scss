@@ -1,7 +1,7 @@
 .table-wrapper {
     border-top-left-radius: 15px !important;
     border-top-right-radius: 15px !important;
-    border-bottom: 7px solid #3e7ea9;
+    border-bottom: 7px solid $darkBlue;
     border-radius: 7px;
     overflow: hidden;
     margin-bottom: 1rem;
@@ -10,7 +10,7 @@
 .ams-table {
     //border-top-left-radius: 15px !important;
     //border-top-right-radius: 15px !important;
-    //border-bottom: 7px solid #3e7ea9;
+    //border-bottom: 7px solid $darkBlue;
     //border-radius: 7px;
     //table-layout:fixed;
     //overflow: hidden;
@@ -24,51 +24,55 @@
 
     &.table-striped {
         tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-            background-color: #cddee9;
+            background-color: $lighterBlue;
         }
 
-        tbody > tr:nth-child(2n+1):hover > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-            background-color: #aac3d3;
+        tbody > tr:nth-child(2n+1):hover > td, .table-striped > tbody > tr:nth-child(2n+1):hover > th {
+            background-color: $lightBlue;
         }
 
         tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
             background-color: white;
         }
 
-        tbody > tr:nth-child(2n):hover > td, .table-striped > tbody > tr:nth-child(2n) > th {
-            background-color: rgb(246, 246, 246);
+        tbody > tr:nth-child(2n):hover > td, .table-striped > tbody > tr:nth-child(2n):hover > th {
+            background-color: $lighterGrey;
         }
 
         &.ranking > tbody > tr:nth-child(2n+1) > td {
-            background-color: #cde9e1;
+            background-color: $lighterGreen;
         }
 
         &.ranking > tbody > tr:nth-child(2n+1):hover > td {
-            background-color: #abd4c8;
+            background-color: $lightGreen;
         }
 
         &.ranking > tbody > tr.for-ballotage:nth-child(2n+1) > td {
-            background-color: #e9e1cd;
+            background-color: $lighterOrange;
         }
 
         &.ranking > tbody > tr.for-ballotage:nth-child(2n+1):hover > td {
-            background-color: #d4c9ab;
+            background-color: $lightOrange;
         }
 
         &.ranking > tbody > tr.dropped-out:nth-child(2n+1) > td {
-            background-color: #cddee9;
+            background-color: $lighterBlue;
         }
 
         &.ranking > tbody > tr.dropped-out:nth-child(2n+1):hover > td {
-            background-color: #aac3d3;
+            background-color: $lightBlue;
         }
 
         &.ranking > tbody > tr.for-ballotage > td, &.ranking > tbody > tr.dropped-out > td {
-            border-top: 7px solid #3e7ea9;
+            border-top: 7px solid $darkBlue;
         }
 
         &.ranking > tbody > tr.for-ballotage ~ tr.for-ballotage > td, &.ranking > tbody > tr.dropped-out ~ tr.dropped-out > td {
             border-top: none;
+        }
+
+        &.public > thead > tr > th, &.ranking > thead > tr > th {
+            border: none;
         }
     }
 }

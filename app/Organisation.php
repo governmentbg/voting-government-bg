@@ -128,6 +128,16 @@ class Organisation extends Model
         ];
     }
 
+    public static function getRejectionStatuses()
+    {
+        return [
+            self::STATUS_NEW,
+            self::STATUS_PARTICIPANT,
+            self::STATUS_PENDING,
+            self::STATUS_REJECTED
+        ];
+    }
+
     public function scopeCountRegistered($query, $tourId)
     {
         $query->where('voting_tour_id', $tourId)->whereIn('status', self::getApprovedStatuses());

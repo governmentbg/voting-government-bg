@@ -168,25 +168,35 @@ class OrganisationController extends BaseAdminController
         $id = $request->offsetGet('id');
         list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
 
-        if (empty($orgData)) {
+        if (empty($orgData) || empty($this->votingTour)) {
             return back();
         }
 
-        $votingTour = VotingTour::getLatestTour();
-
-        if (($orgData->status != Organisation::STATUS_CANDIDATE) && ($votingTour->status != VotingTour::STATUS_RANKING)) {
-            $disabledStatuses = [Organisation::STATUS_DECLASSED, Organisation::STATUS_BALLOTAGE];
-        }
-
-        if (($orgData->status == Organisation::STATUS_CANDIDATE) && ($votingTour->status == VotingTour::STATUS_RANKING)) {
+        if ($orgData->status == Organisation::STATUS_DECLASSED) {
             $disabledStatuses = [
-                Organisation::STATUS_REJECTED,
                 Organisation::STATUS_NEW,
                 Organisation::STATUS_PARTICIPANT,
+                Organisation::STATUS_CANDIDATE,
                 Organisation::STATUS_PENDING,
-                Organisation::STATUS_PENDING,
-                Organisation::STATUS_REJECTED
+                Organisation::STATUS_BALLOTAGE,
+                Organisation::STATUS_REJECTED,
             ];
+        } else {
+            if ($this->votingTour->status != VotingTour::STATUS_RANKING ||
+                !in_array($orgData->status, Organisation::getApprovedCandidateStatuses())
+            ) {
+                $disabledStatuses[] = Organisation::STATUS_DECLASSED;
+
+                if ($orgData->status != Organisation::STATUS_BALLOTAGE) {
+                    $disabledStatuses[] = Organisation::STATUS_BALLOTAGE;
+                }
+            }
+
+            if ($this->votingTour->status == VotingTour::STATUS_RANKING &&
+                in_array($orgData->status, Organisation::getApprovedCandidateStatuses())
+            ) {
+                $disabledStatuses = Organisation::getRejectionStatuses();
+            }
         }
 
         if (!empty($orgErrors)) {
@@ -235,6 +245,15 @@ class OrganisationController extends BaseAdminController
         $rankErrors = [];
         $editErrors = [];
 
+        $callRanking = false;
+        if ($status == Organisation::STATUS_DECLASSED) {
+            list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+
+            if (!empty($orgData) && $orgData->status != $status) {
+                $callRanking = true;
+            }
+        }
+
         \DB::beginTransaction();
 
         list($edit, $editErrors) = api_result(ApiOrganisation::class, 'edit', [
@@ -255,7 +274,7 @@ class OrganisationController extends BaseAdminController
         ]);
 
         $ranking = [];
-        if ($status == Organisation::STATUS_DECLASSED) {
+        if ($callRanking) {
             list($ranking, $rankErrors) = api_result(ApiVote::class, 'ranking', ['status' => Vote::TOUR_ORGANISATION_DECLASSED_RANKING, 'declass_org_id' => $id]);
         }
 

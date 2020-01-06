@@ -11,10 +11,12 @@
     </div>
     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.org_update', ['id' => $orgData->id]) }}">
         <div class="row m-l-5">
+            <div class="col-lg-11 p-l-25 p-r-25">
+                @include('components.errors')
+            </div>
             <div class="col-lg-6">
                 <div class="col-md-12">
                     {{ csrf_field() }}
-                    @include('components.errors')
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
                         <div class="row col-lg-8">

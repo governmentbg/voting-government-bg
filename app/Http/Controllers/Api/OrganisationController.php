@@ -246,28 +246,29 @@ class OrganisationController extends ApiController
                             }
                         }
 
-                        if (($organisation->status != Organisation::STATUS_CANDIDATE) && ($data['status'] == Organisation::STATUS_DECLASSED) && ($votingTour->status != VotingTour::STATUS_RANKING)) {
-                            return $this->errorResponse(__('custom.declass_not_allowed'));
-                        }
+                        if (isset($data['status']) && $data['status'] != $organisation->status) {
+                            if ($organisation->status == Organisation::STATUS_DECLASSED) {
+                                return $this->errorResponse(__('custom.org_status_update_not_allowed'));
+                            }
 
-                        if (($organisation->status != Organisation::STATUS_CANDIDATE) && ($data['status'] == Organisation::STATUS_BALLOTAGE) && ($votingTour->status != VotingTour::STATUS_RANKING)) {
-                            return $this->errorResponse(__('custom.ballotage_not_allowed'));
-                        }
+                            if ($votingTour->status != VotingTour::STATUS_RANKING ||
+                                !in_array($organisation->status, Organisation::getApprovedCandidateStatuses())
+                            ) {
+                                if ($data['status'] == Organisation::STATUS_DECLASSED) {
+                                    return $this->errorResponse(__('custom.declass_not_allowed'));
+                                }
 
-                        if (($organisation->status == Organisation::STATUS_CANDIDATE)
-                            && (
-                                    in_array($data['status'],
-                                    [
-                                        Organisation::STATUS_REJECTED,
-                                        Organisation::STATUS_NEW,
-                                        Organisation::STATUS_PARTICIPANT,
-                                        Organisation::STATUS_PENDING,
-                                        Organisation::STATUS_PENDING
-                                    ])
-                                )
-                            && ($votingTour->status == VotingTour::STATUS_RANKING))
-                        {
-                            return $this->errorResponse(__('custom.rejection_not_allowed'));
+                                if ($data['status'] == Organisation::STATUS_BALLOTAGE) {
+                                    return $this->errorResponse(__('custom.ballotage_not_allowed'));
+                                }
+                            }
+
+                            if ($votingTour->status == VotingTour::STATUS_RANKING &&
+                                in_array($organisation->status, Organisation::getApprovedCandidateStatuses()) &&
+                                in_array($data['status'], Organisation::getRejectionStatuses())
+                            ) {
+                                return $this->errorResponse(__('custom.rejection_not_allowed', ['status' => Organisation::getStatuses()[$organisation->status]]));
+                            }
                         }
 
                         $orgData = [];

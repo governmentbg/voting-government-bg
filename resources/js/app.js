@@ -244,19 +244,19 @@ $('form.change-tour').submit(function(e) {
         if (status == 3) {
             modal.find('.modal-title').text($('#translations').data('voting'));
             modal.find('.modal-body .text').text($('#translations').data('status-change-confirm'));
-            modal.find('.modal-body .checkbox-container label').show()
+            modal.find('.modal-body .checkbox-container label').show();
         }
 
         if (status == 4) {
             modal.find('.modal-title').text($('#translations').data('ranking'));
             modal.find('.modal-body .text').text($('#translations').data('confirm-ranking'));
-            modal.find('.modal-body .checkbox-container label').show()
+            modal.find('.modal-body .checkbox-container label').show();
         }
 
         if (status == 5) {
             modal.find('.modal-title').text($('#translations').data('ballotage'));
             modal.find('.modal-body .text').text($('#translations').data('status-change-confirm'));
-            modal.find('.modal-body .checkbox-container label').show()
+            modal.find('.modal-body .checkbox-container label').show();
         }
 
         modal.find('input[name="send_emails"]').change(function() {
@@ -433,4 +433,16 @@ $('#orgList').on('keyup keypress', function(e) {
         e.preventDefault();
         return false;
     }
+});
+
+$('form.edit-org').submit(function(e) {
+    if ($('.edit-status').data('old-status') != 6 && $('.edit-status').val() == 6) {
+        e.preventDefault();
+        let modalDeclass = $('#confirmOrgDeclass');
+        modalDeclass.modal();
+    }
+});
+
+$('#confirmOrgDeclass .confirm').click(function() {
+    $('form.edit-org').unbind('submit').submit();
 });

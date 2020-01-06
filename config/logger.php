@@ -17,4 +17,3 @@ return [
         'production' => 'amsvoting.production'
     ]
 ];
-

@@ -13,4 +13,11 @@ class TradeRegister extends Model
     public $timestamps = false;
 
     protected $primaryKey = 'eik';
+
+    /**
+    * The "type" of the primary key eik.
+    *
+    * @var string
+    */
+    protected $keyType = 'string';
 }

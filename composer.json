@@ -13,7 +13,8 @@
         "fideloper/proxy": "^4.0",
         "fluent/logger": "^1.0",
         "graylog2/gelf-php": "^1.6",
-        "laravel/framework": "5.7.*",
+        "laravel/framework": "5.8.*",
+        "laravel/helpers": "^1.1",
         "laravel/tinker": "^1.0",
         "predis/predis": "~1.0"
     },

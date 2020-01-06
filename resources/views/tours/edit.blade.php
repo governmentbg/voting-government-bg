@@ -59,6 +59,7 @@
         data-ranking="{{ __('custom.ranking') }}"
         data-finished="{{ __('custom.finished') }}"
         data-confirm="{{ __('custom.confirm_status_change') }}"
+        data-confirm-ranking="{{ __('messages.status_change_confirmation_ranking') }}"
     ></div>
     <div class="modal" tabindex="-1" role="dialog" id='confirmEmailSending'>
         <div class="modal-dialog" role="document">
@@ -86,4 +87,3 @@
 </div>
 
 @endsection
-

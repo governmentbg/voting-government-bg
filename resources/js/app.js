@@ -230,12 +230,18 @@ $('form.change-tour').submit(function(e) {
     modal.find('.modal-body [type="checkbox"][name="send_emails"]').hide();
     modal.find('.modal-body .checkbox-container label').hide();
 
-    if ((status == 3 || status == 5) && status != oldValue) { //status - voting
+    if ((status == 3 || status == 5 || status == 4) && status != oldValue) { //status - voting
         modal.modal();
 
         if (status == 3) {
             modal.find('.modal-title').text($('#translations').data('voting'));
             modal.find('.modal-body .text').text($('#translations').data('status-change-confirm'));
+            modal.find('.modal-body .checkbox-container label').show()
+        }
+
+        if (status == 4) {
+            modal.find('.modal-title').text($('#translations').data('ranking'));
+            modal.find('.modal-body .text').text($('#translations').data('confirm-ranking'));
             modal.find('.modal-body .checkbox-container label').show()
         }
 
@@ -260,11 +266,6 @@ $('form.change-tour').submit(function(e) {
     } else if (status == 2 && status != oldValue) {
         modal.modal();
         modal.find('.modal-title').text($('#translations').data('closed-reg'));
-        modal.find('.modal-body .text').text($('#translations').data('confirm'));
-        modal.find('.confirm').attr('disabled', false);
-    } else if (status == 4 && status != oldValue) {
-        modal.modal();
-        modal.find('.modal-title').text($('#translations').data('ranking'));
         modal.find('.modal-body .text').text($('#translations').data('confirm'));
         modal.find('.confirm').attr('disabled', false);
     } else if (status == 6 && status != oldValue) {

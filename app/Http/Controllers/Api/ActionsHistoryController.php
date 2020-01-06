@@ -48,7 +48,7 @@ class ActionsHistoryController extends ApiController
                 'action'            => 'nullable|int',
                 'object'            => 'nullable|int',
                 'ip_address'        => 'nullable|string',
-                'voting_tour_id'    => 'nullable|int|exists:voting_tour,id',
+                'tour_id'           => 'nullable|int|exists:voting_tour,id',
                 'page_number'       => 'nullable|integer',
                 'order_type'        => 'nullable|string',
                 'order_field'       => 'nullable|string|in:' . implode(',', $allowedOrderFields),
@@ -97,10 +97,10 @@ class ActionsHistoryController extends ApiController
                 $query->where('ip_address', $filters['ip_address']);
             }
 
-            if (empty($filters['voting_tour_id'])) {
+            if (empty($filters['tour_id'])) {
                 $query->whereNull('actions_history.voting_tour_id');
             } else {
-                $query->where('actions_history.voting_tour_id', $filters['voting_tour_id']);
+                $query->where('actions_history.voting_tour_id', $filters['tour_id']);
             }
 
             $query->orderBy($filters['order_field'], $filters['order_type']);

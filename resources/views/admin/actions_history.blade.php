@@ -77,7 +77,7 @@
                                     @foreach ($toursList as $index => $tourData)
                                         <option
                                             value="{{ $tourData->id }}"
-                                            {{ isset($filters['voting_tour_id']) && $filters['voting_tour_id'] == $tourData->id ? 'selected' : '' }}
+                                            {{ isset($filters['tour_id']) && $filters['tour_id'] == $tourData->id ? 'selected' : '' }}
                                         >{{ $tourData->name }}</option>
                                     @endforeach
                                 @endif

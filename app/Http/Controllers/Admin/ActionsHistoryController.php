@@ -57,7 +57,7 @@ class ActionsHistoryController extends BaseAdminController
             $allFilters['period_to'] = $periodTo;
         }
 
-        $allFilters['voting_tour_id'] = isset($votingTourId) ? $votingTourId : null;
+        $allFilters['tour_id'] = isset($votingTourId) ? $votingTourId : null;
 
         // apply sort parameters
         if ($request->has('sort')) {

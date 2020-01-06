@@ -176,7 +176,7 @@ class VoteController extends ApiController
     {
         $votes = Vote::select('*')->orderBy('id', 'ASC')->get();
 
-        foreach ($votes as $singleVote) {
+        foreach ($votes->values() as $index => $singleVote) {
             $voteHash = hash('sha256',
                 $singleVote->vote_time .
                 $singleVote->voter_id .
@@ -187,7 +187,7 @@ class VoteController extends ApiController
             );
 
             if ($singleVote->id < $votes->last()->id) {
-                $nextVoteId = $singleVote->id + 1;
+                $nextVoteId = $votes->values()[$index + 1]->id;
 
                 $votes = $votes->keyBy('id');
                 $nextVote = $votes->get($nextVoteId);
@@ -324,7 +324,7 @@ class VoteController extends ApiController
                                 // calculate vote limit
                                 $limits = Vote::calculateVoteLimit($voteRecordData, $votingCount);
 
-                                // excract elected orgs data
+                                // extract selected orgs data
                                 $electedOrgsData = array_slice($voteRecordData, 0, $limits['orgPos'] + 1, true);
                                 $voteRecordData = array_slice($voteRecordData, $limits['orgPos'] + 1, null, true);
                             }
@@ -332,7 +332,7 @@ class VoteController extends ApiController
                             foreach ($listOfCandidates as $candidate) {
                                 $voteRecordData[$candidate->id][$votingCount] = intval($candidate->votes);
 
-                                // excract ballotage orgs data
+                                // extract ballotage orgs data
                                 $ballotageOrgsData[$candidate->id] = $voteRecordData[$candidate->id];
                                 unset($voteRecordData[$candidate->id]);
                             }

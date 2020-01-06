@@ -20,7 +20,7 @@ class XMLParser
     // Е - Пререгистрирана фирма по Булстат
     // L - Пререгистрирана фирма по Булстат затворена
     // C - Нова партида затворена
-    
+
     public function __construct()
     {
         ;
@@ -29,15 +29,15 @@ class XMLParser
     /**
      * Tries to parse XML file from a given path.
      * @param string $path
-     * @return boolean 
+     * @return boolean
      */
     public function loadFile($path)
     {
         $this->data = simplexml_load_file($path);
-        
+
         return $this->data === false ? false : true;
     }
-    
+
     /**
      * Return parsed data as array.
      * @param string $path
@@ -117,4 +117,3 @@ class XMLParser
         return isset($org->attributes()['LegalForm']) && in_array((string)$org->attributes()['LegalForm'], self::LEGAL_FORMS);
     }
 }
-

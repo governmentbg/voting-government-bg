@@ -17,7 +17,7 @@ class FluentdHandler extends AbstractProcessingHandler
         $this->logger = new \Fluent\Logger\FluentLogger(config('logger.host'), config('logger.port'));
     }
 
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): bool
     {
         return new GelfMessageFormatter;
     }

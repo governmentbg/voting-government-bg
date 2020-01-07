@@ -22,9 +22,8 @@ class FluentdHandler extends AbstractProcessingHandler
         return new GelfMessageFormatter;
     }
 
-    public function write(array $record)
+    public function write(array $record): void
     {
         $this->logger->post(config('logger.tag.'. config('app.env')), $record['formatted']->toArray());
     }
 }
-

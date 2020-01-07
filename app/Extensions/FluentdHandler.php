@@ -5,6 +5,7 @@ namespace App\Extensions;
 use Monolog\Formatter\GelfMessageFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Monolog\Formatter\FormatterInterface;
 
 class FluentdHandler extends AbstractProcessingHandler
 {

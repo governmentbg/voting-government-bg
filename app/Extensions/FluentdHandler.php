@@ -5,6 +5,7 @@ namespace App\Extensions;
 use Monolog\Formatter\GelfMessageFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Monolog\Formatter\FormatterInterface;
 
 class FluentdHandler extends AbstractProcessingHandler
 {
@@ -17,12 +18,12 @@ class FluentdHandler extends AbstractProcessingHandler
         $this->logger = new \Fluent\Logger\FluentLogger(config('logger.host'), config('logger.port'));
     }
 
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new GelfMessageFormatter;
     }
 
-    public function write(array $record)
+    public function write(array $record): void
     {
         $this->logger->post(config('logger.tag.'. config('app.env')), $record['formatted']->toArray());
     }

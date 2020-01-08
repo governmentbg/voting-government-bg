@@ -91,7 +91,7 @@ class ResetPasswordController extends Controller
         }
 
         session(['alert-success' => __('passwords.changed')]);
-        return $this->sendResetResponse(Password::PASSWORD_RESET);
+        return $this->sendResetResponse($request, Password::PASSWORD_RESET);
     }
 
     /**

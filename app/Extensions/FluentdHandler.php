@@ -27,4 +27,3 @@ class FluentdHandler extends AbstractProcessingHandler
         $this->logger->post(config('logger.tag.'. config('app.env')), $record['formatted']->toArray());
     }
 }
-

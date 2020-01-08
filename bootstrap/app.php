@@ -53,29 +53,29 @@ $app->configureMonologUsing(function ($monolog) use($app){
                 $record['extra']['dbhost'] = config('database.connections.' . $connection . '.host');
                 return $record;
             });
-        $monolog->pushHandler($fluentd);         
+        $monolog->pushHandler($fluentd);
     }
-    
+
     //handler for default laravel log file "laravel.log"
     $monolog->pushHandler($fileHandler = new \Monolog\Handler\StreamHandler($app->storagePath() . '/logs/laravel.log'), $logLevel, true);
     $fileHandler->setFormatter(new \Monolog\Formatter\LineFormatter(null, null, false, true));
-    
+
     // fix cases when file and line are undefined because function is called inside callable
     $monolog->pushProcessor(function ($record) {
             foreach (['file', 'line'] as $field) {
                 if (empty($record['extra'][$field]) && !empty($record['context'][$field])) {
                     $record['extra'][$field] = $record['context'][$field];
-                }             
+                }
             }
-            
+
             if (!empty($record['context']['exception'])) { //get file and line from exception
                 $record['extra']['file'] = $record['context']['exception']->getFile();
                 $record['extra']['line'] = $record['context']['exception']->getLine();
             }
-                
+
             return $record;
         });
-    
+
     //additional message processors
     $monolog->pushProcessor(new \Monolog\Processor\GitProcessor());
     $monolog->pushProcessor(new \Monolog\Processor\WebProcessor());

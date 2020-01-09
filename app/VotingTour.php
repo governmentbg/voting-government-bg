@@ -19,13 +19,20 @@ class VotingTour extends Model
     const STATUS_BALLOTAGE = 5;
     const STATUS_FINISHED = 6;
 
-    const DEFAULT_RECORDS_PER_PAGE = 50;
+    const STATUS_STEP = 1;
+
     const DEFAULT_ORDER_FIELD = 'created_at';
     const DEFAULT_ORDER_TYPE = 'ASC';
 
-    const STATUS_STEP = 1;
+    const ALLOWED_ORDER_FIELDS = [
+        'name',
+        'status',
+        'created_at',
+        'updated_at',
+    ];
+    const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
 
-    protected $hidden = ['updater', 'creator'];
+    protected $table = 'voting_tour';
 
     /**
      * The attributes that aren't mass assignable.
@@ -34,7 +41,12 @@ class VotingTour extends Model
      */
     protected $guarded = ['id'];
 
-    protected $table = 'voting_tour';
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['updater', 'creator'];
 
     public function votes()
     {

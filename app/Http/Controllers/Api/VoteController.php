@@ -112,7 +112,7 @@ class VoteController extends ApiController
                     }
                 } catch (\Exception $e) {
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.vote_failed'));
+                    return $this->errorResponse(__('custom.vote_failed'), __('custom.internal_server_error'));
                 }
             }
         }
@@ -165,7 +165,7 @@ class VoteController extends ApiController
                 return $this->successResponse($lastVote);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.get_vote_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.get_vote_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -382,7 +382,7 @@ class VoteController extends ApiController
                 return $this->errorResponse(__('custom.ranking_not_allowed'));
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.ranking_failed'), $e->getMessage());
+                return $this->errorResponse(__('custom.ranking_failed'), __('custom.internal_server_error'));
             }
         }
 
@@ -499,7 +499,7 @@ class VoteController extends ApiController
 
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.list_ranking_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_ranking_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -518,8 +518,23 @@ class VoteController extends ApiController
      */
     public function listVoters(Request $request)
     {
-        $filters = $request->get('filters', []);
-        $withPagination = $request->get('with_pagination', true);
+        $rules = [
+            'filters'         => 'nullable|array',
+            'with_pagination' => 'nullable|bool',
+            'page_number'     => 'nullable|int|min:1',
+        ];
+
+        $data = $request->only(array_keys($rules));
+
+        $validator = \Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
+
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $withPagination = isset($data['with_pagination']) ? $data['with_pagination'] : true;
+        $page = isset($data['page_number']) ? $data['page_number'] : null;
 
         $validator = Validator::make($filters, [
             'eik' => 'nullable|digits_between:1,19',
@@ -550,14 +565,19 @@ class VoteController extends ApiController
                                $query->where('votes.id', '>', $voteLimits['minId']);
                            }
                        })
-                      ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
+                       ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
 
-                $voters = $withPagination ? $voters->paginate() : $voters->get();
+                if ($withPagination) {
+                    $request->request->add(['page' => $page]);
+                    $voters = $voters->paginate();
+                } else {
+                    $voters = $voters->get();
+                }
 
                 return $this->successResponse($voters);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.list_voters_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_voters_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -608,7 +628,7 @@ class VoteController extends ApiController
             return $this->errorResponse(__('custom.cancel_tour_not_allowed'));
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.cancel_tour_fail'), $e->getMessage());
+            return $this->errorResponse(__('custom.cancel_tour_fail'), __('custom.internal_server_error'));
         }
     }
 
@@ -630,7 +650,7 @@ class VoteController extends ApiController
             return $this->errorResponse(__('custom.get_max_votes_not_allowed'));
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.get_max_votes_fail'), $e->getMessage());
+            return $this->errorResponse(__('custom.get_max_votes_fail'), __('custom.internal_server_error'));
         }
     }
 

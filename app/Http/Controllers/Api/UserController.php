@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 use App\VotingTour;
@@ -17,7 +16,10 @@ class UserController extends ApiController
     /**
      * Generate password reset hash.
      *
-     * @return json $response - response with status and the generated hash if successful
+     * @param string username - required
+     * @param string email - required
+     *
+     * @return json - response with status and the generated hash if successful
      */
     public function generatePasswordHash(Request $request)
     {
@@ -58,7 +60,7 @@ class UserController extends ApiController
             }
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.password_hash_generation_fail'), $e->getMessage());
+            return $this->errorResponse(__('custom.password_hash_generation_fail'), __('custom.internal_server_error'));
         }
 
         return $this->successResponse(['hash' => $password], true);
@@ -70,7 +72,7 @@ class UserController extends ApiController
      * @param string new_password - required
      * @param string hash - required
      *
-     * @return json $response - response with status and user id if successful
+     * @return json - response with status and user id if successful
      */
     public function resetPassword(Request $request)
     {
@@ -88,10 +90,10 @@ class UserController extends ApiController
             return $this->errorResponse(__('custom.password_reset_fail'), $validator->errors()->messages());
         }
 
-        $user = User::where('pw_reset_hash', $hash)->first();
+        try {
+            $user = User::where('pw_reset_hash', $hash)->first();
 
-        if ($user) {
-            try {
+            if ($user) {
                 $user->update(['password' => Hash::make($new_password)]);
 
                 $logData = [
@@ -104,13 +106,13 @@ class UserController extends ApiController
                 ActionsHistory::add($logData);
 
                 return $this->successResponse(['id' => $user->id], true);
-            } catch (QueryException $e) {
-                logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.database_error'));
             }
-        }
 
-        return $this->errorResponse(__('custom.password_reset_token_invalid'));
+            return $this->errorResponse(__('custom.password_reset_token_invalid'));
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.password_reset_fail'), __('custom.internal_server_error'));
+        }
     }
 
     /**
@@ -120,7 +122,7 @@ class UserController extends ApiController
      * @param string new_password - required
      * @param string password - required
      *
-     * @return json $response - response with status and user id if successful
+     * @return json - response with status and user id if successful
      */
     public function changePassword(Request $request)
     {
@@ -138,10 +140,10 @@ class UserController extends ApiController
             return $this->errorResponse(__('custom.change_password_error'), $validator->errors()->messages());
         }
 
-        $user = User::where('id', $data['user_id'])->first();
+        try {
+            $user = User::where('id', $data['user_id'])->first();
 
-        if ($user) {
-            try {
+            if ($user) {
                 if (Hash::check($data['password'], $user->password)) {
                     $user->update(['password' => Hash::make($data['new_password'])]);
                 } else {
@@ -158,15 +160,13 @@ class UserController extends ApiController
                 ActionsHistory::add($logData);
 
                 return $this->successResponse();
-            } catch (QueryException $e) {
-                logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.database_error'));
+            } else {
+                return $this->errorResponse(__('custom.user_not_found'));
             }
-        } else {
-            return $this->errorResponse(__('custom.user_not_found'));
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.change_password_error'), __('custom.internal_server_error'));
         }
-
-        return $this->errorResponse(__('custom.change_password_error'));
     }
 
     /**
@@ -182,7 +182,7 @@ class UserController extends ApiController
      * @param string user_data[email] - required without org_id
      * @param string user_data[active] - optional
      *
-     * @return json $response - response with status and api key if successful
+     * @return json - response with status and api key if successful
      */
     public function add(Request $request)
     {
@@ -251,25 +251,25 @@ class UserController extends ApiController
             ActionsHistory::add($logData);
 
             return $this->successResponse(['id' => $user->id], true);
-        } catch (QueryException $ex) {
+        } catch (QueryException $e) {
             DB::rollback();
-            Log::error($ex->getMessage());
-            return $this->errorResponse(__('custom.add_user_fail'), $ex->getMessage());
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.add_user_fail'), __('custom.internal_server_error'));
         }
     }
 
     /**
      * Edit user record
      *
-     * @param integer id - required
-     * @param array data - required
-     * @param string data[firs_tname] - optional
-     * @param string data[last_name] - optional
-     * @param string data[password] - required
-     * @param string data[password_confirm] - optional
-     * @param string data[org_id] - optional
+     * @param integer user_id - required
+     * @param array user_data - required
+     * @param string user_data[firs_tname] - optional
+     * @param string user_data[last_name] - optional
+     * @param string user_data[password] - required
+     * @param string user_data[password_confirm] - optional
+     * @param string user_data[org_id] - optional
      *
-     * @return json $response - response with status and api key if successful
+     * @return json - response with status and api key if successful
      */
     public function edit(Request $request)
     {
@@ -320,10 +320,10 @@ class UserController extends ApiController
                 }
 
                 return $this->successResponse();
-            } catch (QueryException $ex) {
+            } catch (QueryException $e) {
                 DB::rollback();
-                Log::error($ex->getMessage());
-                return $this->errorResponse(__('custom.edit_user_fail'), $validator->errors()->messages());
+                logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.edit_user_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -333,20 +333,37 @@ class UserController extends ApiController
     /**
      * List all user in specific order.
      *
-     * @param string $order_field - required
-     * @param string $order_type  - required
+     * @param string order_field - optional
+     * @param string order_type - optional
+     * @param integer page_number - optional
      *
-     * @return json $response - response with status and collection of user models if successful
+     * @return json - response with status and collection of user models if successful
      */
     public function list(Request $request)
     {
-        $field = $request->get('order_field', null);
-        $order = $request->get('order_type', 'ASC');
-        $page = $request->get('page_number');
+        $rules = [
+            'order_field' => 'nullable|string|in:'. implode(',', User::ALLOWED_ORDER_FIELDS),
+            'order_type'  => 'nullable|string|in:'. implode(',', User::ALLOWED_ORDER_TYPES),
+            'page_number' => 'nullable|int|min:1',
+        ];
+
+        $data = $request->only(array_keys($rules));
+        $data['order_type'] = isset($data['order_type']) ? strtoupper($data['order_type']) : null;
+
+        $validator = \Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
+
+        $orderField = isset($data['order_field']) ? $data['order_field'] : User::DEFAULT_ORDER_FIELD;
+        $orderType = isset($data['order_type']) ? $data['order_type'] : User::DEFAULT_ORDER_TYPE;
+
+        $page = isset($data['page_number']) ? $data['page_number'] : null;
         $request->request->add(['page' => $page]);
 
         try {
-            $users = User::whereNull('org_id')->sort($field, $order)->paginate();
+            $users = User::whereNull('org_id')->sort($orderField, $orderType)->paginate();
 
             if (\Auth::user()) {
                 $logData = [
@@ -358,21 +375,18 @@ class UserController extends ApiController
             }
 
             return $this->successResponse($users);
-        } catch (QueryException $e) {
+        } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.user_not_found'), $e->getMessage());
+            return $this->errorResponse(__('custom.list_users_fail'), __('custom.internal_server_error'));
         }
-
-
-        return $this->errorResponse(__('custom.user_not_found'));
     }
 
     /**
      * Get user model by id.
      *
-     * @param integer id - required
+     * @param integer user_id - required
      *
-     * @return json $response - response with status and user model if successful
+     * @return json - response with status and user model if successful
      */
     public function getData(Request $request)
     {
@@ -380,24 +394,29 @@ class UserController extends ApiController
 
         $validator = \Validator::make(['id' => $id], ['id' => 'required']);
         if ($validator->fails()) {
-            return $this->errorResponse(__('custom.user_not_found'), $validator->errors()->messages());
+            return $this->errorResponse(__('custom.get_user_fail'), $validator->errors()->messages());
         }
 
-        $user = User::where('id', $id)->first();
-        if ($user) {
-            if (\Auth::user()) {
-                $logData = [
-                    'module' => ActionsHistory::USERS,
-                    'action' => ActionsHistory::TYPE_SEE,
-                    'object' => $user->id
-                ];
+        try {
+            $user = User::where('id', $id)->first();
+            if ($user) {
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::USERS,
+                        'action' => ActionsHistory::TYPE_SEE,
+                        'object' => $user->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
+
+                return $this->successResponse($user);
             }
 
-            return $this->successResponse($user);
+            return $this->errorResponse(__('custom.user_not_found'));
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.get_user_fail'), __('custom.internal_server_error'));
         }
-
-        return $this->errorResponse(__('custom.user_not_found'));
     }
 }

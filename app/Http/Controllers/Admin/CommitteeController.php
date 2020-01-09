@@ -18,8 +18,9 @@ class CommitteeController extends BaseAdminController
     {
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.committee'), '');
-         // apply sort parameters
-         if ($request->has('sort')) {
+
+        // apply sort parameters
+        if ($request->has('sort')) {
             $orderField = $request->sort;
         } else {
             $orderField = 'name';
@@ -37,7 +38,7 @@ class CommitteeController extends BaseAdminController
         ]);
 
         if (!empty($errors)) {
-            return view('admin.committeeList')->withErrors($errors)->with('users', []);
+            return view('admin.committee_list')->withErrors($errors)->with('users', []);
         }
 
         return view('admin.committee_list', ['users' => $this->paginate($users)]);

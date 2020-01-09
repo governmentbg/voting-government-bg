@@ -7,7 +7,6 @@ use App\VotingTour;
 use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
@@ -54,7 +53,8 @@ class VotingTourController extends ApiController
                 DB::commit();
             } catch (QueryException $e) {
                 DB::rollback();
-                Log::error($e->getMessage());
+                logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.error_adding_tour', __('custom.internal_server_error')));
             }
 
             if (isset($saved)) {
@@ -127,7 +127,8 @@ class VotingTourController extends ApiController
                     DB::commit();
                 } catch (QueryException $e) {
                     DB::rollback();
-                    Log::error($e->getMessage());
+                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.error_changing_status', __('custom.internal_server_error')));
                 }
 
                 if (\Auth::user()) {
@@ -177,7 +178,8 @@ class VotingTourController extends ApiController
                     DB::commit();
                 } catch (QueryException $e) {
                     DB::rollback();
-                    Log::error($e->getMessage());
+                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.error_renaming_tour', __('custom.internal_server_error')));
                 }
 
                 if (\Auth::user()) {
@@ -201,8 +203,7 @@ class VotingTourController extends ApiController
      * Get the latest voting tour - if a status different from FINISHED is found
      * it is returned, otherwise returns the tour with the highest updated_at
      *
-     * @param string order_field - required
-     * @param string order_type - required
+     * @param none
      *
      * @return tour or error
      */
@@ -228,27 +229,21 @@ class VotingTourController extends ApiController
     public function list(Request $request)
     {
         $post = $request->all();
+        $post['order_type'] = isset($post['order_type']) ? strtoupper($post['order_type']) : null;
 
         $validator = Validator::make($post, [
-            'order_field'    => 'nullable|string',
-            'order_type'     => 'nullable|string'
+            'order_field' => 'nullable|string|in:'. implode(',', VotingTour::ALLOWED_ORDER_FIELDS),
+            'order_type'  => 'nullable|string|in:'. implode(',', VotingTour::ALLOWED_ORDER_TYPES),
         ]);
 
-        if (!$validator->fails()) {
-            $orderField = isset($post['order_field']) ? $post['order_field'] : VotingTour::DEFAULT_ORDER_FIELD;
-            $orderType = isset($post['order_type']) ? $post['order_type'] : VotingTour::DEFAULT_ORDER_TYPE;
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
 
-            $orderColumns = [
-                'name',
-                'status',
-                'created_at',
-                'updated_at',
-            ];
+        $orderField = isset($post['order_field']) ? $post['order_field'] : VotingTour::DEFAULT_ORDER_FIELD;
+        $orderType = isset($post['order_type']) ? $post['order_type'] : VotingTour::DEFAULT_ORDER_TYPE;
 
-            if (!in_array($orderField, $orderColumns)) {
-                return $this->errorResponse(__('custom.invalid_sort_field'));
-            }
-
+        try {
             $tourList = VotingTour::orderBy($orderField, $orderType)->get();
 
             if ($tourList->first()) {
@@ -265,9 +260,10 @@ class VotingTourController extends ApiController
             } else {
                 return $this->errorResponse(__('custom.tour_list_not_found'));
             }
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.list_tours_fail'), __('custom.internal_server_error'));
         }
-
-        return $this->errorResponse(__('custom.tour_list_not_found'));
     }
 
     /**

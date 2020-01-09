@@ -16,27 +16,37 @@ class MessageController extends ApiController
     /**
      * Get all messages sent by specific organisation and order them if needed.
      *
-     * @param int    $org_id      - required
-     * @param string $order_field - optional
-     * @param string $order_type  - optional
+     * @param integer org_id - required
+     * @param string order_field - optional
+     * @param string order_type - optional
+     * @param integer page_number - optional
      *
-     * @return json $response - response with status and message collection if successful
+     * @return json - response with status and message collection if successful
      */
     public function listByOrg(Request $request)
     {
-        $orgId = $request->get('org_id');
-        $field = $request->get('order_field', 'created_at');
-        $order = $request->get('order_type', 'DESC');
-        $page = $request->get('page_number');
-        $request->request->add(['page' => $page]);
+        $rules = [
+            'org_id'      => 'required|integer',
+            'order_field' => 'nullable|string|in:'. implode(',', Message::ALLOWED_ORDER_FIELDS),
+            'order_type'  => 'nullable|string|in:'. implode(',', Message::ALLOWED_ORDER_TYPES),
+            'page_number' => 'nullable|int|min:1',
+        ];
 
-        $validator = \Validator::make(['org_id' => $orgId], [
-            'org_id' => 'required|integer',
-        ]);
+        $data = $request->only(array_keys($rules));
+        $data['order_type'] = isset($data['order_type']) ? strtoupper($data['order_type']) : null;
+
+        $validator = \Validator::make($data, $rules);
 
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
         }
+
+        $orgId = $data['org_id'];
+        $orderField = isset($data['order_field']) ? $data['order_field'] : Message::DEFAULT_ORDER_FIELD;
+        $orderType = isset($data['order_type']) ? $data['order_type'] : Message::DEFAULT_ORDER_TYPE;
+
+        $page = isset($data['page_number']) ? $data['page_number'] : null;
+        $request->request->add(['page' => $page]);
 
         try {
             $votingTour = VotingTour::getLatestTour();
@@ -46,7 +56,7 @@ class MessageController extends ApiController
 
             $messages = Message::where(function($query) use ($orgId) {
                             $query->where('sender_org_id', $orgId)->orWhere('recipient_org_id', $orgId);
-                        })->where('voting_tour_id', $votingTour->id)->sort($field, $order)->paginate();
+                        })->where('voting_tour_id', $votingTour->id)->sort($orderField, $orderType)->paginate();
 
             if (\Auth::user()) {
                 $logData = [
@@ -61,32 +71,39 @@ class MessageController extends ApiController
             return $this->successResponse($messages);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.message_not_found'), $e->getMessage());
+            return $this->errorResponse(__('custom.message_not_found'), __('custom.internal_server_error'));
         }
     }
 
     /**
      * Get all messages for specific conversation and order them if needed.
      *
-     * @param int    $parent_id   - required
-     * @param string $order_field - optional
-     * @param string $order_type  - optional
+     * @param integer parent_id - required
+     * @param string order_field - optional
+     * @param string order_type - optional
      *
-     * @return json $response - response with status and message collection if successful
+     * @return json - response with status and message collection if successful
      */
     public function listByParent(Request $request)
     {
-        $parentId = $request->get('parent_id');
-        $field = $request->get('order_field', 'created_at');
-        $order = $request->get('order_type', 'ASC');
+        $rules = [
+            'parent_id'   => 'required|integer',
+            'order_field' => 'nullable|string|in:'. implode(',', Message::ALLOWED_ORDER_FIELDS),
+            'order_type'  => 'nullable|string|in:'. implode(',', Message::ALLOWED_ORDER_TYPES),
+        ];
 
-        $validator = \Validator::make(['parent_id' => $parentId], [
-            'parent_id' => 'required|integer',
-        ]);
+        $data = $request->only(array_keys($rules));
+        $data['order_type'] = isset($data['order_type']) ? strtoupper($data['order_type']) : null;
+
+        $validator = \Validator::make($data, $rules);
 
         if ($validator->fails()) {
             return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
         }
+
+        $parentId = $data['parent_id'];
+        $orderField = isset($data['order_field']) ? $data['order_field'] : Message::DEFAULT_ORDER_FIELD;
+        $orderType = isset($data['order_type']) ? $data['order_type'] : 'ASC';
 
         try {
             $votingTour = VotingTour::getLatestTour();
@@ -98,7 +115,7 @@ class MessageController extends ApiController
                             $query->where('parent_id', $parentId)->orWhere('id', $parentId);
                         })->where('voting_tour_id', $votingTour->id)->with(['files' => function($query) {
                             $query->select('id', 'name', 'mime_type', 'message_id', 'org_id', 'created_at');
-                        }])->sort($field, $order)->get();
+                        }])->sort($orderField, $orderType)->get();
 
             if (\Auth::user()) {
                 $logData = [
@@ -113,25 +130,43 @@ class MessageController extends ApiController
             return $this->successResponse($messages);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.message_not_found'), $e->getMessage());
+            return $this->errorResponse(__('custom.message_not_found'), __('custom.internal_server_error'));
         }
     }
 
     /**
      * Get filtered messages and order them if needed.
      *
-     * @param array  $filters     - optional
-     * @param string $order_field - optional
-     * @param string $order_type  - optional
+     * @param array filters - optional
+     * @param string order_field - optional
+     * @param string order_type - optional
+     * @param integer page_number - optional
      *
-     * @return json $response - response with status and message collection if successful
+     * @return json - response with status and message collection if successful
      */
     public function search(Request $request)
     {
-        $filters = $request->get('filters', []);
-        $field = $request->get('order_field');
-        $order = $request->get('order_type', 'ASC');
-        $page = $request->get('page_number');
+        $rules = [
+            'filters'     => 'nullable|array',
+            'order_field' => 'nullable|string|in:'. implode(',', Message::ALLOWED_ORDER_FIELDS),
+            'order_type'  => 'nullable|string|in:'. implode(',', Message::ALLOWED_ORDER_TYPES),
+            'page_number' => 'nullable|int|min:1',
+        ];
+
+        $data = $request->only(array_keys($rules));
+        $data['order_type'] = isset($data['order_type']) ? strtoupper($data['order_type']) : null;
+
+        $validator = \Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
+
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $orderField = isset($data['order_field']) ? $data['order_field'] : Message::DEFAULT_ORDER_FIELD;
+        $orderType = isset($data['order_type']) ? $data['order_type'] : Message::DEFAULT_ORDER_TYPE;
+
+        $page = isset($data['page_number']) ? $data['page_number'] : null;
         $request->request->add(['page' => $page]);
 
         $validator = \Validator::make($filters, [
@@ -139,11 +174,11 @@ class MessageController extends ApiController
             'date_to'   => 'nullable|date|date_format:Y-m-d',
             'subject'   => 'nullable|string|max:255',
             'org_name'  => 'nullable|string|max:255',
-            'status'    => 'nullable|int|in:' . implode(',', array_keys(Message::getStatuses())),
+            'status'    => 'nullable|int|in:'. implode(',', array_keys(Message::getStatuses())),
         ]);
 
         if ($validator->fails()) {
-            return $this->errorResponse(__('custom.invalid_sort_field'), $validator->errors()->messages());
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
         }
 
         try {
@@ -152,7 +187,7 @@ class MessageController extends ApiController
                 return $this->errorResponse(__('custom.voting_tour_not_found'));
             }
 
-            $messages = Message::where('voting_tour_id', $votingTour->id)->search($filters, $field, $order)->paginate();
+            $messages = Message::where('voting_tour_id', $votingTour->id)->search($filters, $orderField, $orderType)->paginate();
 
             if (\Auth::user()) {
                 $logData = [
@@ -166,16 +201,16 @@ class MessageController extends ApiController
             return $this->successResponse($messages);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.message_not_found'), $e->getMessage());
+            return $this->errorResponse(__('custom.message_not_found'), __('custom.internal_server_error'));
         }
     }
 
     /**
      * Mark message as read.
      *
-     * @param int $message_id - required
+     * @param integer message_id - required
      *
-     * @return json $response - response with status and message id if successful
+     * @return json - response with status and message id if successful
      */
     public function markAsRead(Request $request)
     {
@@ -195,9 +230,11 @@ class MessageController extends ApiController
     }
 
     /**
-     * Get array with message read statuses.
-     * @param  Request $request
-     * @return json
+     * List statuses
+     *
+     * @param none
+     *
+     * @return json - response with status code and list of statuses or errors
      */
     public function listStatuses(Request $request)
     {
@@ -213,19 +250,20 @@ class MessageController extends ApiController
         if ($results) {
             return $this->successResponse($results);
         }
+
         return $this->errorResponse('custom.status_list_not_found');
     }
 
     /**
      * Send message to organisation.
      *
-     * @param int    $sender_user_id - required
-     * @param int    $recipient_org  - required
-     * @param string $subject        - required
-     * @param string $body           - required
-     * @param int    $parent_id      - required
+     * @param integer sender_user_id - required
+     * @param integer recipient_org  - required
+     * @param string subject - required
+     * @param string body - required
+     * @param integer parent_id - required
      *
-     * @return json $response - response with status and  id of the created message if successful
+     * @return json - response with status and  id of the created message if successful
      */
     public function sendMessageToOrg(Request $request)
     {
@@ -274,20 +312,20 @@ class MessageController extends ApiController
             return $this->successResponse(['id' => $message->id], true);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.message_not_send'), $e->getMessage());
+            return $this->errorResponse(__('custom.message_not_send'), __('custom.internal_server_error'));
         }
     }
 
     /**
      * Send message from organisation.
      *
-     * @param int    $sender_org_id - required
-     * @param array  $files         - optional
-     * @param string $subject       - required
-     * @param string $body          - required
-     * @param int    $parent_id     - required
+     * @param integer sender_org_id - required
+     * @param string subject - required
+     * @param string body - required
+     * @param integer parent_id - required
+     * @param array files - optional
      *
-     * @return json $response - response with status and id of the created message if successful
+     * @return json - response with status and id of the created message if successful
      */
     public function sendMessageFromOrg(Request $request)
     {
@@ -367,16 +405,21 @@ class MessageController extends ApiController
         } catch (\Exception $e) {
             DB::rollback();
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.message_not_send'), $e->getMessage());
+            return $this->errorResponse(__('custom.message_not_send'), __('custom.internal_server_error'));
         }
     }
 
     /**
      * Send message to organisations.
      *
-     * @param array $query - required
+     * @param integer sender_user_id - required
+     * @param array recipient_filters - optional
+     * @param array recipient_filters[org_statuses] - optional
+     * @param string subject - required
+     * @param string body - required
+     * @param integer parent_id - optional
      *
-     * @return json $response - response with status
+     * @return json - response with status
      */
     public function sendBulkMessagesToOrg(Request $request)
     {
@@ -446,7 +489,7 @@ class MessageController extends ApiController
             return $this->successResponse();
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.message_not_send'), $e->getMessage());
+            return $this->errorResponse(__('custom.message_not_send'), __('custom.internal_server_error'));
         }
     }
 }

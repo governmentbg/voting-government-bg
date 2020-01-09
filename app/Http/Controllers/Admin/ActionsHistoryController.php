@@ -61,21 +61,22 @@ class ActionsHistoryController extends BaseAdminController
 
         // apply sort parameters
         if ($request->has('sort')) {
-            $allFilters['order_field'] = $request->sort;
+            $orderField = $request->sort;
         } else {
-            $allFilters['order_field'] = 'occurrence';
+            $orderField = 'occurrence';
         }
 
         if ($request->has('order')) {
-            $allFilters['order_type'] = $request->order;
+            $orderType = $request->order;
         } else {
-            $allFilters['order_type'] = 'desc';
+            $orderType = 'desc';
         }
 
-        $allFilters['page_number'] = $request->page;
-
         list($actionsHistory, $errors) = api_result(ApiHistory::class, 'search', [
-            'filters'         => $allFilters,
+            'filters'     => $allFilters,
+            'order_field' => $orderField,
+            'order_type'  => $orderType,
+            'page_number' => $request->page
         ]);
 
         list($modules, $modulesErrors) = api_result(ApiHistory::class, 'listModules');

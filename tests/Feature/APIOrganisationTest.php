@@ -4,18 +4,19 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class APIOrganisationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
     use WithFaker;
-    
-    public function setUp()
+
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->be(factory(\App\User::class)->create());
+        $tour = \App\VotingTour::getLatestTour() ? \App\VotingTour::getLatestTour() : factory(\App\VotingTour::class)->create();
     }
 
     /**

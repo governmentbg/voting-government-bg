@@ -697,7 +697,7 @@ class VoteController extends ApiController
                 } else {
                     $voteLimits['status'] = Vote::TOUR_VOTING;
                 }
-            } elseif ($tourStatus = VotingTour::STATUS_FINISHED) {
+            } elseif ($tourStatus == VotingTour::STATUS_FINISHED) {
                 $votingCount = Vote::getVotingCount($tourId);
                 $tourCancelled = (Vote::getLatestRankingId($tourId, Vote::TOUR_CANCELLED_NO_RANKING) != null);
                 if ($tourCancelled) {

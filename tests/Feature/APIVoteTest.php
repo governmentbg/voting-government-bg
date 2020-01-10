@@ -17,7 +17,7 @@ class APIVoteTest extends TestCase
     private $orgId;
     private $vote;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -129,6 +129,8 @@ class APIVoteTest extends TestCase
      */
     public function testRanking()
     {
+        $rankingStatus = 0;
+
         if (!empty($this->votingTour) && Vote::getVotingCount($this->votingTour->id) > 0) {
             $rankingStatus = Vote::TOUR_BALLOTAGE_RANKING;
         } elseif($this->votingTour->status == VotingTour::STATUS_BALLOTAGE) {
@@ -153,7 +155,7 @@ class APIVoteTest extends TestCase
     {
         $response =  $this->post(url('api/vote/getLatestRanking'), ['tour_id' => $this->votingTour->id]);
 
-        if (!empty($this->votingTour) && !in_array($this->votingTour->status, VotingTour::getRegStatuses())) {
+        if (!empty($this->votingTour) && !in_array($this->votingTour->status, VotingTour::getRegStatuses()) && $this->votingTour->status > VotingTour::STATUS_VOTING) {
             $response->assertStatus(200)->assertJson(['success' => true]);
         } else {
             $response->assertStatus(500)->assertJson(['success' => false]);

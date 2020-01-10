@@ -3,29 +3,29 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 
 class VoteTest extends TestCase
 {
-    use RefreshDatabase;
-    
+    use DatabaseTransactions;
+
     private $object;
-    
+
     private $objectKey;
-    
+
     private $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
-        
+
         $faker = \Faker\Factory::create();
         $this->faker = $faker;
-        
+
         //$this->objectKey = $faker->name;
-        
+
         $this->object = factory(\App\Vote::class)->create();
     }
 
@@ -40,7 +40,7 @@ class VoteTest extends TestCase
             'id' => $this->object->id,
         ]);
     }
-    
+
     /**
      * Test Vote update in DB.
      *
@@ -50,12 +50,12 @@ class VoteTest extends TestCase
     {
         $newStatus = $this->faker->numberBetween(1, 55);
         $this->object->update(['tour_status' => $newStatus]);
-        
+
         $this->assertDatabaseHas('votes', [
             'tour_status' => $newStatus,
         ]);
     }
-    
+
     /**
      * Test Vote deletion in DB.
      *
@@ -64,13 +64,13 @@ class VoteTest extends TestCase
     public function testDeleteVote()
     {
         $this->object->delete();
-        
+
         $this->assertDatabaseMissing('votes', [
             'id' => $this->object->id,
         ]);
     }
-    
-    public function tearDown()
+
+    public function tearDown(): void
     {
         Schema::enableForeignKeyConstraints();
         parent::tearDown();

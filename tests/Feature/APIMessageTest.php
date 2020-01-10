@@ -4,25 +4,25 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class APIMessageTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
     use WithFaker;
 
     private $user;
 
     private $org;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         //Schema::disableForeignKeyConstraints();
 
         $this->user = factory(\App\User::class)->create();
-        $this->tour = factory(\App\VotingTour::class)->create(['created_by' => $this->user->id]);
+        $this->tour = $votingTour = \App\VotingTour::getLatestTour() ? \App\VotingTour::getLatestTour() : factory(\App\VotingTour::class)->create(['created_by' => $this->user->id]);
         $this->org = factory(\App\Organisation::class)->create([
             'created_by'     => $this->user->id,
             'voting_tour_id' => $this->tour->id,
@@ -31,7 +31,7 @@ class APIMessageTest extends TestCase
         $this->be($this->user);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         //Schema::enableForeignKeyConstraints();
         parent::tearDown();

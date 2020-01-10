@@ -3,29 +3,29 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
-    
+    use DatabaseTransactions;
+
     private $user;
-    
+
     private $username;
-    
+
     private $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
-        
+
         $faker = \Faker\Factory::create();
         $this->faker = $faker;
-        
+
         $this->username = $faker->name;
-        
+
         $this->user = factory(\App\User::class)->create([
             'username' => $this->username,
         ]);
@@ -42,7 +42,7 @@ class UserTest extends TestCase
             'username' => $this->username,
         ]);
     }
-    
+
     /**
      * Test User update in DB.
      *
@@ -52,12 +52,12 @@ class UserTest extends TestCase
     {
         $newUsername = $this->faker->name;
         $this->user->update(['username' => $newUsername]);
-        
+
         $this->assertDatabaseHas('users', [
             'username' => $newUsername,
         ]);
     }
-    
+
     /**
      * Test User deletion in DB.
      *
@@ -66,13 +66,13 @@ class UserTest extends TestCase
     public function testDeleteUser()
     {
         $this->user->delete();
-        
+
         $this->assertDatabaseMissing('users', [
             'username' => $this->username,
         ]);
     }
-    
-    public function tearDown()
+
+    public function tearDown(): void
     {
         Schema::enableForeignKeyConstraints();
         parent::tearDown();

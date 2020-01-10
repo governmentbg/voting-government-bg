@@ -5,23 +5,23 @@ namespace Tests\Unit;
 use App\VotingTour;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 
 class VotingTourTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
     use WithFaker;
 
     private $object;
 
     private $objectKey;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
-        
+
         $this->be(factory(\App\User::class)->create());
 
         //$this->objectKey = $faker->name;
@@ -76,7 +76,7 @@ class VotingTourTest extends TestCase
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Schema::enableForeignKeyConstraints();
         parent::tearDown();

@@ -3,30 +3,30 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 
 class MessageTest extends TestCase
 {
-    use RefreshDatabase;
-    
+    use DatabaseTransactions;
+
     private $object;
-    
+
     private $objectKey;
-    
+
     private $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Schema::disableForeignKeyConstraints();
-        
+
         $faker = \Faker\Factory::create();
         $this->faker = $faker;
-        
+
         $this->be(factory(\App\User::class)->create());
         //$this->objectKey = $faker->name;
-        
+
         $this->object = factory(\App\Message::class)->create();
     }
 
@@ -41,7 +41,7 @@ class MessageTest extends TestCase
             'id' => $this->object->id,
         ]);
     }
-    
+
     /**
      * Test Message update in DB.
      *
@@ -51,12 +51,12 @@ class MessageTest extends TestCase
     {
         $newSubject = $this->faker->name;
         $this->object->update(['subject' => $newSubject]);
-        
+
         $this->assertDatabaseHas('messages', [
             'subject' => $newSubject,
         ]);
     }
-    
+
     /**
      * Test Message deletion in DB.
      *
@@ -65,13 +65,13 @@ class MessageTest extends TestCase
     public function testDeleteMesage()
     {
         $this->object->delete();
-        
+
         $this->assertDatabaseMissing('messages', [
             'id' => $this->object->id,
         ]);
     }
-    
-    public function tearDown()
+
+    public function tearDown(): void
     {
         Schema::enableForeignKeyConstraints();
         parent::tearDown();

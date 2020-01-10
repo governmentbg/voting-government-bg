@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row m-r-none">
     <div class="p-l-25">
         <div class="p-l-40">
             <h3 class="p-b-15"><b>{{ isset($listTitle) ? $listTitle : '' }}</b></h3>
@@ -49,8 +49,8 @@
                             <thead>
                                 <tr>
                                     <th class="w-5">{{ __('custom.number') }}</th>
-                                    <th class="w-5"></th>
-                                    <th>{{ __('custom.organisation') }}</th>
+                                    <th class="w-5">&nbsp;</th>
+                                    <th class="w-40">{{ __('custom.organisation') }}</th>
                                     <th class="w-5">{{ __('custom.candidate') }}</th>
                                     <th class="w-10">{{ __('custom.eik') }}</th>
                                     <th class="w-15">{{ __('custom.registered_at') }}</th>

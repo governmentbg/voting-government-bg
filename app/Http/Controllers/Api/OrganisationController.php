@@ -60,8 +60,8 @@ class OrganisationController extends ApiController
                 'phone'             => 'required|string|max:40',
                 'in_av'             => 'nullable|bool',
                 'is_candidate'      => 'nullable|bool',
-                'description'       => 'nullable|max:8000|required_if:is_candidate,1',
-                'references'        => 'nullable|max:8000|required_if:is_candidate,1',
+                'description'       => 'nullable|string|max:8000',
+                'references'        => 'nullable|string|max:8000',
                 'status'            => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
                 'files'             => 'nullable|array',
@@ -71,8 +71,8 @@ class OrganisationController extends ApiController
             ]);
 
             $validator->after(function ($validator) use ($data) {
-                if (isset($data['description']) && empty($data['description'])) {
-                    if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                    if (!isset($data['description']) || trim($data['description']) == '') {
                         $validator->errors()->add('description', __('custom.org_descr_required'));
                     }
                 }
@@ -225,13 +225,19 @@ class OrganisationController extends ApiController
                 'phone'          => 'nullable|string|max:40',
                 'in_av'          => 'nullable|bool',
                 'is_candidate'   => 'nullable|bool',
-                'description'    => 'nullable|max:8000|required_if:is_candidate,1',
-                'references'     => 'nullable|max:8000|required_if:is_candidate,1',
+                'description'    => 'nullable|string|max:8000',
+                'references'     => 'nullable|string|max:8000',
                 'status'         => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
             ]);
 
             $validator->after(function ($validator) use ($data) {
+                if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                    if (!isset($data['description']) || trim($data['description']) == '') {
+                        $validator->errors()->add('description', __('custom.org_descr_required'));
+                    }
+                }
+
                 if (!$validator->errors()->has('description') && !empty($data['description'])) {
                     $words = preg_split( '|\s+|s', $data['description']);
                     if (($words = count($words)) > 500) {
@@ -247,22 +253,6 @@ class OrganisationController extends ApiController
                     $organisation = Organisation::where('id', $orgId)->where('voting_tour_id', $votingTour->id)->first();
 
                     if ($organisation) {
-                        $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
-
-                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
-                            $description = (array_key_exists('description', $data) ? $data['description'] : $organisation->description);
-
-                            if (trim($description) == '') {
-                                return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
-                            }
-
-                            $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
-
-                            if (trim($references) == '') {
-                                $data['references'] = '';
-                            }
-                        }
-
                         if (isset($data['status']) && $data['status'] != $organisation->status) {
                             if ($organisation->status == Organisation::STATUS_DECLASSED) {
                                 return $this->errorResponse(__('custom.org_status_update_not_allowed'));
@@ -285,6 +275,15 @@ class OrganisationController extends ApiController
                                 in_array($data['status'], Organisation::getRejectionStatuses())
                             ) {
                                 return $this->errorResponse(__('custom.rejection_not_allowed', ['status' => Organisation::getStatuses()[$organisation->status]]));
+                            }
+                        }
+
+                        $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
+
+                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
+                            $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
+                            if (trim($references) == '') {
+                                $data['references'] = '';
                             }
                         }
 

@@ -1,12 +1,12 @@
-<div class="row m-l-none m-r-none">
+<div class="row m-r-none">
     <div class="p-l-25">
-        <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-none' : 'p-l-40' }}">
+        <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-15' : 'p-l-40' }}">
             <h3 class="p-b-15"><b>{{ isset($listTitle) ? $listTitle : '' }}</b></h3>
         </div>
         @if (!empty($stats))
             @for ($i = 0; $i < $votingCount; $i++)
                 @if (isset($stats->$i) && !empty($stats->$i))
-                    <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-none' : 'p-l-40' }}">
+                    <div class="{{ isset($fullWidth) && $fullWidth ? 'p-l-15' : 'p-l-40' }}">
                         <h3 class="p-b-15">
                             {{ ($i == 0 ? __('custom.voter_turnout') : ($votingCount > 2
                                 ? __('custom.voter_turnout_ballotage_n', ['index' => $i])
@@ -31,6 +31,7 @@
                 @php
                     $tour['id'] = request()->segment(1) == 'admin' ? $tourId : '';
                     $mainColumnsCount = 4;
+                    $orgWidthClass = 'w-55';
                 @endphp
                 <form method="get" action="{{ route($route, $tour['id']) }}" id="orgList">
                     <div class="col-lg-12 text-right p-r-none p-b-15">
@@ -51,12 +52,13 @@
                                 <tr>
                                     <th class="w-5">{{ __('custom.number') }}</th>
                                     @if (!isset($orgNotEditable) || (isset($orgNotEditable) && !$orgNotEditable))
-                                        <th class="w-5"></th>
+                                        <th class="w-5">&nbsp;</th>
                                         @php
                                             $mainColumnsCount++;
+                                            $orgWidthClass = 'w-50';
                                         @endphp
                                     @endif
-                                    <th>{{ __('custom.organisation') }}</th>
+                                    <th class="{{ $orgWidthClass }}">{{ __('custom.organisation') }}</th>
                                     <th class="w-10">{{ __('custom.eik') }}</th>
                                     <th class="w-5">{{ __('custom.votes') }}</th>
                                     @if ($votingCount > 1)

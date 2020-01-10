@@ -94,12 +94,22 @@ class OrganisationController extends BaseFrontendController
                     return redirect($this->redirectTo);
                 } else {
                     DB::rollback();
-                    $errors = !empty($result->errors) ? (array) $result->errors : [];
-                    session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_error'));
+                    $errMsg = isset($result->error) ? $result->error->message : __('custom.register_error');
+                    if (is_string($result->errors)) {
+                        $errMsg .= ' - '. $result->errors;
+                    } else {
+                        $errors = !empty($result->errors) ? (array) $result->errors : [];
+                    }
+                    session()->flash('alert-danger', $errMsg);
                 }
             } else {
-                $errors = !empty($result->errors) ? (array) $result->errors : [];
-                session()->flash('alert-danger', isset($result->error) ? $result->error->message : __('custom.register_org_error'));
+                $errMsg = isset($result->error) ? $result->error->message : __('custom.register_org_error');
+                if (is_string($result->errors)) {
+                    $errMsg .= ' - '. $result->errors;
+                } else {
+                    $errors = !empty($result->errors) ? (array) $result->errors : [];
+                }
+                session()->flash('alert-danger', $errMsg);
             }
         }
 

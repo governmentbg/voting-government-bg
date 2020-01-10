@@ -142,7 +142,9 @@
                                 maxlength="8000"
                             >{{ old('description') }}</textarea>
                         </div>
-                        <span class="error p-l-15">{{ str_replace('когато кандидат е 1', __('custom.if_selected'), $errors->first('description')) }}</span>
+                        <div class="col-sm-8 col-xs-6 offset-sm-4 p-l-none">
+                            <span class="error">{{ $errors->first('description') }}</span>
+                        </div>
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
                         <label for="references" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.reference_materials') }}:</label>
@@ -156,13 +158,15 @@
                                 maxlength="8000"
                             >{{ old('references') }}</textarea>
                         </div>
-                        <span class="error p-l-15">{{ str_replace('когато кандидат е 1', __('custom.if_selected'), $errors->first('references')) }}</span>
+                        <div class="col-sm-8 col-xs-6 offset-sm-4 p-l-none">
+                            <span class="error">{{ $errors->first('references') }}</span>
+                        </div>
                     </div>
                 </div>
                     <hr class="hr-thin">
                 <div class="col-md-10">
                     <h5>{{ __('custom.applied_files') }} </h5>
-                    <p>{{  __('custom.nonav_org') }}</p>
+                    <p>{{ __('custom.nonav_org') }}</p>
                     <div class="form-group row">
                         <div class="col-lg-12 p-r-none">
                             @include('components.fileinput', ['name' => 'files[]'])

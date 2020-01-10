@@ -60,7 +60,7 @@ function checkVoteSize() {
  */
 function addRowNumber(selectedOrgs) {
     selectedOrgs.each(function(i, org) {
-        let orgInList = $('#votefor option[value="' + $(org).attr('value') +'"]');
+        let orgInList = $('#votefor option[value="'+ $(org).attr('value') +'"]');
         let index = orgInList.index() + 1;
         $('#votefor option[value="' + $(org).attr('value') +'"]').html('<span>'+ index +' - </span>' + $(org).text());
     });
@@ -346,11 +346,14 @@ $(function() {
                 success: function(result) {
                     result = JSON.parse(result);
                     if (jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data)) {
-                        $('#registerOrg input[name="name"]').val(result.data.name);
-                        $('#registerOrg input[name="address"]').val(result.data.fullAddress);
-                        $('#registerOrg input[name="representative"]').val(result.data.representative);
-                        $('#registerOrg input[name="phone"]').val(result.data.phone);
-                        $('#registerOrg input[name="email"]').val(result.data.email);
+                        result.data['address'] = result.data.fullAddress;
+                        ['name', 'address', 'representative', 'phone', 'email'].forEach(function(field) {
+                            var input = $('#registerOrg input[name="'+ field +'"]');
+                            input.val(result.data[field]);
+                            if (input.val() != '') {
+                                input[0].setCustomValidity('');
+                            }
+                        });
                     }
                 }
             });

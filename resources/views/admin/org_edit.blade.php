@@ -148,7 +148,7 @@
                                     maxlength="8000"
                                 >{{ old('description', $orgData->description) }}</textarea>
                             </div>
-                            <span class="error">{{ str_replace('когато кандидат е 1', __('custom.if_selected'), $errors->first('description')) }}</span>
+                            <span class="error">{{ $errors->first('description') }}</span>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -163,7 +163,7 @@
                                     maxlength="8000"
                                 >{{ old('references', $orgData->references) }}</textarea>
                             </div>
-                            <span class="error">{{ str_replace('когато кандидат е 1', __('custom.if_selected'), $errors->first('references')) }}</span>
+                            <span class="error">{{ $errors->first('references') }}</span>
                         </div>
                     </div>
                     <div class="form-group row">

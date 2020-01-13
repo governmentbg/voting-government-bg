@@ -75,6 +75,7 @@
             </form>
         </div>
     </div>
+    @php http2_push_image('/img/vote_arrow.svg'); @endphp
 @elseif (!empty($infoLabel))
     <div class="row">
         <div class="col-lg-12 display-flex justify-center">

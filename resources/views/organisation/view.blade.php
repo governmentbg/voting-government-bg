@@ -229,4 +229,13 @@
     </div>
 @endif
 
+@php
+    http2_push_image('/img/arrow.svg');
+    http2_push_image('/img/tick.svg');
+    http2_push_image('/img/circle-fill.svg');
+    http2_push_image('/img/circle-no-fill.svg');
+    http2_push_image('/img/view.svg');
+    http2_push_image('/img/download.svg');
+@endphp
+
 @endsection

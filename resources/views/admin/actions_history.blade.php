@@ -251,5 +251,10 @@
         </div>
     </div>
 </div>
+@php
+    http2_push_image('/img/calendar.svg');
+    http2_push_image('img/arrow-down.svg');
+    http2_push_image('/img/arrow-up.svg');
+@endphp
 
 @endsection

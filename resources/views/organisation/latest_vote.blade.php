@@ -54,6 +54,7 @@
             @endif
         </div>
     </div>
+    @php http2_push_image('/img/tick.svg'); @endphp
 @else
     <div class="row">
         <div class="col-lg-12 display-flex justify-center">

@@ -23,3 +23,4 @@
         <td class="text-center">{{ date('Y-m-d', strtotime($organisation->created_at)) }}</td>
     </tr>
 @endforeach
+@php http2_push_image('/img/view.svg'); @endphp

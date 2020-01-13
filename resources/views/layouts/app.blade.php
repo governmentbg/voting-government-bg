@@ -19,3 +19,8 @@
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>
+@php
+    http2_push_style('/css/app.css');
+    http2_push_style('/css/datepicker.min.css');
+    http2_push_script('/js/app.js');
+@endphp

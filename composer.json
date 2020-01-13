@@ -46,7 +46,8 @@
             "app/Helpers/ApiHelper.php",
             "app/Helpers/CsvHelper.php",
             "app/Helpers/LangHelper.php",
-            "app/Helpers/MailHelper.php"
+            "app/Helpers/MailHelper.php",
+            "app/Helpers/Http2Helper.php"
         ]
     },
     "autoload-dev": {

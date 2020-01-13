@@ -18,7 +18,7 @@ class Http2ServerPush
     {
         $response = $next($request);
 
-        if(!$request->ajax()){
+        if(!$request->ajax() && $response instanceof Response){
             $link = implode(',', app(\App\Libraries\Http2Push::class)->getLinks());
             $this->addLinkHeader($response, $link);
         }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/TRCompanyInfo" xmlns:tns="http://www.bulstat.bg/TRCompanyInfo"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="TRCompanyInfo">
+		<xs:annotation>
+			<xs:documentation>Информация на нефизическо лице от ТР (Търговски
+				регистър)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyEIK" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ЕИК на НФЛ</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CompanyName" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на НФЛ</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CompanyLegalForm" minOccurs="1"
+				maxOccurs="1" type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Правна форма
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompanyStatus" minOccurs="1" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Статус
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

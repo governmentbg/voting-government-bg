@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetStateOfPlayRequest"
+	xmlns:tns="http://www.bulstat.bg/GetStateOfPlayRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:element name="GetStateOfPlayRequest" type="tns:GetStateOfPlayRequest" />
+
+	<xs:complexType name="GetStateOfPlayRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на актуално състояние
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UIC" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Стойност на кода</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="13" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+
+			<xs:element name="Case" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Фирмено дело</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Court" minOccurs="1" maxOccurs="1"
+							type="T3:NomenclatureEntry">
+							<xs:annotation>
+								<xs:documentation>Съд
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Year" minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Година</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:int">
+									<xs:minInclusive value="0" />
+									<xs:maxInclusive value="9999" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Number" minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Номер</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="20" />
+									<xs:minLength value="1" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/WSRequest" xmlns:tns="http://www.bulstat.bg/WSRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:complexType name="WSRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за операция
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Language" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Език</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="bg" />
+						<xs:enumeration value="en" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

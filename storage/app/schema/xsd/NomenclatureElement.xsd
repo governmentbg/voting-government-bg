@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/NomenclatureElement" xmlns:tns="http://www.bulstat.bg/NomenclatureElement"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="NomenclatureElement">
+		<xs:annotation>
+			<xs:documentation>Елемент от номеклатура</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T3:NomenclatureEntry">
+				<xs:sequence>
+					<xs:element name="Name" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Наименование на номенклатурна стойност
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="180" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Ordering" default="0" maxOccurs="1"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Подредба</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="-2147483648" />
+								<xs:maxInclusive value="2147483647" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Active" maxOccurs="1" minOccurs="1"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Посочва дали понятието е актуално или не
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

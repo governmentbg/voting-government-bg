@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RealOwnersRep" xmlns:tns="http://www.bulstat.bg/RealOwnersRep"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry"
+	xmlns:T8="http://www.bulstat.bg/Address" xmlns:T40="http://www.bulstat.bg/SubscriptionElement">
+	
+	
+	<xs:import schemaLocation="NomenclatureEntry.xsd" 	namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Address.xsd" namespace="http://www.bulstat.bg/Address" />
+	<xs:import schemaLocation="SubscriptionElement.xsd" namespace="http://www.bulstat.bg/SubscriptionElement" />
+	
+	<xs:complexType name="RealOwnerRep">
+		<xs:annotation>
+			<xs:documentation>
+			</xs:documentation>
+			</xs:annotation>
+			<xs:complexContent>
+				<xs:extension base="T40:SubscriptionElement">
+					<xs:sequence>
+						<xs:element name="UIC" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Стойност на кода</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="13" />
+									<xs:minLength value="1" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<!--xs:element name="UICType" minOccurs="0" maxOccurs="1" 	type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид на кода
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element-->
+						<xs:element name="FullName"  minOccurs="0" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Наименование</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<!--xs:element name="BirthDate" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Дата на раждане във формат
+								(yyyy-MM-dd)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:date">
+								<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+								<xs:minInclusive value="0001-01-01" />
+								<xs:maxInclusive value="9999-12-31" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element-->
+						<xs:element name="Country" minOccurs="0"  	type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Държава</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Addresses" minOccurs="0" maxOccurs="unbounded" 	type="T8:Address">
+						<xs:annotation>
+							<xs:documentation>Адреси</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+</xs:schema>	

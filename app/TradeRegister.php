@@ -20,4 +20,9 @@ class TradeRegister extends Model
     * @var string
     */
     protected $keyType = 'string';
+    const STATUSES = ['E', 'C', 'L', 'N'];
+    // N - Нова
+    // Е - Пререгистрирана фирма по Булстат
+    // L - Пререгистрирана фирма по Булстат затворена
+    // C - Нова партида затворена
 }

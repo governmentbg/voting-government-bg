@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RegisterRefusalResponse"
+	xmlns:tns="http://www.bulstat.bg/RegisterRefusalResponse"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T9="http://www.bulstat.bg/Refusal" xmlns:R15="http://www.bulstat.bg/WSResponse">
+
+	<xs:import schemaLocation="Refusal.xsd" namespace="http://www.bulstat.bg/Refusal" />
+	<xs:import schemaLocation="WSResponse.xsd" namespace="http://www.bulstat.bg/WSResponse" />
+
+	<xs:complexType name="RegisterRefusalResponse">
+		<xs:annotation>
+			<xs:documentation>Резултат от операцията
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="R15:WSResponse">
+				<xs:sequence>
+					<xs:element name="Refusal" minOccurs="1" maxOccurs="1"
+						type="T9:Refusal">
+						<xs:annotation>
+							<xs:documentation>Отказ
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

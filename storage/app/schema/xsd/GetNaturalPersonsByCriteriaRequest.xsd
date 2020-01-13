@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetNaturalPersonsByCriteriaRequest"
+	xmlns:tns="http://www.bulstat.bg/GetNaturalPersonsByCriteriaRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="GetNaturalPersonsByCriteriaRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на списък от физ. лица по
+				подадени критерии
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IDType" minOccurs="1" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Вид документ за самоличност
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IDNumber" maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Номер на док. за самоличност</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="15" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="IDCountry" minOccurs="0" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Държава, издала док. за самоличност
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

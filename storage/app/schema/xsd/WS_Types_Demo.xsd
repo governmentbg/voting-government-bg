@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/WS_Types" xmlns:tns="http://www.bulstat.bg/WS_Types"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:R0="http://www.bulstat.bg/SendSubscriptionRequest" xmlns:R1="http://www.bulstat.bg/WSResponse">
+
+	<xs:import schemaLocation="SendSubscriptionRequest.xsd"
+		namespace="http://www.bulstat.bg/SendSubscriptionRequest" />
+	<xs:import schemaLocation="WSResponse.xsd"
+		namespace="http://www.bulstat.bg/WSResponse" />
+
+	<xs:complexType name="WS_Types">
+		<xs:sequence>
+			<xs:element name="SendSubscriptionRequest" type="R0:SendSubscriptionRequest"
+				minOccurs="0" />
+			<xs:element name="WSResponse" type="R1:WSResponse"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/LogicalList" xmlns:tns="http://www.bulstat.bg/LogicalList"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T0="http://www.bulstat.bg/MetaDefinition" xmlns:T2="http://www.bulstat.bg/Nomenclature"
+	xmlns:T3="http://www.bulstat.bg/LogicalListElement">
+
+	<xs:import schemaLocation="MetaDefinition.xsd" namespace="http://www.bulstat.bg/MetaDefinition" />
+	<xs:import schemaLocation="LogicalListElement.xsd"
+		namespace="http://www.bulstat.bg/LogicalListElement" />
+	<xs:import schemaLocation="Nomenclature.xsd"
+		namespace="http://www.bulstat.bg/Nomenclature" />
+
+	<xs:complexType name="LogicalList">
+		<xs:annotation>
+			<xs:documentation>Логически списък</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Definition" minOccurs="1" maxOccurs="1"
+				type="T0:MetaDefinition">
+				<xs:annotation>
+					<xs:documentation>Дефиниция на ЛС</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FirstNom" minOccurs="1" maxOccurs="1"
+				type="T0:MetaDefinition">
+				<xs:annotation>
+					<xs:documentation>Дефиниция на водещата номенклатура
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SecondNom" minOccurs="1" maxOccurs="1"
+				type="T0:MetaDefinition">
+				<xs:annotation>
+					<xs:documentation>Дефиниция на подчинената номенклатура
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Content" minOccurs="0" maxOccurs="unbounded"
+				type="T3:LogicalListElement">
+				<xs:annotation>
+					<xs:documentation>Съдържание на ЛС</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

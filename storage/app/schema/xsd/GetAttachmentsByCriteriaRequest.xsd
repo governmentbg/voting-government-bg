@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetAttachmentsByCriteriaRequest"
+	xmlns:tns="http://www.bulstat.bg/GetAttachmentsByCriteriaRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:complexType name="GetAttachmentsByCriteriaRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на приложения
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IncNumber" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Входящ номер на заявление</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RegNumber" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Номер на вписване на заявление
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

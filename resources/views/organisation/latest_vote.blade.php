@@ -16,26 +16,27 @@
     </div>
     <div class="row">
         <div class="col-lg-12">
-            @if (isset($latestVoteData) && isset($orgList))
+            @if (isset($latestVoteData))
                 @php
                     $i = 1;
                 @endphp
                 <div class="offset-lg-3 col-lg-6 vote-box-outline">
                     @foreach ($orgList as $index => $singleOrg)
                         @if (in_array($singleOrg->id, $latestVoteData))
-                        @php  $padNumber = ''; @endphp
                             <div class="c-darkBlue p-2">
                                 @php
-                                    if (strlen($i) < 2 ) {
+                                    if (strlen($i) < 2) {
                                         $padNumber = 'p-l-13';
                                     } else {
                                         $padNumber = '';
                                     }
                                 @endphp
-                                <div class="display-inline f-s-21 p-r-15 {{$padNumber}}"><b>{{ $i }}</b></div>
+                                <div class="display-inline f-s-21 p-r-15 {{ $padNumber }}"><b>{{ $i }}</b></div>
                                 <div class="display-inline p-r-15"><img src="{{ asset('img/tick.svg') }}" height="30px" width="30px" class="m-b-8"/></div>
                                 <div class="display-inline f-s-21 ">{{ $singleOrg->eik .' - '. $singleOrg->name }}</div>
-                                @php $i++ @endphp
+                                @php
+                                    $i++;
+                                @endphp
                             </div>
                         @endif
                     @endforeach
@@ -53,6 +54,7 @@
             @endif
         </div>
     </div>
+    @php http2_push_image('/img/tick.svg'); @endphp
 @else
     <div class="row">
         <div class="col-lg-12 display-flex justify-center">
@@ -60,4 +62,5 @@
         </div>
     </div>
 @endif
+
 @endsection

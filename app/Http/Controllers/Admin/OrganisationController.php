@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\ActionsHistory;
-use App\Organisation;
 use App\Vote;
 use App\VotingTour;
+use App\Organisation;
+use App\ActionsHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
@@ -37,8 +37,8 @@ class OrganisationController extends BaseAdminController
         $this->addBreadcrumb(__('custom.registered_orgs'), '');
 
         $allFilters = [];
-        if (isset($status) && $status != 'all') {
-            $allFilters['statuses'] = [(int) $status];
+        if (isset($status)) {
+            $allFilters['statuses'] = $status == 'all' ? null : [(int) $status];
         }
         if (isset($eik) && $eik != '') {
             $allFilters['eik'] = $eik;
@@ -70,6 +70,19 @@ class OrganisationController extends BaseAdminController
             $orderType = $request->order;
         } else {
             $orderType = 'desc';
+        }
+
+        if (!empty(session('filters'))) {
+            if (empty($allFilters)) {
+                $allFilters = session('filters');
+            }
+        }
+
+        session(['filters' => $allFilters]);
+
+        if ($request->has('forget')) {
+            session()->forget('filters');
+            return redirect(route('admin.org_list'));
         }
 
         if (!empty($this->votingTour)) {
@@ -146,6 +159,7 @@ class OrganisationController extends BaseAdminController
         $files = [];
         $messages = [];
         $errors = [];
+        $disabledStatuses = [];
 
         if (session()->has('errors')) {
             $errors = session()->get('errors')->messages();
@@ -153,6 +167,37 @@ class OrganisationController extends BaseAdminController
 
         $id = $request->offsetGet('id');
         list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+
+        if (empty($orgData) || empty($this->votingTour)) {
+            return back();
+        }
+
+        if ($orgData->status == Organisation::STATUS_DECLASSED) {
+            $disabledStatuses = [
+                Organisation::STATUS_NEW,
+                Organisation::STATUS_PARTICIPANT,
+                Organisation::STATUS_CANDIDATE,
+                Organisation::STATUS_PENDING,
+                Organisation::STATUS_BALLOTAGE,
+                Organisation::STATUS_REJECTED,
+            ];
+        } else {
+            if ($this->votingTour->status != VotingTour::STATUS_RANKING ||
+                !in_array($orgData->status, Organisation::getApprovedCandidateStatuses())
+            ) {
+                $disabledStatuses[] = Organisation::STATUS_DECLASSED;
+
+                if ($orgData->status != Organisation::STATUS_BALLOTAGE) {
+                    $disabledStatuses[] = Organisation::STATUS_BALLOTAGE;
+                }
+            }
+
+            if ($this->votingTour->status == VotingTour::STATUS_RANKING &&
+                in_array($orgData->status, Organisation::getApprovedCandidateStatuses())
+            ) {
+                $disabledStatuses = Organisation::getRejectionStatuses();
+            }
+        }
 
         if (!empty($orgErrors)) {
             session()->flash('alert-danger', __('custom.get_org_fail'));
@@ -176,10 +221,11 @@ class OrganisationController extends BaseAdminController
         $this->addBreadcrumb(!empty($orgData) ? $orgData->name : '');
 
         return view('admin.org_edit', [
-            'orgData'  => $orgData,
-            'statuses' => $statuses,
-            'files'    => $files,
-            'messages' => $messages,
+            'orgData'          => $orgData,
+            'statuses'         => $statuses,
+            'files'            => $files,
+            'messages'         => $messages,
+            'disabledStatuses' => $disabledStatuses
         ])->withErrors($errors);
     }
 
@@ -198,6 +244,15 @@ class OrganisationController extends BaseAdminController
         $status = $request->offsetGet('status');
         $rankErrors = [];
         $editErrors = [];
+
+        $callRanking = false;
+        if ($status == Organisation::STATUS_DECLASSED) {
+            list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
+
+            if (!empty($orgData) && $orgData->status != $status) {
+                $callRanking = true;
+            }
+        }
 
         \DB::beginTransaction();
 
@@ -219,7 +274,7 @@ class OrganisationController extends BaseAdminController
         ]);
 
         $ranking = [];
-        if ($status == Organisation::STATUS_DECLASSED) {
+        if ($callRanking) {
             list($ranking, $rankErrors) = api_result(ApiVote::class, 'ranking', ['status' => Vote::TOUR_ORGANISATION_DECLASSED_RANKING, 'declass_org_id' => $id]);
         }
 

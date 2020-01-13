@@ -170,4 +170,12 @@
     </div>
 </div>
 </div>
+@php
+    http2_push_image('/img/tick.svg');
+    http2_push_image('/img/circle-fill.svg');
+    http2_push_image('/img/circle-no-fill.svg');
+    http2_push_image('/img/download.svg');
+    http2_push_image('/img/view.svg');
+@endphp
+
 @endsection

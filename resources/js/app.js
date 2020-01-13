@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -60,8 +59,8 @@ function checkVoteSize() {
  * Add row number to organisations list.
  */
 function addRowNumber(selectedOrgs) {
-    selectedOrgs.each(function(i, org){
-        let orgInList = $('#votefor option[value="' + $(org).attr('value') +'"]');
+    selectedOrgs.each(function(i, org) {
+        let orgInList = $('#votefor option[value="'+ $(org).attr('value') +'"]');
         let index = orgInList.index() + 1;
         $('#votefor option[value="' + $(org).attr('value') +'"]').html('<span>'+ index +' - </span>' + $(org).text());
     });
@@ -72,7 +71,7 @@ function addRowNumber(selectedOrgs) {
  * @returns {void}
  */
 function reorderRowNumbers() {
-    $('#votefor option').each(function(i, org){
+    $('#votefor option').each(function(i, org) {
         $(org).find('span').remove();
         $(org).html('<span>'+ ($(org).index() + 1) +' - </span>' + $(org).text());
     });
@@ -83,7 +82,7 @@ $(document).ready(function() {
 
     $('#vote_organisations').on('change', function(event) {
 
-      if ($(this).val().length > (14 - $('#votefor option').length)) {
+      if ($(this).val().length > ($('#js-voteform').data('max-votes') - $('#votefor option').length)) {
 
         $(this).val(lastSelect);
       } else {
@@ -162,14 +161,23 @@ $('.js-showTerms').on('click', function() {
     $('#info').modal('show');
 });
 
-var $th = $('.tableFixHead').find('thead');
+var $th1 = $('.tableFixHead').find('thead tr:first-child th');
+var $th2 = $('.tableFixHead').find('thead tr:nth-child(2) th');
 
 $(document).ready(function () {
-    $th.css('transform', 'translateY(1px)');
+    $th1.css('transform', 'translateY(0px)');
+    if ($th2.length > 0) {
+        $th2.css('transform', 'translateY(-1px)');
+    }
 });
 
 $('.tableFixHead').on('scroll', function() {
-    $th.css('transform', 'translateY('+ this.scrollTop + 'px)');
+    $th1.css('transform', 'translateY('+ this.scrollTop + 'px)');
+    $th1.css('background-color', '#3e7ea9');
+    if ($th2.length > 0) {
+        $th2.css('transform', 'translateY('+ (this.scrollTop - 1) + 'px)');
+        $th2.css('background-color', '#3e7ea9');
+    }
 });
 
 $(document).ready(function() {
@@ -221,7 +229,7 @@ $('#votebtn').click(function(ev) {
     return false;
 });
 
-//voting tour update - send vote invites confirmation
+// voting tour update - send vote invites confirmation
 $('form.change-tour').submit(function(e) {
     e.preventDefault();
     let oldValue = $('form.change-tour [name="status"]').data('old-status');
@@ -230,19 +238,25 @@ $('form.change-tour').submit(function(e) {
     modal.find('.modal-body [type="checkbox"][name="send_emails"]').hide();
     modal.find('.modal-body .checkbox-container label').hide();
 
-    if ((status == 3 || status == 5) && status != oldValue) { //status - voting
+    if ((status == 3 || status == 5 || status == 4) && status != oldValue) { //status - voting
         modal.modal();
 
         if (status == 3) {
             modal.find('.modal-title').text($('#translations').data('voting'));
             modal.find('.modal-body .text').text($('#translations').data('status-change-confirm'));
-            modal.find('.modal-body .checkbox-container label').show()
+            modal.find('.modal-body .checkbox-container label').show();
+        }
+
+        if (status == 4) {
+            modal.find('.modal-title').text($('#translations').data('ranking'));
+            modal.find('.modal-body .text').text($('#translations').data('confirm-ranking'));
+            modal.find('.modal-body .checkbox-container label').show();
         }
 
         if (status == 5) {
             modal.find('.modal-title').text($('#translations').data('ballotage'));
             modal.find('.modal-body .text').text($('#translations').data('status-change-confirm'));
-            modal.find('.modal-body .checkbox-container label').show()
+            modal.find('.modal-body .checkbox-container label').show();
         }
 
         modal.find('input[name="send_emails"]').change(function() {
@@ -260,11 +274,6 @@ $('form.change-tour').submit(function(e) {
     } else if (status == 2 && status != oldValue) {
         modal.modal();
         modal.find('.modal-title').text($('#translations').data('closed-reg'));
-        modal.find('.modal-body .text').text($('#translations').data('confirm'));
-        modal.find('.confirm').attr('disabled', false);
-    } else if (status == 4 && status != oldValue) {
-        modal.modal();
-        modal.find('.modal-title').text($('#translations').data('ranking'));
         modal.find('.modal-body .text').text($('#translations').data('confirm'));
         modal.find('.confirm').attr('disabled', false);
     } else if (status == 6 && status != oldValue) {
@@ -337,11 +346,14 @@ $(function() {
                 success: function(result) {
                     result = JSON.parse(result);
                     if (jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data)) {
-                        $('#registerOrg input[name="name"]').val(result.data.name);
-                        $('#registerOrg input[name="address"]').val(result.data.fullAddress);
-                        $('#registerOrg input[name="representative"]').val(result.data.representative);
-                        $('#registerOrg input[name="phone"]').val(result.data.phone);
-                        $('#registerOrg input[name="email"]').val(result.data.email);
+                        result.data['address'] = result.data.fullAddress;
+                        ['name', 'address', 'representative', 'phone', 'email'].forEach(function(field) {
+                            var input = $('#registerOrg input[name="'+ field +'"]');
+                            input.val(result.data[field]);
+                            if (input.val() != '') {
+                                input[0].setCustomValidity('');
+                            }
+                        });
                     }
                 }
             });
@@ -371,9 +383,8 @@ $('.ams-dropdown').on('blur', function() {
 var initialPage = 2;
 
 $('.js-org-table').on('scroll', function() {
-
     if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-        var lastEntryNumber = parseInt($('.js-orgs tr:last-child>td:first-child').text());
+        var lastEntryNumber = parseInt($('.js-orgs tr:last-child > td:first-child').text());
 
         $.ajax({
             type: 'GET',
@@ -396,17 +407,17 @@ $('.js-org-table').on('scroll', function() {
 // General initialization of nanoscroll for project
 $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 
-if ($('.ranking').length > 0) {
-    if ($('.rank-scroll').data('vote-count') > 2) {
-        $('.rank-scroll .nano-pane').css('margin-top', '114px');
+if ($('.public-table').length > 0) {
+    var theadHeight = $('.tableFixHead').find('thead').innerHeight();
+    if ($th2.length > 0) {
+        $('.public-table .nano-pane').css('margin-top', (theadHeight - 1) +'px');
+        $('.public-table .nano-pane .nano-slider').css('margin-top', '-1px');
     } else {
-        $('.rank-scroll .nano-pane').css('margin-top', '56px');
+        $('.public-table .nano-pane').css('margin-top', theadHeight +'px');
+        $('.public-table .nano-pane .nano-slider').css('margin-top', '-2px');
     }
 }
 
-if ($('.rest').length > 0) {
-    $('.rest .nano-pane').css('margin-top', '56px');
-}
 // Fixes a bug where nanoscroller is not initialized on front page
 $(document).ready(function() {
     $('.nano').nanoScroller({ sliderMaxHeight: 100 });
@@ -425,4 +436,16 @@ $('#orgList').on('keyup keypress', function(e) {
         e.preventDefault();
         return false;
     }
+});
+
+$('form.edit-org').submit(function(e) {
+    if ($('.edit-status').data('old-status') != 6 && $('.edit-status').val() == 6) {
+        e.preventDefault();
+        let modalDeclass = $('#confirmOrgDeclass');
+        modalDeclass.modal();
+    }
+});
+
+$('#confirmOrgDeclass .confirm').click(function() {
+    $('form.edit-org').unbind('submit').submit();
 });

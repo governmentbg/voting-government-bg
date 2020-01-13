@@ -70,17 +70,19 @@ class CacheRanking extends Command
 
             if (!empty($listErrors)) {
                 $this->error( __('custom.list_ranking_fail'));
-            } elseif (!empty($listData)) {
-                $votingCount = $listData->voting_count;
-                if (isset($listData->voter_turnout) && !empty($listData->voter_turnout)) {
-                    $stats = $listData->voter_turnout;
-                } else {
-                    $this->error( __('custom.voter_turnout_fail'));
+            } else {
+                if (!empty($listData) && isset($listData->ranking) && !empty($listData->ranking)) {
+                    $votingCount = $listData->voting_count;
+                    if (isset($listData->voter_turnout) && !empty($listData->voter_turnout)) {
+                        $stats = $listData->voter_turnout;
+                    } else {
+                        $this->error( __('custom.voter_turnout_fail'));
+                    }
+                    $listData = $listData->ranking;
                 }
-                $listData = $listData->ranking;
-            }
 
-            Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'votingCount' => $votingCount], now()->addMinutes(60));
+                Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'votingCount' => $votingCount], now()->addMinutes(60));
+            }
         } else {
             $this->warn('Wrong voting tour status. Ranking can\'t be calculated.');
             return;

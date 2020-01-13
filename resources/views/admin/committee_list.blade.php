@@ -16,6 +16,20 @@
                         <tr>
                             <th class="w-20">
                                 <a
+                                    class="c-white {{ app('request')->sort == 'username' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\CommitteeController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'username', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc', 'page' => app('request')->page]
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.username') }}<img src="{{ app('request')->sort == 'username' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-30">
+                                <a
                                     class="c-white {{ app('request')->sort == 'name' ? 'sort-active' : '' }}"
                                     href="{{
                                         action(
@@ -26,21 +40,7 @@
                                             )
                                         )
                                     }}"
-                                >{{ __('custom.username') }}<img src="{{ app('request')->sort == 'name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
-                            </th>
-                            <th class="w-30">
-                                <a
-                                    class="c-white {{ app('request')->sort == 'first_name' ? 'sort-active' : '' }}"
-                                    href="{{
-                                        action(
-                                            'Admin\CommitteeController@list',
-                                            array_merge(
-                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
-                                                ['sort' => 'first_name', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc', 'page' => app('request')->page]
-                                            )
-                                        )
-                                    }}"
-                                >{{ __('custom.own_name') }}<img src="{{ app('request')->sort == 'first_name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                                >{{ __('custom.own_name') }}<img src="{{ app('request')->sort == 'name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
                             <th class="w-25">
                                 <a
@@ -105,4 +105,11 @@
         <a href="{{ route('admin.committee.add') }}" class="btn btn-primary">{{ __('custom.add_new_member') }}</a>
     </div>
 </div>
+
+@php
+    http2_push_image('/img/edit.svg');
+    http2_push_image('img/arrow-down.svg');
+    http2_push_image('/img/arrow-up.svg');
+@endphp
+
 @endsection

@@ -13,7 +13,7 @@ class APIVotingTourTest extends TestCase
 
     private $votingTour;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->be(factory(\App\User::class)->create());

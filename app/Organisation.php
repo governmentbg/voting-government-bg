@@ -31,9 +31,19 @@ class Organisation extends Model
     const DEFAULT_ORDER_FIELD = 'eik';
     const DEFAULT_ORDER_TYPE = 'ASC';
 
-    protected $perPage = 20;
+    const ALLOWED_ORDER_FIELDS = [
+        'eik',
+        'name',
+        'email',
+        'is_ap',
+        'is_candidate',
+        'status',
+        'created_at',
+        'updated_at',
+    ];
+    const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
 
-    protected $hidden = ['updater', 'creator'];
+    protected $perPage = 20;
 
     /**
      * The attributes that aren't mass assignable.
@@ -41,6 +51,13 @@ class Organisation extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['updater', 'creator'];
 
     public function user()
     {
@@ -66,20 +83,6 @@ class Organisation extends Model
     public function setUpdatedAtAttribute($value)
     {
         // to disable updated_at
-    }
-
-    public static function getOrderColumns()
-    {
-        return [
-            'eik',
-            'name',
-            'email',
-            'is_ap',
-            'is_candidate',
-            'status',
-            'created_at',
-            'updated_at',
-        ];
     }
 
     public static function getStatuses()
@@ -125,6 +128,16 @@ class Organisation extends Model
         return [
             self::STATUS_CANDIDATE,
             self::STATUS_BALLOTAGE,
+        ];
+    }
+
+    public static function getRejectionStatuses()
+    {
+        return [
+            self::STATUS_NEW,
+            self::STATUS_PARTICIPANT,
+            self::STATUS_PENDING,
+            self::STATUS_REJECTED
         ];
     }
 

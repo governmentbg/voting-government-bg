@@ -60,7 +60,7 @@ class ForgotPasswordController extends Controller
         );
 
         return isset($response['status']) && $response['status'] == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($response)
+                    ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
 
@@ -93,12 +93,13 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * Get the response for a successful password reset link.
-     *
-     * @param  string  $response
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     */
-    protected function sendResetLinkResponse($response)
+    * Get the response for a successful password reset link.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  string  $response
+    * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+    */
+    protected function sendResetLinkResponse(Request $request, $response)
     {
         session()->flash('alert-success', trans($response['status']));
 

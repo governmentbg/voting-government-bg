@@ -21,6 +21,21 @@ class User extends Authenticatable
     const ACTIVE_FALSE = 0;
     const ACTIVE_TRUE = 1;
 
+    const DEFAULT_ORDER_FIELD = 'id';
+    const DEFAULT_ORDER_TYPE = 'ASC';
+
+    const ALLOWED_ORDER_FIELDS = [
+        'username',
+        'name',
+        'first_name',
+        'last_name',
+        'active',
+        'email',
+        'created_at',
+        'updated_at',
+    ];
+    const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
+
     const EDITABLE_FIELDS = ['first_name', 'last_name', 'active', 'email'];
 
     protected $guarded = ['id'];

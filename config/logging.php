@@ -36,7 +36,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['single', 'graylog'],
             'ignore_exceptions' => false,
         ],
 
@@ -89,6 +89,16 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+
+        'graylog' => [
+            'driver' => 'monolog',
+            'handler' => \App\Extensions\FluentdHandler::class,
+            'formatter' => \Monolog\Formatter\GelfMessageFormatter::class,
+            'tap' => [App\Libraries\LogProcessor::class],
+            'with' => [],
+
+        ],
+
     ],
 
 ];

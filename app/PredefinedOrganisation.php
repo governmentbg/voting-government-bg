@@ -14,6 +14,13 @@ class PredefinedOrganisation extends Model
 
     protected $primaryKey = 'eik';
 
+    /**
+    * The "type" of the primary key eik.
+    *
+    * @var string
+    */
+    protected $keyType = 'string';
+
     public function scopeGetData($query, $eik)
     {
         $query->where('eik', $eik)->select('name', 'city', 'address', 'phone', 'email');

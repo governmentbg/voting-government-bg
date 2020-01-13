@@ -35,7 +35,7 @@
                                     @if ($tour->status == App\VotingTour::STATUS_FINISHED)
                                         <a
                                             href="{{ route('admin.ranking', ['id' => $tour->id])}}"><img src="{{ asset('img/star.svg') }}" height="30px" width="50px"
-                                            title="{{ __('custom.inactive') }}"
+                                            title="{{ __('custom.ranking') }}"
                                             data-toggle="tooltip"
                                             data-placement="top"
                                         ></a>
@@ -77,5 +77,10 @@
 <div class="row">
     <div class="p-b-15"></div>
 </div>
-
+@php 
+    http2_push_image('/img/cross.svg');
+    http2_push_image('/img/star.svg');
+    http2_push_image('/img/edit.svg');
+    http2_push_image('/img/clock.svg');
+@endphp
 @endsection

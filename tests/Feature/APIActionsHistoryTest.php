@@ -21,13 +21,15 @@ class APIActionsHistoryTest extends TestCase
      */
     public function testListActionsHistory()
     {
-        $votingTour = VotingTour::where('status', '>=', VotingTour::STATUS_OPENED_REG)->first();
+        $votingTour = \App\VotingTour::getLatestTour() ? \App\VotingTour::getLatestTour() : null;
 
-        if (!$votingTour) {
+        // logging before adding a tour
+        if ($votingTour == null) {
             $this->post(url('api/actionHistory/search'))
-                ->assertStatus(500)
-                ->assertJson(['success' => false]);
+                ->assertStatus(200)
+                ->assertJson(['success' => true]);
         } else {
+             // logging for a specific tour
             $data['filters']['voting_tour_id'] = $votingTour->id;
 
             $this->post(url('api/actionHistory/search'), $data)

@@ -18,8 +18,9 @@ class CommitteeController extends BaseAdminController
     {
         $this->addBreadcrumb(__('breadcrumbs.settings'), route('admin.settings'));
         $this->addBreadcrumb(__('breadcrumbs.committee'), '');
-         // apply sort parameters
-         if ($request->has('sort')) {
+
+        // apply sort parameters
+        if ($request->has('sort')) {
             $orderField = $request->sort;
         } else {
             $orderField = 'name';
@@ -37,7 +38,7 @@ class CommitteeController extends BaseAdminController
         ]);
 
         if (!empty($errors)) {
-            return view('admin.committeeList')->withErrors($errors)->with('users', []);
+            return view('admin.committee_list')->withErrors($errors)->with('users', []);
         }
 
         return view('admin.committee_list', ['users' => $this->paginate($users)]);
@@ -93,9 +94,9 @@ class CommitteeController extends BaseAdminController
         $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
         $data['isAdmin'] = true;
         if (sendEmail('emails.registrationConfirm', $data, $data['email'], __('custom.register_subject'))) {
-            session()->flash('alert-info', __('custom.register_send_mail_success'));
+            session()->flash('alert-info', __('custom.register_send_mail_success_user'));
         } else {
-            session()->flash('alert-info', __('custom.register_send_mail_failed'));
+            session()->flash('alert-info', __('custom.register_send_mail_failed_user'));
         }
 
         return redirect()->route('admin.committee.list');

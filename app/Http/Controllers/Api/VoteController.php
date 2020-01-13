@@ -9,6 +9,8 @@ use App\Organisation;
 use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\ApiController;
 
 class VoteController extends ApiController
@@ -36,7 +38,13 @@ class VoteController extends ApiController
             }
 
             $validator = Validator::make($post, [
-                'org_id'      => 'required|int|exists:organisations,id',
+                'org_id'      => [
+                    'required',
+                    'int',
+                    Rule::exists('organisations', 'id')->where(function ($query) {
+                        $query->whereIn('status', Organisation::getApprovedStatuses());
+                    }),
+                ],
                 'org_list'    => 'required|string'
             ]);
 
@@ -47,14 +55,15 @@ class VoteController extends ApiController
                         $votedForOrgArray = explode(',', str_replace(' ', '', $post['org_list']));
 
                         $votedForListSize = sizeof($votedForOrgArray);
+                        $maxVotes = $this->prepareMaxVotes($votingTour);
 
-                        if ($votedForListSize <= Vote::MAX_VOTES && ($votedForListSize >= Vote::MIN_VOTES)) {
-                            $currentTourOrgList = Organisation::where('voting_tour_id', VotingTour::getLatestTour()->id)
+                        if ($votedForListSize >= Vote::MIN_VOTES && $votedForListSize <= $maxVotes) {
+                            $currentTourOrgCount = Organisation::where('voting_tour_id', $votingTour->id)
                                 ->whereIn('id', $votedForOrgArray)
-                                ->whereIn('status', [Organisation::STATUS_CANDIDATE, Organisation::STATUS_BALLOTAGE])
-                                ->get()->toArray();
+                                ->whereIn('status', Organisation::getApprovedCandidateStatuses())
+                                ->count();
 
-                            if (sizeof($currentTourOrgList) != $votedForListSize) {
+                            if ($currentTourOrgCount != $votedForListSize) {
                                 return $this->errorResponse(__('custom.invalid_org_in_vote_list'));
                             }
 
@@ -89,19 +98,21 @@ class VoteController extends ApiController
 
                             $vote->save();
 
-                            $logData = [
-                                'module' => ActionsHistory::VOTES,
-                                'action' => ActionsHistory::TYPE_VOTED
-                            ];
+                            if (\Auth::user()) {
+                                $logData = [
+                                    'module' => ActionsHistory::VOTES,
+                                    'action' => ActionsHistory::TYPE_VOTED
+                                ];
 
-                            ActionsHistory::add($logData);
+                                ActionsHistory::add($logData);
+                            }
 
                             return $this->successResponse(['id' => $vote->id], true);
                         }
                     }
                 } catch (\Exception $e) {
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.vote_failed'));
+                    return $this->errorResponse(__('custom.vote_failed'), __('custom.internal_server_error'));
                 }
             }
         }
@@ -154,7 +165,7 @@ class VoteController extends ApiController
                 return $this->successResponse($lastVote);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.get_vote_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.get_vote_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -165,7 +176,7 @@ class VoteController extends ApiController
     {
         $votes = Vote::select('*')->orderBy('id', 'ASC')->get();
 
-        foreach ($votes as $singleVote) {
+        foreach ($votes->values() as $index => $singleVote) {
             $voteHash = hash('sha256',
                 $singleVote->vote_time .
                 $singleVote->voter_id .
@@ -176,7 +187,7 @@ class VoteController extends ApiController
             );
 
             if ($singleVote->id < $votes->last()->id) {
-                $nextVoteId = $singleVote->id + 1;
+                $nextVoteId = $votes->values()[$index + 1]->id;
 
                 $votes = $votes->keyBy('id');
                 $nextVote = $votes->get($nextVoteId);
@@ -313,7 +324,7 @@ class VoteController extends ApiController
                                 // calculate vote limit
                                 $limits = Vote::calculateVoteLimit($voteRecordData, $votingCount);
 
-                                // excract elected orgs data
+                                // extract selected orgs data
                                 $electedOrgsData = array_slice($voteRecordData, 0, $limits['orgPos'] + 1, true);
                                 $voteRecordData = array_slice($voteRecordData, $limits['orgPos'] + 1, null, true);
                             }
@@ -321,7 +332,7 @@ class VoteController extends ApiController
                             foreach ($listOfCandidates as $candidate) {
                                 $voteRecordData[$candidate->id][$votingCount] = intval($candidate->votes);
 
-                                // excract ballotage orgs data
+                                // extract ballotage orgs data
                                 $ballotageOrgsData[$candidate->id] = $voteRecordData[$candidate->id];
                                 unset($voteRecordData[$candidate->id]);
                             }
@@ -356,12 +367,14 @@ class VoteController extends ApiController
                         'prev_hash'      => $prevHash
                     ]);
 
-                    $logData = [
-                        'module' => ActionsHistory::VOTES,
-                        'action' => ActionsHistory::TYPE_RANKED
-                    ];
+                    if (\Auth::user()) {
+                        $logData = [
+                            'module' => ActionsHistory::VOTES,
+                            'action' => ActionsHistory::TYPE_RANKED
+                        ];
 
-                    ActionsHistory::add($logData);
+                        ActionsHistory::add($logData);
+                    }
 
                     return $this->successResponse();
                 }
@@ -369,7 +382,7 @@ class VoteController extends ApiController
                 return $this->errorResponse(__('custom.ranking_not_allowed'));
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.ranking_failed'), $e->getMessage());
+                return $this->errorResponse(__('custom.ranking_failed'), __('custom.internal_server_error'));
             }
         }
 
@@ -486,7 +499,7 @@ class VoteController extends ApiController
 
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.list_ranking_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_ranking_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -505,8 +518,23 @@ class VoteController extends ApiController
      */
     public function listVoters(Request $request)
     {
-        $filters = $request->get('filters', []);
-        $withPagination = $request->get('with_pagination', true);
+        $rules = [
+            'filters'         => 'nullable|array',
+            'with_pagination' => 'nullable|bool',
+            'page_number'     => 'nullable|int|min:1',
+        ];
+
+        $data = $request->only(array_keys($rules));
+
+        $validator = \Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
+
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $withPagination = isset($data['with_pagination']) ? $data['with_pagination'] : true;
+        $page = isset($data['page_number']) ? $data['page_number'] : null;
 
         $validator = Validator::make($filters, [
             'eik' => 'nullable|digits_between:1,19',
@@ -537,14 +565,19 @@ class VoteController extends ApiController
                                $query->where('votes.id', '>', $voteLimits['minId']);
                            }
                        })
-                      ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
+                       ->orderBy(Organisation::DEFAULT_ORDER_FIELD, Organisation::DEFAULT_ORDER_TYPE);
 
-                $voters = $withPagination ? $voters->paginate() : $voters->get();
+                if ($withPagination) {
+                    $request->request->add(['page' => $page]);
+                    $voters = $voters->paginate();
+                } else {
+                    $voters = $voters->get();
+                }
 
                 return $this->successResponse($voters);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.list_voters_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_voters_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -581,20 +614,43 @@ class VoteController extends ApiController
                     'prev_hash'      => $prevHash
                 ]);
 
-                $logData = [
-                    'module' => ActionsHistory::VOTES,
-                    'action' => ActionsHistory::TYPE_CANCELLED_TOUR
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTES,
+                        'action' => ActionsHistory::TYPE_CANCELLED_TOUR
+                    ];
 
-                ActionsHistory::add($logData);
-
+                    ActionsHistory::add($logData);
+                }
                 return $this->successResponse();
             }
 
             return $this->errorResponse(__('custom.cancel_tour_not_allowed'));
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
-            return $this->errorResponse(__('custom.cancel_tour_fail'), $e->getMessage());
+            return $this->errorResponse(__('custom.cancel_tour_fail'), __('custom.internal_server_error'));
+        }
+    }
+
+    public function getMaxVotes(Request $request)
+    {
+        try {
+            $votingTour = VotingTour::getLatestTour();
+
+            if (!empty($votingTour) && array_key_exists($votingTour->status, VotingTour::getActiveStatuses())) {
+                $maxVotes = $this->prepareMaxVotes($votingTour);
+
+                if ($maxVotes >= 0) {
+                    return $this->successResponse(['max_votes' => $maxVotes], true);
+                }
+
+                return $this->errorResponse(__('custom.get_max_votes_fail'));
+            }
+
+            return $this->errorResponse(__('custom.get_max_votes_not_allowed'));
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.get_max_votes_fail'), __('custom.internal_server_error'));
         }
     }
 
@@ -641,7 +697,7 @@ class VoteController extends ApiController
                 } else {
                     $voteLimits['status'] = Vote::TOUR_VOTING;
                 }
-            } elseif ($tourStatus = VotingTour::STATUS_FINISHED) {
+            } elseif ($tourStatus == VotingTour::STATUS_FINISHED) {
                 $votingCount = Vote::getVotingCount($tourId);
                 $tourCancelled = (Vote::getLatestRankingId($tourId, Vote::TOUR_CANCELLED_NO_RANKING) != null);
                 if ($tourCancelled) {
@@ -655,5 +711,49 @@ class VoteController extends ApiController
         }
 
         return $voteLimits;
+    }
+
+    /**
+     * Get maximum number of votes.
+     * For ballotage the number is MAX_VOTES minus number of elected orgs.
+     *
+     * @param stdClass $votingTour
+     *
+     * @return integer
+     */
+    private function prepareMaxVotes($votingTour)
+    {
+        if ($votingTour->status == VotingTour::STATUS_VOTING) {
+            return Vote::MAX_VOTES;
+        }
+
+        $cacheKey = VotingTour::getCacheKey($votingTour->id, 'max-votes');
+        if ($votingTour->status == VotingTour::STATUS_BALLOTAGE) {
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+        }
+
+        $maxVotes = -1;
+
+        // get voting count
+        $votingCount = Vote::getVotingCount($votingTour->id);
+
+        if ($votingCount > 0) {
+            // get latest ranking data
+            $latestRanking = Vote::getLatestRankingData($votingTour->id);
+            $latestRanking = !empty($latestRanking) ? json_decode($latestRanking['vote_data'], true) : null;
+
+            if (!is_null($latestRanking)) {
+                // calculate votes limit
+                $limits = Vote::calculateVoteLimit($latestRanking, $votingCount);
+
+                $maxVotes = Vote::MAX_VOTES - ($limits['orgPos'] + 1);
+            }
+        }
+
+        Cache::put($cacheKey, $maxVotes, now()->addMinutes(60));
+
+        return $maxVotes;
     }
 }

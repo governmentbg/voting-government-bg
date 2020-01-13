@@ -7,7 +7,7 @@ use App\VotingTour;
 use App\ActionsHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\ApiController;
 
@@ -53,17 +53,20 @@ class VotingTourController extends ApiController
                 DB::commit();
             } catch (QueryException $e) {
                 DB::rollback();
-                Log::error($e->getMessage());
+                logger()->error($e->getMessage());
+                return $this->errorResponse(__('custom.error_adding_tour', __('custom.internal_server_error')));
             }
 
             if (isset($saved)) {
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_ADD,
-                    'object' => $saved->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_ADD,
+                        'object' => $saved->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse(['id' => $saved->id], true);
             }
@@ -90,22 +93,30 @@ class VotingTourController extends ApiController
         if (!$validator->fails()) {
             $editVotingTour = VotingTour::getLatestTour();
 
-            if ($editVotingTour->status + VotingTour::STATUS_STEP < $post['new_status']) {
-                if (!($post['new_status'] == VotingTour::STATUS_FINISHED)) {
-                    return $this->errorResponse(__('custom.status_skipping'));
-                }
-            }
-
-            if ($editVotingTour->status > $post['new_status']) {
-                if (!($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_VOTING)
-                    &&
-                    !($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_RANKING)
-                ) {
-                    return $this->errorResponse(__('custom.backward_status'));
-                }
-            }
-
             if ($editVotingTour) {
+                if ($editVotingTour->status + VotingTour::STATUS_STEP < $post['new_status']) {
+                    if (!($post['new_status'] == VotingTour::STATUS_FINISHED)) {
+                        return $this->errorResponse(__('custom.status_skipping'));
+                    }
+                }
+
+                if ($editVotingTour->status > $post['new_status']) {
+                    if (!($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_VOTING)
+                        &&
+                        !($editVotingTour->status == VotingTour::STATUS_BALLOTAGE && $post['new_status'] == VotingTour::STATUS_RANKING)
+                    ) {
+                        return $this->errorResponse(__('custom.backward_status'));
+                    }
+                }
+
+                if ($editVotingTour->status != $post['new_status'] && array_key_exists($post['new_status'], VotingTour::getActiveStatuses())) {
+                    // clear cached max votes
+                    $cacheKey = VotingTour::getCacheKey($editVotingTour->id, 'max-votes');
+                    if (Cache::has($cacheKey)) {
+                        Cache::forget($cacheKey);
+                    }
+                }
+
                 try {
                     DB::beginTransaction();
 
@@ -116,16 +127,19 @@ class VotingTourController extends ApiController
                     DB::commit();
                 } catch (QueryException $e) {
                     DB::rollback();
-                    Log::error($e->getMessage());
+                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.error_changing_status', __('custom.internal_server_error')));
                 }
 
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_MOD,
-                    'object' => $editVotingTour->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_MOD,
+                        'object' => $editVotingTour->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse();
             }
@@ -164,30 +178,32 @@ class VotingTourController extends ApiController
                     DB::commit();
                 } catch (QueryException $e) {
                     DB::rollback();
-                    Log::error($e->getMessage());
+                    logger()->error($e->getMessage());
+                    return $this->errorResponse(__('custom.error_renaming_tour', __('custom.internal_server_error')));
                 }
 
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_MOD,
-                    'object' => $editVotingTour->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_MOD,
+                        'object' => $editVotingTour->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse();
             }
         }
 
-        return $this->errorResponse(__('custom.error_changing_status'), $validator->errors()->messages());
+        return $this->errorResponse(__('custom.error_renaming_tour'), $validator->errors()->messages());
     }
 
     /**
      * Get the latest voting tour - if a status different from FINISHED is found
      * it is returned, otherwise returns the tour with the highest updated_at
      *
-     * @param string order_field - required
-     * @param string order_type - required
+     * @param none
      *
      * @return tour or error
      */
@@ -213,45 +229,41 @@ class VotingTourController extends ApiController
     public function list(Request $request)
     {
         $post = $request->all();
+        $post['order_type'] = isset($post['order_type']) ? strtoupper($post['order_type']) : null;
 
         $validator = Validator::make($post, [
-            'order_field'    => 'nullable|string',
-            'order_type'     => 'nullable|string'
+            'order_field' => 'nullable|string|in:'. implode(',', VotingTour::ALLOWED_ORDER_FIELDS),
+            'order_type'  => 'nullable|string|in:'. implode(',', VotingTour::ALLOWED_ORDER_TYPES),
         ]);
 
-        if (!$validator->fails()) {
-            $orderField = isset($post['order_field']) ? $post['order_field'] : VotingTour::DEFAULT_ORDER_FIELD;
-            $orderType = isset($post['order_type']) ? $post['order_type'] : VotingTour::DEFAULT_ORDER_TYPE;
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
 
-            $orderColumns = [
-                'name',
-                'status',
-                'created_at',
-                'updated_at',
-            ];
+        $orderField = isset($post['order_field']) ? $post['order_field'] : VotingTour::DEFAULT_ORDER_FIELD;
+        $orderType = isset($post['order_type']) ? $post['order_type'] : VotingTour::DEFAULT_ORDER_TYPE;
 
-            if (!in_array($orderField, $orderColumns)) {
-                return $this->errorResponse(__('custom.invalid_sort_field'));
-            }
-
+        try {
             $tourList = VotingTour::orderBy($orderField, $orderType)->get();
 
             if ($tourList->first()) {
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_SEE
+                    ];
 
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_SEE
-                ];
-
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse($tourList);
             } else {
                 return $this->errorResponse(__('custom.tour_list_not_found'));
             }
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+            return $this->errorResponse(__('custom.list_tours_fail'), __('custom.internal_server_error'));
         }
-
-        return $this->errorResponse(__('custom.tour_list_not_found'));
     }
 
     /**
@@ -273,13 +285,15 @@ class VotingTourController extends ApiController
             $votingTourData = VotingTour::where('id', $post['tour_id'])->first();
 
             if ($votingTourData) {
-                $logData = [
-                    'module' => ActionsHistory::VOTING_TOURS,
-                    'action' => ActionsHistory::TYPE_SEE,
-                    'object' => $votingTourData->id
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::VOTING_TOURS,
+                        'action' => ActionsHistory::TYPE_SEE,
+                        'object' => $votingTourData->id
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse($votingTourData);
             } else {

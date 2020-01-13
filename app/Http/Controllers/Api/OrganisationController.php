@@ -40,6 +40,15 @@ class OrganisationController extends ApiController
         $votingTour = VotingTour::getLatestTour();
         if (!empty($votingTour) && $votingTour->status == VotingTour::STATUS_OPENED_REG) {
             $data = $request->get('org_data', []);
+
+            $validator = \Validator::make(['org_data' => $data], [
+                'org_data' => 'required|array',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->errorResponse(__('custom.reg_org_fail'), $validator->errors()->messages());
+            }
+
             $data['files'] = $request->get('files', []);
 
             $validator = \Validator::make($data, [
@@ -49,10 +58,10 @@ class OrganisationController extends ApiController
                 'representative'    => 'required|string|max:512',
                 'email'             => 'required|email',
                 'phone'             => 'required|string|max:40',
-                'in_av'             => 'bool',
-                'is_candidate'      => 'bool',
-                'description'       => 'nullable|max:8000|required_if:is_candidate,1',
-                'references'        => 'nullable|max:8000|required_if:is_candidate,1',
+                'in_av'             => 'nullable|bool',
+                'is_candidate'      => 'nullable|bool',
+                'description'       => 'nullable|string|max:8000',
+                'references'        => 'nullable|string|max:8000',
                 'status'            => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
                 'files'             => 'nullable|array',
@@ -62,8 +71,8 @@ class OrganisationController extends ApiController
             ]);
 
             $validator->after(function ($validator) use ($data) {
-                if (isset($data['description']) && empty($data['description'])) {
-                    if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                    if (!isset($data['description']) || trim($data['description']) == '') {
                         $validator->errors()->add('description', __('custom.org_descr_required'));
                     }
                 }
@@ -162,7 +171,7 @@ class OrganisationController extends ApiController
                 } catch (\Exception $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.reg_org_fail'));
+                    return $this->errorResponse(__('custom.reg_org_fail'), __('custom.internal_server_error'));
                 }
             }
 
@@ -184,7 +193,7 @@ class OrganisationController extends ApiController
      * @param string org_data[phone] - optional
      * @param boolean org_data[in_av] - optional
      * @param boolean org_data[is_candidate] - optional
-     * @param string org_data[description] - optional
+     * @param string org_data[description] - required if is_candidate is true
      * @param string org_data[references] - optional
      * @param integer org_data[status] - optional
      * @param integer org_data[status_hint] - optional
@@ -196,25 +205,39 @@ class OrganisationController extends ApiController
         $votingTour = VotingTour::getLatestTour();
 
         if (!empty($votingTour) && !array_key_exists($votingTour->status, VotingTour::getNonEditableStatuses())) {
+            $orgId = $request->get('org_id', null);
             $data = $request->get('org_data', []);
-            $data['org_id'] = $request->get('org_id', null);
+
+            $validator = \Validator::make(['org_id' => $orgId, 'org_data' => $data], [
+                'org_id'   => 'required|int|exists:organisations,id',
+                'org_data' => 'required|array',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->errorResponse(__('custom.edit_org_fail'), $validator->errors()->messages());
+            }
 
             $validator = \Validator::make($data, [
-                'org_id'         => 'required|int|exists:organisations,id',
-                'name'           => 'string|max:255',
-                'address'        => 'string|max:512',
-                'representative' => 'string|max:512',
-                'email'          => 'string|email',
-                'phone'          => 'string|max:40',
-                'in_av'          => 'bool',
-                'is_candidate'   => 'bool',
-                'description'    => 'nullable|max:8000|required_if:is_candidate,1',
-                'references'     => 'nullable|max:8000|required_if:is_candidate,1',
-                'status'         => 'int|in:'. implode(',', array_keys(Organisation::getStatuses())),
+                'name'           => 'nullable|string|max:255',
+                'address'        => 'nullable|string|max:512',
+                'representative' => 'nullable|string|max:512',
+                'email'          => 'nullable|string|email',
+                'phone'          => 'nullable|string|max:40',
+                'in_av'          => 'nullable|bool',
+                'is_candidate'   => 'nullable|bool',
+                'description'    => 'nullable|string|max:8000',
+                'references'     => 'nullable|string|max:8000',
+                'status'         => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
                 'status_hint'    => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatusHints())),
             ]);
 
             $validator->after(function ($validator) use ($data) {
+                if (isset($data['is_candidate']) && $data['is_candidate'] == Organisation::IS_CANDIDATE_TRUE) {
+                    if (!isset($data['description']) || trim($data['description']) == '') {
+                        $validator->errors()->add('description', __('custom.org_descr_required'));
+                    }
+                }
+
                 if (!$validator->errors()->has('description') && !empty($data['description'])) {
                     $words = preg_split( '|\s+|s', $data['description']);
                     if (($words = count($words)) > 500) {
@@ -227,20 +250,38 @@ class OrganisationController extends ApiController
                 try {
                     DB::beginTransaction();
 
-                    $organisation = Organisation::where('id', $data['org_id'])->where('voting_tour_id', $votingTour->id)->first();
+                    $organisation = Organisation::where('id', $orgId)->where('voting_tour_id', $votingTour->id)->first();
 
                     if ($organisation) {
+                        if (isset($data['status']) && $data['status'] != $organisation->status) {
+                            if ($organisation->status == Organisation::STATUS_DECLASSED) {
+                                return $this->errorResponse(__('custom.org_status_update_not_allowed'));
+                            }
+
+                            if ($votingTour->status != VotingTour::STATUS_RANKING ||
+                                !in_array($organisation->status, Organisation::getApprovedCandidateStatuses())
+                            ) {
+                                if ($data['status'] == Organisation::STATUS_DECLASSED) {
+                                    return $this->errorResponse(__('custom.declass_not_allowed'));
+                                }
+
+                                if ($data['status'] == Organisation::STATUS_BALLOTAGE) {
+                                    return $this->errorResponse(__('custom.ballotage_not_allowed'));
+                                }
+                            }
+
+                            if ($votingTour->status == VotingTour::STATUS_RANKING &&
+                                in_array($organisation->status, Organisation::getApprovedCandidateStatuses()) &&
+                                in_array($data['status'], Organisation::getRejectionStatuses())
+                            ) {
+                                return $this->errorResponse(__('custom.rejection_not_allowed', ['status' => Organisation::getStatuses()[$organisation->status]]));
+                            }
+                        }
+
                         $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
 
                         if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
-                            $description = (array_key_exists('description', $data) ? $data['description'] : $organisation->description);
-
-                            if (trim($description) == '') {
-                                return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
-                            }
-
                             $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
-
                             if (trim($references) == '') {
                                 $data['references'] = '';
                             }
@@ -291,13 +332,15 @@ class OrganisationController extends ApiController
 
                         DB::commit();
 
-                        $logData = [
-                            'module' => ActionsHistory::ORGANISATIONS,
-                            'action' => ActionsHistory::TYPE_MOD,
-                            'object' => $organisation->id
-                        ];
+                        if (\Auth::user()) {
+                            $logData = [
+                                'module' => ActionsHistory::ORGANISATIONS,
+                                'action' => ActionsHistory::TYPE_MOD,
+                                'object' => $organisation->id
+                            ];
 
-                        ActionsHistory::add($logData);
+                            ActionsHistory::add($logData);
+                        }
 
                         return $this->successResponse();
                     } else {
@@ -306,7 +349,7 @@ class OrganisationController extends ApiController
                 } catch (\Exception $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.edit_org_fail'));
+                    return $this->errorResponse(__('custom.edit_org_fail', __('custom.internal_server_error')));
                 }
             }
 
@@ -339,10 +382,28 @@ class OrganisationController extends ApiController
      */
     public function search(Request $request)
     {
-        $filters = $request->get('filters', []);
-        $orderField = $request->get('order_field', Organisation::DEFAULT_ORDER_FIELD);
-        $orderType = strtoupper($request->get('order_type', Organisation::DEFAULT_ORDER_TYPE));
-        $withPagination = $request->get('with_pagination', false);
+        $rules = [
+            'filters'         => 'nullable|array',
+            'order_field'     => 'nullable|string|in:'. implode(',', Organisation::ALLOWED_ORDER_FIELDS),
+            'order_type'      => 'nullable|string|in:'. implode(',', Organisation::ALLOWED_ORDER_TYPES),
+            'with_pagination' => 'nullable|bool',
+            'page_number'     => 'nullable|int|min:1',
+        ];
+
+        $data = $request->only(array_keys($rules));
+        $data['order_type'] = isset($data['order_type']) ? strtoupper($data['order_type']) : null;
+
+        $validator = \Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
+        }
+
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $orderField = isset($data['order_field']) ? $data['order_field'] : Organisation::DEFAULT_ORDER_FIELD;
+        $orderType = isset($data['order_type']) ? $data['order_type'] : Organisation::DEFAULT_ORDER_TYPE;
+        $withPagination = isset($data['with_pagination']) ? $data['with_pagination'] : false;
+        $page = isset($data['page_number']) ? $data['page_number'] : null;
 
         $validator = \Validator::make($filters, [
             'eik'              => 'nullable|digits_between:1,19',
@@ -367,10 +428,6 @@ class OrganisationController extends ApiController
                 }
                 if (empty($votingTour)) {
                     return $this->errorResponse(__('custom.voting_tour_not_found'));
-                }
-
-                if (!in_array($orderField, Organisation::getOrderColumns()) || !in_array($orderType, ['ASC', 'DESC'])) {
-                    return $this->errorResponse(__('custom.invalid_sort_field'));
                 }
 
                 if (isset($filters['only_main_fields']) && $filters['only_main_fields']) {
@@ -407,7 +464,7 @@ class OrganisationController extends ApiController
                 $organisations->orderBy($orderField, $orderType);
 
                 if ($withPagination) {
-                    $request->request->add(['page' => $request->get('page_number')]);
+                    $request->request->add(['page' => $page]);
                     $organisations = $organisations->paginate();
                 } else {
                     $organisations = $organisations->get();
@@ -425,7 +482,7 @@ class OrganisationController extends ApiController
                 return $this->successResponse($organisations);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.list_org_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_org_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -481,7 +538,7 @@ class OrganisationController extends ApiController
                 }
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.get_org_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.get_org_fail'), __('custom.internal_server_error'));
             }
         }
 
@@ -515,18 +572,20 @@ class OrganisationController extends ApiController
                             ->where('voting_tour_id', $votingTour->id)
                             ->orderBy('id')->get();
 
-                $logData = [
-                    'module' => ActionsHistory::ORGANISATIONS_FILES,
-                    'action' => ActionsHistory::TYPE_SEE,
-                    'object' => $orgId
-                ];
+                if (\Auth::user()) {
+                    $logData = [
+                        'module' => ActionsHistory::ORGANISATIONS_FILES,
+                        'action' => ActionsHistory::TYPE_SEE,
+                        'object' => $orgId
+                    ];
 
-                ActionsHistory::add($logData);
+                    ActionsHistory::add($logData);
+                }
 
                 return $this->successResponse($files);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.list_org_files_fail'), $e->getMessage());
+                return $this->errorResponse(__('custom.list_org_files_fail'), __('custom.internal_server_error'));
             }
         }
 

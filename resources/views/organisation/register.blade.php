@@ -141,6 +141,8 @@
                                 cols="40"
                                 maxlength="8000"
                             >{{ old('description') }}</textarea>
+                        </div>
+                        <div class="col-sm-8 col-xs-6 offset-sm-4 p-l-none">
                             <span class="error">{{ $errors->first('description') }}</span>
                         </div>
                     </div>
@@ -155,6 +157,8 @@
                                 cols="40"
                                 maxlength="8000"
                             >{{ old('references') }}</textarea>
+                        </div>
+                        <div class="col-sm-8 col-xs-6 offset-sm-4 p-l-none">
                             <span class="error">{{ $errors->first('references') }}</span>
                         </div>
                     </div>
@@ -162,7 +166,7 @@
                     <hr class="hr-thin">
                 <div class="col-md-10">
                     <h5>{{ __('custom.applied_files') }} </h5>
-                    <p>{{  __('custom.nonav_org') }}</p>
+                    <p>{{ __('custom.nonav_org') }}</p>
                     <div class="form-group row">
                         <div class="col-lg-12 p-r-none">
                             @include('components.fileinput', ['name' => 'files[]'])

@@ -9,11 +9,6 @@ class ActionsHistory extends Model
 {
     use MetaData;
 
-    protected $table = 'actions_history';
-    public $timestamps = false;
-    protected $guarded = ['id'];
-    protected $hidden = ['actor'];
-
     /*
      * User action types
      */
@@ -39,6 +34,41 @@ class ActionsHistory extends Model
     const VOTES = 7;
     const ORGANISATION_MESSAGES = 8;
     const ORGANISATIONS_FILES = 9;
+
+    const DEFAULT_ORDER_FIELD = 'id';
+    const DEFAULT_ORDER_TYPE = 'DESC';
+
+    const ALLOWED_ORDER_FIELDS = [
+        'occurrence',
+        'user_id',
+        'username',
+        'action',
+        'module',
+        'object',
+        'voting_tour_id',
+        'ip_address',
+    ];
+    const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
+
+    protected $table = 'actions_history';
+
+    protected $perPage = 15;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['actor'];
+
+    public $timestamps = false;
 
     /**
      * Get the types of action
@@ -102,33 +132,40 @@ class ActionsHistory extends Model
         $object = isset($request['object']) ? $request['object'] : null;
         $ip = request()->ip();
 
+
         if (isset($request['actor'])) {
             $actor = $request['actor'];
         } else {
-            if (isset(\Auth::user()->id)) {
-                $actor = \Auth::user()->id;
+            $userId = isset(\Auth::guard('backend')->user()->id) ? \Auth::guard('backend')->user()->id : null;
+
+            if (!$userId) {
+                $userId = isset(\Auth::user()->id) ? \Auth::user()->id : null;
+            }
+
+            if ($userId) {
+                $actor = $userId;
             } else {
-                $actor = 1;
+                $actor = null;
             }
         }
-        $tour = VotingTour::getLatestTour();
-        if (!$validator->fails()) {
-            if (!empty($tour)) {
-                try {
-                    $dbData = [
-                        'user_id'        => $actor,
-                        'action'         => $request['action'],
-                        'module'         => $request['module'],
-                        'object'         => $object,
-                        'voting_tour_id' => $tour->id,
-                        'occurrence'     => date('Y-m-d H:i:s'),
-                        'ip_address'     => !empty($ip) ? $ip : 'N/A',
-                    ];
 
-                    ActionsHistory::create($dbData);
-                } catch (QueryException $ex) {
-                    logger()->error($ex);
-                }
+        $tour = VotingTour::getLatestTour() ? VotingTour::getLatestTour()->id : null;
+
+        if (!$validator->fails()) {
+            try {
+                $dbData = [
+                    'user_id'        => $actor,
+                    'action'         => $request['action'],
+                    'module'         => $request['module'],
+                    'object'         => $object,
+                    'voting_tour_id' => $tour,
+                    'occurrence'     => date('Y-m-d H:i:s'),
+                    'ip_address'     => !empty($ip) ? $ip : 'N/A',
+                ];
+
+                ActionsHistory::create($dbData);
+            } catch (QueryException $ex) {
+                logger()->error($ex);
             }
         }
     }

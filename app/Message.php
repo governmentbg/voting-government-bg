@@ -14,6 +14,16 @@ class Message extends Model
     const STATUS_READ = 2;
     const BATCH_SIZE = 2048;
 
+    const DEFAULT_ORDER_FIELD = 'created_at';
+    const DEFAULT_ORDER_TYPE = 'DESC';
+
+    const ALLOWED_ORDER_FIELDS = [
+        'subject',
+        'created_at',
+        'updated_at',
+    ];
+    const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
+
     protected $perPage = 15;
 
     /**
@@ -23,9 +33,14 @@ class Message extends Model
      */
     protected $guarded = ['id'];
 
-    protected $appends = ['sender_org_name', 'sender_user_name',];
-
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = ['senderOrganisation', 'senderUser'];
+
+    protected $appends = ['sender_org_name', 'sender_user_name'];
 
     public function subMessages()
     {

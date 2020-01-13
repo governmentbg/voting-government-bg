@@ -9,12 +9,14 @@
     <div class="row">
         <div class="col-lg-12 p-l-40 m-b-30"><h3>{{ __('custom.data_for') }} {{ $orgData->name }}</h3></div>
     </div>
-    <form method="POST" enctype="multipart/form-data" action="{{ route('admin.org_update', ['id' => $orgData->id]) }}">
+    <form method="POST" enctype="multipart/form-data" action="{{ route('admin.org_update', ['id' => $orgData->id]) }}" class="edit-org">
         <div class="row m-l-5">
+            <div class="col-lg-11 p-l-25 p-r-25">
+                @include('components.errors')
+            </div>
             <div class="col-lg-6">
                 <div class="col-md-12">
                     {{ csrf_field() }}
-                    @include('components.errors')
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
                         <div class="row col-lg-8">
@@ -167,11 +169,12 @@
                     <div class="form-group row">
                         <label class="col-lg-4">{{ __('custom.status') }}:</label>
                         <div class="col-lg-8 headerDropdown">
-                            <select name="status" class="ams-dropdown custom-select w-100">
+                            <select name="status" class="ams-dropdown custom-select w-100 edit-status" data-old-status="{{$orgData->status}}">
                                 @if (isset($statuses))
                                     @foreach ($statuses as $statusIndex => $status)
                                         <option
                                             value="{{ $statusIndex }}"
+                                            {{ in_array($statusIndex, $disabledStatuses) ? 'disabled' : '' }}
                                             @if (old('status'))
                                                 {{ old('status') == $statusIndex ? 'selected' : ''}}
                                             @else
@@ -320,5 +323,32 @@
     @endif
     </div>
 @endif
+
+<div class="modal" tabindex="-1" role="dialog" id='confirmOrgDeclass'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('custom.declass_modal_title') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ __('custom.declass_message') }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('custom.cancel')}}</button>
+                <button type="button" class="btn btn-primary confirm">{{ __('custom.confirm')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+@php
+    http2_push_image('/img/arrow.svg');
+    http2_push_image('/img/circle-fill.svg');
+    http2_push_image('/img/circle-no-fill.svg');
+    http2_push_image('/img/view.svg');
+    http2_push_image('/img/download.svg');
+@endphp
 
 @endsection

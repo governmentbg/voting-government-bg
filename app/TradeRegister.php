@@ -14,6 +14,13 @@ class TradeRegister extends Model
 
     protected $primaryKey = 'eik';
 
+    /**
+    * The "type" of the primary key eik.
+    *
+    * @var string
+    */
+    protected $keyType = 'string';
+
     const STATUSES = ['E', 'C', 'L', 'N'];
     // N - Нова
     // Е - Пререгистрирана фирма по Булстат

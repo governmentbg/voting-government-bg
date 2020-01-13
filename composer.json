@@ -8,12 +8,13 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.3",
         "awobaz/compoships": "^1.1",
         "fideloper/proxy": "^4.0",
         "fluent/logger": "^1.0",
         "graylog2/gelf-php": "^1.6",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "^6.0",
+        "laravel/helpers": "^1.1",
         "laravel/tinker": "^1.0",
         "predis/predis": "~1.0"
     },
@@ -21,7 +22,7 @@
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "~6.0"
+        "phpunit/phpunit": "^7.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -45,7 +46,8 @@
             "app/Helpers/ApiHelper.php",
             "app/Helpers/CsvHelper.php",
             "app/Helpers/LangHelper.php",
-            "app/Helpers/MailHelper.php"
+            "app/Helpers/MailHelper.php",
+            "app/Helpers/Http2Helper.php"
         ]
     },
     "autoload-dev": {

@@ -43,6 +43,11 @@
                             <a href="{{$registeredOrgs}}">{{ __('custom.elections') }}</a>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <a href="{{$actionsHistory}}">{{ __('custom.actions_history') }}</a>
+                        </div>
+                    </div>
                     @if (auth()->guard('backend')->user()->isSuperAdmin())
                         <div class="form-group row">
                             <div class="col-sm-8">

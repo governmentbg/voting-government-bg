@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <div class="from-group row m-b-30">
+            <div class="from-group row m-b-15">
                 <div class="offset-lg-3 col-lg-5">
                     <div class="form-group row p-l-none">
                         <label for="registered_period" class="col-lg-3 col-form-label">{{ __('custom.registered_period') }}:</label>
@@ -120,17 +120,42 @@
                     </div>
                 </div>
             </div>
+            <div class="from-group row m-b-15">
+                <div class="offset-lg-3 col-lg-5">
+                    <div class="form-group row p-l-none">
+                        <div class="offset-lg-1 col-lg-7 text-right">
+                            <button
+                                class="btn btn-primary"
+                                type="submit"
+                                name="forget"
+                                value="1"
+                            >{{ uctrans('custom.clear_filter') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @if (!empty($organisationList))
-                <div class="col-lg-12 text-right p-r-none p-b-none">
-                    <button
-                        class="btn btn-primary add"
-                        type="submit"
-                        name="download"
-                    >{{ uctrans('custom.download') }}</button>
+                <div class="col-lg-12 p-r-none p-b-none display-flex justify-content">
+                    <div class="col-lg-4 text-left display-inline p-t-5 p-l-none">
+                        {{ __('custom.showing') }}
+                        {{ $organisationList->firstItem() . ' - ' }}
+                        {{ $organisationList->lastItem() }}
+                        {{ __('custom.out_of') }}
+                        {{ $organisationList->total() }}
+                        {{ __('custom.records') }}
+                    </div>
+                    <div class="col-lg-4 display-inline"></div>
+                    <div class="text-right display-inline col-lg-4 p-r-none">
+                        <button
+                            class="btn btn-primary add"
+                            type="submit"
+                            name="download"
+                        >{{ uctrans('custom.download') }}</button>
+                    </div>
                 </div>
             @endif
         </form>
-        <div class="table-wrapper {{!empty($organisationList) ? 'm-t-30' : 'm-t-90' }}">
+        <div class="table-wrapper {{!empty($organisationList) ? 'm-t-15' : 'm-t-90' }}">
             <div class="table-responsive">
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>
@@ -178,7 +203,7 @@
                                     }}"
                                 >{{ __('custom.status') }}<img src="{{ app('request')->sort == 'status' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
-                            <th class="w-10">
+                            <th class="w-5">
                                 <a
                                     class="c-white {{ app('request')->sort == 'is_candidate' ? 'sort-active' : '' }}"
                                     href="{{
@@ -192,7 +217,7 @@
                                     }}"
                                 >{{ __('custom.candidate') }}<img src="{{ app('request')->sort == 'is_candidate' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
-                            <th class="w-10">
+                            <th class="w-15">
                                 <a
                                     class="c-white {{ app('request')->sort == 'created_at' ? 'sort-active' : '' }}"
                                     href="{{
@@ -279,5 +304,12 @@
         </div>
     </div>
 </div>
+@php
+    http2_push_image('/img/calendar.svg');
+    http2_push_image('/img/arrow-up.svg');
+    http2_push_image('/img/arrow-down.svg');
+    http2_push_image('/img/checked.svg');
+    http2_push_image('/img/edit.svg');
+@endphp
 
 @endsection

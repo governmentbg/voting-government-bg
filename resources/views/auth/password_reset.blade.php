@@ -7,7 +7,7 @@
     <div class="col-lg-4 p-l-40 offset-lg-4">
         @if(!auth()->guard('backend')->check())
         <div>
-            <form method="POST" action="{{route('password.reset', ['token' => null])}}">
+            <form method="POST" action="{{route('password.update', ['token' => null])}}">
                 {{ csrf_field() }}
                 @include('components.errors')
                 @include('components.status')
@@ -47,5 +47,3 @@
     </div>
 </div>
 @endsection
-
-

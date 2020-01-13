@@ -325,22 +325,24 @@ class PublicController extends BaseFrontendController
 
             if (!empty($listErrors)) {
                 $errors['message'] = __('custom.list_ranking_fail');
-            } elseif (!empty($listData) && isset($listData->ranking) && !empty($listData->ranking)) {
-                $votingCount = $listData->voting_count;
-                if (isset($listData->voter_turnout) && !empty($listData->voter_turnout)) {
-                    $stats = $listData->voter_turnout;
-                } else {
-                    $errors['message'] = __('custom.voter_turnout_fail');
+            } else {
+                if (!empty($listData) && isset($listData->ranking) && !empty($listData->ranking)) {
+                    $votingCount = $listData->voting_count;
+                    if (isset($listData->voter_turnout) && !empty($listData->voter_turnout)) {
+                        $stats = $listData->voter_turnout;
+                    } else {
+                        $errors['message'] = __('custom.voter_turnout_fail');
+                    }
+                    $listData = $listData->ranking;
                 }
-                $listData = $listData->ranking;
-            }
 
-            if ($request->has('download')) {
-                $fileData = $this->generateCSV(['listData' => $listData, 'votingCount' => $votingCount]);
-                return response()->download($fileData['path'], $fileData['filename'], $fileData['headers'])->deleteFileAfterSend(true);
-            }
+                if ($request->has('download')) {
+                    $fileData = $this->generateCSV(['listData' => $listData, 'votingCount' => $votingCount]);
+                    return response()->download($fileData['path'], $fileData['filename'], $fileData['headers'])->deleteFileAfterSend(true);
+                }
 
-            Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'votingCount' => $votingCount], now()->addMinutes(60));
+                Cache::put($cacheKey, ['listData' => $listData, 'stats' => $stats, 'votingCount' => $votingCount], now()->addMinutes(60));
+            }
         } else {
             return redirect('/');
         }

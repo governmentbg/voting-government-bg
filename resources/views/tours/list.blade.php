@@ -77,5 +77,10 @@
 <div class="row">
     <div class="p-b-15"></div>
 </div>
-
+@php 
+    http2_push_image('/img/cross.svg');
+    http2_push_image('/img/star.svg');
+    http2_push_image('/img/edit.svg');
+    http2_push_image('/img/clock.svg');
+@endphp
 @endsection

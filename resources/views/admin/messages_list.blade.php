@@ -178,5 +178,13 @@
         </div>
     </div>
 </div>
+@php
+    http2_push_image('/img/calendar.svg');
+    http2_push_image('img/arrow-down.svg');
+    http2_push_image('/img/arrow-up.svg');
+    http2_push_image('/img/circle-fill.svg');
+    http2_push_image('/img/circle-no-fill.svg');
+    http2_push_image('/img/view.svg');
+@endphp
 
 @endsection

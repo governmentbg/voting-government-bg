@@ -17,4 +17,6 @@ class BulstatRegister extends Model
     public $timestamps = false;
 
     protected $primaryKey = 'eik';
+
+    protected $keyType = 'string';
 }

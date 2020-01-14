@@ -2,13 +2,14 @@
 
 namespace App\Jobs;
 
+use App\BulstatRegister;
+use App\SubscriptionRequest;
+use App\Libraries\XMLParserBulstat;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\BulstatRegister;
-use App\Libraries\XMLParserBulstat;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class UpdateBulstatRegister implements ShouldQueue
 {
@@ -63,5 +64,10 @@ class UpdateBulstatRegister implements ShouldQueue
     public function failed(\Exception $exception)
     {
         logger()->error($exception->getMessage() . ' UID: ' . $this->data->UID);
+
+        $requestRec = SubscriptionRequest::where('UID', $this->data->UID)->first();
+        if($requestRec){
+            $requestRec->update(['status' => SubscriptionRequest::STATUS_ERROR]);
+        }
     }
 }

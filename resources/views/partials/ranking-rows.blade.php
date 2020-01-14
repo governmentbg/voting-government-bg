@@ -31,3 +31,4 @@
         @endfor
     </tr>
 @endforeach
+@php http2_push_image('/img/view.svg'); @endphp

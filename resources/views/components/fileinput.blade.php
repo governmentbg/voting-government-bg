@@ -46,3 +46,8 @@
     </div>
     @endif
 </div>
+
+@php
+    http2_push_image('/img/download.svg');
+    http2_push_image('/img/plus.svg');
+@endphp

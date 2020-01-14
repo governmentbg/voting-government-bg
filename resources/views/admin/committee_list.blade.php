@@ -105,4 +105,11 @@
         <a href="{{ route('admin.committee.add') }}" class="btn btn-primary">{{ __('custom.add_new_member') }}</a>
     </div>
 </div>
+
+@php
+    http2_push_image('/img/edit.svg');
+    http2_push_image('img/arrow-down.svg');
+    http2_push_image('/img/arrow-up.svg');
+@endphp
+
 @endsection

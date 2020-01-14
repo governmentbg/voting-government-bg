@@ -61,3 +61,4 @@
     </div>
 </nav>
 <hr class="hr-thick">
+@php http2_push_image('/img/tick.svg'); @endphp

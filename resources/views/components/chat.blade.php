@@ -63,3 +63,9 @@
         </div>
     @endif
 </div>
+
+@php
+    http2_push_image('/img/request-dark.svg');
+    http2_push_image('/img/tick.svg');
+    http2_push_image('/img/request-light.svg');
+@endphp

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PredefinedOrganisation extends Model
 {
+    const PREDEFINED_LIST_TYPE = 3;
+
     protected $table = 'predefined_list';
 
     protected $guarded = [];
@@ -21,19 +23,10 @@ class PredefinedOrganisation extends Model
     */
     protected $keyType = 'string';
 
-    public function scopeGetData($query, $eik)
+    public static function getType()
     {
-        $query->where('eik', $eik)->select('name', 'city', 'address', 'phone', 'email');
-
-        return $query;
-    }
-
-    public function getFullAddressAttribute()
-    {
-        if (trim($this->city) != '') {
-            return $this->city . (trim($this->address) != '' ? ', '. $this->address : '');
-        }
-
-        return $this->address;
+        return [
+            self::PREDEFINED_LIST_TYPE => __('custom.predefined_list_type')
+        ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Libraries\XMLParserBulstat;
+use Illuminate\Support\Facades\Storage;
 
 class ParseBulstatXML extends Command
 {
@@ -63,7 +64,7 @@ class ParseBulstatXML extends Command
                 $this->info(''); //add new row
             }
 
-            Storage::disk('local')->put('predefined_list.json', json_encode($allData));
+            Storage::disk('local')->put('bulstat_predefined_list.json', json_encode($allData));
         }
         catch(\Exception $e){
             $this->error($e->getMessage());

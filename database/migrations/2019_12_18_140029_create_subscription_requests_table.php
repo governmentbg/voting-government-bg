@@ -17,6 +17,7 @@ class CreateSubscriptionRequestsTable extends Migration
            // $table->increments('id');
             $table->string('uid');
             $table->mediumText('request_xml', 191);
+            $table->tinyInteger('type');
             $table->tinyInteger('status');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 

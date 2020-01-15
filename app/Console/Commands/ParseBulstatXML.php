@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Libraries\XMLParserBulstat;
+use Illuminate\Support\Facades\Storage;
 
 class ParseBulstatXML extends Command
 {

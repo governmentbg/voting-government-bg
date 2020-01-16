@@ -29,11 +29,6 @@ class TradeRegister extends Model
     */
     protected $keyType = 'string';
 
-    // N - Нова
-    // Е - Пререгистрирана фирма по Булстат
-    // L - Пререгистрирана фирма по Булстат затворена
-    // C - Нова партида затворена
-
     public static function getType()
     {
         return [

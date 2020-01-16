@@ -13,7 +13,7 @@ class PredefinedListController extends Controller
 
         $result = [];
         if (isset($eik) && is_numeric($eik)) {
-            $params = ['eik' => $eik, 'only_main_fields' => true, 'test' => ''];
+            $params = ['eik' => $eik, 'only_main_fields' => true];
 
             // get predefined list types
             list($types, $errors) = api_result(ApiPredefinedList::class, 'listTypes');

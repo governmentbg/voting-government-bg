@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\PredefinedList as ApiPredefinedList;
+use App\Http\Controllers\Api\PredefinedListController as ApiPredefinedList;
 
 class PredefinedListController extends Controller
 {

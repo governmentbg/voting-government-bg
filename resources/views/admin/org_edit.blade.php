@@ -209,6 +209,248 @@
 
     <hr class="hr-thin">
 
+    <div class="row mr-3 show-regs-wrapper mb-3">
+        <div class="col-lg-12 text-right">
+            @include('components.button', ['buttonLabel' => __('custom.show_reg_info'), 'name' => 'show', 'id' => 'showRegs'])
+            <img src="{{ asset('img/cross.svg') }}" height="30px" width="30px" class="display-none cross-close">
+        </div>
+    </div>
+
+    <div class="col-lg-12 display-none regs-tables">
+        <div class="display-inline">
+            <div class="col-lg-12 text-justify">
+                <div class="col-lg-3 reg-bg inline-block v-align-top">
+                    <h3 class="text-center">{{ __('custom.predefined_list_type_bul') }}</h3>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.org_name') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->name) ? $orgDataPredBul->name : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->eik) ? $orgDataPredBul->eik : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->reg_number) ? $orgDataPredBul->reg_number : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.city') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->city) ? $orgDataPredBul->city : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.address') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->address) ? $orgDataPredBul->address : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.representative') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->representative) ? $orgDataPredBul->representative : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.registered_at') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->reg_date) ? $orgDataPredBul->reg_date : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.email') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->email) ? $orgDataPredBul->email : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.phone_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->phone) ? $orgDataPredBul->phone : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.description') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->description) ? $orgDataPredBul->description : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.goals') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->goals) ? $orgDataPredBul->goals : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.tools') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->tools) ? $orgDataPredBul->tools : '' }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1 inline-block"></div>
+                <div class="col-lg-3 reg-bg inline-block v-align-top">
+                    <h3 class="text-center">{{ __('custom.predefined_list_type_tr') }}</h3>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.org_name') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->name) ? $orgDataPredTrade->name : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->eik) ? $orgDataPredTrade->eik : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->reg_number) ? $orgDataPredTrade->reg_number : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.city') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredTrade->city) ? $orgDataPredTrade->city : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.address') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredTrade->address) ? $orgDataPredTrade->address : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.representative') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->representative) ? $orgDataPredBul->representative : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.registered_at') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->reg_date) ? $orgDataPredTrade->reg_date : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.email') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->email) ? $orgDataPredTrade->email : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.phone_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->phone) ? $orgDataPredTrade->phone : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.description') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->description) ? $orgDataPredTrade->description : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.goals') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->goals) ? $orgDataPredTrade->goals : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.tools') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->tools) ? $orgDataPredBul->tools : '' }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1 inline-block"></div>
+                <div class="col-lg-3 reg-bg inline-block v-align-top">
+                    <h3 class="text-center">{{ __('custom.predefined_list_type') }}</h3>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.org_name') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->name) ? $orgDataPred->name : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->eik) ? $orgDataPred->eik : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->reg_number) ? $orgDataPred->reg_number : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.city') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPred->city) ? $orgDataPred->city : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.address') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPred->address) ? $orgDataPred->address : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.representative') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->representative) ? $orgDataPredBul->representative : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.registered_at') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->reg_date) ? $orgDataPred->reg_date : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.email') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->email) ? $orgDataPred->email : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.phone_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->phone) ? $orgDataPred->phone : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.description') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->description) ? $orgDataPred->description : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.goals') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->goals) ? $orgDataPred->goals : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-justified">
+                        <label class="col-lg-2 col-xs-12">{{ __('custom.tools') }}:</label>
+                        <div class="col-lg-12 p-l-none">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->tools) ? $orgDataPred->tools : '' }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="hr-thin">
+    </div>
+
     <!-- ------------MESSAGES ------------------->
     <div class="row msg-m-b">
         <div class="col-lg-6 p-l-40"><h2>{{ __('custom.messages') }}</h2></div>

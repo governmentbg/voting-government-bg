@@ -449,3 +449,15 @@ $('form.edit-org').submit(function(e) {
 $('#confirmOrgDeclass .confirm').click(function() {
     $('form.edit-org').unbind('submit').submit();
 });
+
+$('#showRegs').click(function() {
+    $('.regs-tables').show();
+    $(this).hide();
+    $('.cross-close').show();
+});
+
+$('.cross-close').click(() => {
+    $('.regs-tables').hide();
+    $('.cross-close').hide();
+    $('#showRegs').show();
+});

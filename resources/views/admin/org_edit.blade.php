@@ -234,6 +234,12 @@
                         </div>
                     </div>
                     <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->reg_number) ? $orgDataPredBul->reg_number : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
                         <label class="col-lg-5 col-xs-12">{{ __('custom.city') }}:</label>
                         <div class="row col-lg-7">
                             <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->city) ? $orgDataPredBul->city : '' }}</label>
@@ -304,6 +310,12 @@
                         </div>
                     </div>
                     <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->reg_number) ? $orgDataPredTrade->reg_number : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
                         <label class="col-lg-5 col-xs-12">{{ __('custom.city') }}:</label>
                         <div class="row col-lg-7">
                             <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredTrade->city) ? $orgDataPredTrade->city : '' }}</label>
@@ -371,6 +383,12 @@
                         <label class="col-lg-5 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
                         <div class="row col-lg-7">
                             <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->eik) ? $orgDataPred->eik : '' }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
+                        <div class="row col-lg-7">
+                            <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->reg_number) ? $orgDataPred->reg_number : '' }}</label>
                         </div>
                     </div>
                     <div class="form-group row text-left">

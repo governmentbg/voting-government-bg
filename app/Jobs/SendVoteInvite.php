@@ -14,13 +14,13 @@ class SendVoteInvite implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $org;
-    
+
     /**
      *  Voting Tour status.
      * @var int
      */
     private $status;
-    
+
     /**
      * Create a new job instance.
      *
@@ -40,14 +40,14 @@ class SendVoteInvite implements ShouldQueue
     public function handle()
     {
         //send vote invitation
-        $template = 'emails.vote_invite'; 
+        $template = 'emails.vote_invite';
         $to = $this->org->email;
         $subject = __('custom.vote_invite');
-        
+
         if($this->status == VotingTour::STATUS_BALLOTAGE){
-            $subject .= ' - ' . __('custom.ballotage'); 
+            $subject .= __('custom.for') . ultrans('custom.ballotage');
         }
-        
+
         sendEmail($template, ['name' => $this->org->name ], $to, $subject);
     }
 }

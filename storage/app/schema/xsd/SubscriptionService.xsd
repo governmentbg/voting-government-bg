@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI (http://jax-ws.java.net). 
+	RI's version is JAX-WS RI 2.2.10 svn-revision#919b322c92f13ad085a933e8dd6dd35d4947364b. -->
+<xs:schema xmlns:tns="http://www.bulstat.bg/SubscriptionService"
+	xmlns:ns5="http://www.bulstat.bg/WSResponse" xmlns:ns4="http://www.bulstat.bg/Attachment"
+	xmlns:ns3="http://www.bulstat.bg/StateOfPlay" xmlns:ns2="http://www.bulstat.bg/Event"
+	xmlns:ns1="http://www.bulstat.bg/SendSubscriptionRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	version="1.0" targetNamespace="http://www.bulstat.bg/SubscriptionService">
+
+	<xs:import namespace="http://www.bulstat.bg/WSResponse"
+		schemaLocation="WSResponse.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/UIC"
+		schemaLocation="UIC.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubscriptionElement"
+		schemaLocation="SubscriptionElement.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelPartner"
+		schemaLocation="SubjectRelPartner.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelManager"
+		schemaLocation="SubjectRelManager.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelCollectiveBodyMember"
+		schemaLocation="SubjectRelCollectiveBodyMember.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelBelonging"
+		schemaLocation="SubjectRelBelonging.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelAssignee"
+		schemaLocation="SubjectRelAssignee.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropState"
+		schemaLocation="SubjectPropState.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropScopeOfActivity"
+		schemaLocation="SubjectPropScopeOfActivity.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropRepresentationType"
+		schemaLocation="SubjectPropRepresentationType.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropProfession"
+		schemaLocation="SubjectPropProfession.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropOwnershipForm"
+		schemaLocation="SubjectPropOwnershipForm.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropLifeTime"
+		schemaLocation="SubjectPropLifeTime.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropInstallments"
+		schemaLocation="SubjectPropInstallments.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropFundingSource"
+		schemaLocation="SubjectPropFundingSource.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropCollectiveBody"
+		schemaLocation="SubjectPropCollectiveBody.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropActivityKID2008"
+		schemaLocation="SubjectPropActivityKID2008.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropActivityKID2003"
+		schemaLocation="SubjectPropActivityKID2003.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropActivityDate"
+		schemaLocation="SubjectPropActivityDate.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropAccountingRecordForm"
+		schemaLocation="SubjectPropAccountingRecordForm.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Subject"
+		schemaLocation="Subject.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/StateOfPlay"
+		schemaLocation="StateOfPlay.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/SendSubscriptionRequest"
+		schemaLocation="SendSubscriptionRequest.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/NomenclatureEntry"
+		schemaLocation="NomenclatureEntry.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/NaturalPerson"
+		schemaLocation="NaturalPerson.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/LegalEntity"
+		schemaLocation="LegalEntity.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/IdentificationDoc"
+		schemaLocation="IdentificationDoc.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/File"
+		schemaLocation="File.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Event"
+		schemaLocation="Event.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Employee"
+		schemaLocation="Employee.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Document"
+		schemaLocation="Document.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Communication"
+		schemaLocation="Communication.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Case"
+		schemaLocation="Case.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Attachment"
+		schemaLocation="Attachment.xsd"></xs:import>
+	<xs:import namespace="http://www.bulstat.bg/Address"
+		schemaLocation="Address.xsd"></xs:import>
+
+	<xs:element name="SendSubscription" type="tns:SendSubscription"></xs:element>
+	<xs:element name="SendSubscriptionResponse" type="tns:SendSubscriptionResponse"></xs:element>
+	<xs:element name="SubscriptionException" type="tns:SubscriptionException"></xs:element>
+
+	<xs:complexType name="SendSubscription">
+		<xs:sequence>
+			<xs:element name="UID" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Уникален идентификатор на заявката
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element ref="ns1:SendSubscriptionRequest" minOccurs="1"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Заявка
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SendSubscriptionResponse">
+		<xs:sequence>
+			<xs:element ref="ns5:WSResponse" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SubscriptionException">
+		<xs:sequence>
+			<xs:element name="message" type="xs:string" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

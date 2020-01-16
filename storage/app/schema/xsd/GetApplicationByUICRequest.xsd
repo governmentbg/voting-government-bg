@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetApplicationByUICRequest"
+	xmlns:tns="http://www.bulstat.bg/GetApplicationByUICRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:complexType name="GetApplicationByUICRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на заявление по код на БУЛСТАТ
+				на субекта</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UIC" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Стойност на кода на субекта</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="13" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

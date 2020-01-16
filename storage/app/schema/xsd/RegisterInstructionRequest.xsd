@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RegisterInstructionRequest"
+	xmlns:tns="http://www.bulstat.bg/RegisterInstructionRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T31="http://www.bulstat.bg/Instruction" xmlns:T7="http://www.bulstat.bg/Employee">
+
+	<xs:import schemaLocation="Instruction.xsd" namespace="http://www.bulstat.bg/Instruction" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+
+	<xs:complexType name="RegisterInstructionRequest">
+		<xs:annotation>
+			<xs:documentation>Регистриране на указания
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Employee" minOccurs="0" maxOccurs="1"
+				type="T7:Employee">
+				<xs:annotation>
+					<xs:documentation>Служител, който регистрира указанието
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Instruction" minOccurs="1" maxOccurs="1"
+				type="T31:Instruction">
+				<xs:annotation>
+					<xs:documentation>Указание
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

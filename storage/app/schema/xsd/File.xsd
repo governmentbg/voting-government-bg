@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/File" xmlns:tns="http://www.bulstat.bg/File"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:complexType name="File">
+		<xs:annotation>
+			<xs:documentation>Файл</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="FileName" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Наименование на фйла</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="100" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="FileExtension" maxOccurs="1"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Разширение на файла (doc/ xls/ img и др.)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="20" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="FileImage" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Файлът, представен като byte array
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:base64Binary">
+								<xs:maxLength value="2147483647" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

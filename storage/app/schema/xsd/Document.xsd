@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Document" xmlns:tns="http://www.bulstat.bg/Document"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T10="http://www.bulstat.bg/Subject"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Subject.xsd" namespace="http://www.bulstat.bg/Subject" />
+
+	<xs:complexType name="Document">
+		<xs:annotation>
+			<xs:documentation>Документ</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="DocumentType" minOccurs="1" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид документ (заявление, решение и т.н.)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DocumentNumber" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Номер на документ</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="20" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DocumentDate" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Дата на документа във формат
+								(yyyy-MM-dd)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:date">
+								<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+								<xs:minInclusive value="0001-01-01" />
+								<xs:maxInclusive value="9999-12-31" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="ValidFromDate" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Дата, на която влиза в сила във формат
+								(yyyy-MM-dd)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:date">
+								<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+								<xs:minInclusive value="0001-01-01" />
+								<xs:maxInclusive value="9999-12-31" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DocumentName" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Име на документа (попълва се, когато документът
+								е
+								с вид "друг вид")
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Author" minOccurs="0" maxOccurs="1"
+						type="T10:Subject">
+						<xs:annotation>
+							<xs:documentation>Автор
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AuthorName" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Име на автора (Попълва се, когато авторът е
+								неизвестен субект)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="AdditionalInfo" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Допълнителна информация за документа
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="1000" />
+								<xs:minLength value="0" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

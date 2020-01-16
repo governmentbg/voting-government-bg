@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Nomenclature" xmlns:tns="http://www.bulstat.bg/Nomenclature"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T0="http://www.bulstat.bg/MetaDefinition" xmlns:T1="http://www.bulstat.bg/NomenclatureElement">
+
+	<xs:import schemaLocation="MetaDefinition.xsd" namespace="http://www.bulstat.bg/MetaDefinition" />
+
+	<xs:import schemaLocation="NomenclatureElement.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureElement" />
+
+	<xs:complexType name="Nomenclature">
+		<xs:annotation>
+			<xs:documentation>Линейна номенклатура</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Definition" minOccurs="1" maxOccurs="1"
+				type="T0:MetaDefinition">
+				<xs:annotation>
+					<xs:documentation>Дефиниция на номенклатурата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Content" minOccurs="0" maxOccurs="unbounded"
+				type="T1:NomenclatureElement">
+				<xs:annotation>
+					<xs:documentation>Съдържание на номенклатурата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

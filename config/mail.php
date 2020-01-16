@@ -2,6 +2,21 @@
 
 return [
     'mailto' => env('MAILTO'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Amsvoting email credentials
+    |--------------------------------------------------------------------------
+    |
+    | Login information for downloading attached
+    | files from amsvoting mailbox.
+    |
+    */
+
+    'importserver' => env('IMPORT_MAIL_SERVER'),
+    'importuser' => env('IMPORT_MAIL_USER'),
+    'importpassword' => env('IMPORT_MAIL_PASSWORD'),
+
     /*
     |--------------------------------------------------------------------------
     | Mail Driver

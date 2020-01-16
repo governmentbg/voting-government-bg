@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/WS_Types" xmlns:tns="http://www.bulstat.bg/WS_Types"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:R0="http://www.bulstat.bg/PutApplicationRequest" xmlns:R1="http://www.bulstat.bg/RegisterApplicationRequest"
+	xmlns:R2="http://www.bulstat.bg/CorrectApplicationRequest" xmlns:R3="http://www.bulstat.bg/RegisterInstructionRequest"
+	xmlns:R4="http://www.bulstat.bg/RegisterRefusalRequest" xmlns:R5="http://www.bulstat.bg/GetApplicationRequest"
+	xmlns:R6="http://www.bulstat.bg/GetStateOfPlayRequest" xmlns:R7="http://www.bulstat.bg/PayRequest"
+	xmlns:R8="http://www.bulstat.bg/ConfirmRequest" xmlns:R9="http://www.bulstat.bg/GetLegalEntityByUICRequest"
+	xmlns:R10="http://www.bulstat.bg/GetNaturalPersonByUICRequest"
+	xmlns:R11="http://www.bulstat.bg/GetSubjectByCriteriaRequest"
+	xmlns:R12="http://www.bulstat.bg/ListForeignCitizensByCriteriaRequest"
+	xmlns:R13="http://www.bulstat.bg/ListPaymentsByCriteriaRequest"
+	xmlns:R15="http://www.bulstat.bg/WSResponse" xmlns:R16="http://www.bulstat.bg/CorrectApplicationResponse"
+	xmlns:R19="http://www.bulstat.bg/PutApplicationResponse" xmlns:R20="http://www.bulstat.bg/RegisterApplicationResponse"
+	xmlns:R21="http://www.bulstat.bg/RegisterInstructionResponse"
+	xmlns:R22="http://www.bulstat.bg/RegisterRefusalResponse" xmlns:R23="http://www.bulstat.bg/GetAttachmentsByCriteriaRequest"
+	xmlns:R25="http://www.bulstat.bg/GetFilesByAttachmentUIDRequest"
+	xmlns:R26="http://www.bulstat.bg/PayResponse" xmlns:R27="http://www.bulstat.bg/GetNomenclatureByCodeRequest"
+	xmlns:R28="http://www.bulstat.bg/GetTreeChildrenRequest" xmlns:R29="http://www.bulstat.bg/GetTreeParentRequest"
+	xmlns:R30="http://www.bulstat.bg/GetLegalEntitiesByCriteriaRequest"
+	xmlns:R31="http://www.bulstat.bg/GetNaturalPersonsByCriteriaRequest"
+	xmlns:R32="http://www.bulstat.bg/SendSubscriptionRequest" xmlns:PROP0="http://www.bulstat.bg/SubjectPropLifeTime"
+	xmlns:PROP1="http://www.bulstat.bg/SubjectPropState" xmlns:PROP2="http://www.bulstat.bg/SubjectPropScopeOfActivity"
+	xmlns:PROP3="http://www.bulstat.bg/SubjectPropActivityKID2008"
+	xmlns:PROP4="http://www.bulstat.bg/SubjectPropActivityKID2003"
+	xmlns:PROP5="http://www.bulstat.bg/SubjectPropInstallments"
+	xmlns:PROP6="http://www.bulstat.bg/SubjectPropRepresentationType"
+	xmlns:PROP7="http://www.bulstat.bg/SubjectPropFundingSource"
+	xmlns:PROP8="http://www.bulstat.bg/SubjectPropOwnershipForm"
+	xmlns:PROP9="http://www.bulstat.bg/SubjectPropAccountingRecordForm"
+	xmlns:PROP10="http://www.bulstat.bg/SubjectPropActivityDate"
+	xmlns:PROP11="http://www.bulstat.bg/SubjectPropProfession"
+	xmlns:PROP12="http://www.bulstat.bg/SubjectPropCollectiveBody"
+	xmlns:REL0="http://www.bulstat.bg/SubjectRelPartner" xmlns:REL1="http://www.bulstat.bg/SubjectRelManager"
+	xmlns:REL2="http://www.bulstat.bg/SubjectRelBelonging" xmlns:REL3="http://www.bulstat.bg/SubjectRelAssignee"
+	xmlns:REL4="http://www.bulstat.bg/SubjectRelCollectiveBodyMember"
+	xmlns:T0="http://www.bulstat.bg/MetaDefinition" xmlns:T1="http://www.bulstat.bg/NomenclatureElement"
+	xmlns:T2="http://www.bulstat.bg/Nomenclature" xmlns:T3="http://www.bulstat.bg/NomenclatureEntry"
+	xmlns:T4="http://www.bulstat.bg/LogicalListElement" xmlns:T5="http://www.bulstat.bg/LogicalList"
+	xmlns:T6="http://www.bulstat.bg/TRCompanyInfo" xmlns:T7="http://www.bulstat.bg/Employee"
+	xmlns:T8="http://www.bulstat.bg/Address" xmlns:T9="http://www.bulstat.bg/Application"
+	xmlns:T10="http://www.bulstat.bg/StateOfPlay" xmlns:T11="http://www.bulstat.bg/Attachment"
+	xmlns:T12="http://www.bulstat.bg/PaymentOrderPartition" xmlns:T13="http://www.bulstat.bg/File"
+	xmlns:T14="http://www.bulstat.bg/PaymentOrder" xmlns:T17="http://www.bulstat.bg/Document"
+	xmlns:T18="http://www.bulstat.bg/Event" xmlns:T21="http://www.bulstat.bg/Applicant"
+	xmlns:T22="http://www.bulstat.bg/LegalEntity" xmlns:T23="http://www.bulstat.bg/NaturalPerson"
+	xmlns:T24="http://www.bulstat.bg/Subject" xmlns:T25="http://www.bulstat.bg/UIC"
+	xmlns:T27="http://www.bulstat.bg/Case" xmlns:T28="http://www.bulstat.bg/Communication"
+	xmlns:T29="http://www.bulstat.bg/IdentificationDoc" xmlns:T30="http://www.bulstat.bg/ApplicationData"
+	xmlns:T31="http://www.bulstat.bg/Instruction" xmlns:T32="http://www.bulstat.bg/Refusal"
+	xmlns:T33="http://www.bulstat.bg/PostApplication" xmlns:T34="http://www.bulstat.bg/TreeElement"
+	xmlns:T35="http://www.bulstat.bg/Court" xmlns:T36="http://www.bulstat.bg/GetApplicationByUICRequest"
+	xmlns:T37="http://www.bulstat.bg/ExportedData" xmlns:T38="http://www.bulstat.bg/Nomenclatures">
+
+	<xs:import schemaLocation="PutApplicationRequest.xsd"
+		namespace="http://www.bulstat.bg/PutApplicationRequest" />
+	<xs:import schemaLocation="RegisterApplicationRequest.xsd"
+		namespace="http://www.bulstat.bg/RegisterApplicationRequest" />
+	<xs:import schemaLocation="CorrectApplicationRequest.xsd"
+		namespace="http://www.bulstat.bg/CorrectApplicationRequest" />
+	<xs:import schemaLocation="RegisterInstructionRequest.xsd"
+		namespace="http://www.bulstat.bg/RegisterInstructionRequest" />
+	<xs:import schemaLocation="RegisterRefusalRequest.xsd"
+		namespace="http://www.bulstat.bg/RegisterRefusalRequest" />
+	<xs:import schemaLocation="GetApplicationRequest.xsd"
+		namespace="http://www.bulstat.bg/GetApplicationRequest" />
+	<xs:import schemaLocation="GetStateOfPlayRequest.xsd"
+		namespace="http://www.bulstat.bg/GetStateOfPlayRequest" />
+	<xs:import schemaLocation="PayRequest.xsd" namespace="http://www.bulstat.bg/PayRequest" />
+	<xs:import schemaLocation="ConfirmRequest.xsd"
+		namespace="http://www.bulstat.bg/ConfirmRequest" />
+	<xs:import schemaLocation="GetLegalEntityByUICRequest.xsd"
+		namespace="http://www.bulstat.bg/GetLegalEntityByUICRequest" />
+	<xs:import schemaLocation="GetNaturalPersonByUICRequest.xsd"
+		namespace="http://www.bulstat.bg/GetNaturalPersonByUICRequest" />
+	<xs:import schemaLocation="GetSubjectByCriteriaRequest.xsd"
+		namespace="http://www.bulstat.bg/GetSubjectByCriteriaRequest" />
+	<xs:import schemaLocation="ListForeignCitizensByCriteriaRequest.xsd"
+		namespace="http://www.bulstat.bg/ListForeignCitizensByCriteriaRequest" />
+	<xs:import schemaLocation="ListPaymentsByCriteriaRequest.xsd"
+		namespace="http://www.bulstat.bg/ListPaymentsByCriteriaRequest" />
+	<xs:import schemaLocation="WSResponse.xsd" namespace="http://www.bulstat.bg/WSResponse" />
+	<xs:import schemaLocation="CorrectApplicationResponse.xsd"
+		namespace="http://www.bulstat.bg/CorrectApplicationResponse" />
+	<xs:import schemaLocation="PutApplicationResponse.xsd"
+		namespace="http://www.bulstat.bg/PutApplicationResponse" />
+	<xs:import schemaLocation="RegisterApplicationResponse.xsd"
+		namespace="http://www.bulstat.bg/RegisterApplicationResponse" />
+	<xs:import schemaLocation="RegisterInstructionResponse.xsd"
+		namespace="http://www.bulstat.bg/RegisterInstructionResponse" />
+	<xs:import schemaLocation="RegisterRefusalResponse.xsd"
+		namespace="http://www.bulstat.bg/RegisterRefusalResponse" />
+	<xs:import schemaLocation="GetAttachmentsByCriteriaRequest.xsd"
+		namespace="http://www.bulstat.bg/GetAttachmentsByCriteriaRequest" />
+	<xs:import schemaLocation="GetFilesByAttachmentUIDRequest.xsd"
+		namespace="http://www.bulstat.bg/GetFilesByAttachmentUIDRequest" />
+	<xs:import schemaLocation="PayResponse.xsd" namespace="http://www.bulstat.bg/PayResponse" />
+	<xs:import schemaLocation="GetNomenclatureByCodeRequest.xsd"
+		namespace="http://www.bulstat.bg/GetNomenclatureByCodeRequest" />
+	<xs:import schemaLocation="GetTreeChildrenRequest.xsd"
+		namespace="http://www.bulstat.bg/GetTreeChildrenRequest" />
+	<xs:import schemaLocation="GetTreeParentRequest.xsd"
+		namespace="http://www.bulstat.bg/GetTreeParentRequest" />
+	<xs:import schemaLocation="GetLegalEntitiesByCriteriaRequest.xsd"
+		namespace="http://www.bulstat.bg/GetLegalEntitiesByCriteriaRequest" />
+	<xs:import schemaLocation="GetNaturalPersonsByCriteriaRequest.xsd"
+		namespace="http://www.bulstat.bg/GetNaturalPersonsByCriteriaRequest" />
+	<xs:import schemaLocation="SendSubscriptionRequest.xsd"
+		namespace="http://www.bulstat.bg/SendSubscriptionRequest" />
+
+	<xs:import schemaLocation="SubjectPropLifeTime.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropLifeTime" />
+	<xs:import schemaLocation="SubjectPropState.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropState" />
+	<xs:import schemaLocation="SubjectPropScopeOfActivity.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropScopeOfActivity" />
+	<xs:import schemaLocation="SubjectPropActivityKID2008.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropActivityKID2008" />
+	<xs:import schemaLocation="SubjectPropActivityKID2003.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropActivityKID2003" />
+	<xs:import schemaLocation="SubjectPropInstallments.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropInstallments" />
+	<xs:import schemaLocation="SubjectPropRepresentationType.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropRepresentationType" />
+	<xs:import schemaLocation="SubjectPropFundingSource.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropFundingSource" />
+	<xs:import schemaLocation="SubjectPropOwnershipForm.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropOwnershipForm" />
+	<xs:import schemaLocation="SubjectPropAccountingRecordForm.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropAccountingRecordForm" />
+	<xs:import schemaLocation="SubjectPropActivityDate.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropActivityDate" />
+	<xs:import schemaLocation="SubjectPropProfession.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropProfession" />
+	<xs:import schemaLocation="SubjectPropCollectiveBody.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropCollectiveBody" />
+
+	<xs:import schemaLocation="SubjectRelPartner.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelPartner" />
+	<xs:import schemaLocation="SubjectRelManager.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelManager" />
+	<xs:import schemaLocation="SubjectRelBelonging.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelBelonging" />
+	<xs:import schemaLocation="SubjectRelAssignee.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelAssignee" />
+	<xs:import schemaLocation="SubjectRelCollectiveBodyMember.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelCollectiveBodyMember" />
+
+	<xs:import schemaLocation="MetaDefinition.xsd"
+		namespace="http://www.bulstat.bg/MetaDefinition" />
+	<xs:import schemaLocation="NomenclatureElement.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureElement" />
+	<xs:import schemaLocation="Nomenclature.xsd"
+		namespace="http://www.bulstat.bg/Nomenclature" />
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="LogicalListElement.xsd"
+		namespace="http://www.bulstat.bg/LogicalListElement" />
+	<xs:import schemaLocation="LogicalList.xsd" namespace="http://www.bulstat.bg/LogicalList" />
+	<xs:import schemaLocation="TRCompanyInfo.xsd"
+		namespace="http://www.bulstat.bg/TRCompanyInfo" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+	<xs:import schemaLocation="Address.xsd" namespace="http://www.bulstat.bg/Address" />
+	<xs:import schemaLocation="Application.xsd" namespace="http://www.bulstat.bg/Application" />
+	<xs:import schemaLocation="StateOfPlay.xsd" namespace="http://www.bulstat.bg/StateOfPlay" />
+	<xs:import schemaLocation="Attachment.xsd" namespace="http://www.bulstat.bg/Attachment" />
+	<xs:import schemaLocation="PaymentOrderPartition.xsd"
+		namespace="http://www.bulstat.bg/PaymentOrderPartition" />
+	<xs:import schemaLocation="File.xsd" namespace="http://www.bulstat.bg/File" />
+	<xs:import schemaLocation="PaymentOrder.xsd"
+		namespace="http://www.bulstat.bg/PaymentOrder" />
+	<xs:import schemaLocation="Document.xsd" namespace="http://www.bulstat.bg/Document" />
+	<xs:import schemaLocation="Event.xsd" namespace="http://www.bulstat.bg/Event" />
+	<xs:import schemaLocation="Applicant.xsd" namespace="http://www.bulstat.bg/Applicant" />
+	<xs:import schemaLocation="LegalEntity.xsd" namespace="http://www.bulstat.bg/LegalEntity" />
+	<xs:import schemaLocation="NaturalPerson.xsd"
+		namespace="http://www.bulstat.bg/NaturalPerson" />
+	<xs:import schemaLocation="Subject.xsd" namespace="http://www.bulstat.bg/Subject" />
+	<xs:import schemaLocation="UIC.xsd" namespace="http://www.bulstat.bg/UIC" />
+	<xs:import schemaLocation="Case.xsd" namespace="http://www.bulstat.bg/Case" />
+	<xs:import schemaLocation="Communication.xsd"
+		namespace="http://www.bulstat.bg/Communication" />
+	<xs:import schemaLocation="IdentificationDoc.xsd"
+		namespace="http://www.bulstat.bg/IdentificationDoc" />
+	<xs:import schemaLocation="ApplicationData.xsd"
+		namespace="http://www.bulstat.bg/ApplicationData" />
+	<xs:import schemaLocation="Instruction.xsd" namespace="http://www.bulstat.bg/Instruction" />
+	<xs:import schemaLocation="Refusal.xsd" namespace="http://www.bulstat.bg/Refusal" />
+	<xs:import schemaLocation="PostApplication.xsd"
+		namespace="http://www.bulstat.bg/PostApplication" />
+	<xs:import schemaLocation="TreeElement.xsd" namespace="http://www.bulstat.bg/TreeElement" />
+	<xs:import schemaLocation="Court.xsd" namespace="http://www.bulstat.bg/Court" />
+	<xs:import schemaLocation="GetApplicationByUICRequest.xsd"
+		namespace="http://www.bulstat.bg/GetApplicationByUICRequest" />
+	<xs:import schemaLocation="ExportedData.xsd"
+		namespace="http://www.bulstat.bg/ExportedData" />
+	<xs:import schemaLocation="Nomenclatures.xsd"
+		namespace="http://www.bulstat.bg/Nomenclatures" />
+
+	<xs:complexType name="WS_Types">
+		<xs:sequence>
+			<xs:element name="PutApplicationRequest" type="R0:PutApplicationRequest"
+				minOccurs="0" />
+			<xs:element name="RegisterApplicationRequest" type="R1:RegisterApplicationRequest"
+				minOccurs="0" />
+			<xs:element name="CorrectApplicationRequest" type="R2:CorrectApplicationRequest"
+				minOccurs="0" />
+			<xs:element name="RegisterInstructionRequest" type="R3:RegisterInstructionRequest"
+				minOccurs="0" />
+			<xs:element name="RegisterRefusalRequest" type="R4:RegisterRefusalRequest"
+				minOccurs="0" />
+			<xs:element name="GetApplicationRequest" type="R5:GetApplicationRequest"
+				minOccurs="0" />
+			<xs:element name="GetStateOfPlayRequest" type="R6:GetStateOfPlayRequest"
+				minOccurs="0" />
+			<xs:element name="PayRequest" type="R7:PayRequest"
+				minOccurs="0" />
+			<xs:element name="ConfirmRequest" type="R8:ConfirmRequest"
+				minOccurs="0" />
+			<xs:element name="GetLegalEntityByUICRequest" type="R9:GetLegalEntityByUICRequest"
+				minOccurs="0" />
+			<xs:element name="GetNaturalPersonByUICRequest" type="R10:GetNaturalPersonByUICRequest"
+				minOccurs="0" />
+			<xs:element name="GetSubjectByCriteriaRequest" type="R11:GetSubjectByCriteriaRequest"
+				minOccurs="0" />
+			<xs:element name="ListForeignCitizensByCriteriaRequest"
+				type="R12:ListForeignCitizensByCriteriaRequest" minOccurs="0" />
+			<xs:element name="ListPaymentsByCriteriaRequest" type="R13:ListPaymentsByCriteriaRequest"
+				minOccurs="0" />
+			<xs:element name="WSResponse" type="R15:WSResponse"
+				minOccurs="0" />
+			<xs:element name="GetTreeChildrenRequest" type="R28:GetTreeChildrenRequest"
+				minOccurs="0" />
+			<xs:element name="GetTreeParentRequest" type="R29:GetTreeParentRequest"
+				minOccurs="0" />
+			<xs:element name="GetLegalEntitiesByCriteriaRequest" type="R30:GetLegalEntitiesByCriteriaRequest"
+				minOccurs="0" />
+			<xs:element name="GetNaturalPersonsByCriteriaRequest"
+				type="R31:GetNaturalPersonsByCriteriaRequest" minOccurs="0" />
+			<xs:element name="SendSubscriptionRequest" type="R32:SendSubscriptionRequest"
+				minOccurs="0" />
+
+
+			<xs:element name="CorrectApplicationResponse" type="R16:CorrectApplicationResponse"
+				minOccurs="0" />
+			<xs:element name="PutApplicationResponse" type="R19:PutApplicationResponse"
+				minOccurs="0" />
+			<xs:element name="RegisterApplicationResponse" type="R20:RegisterApplicationResponse"
+				minOccurs="0" />
+			<xs:element name="RegisterInstructionResponse" type="R21:RegisterInstructionResponse"
+				minOccurs="0" />
+			<xs:element name="RegisterRefusalResponse" type="R22:RegisterRefusalResponse"
+				minOccurs="0" />
+			<xs:element name="GetAttachmentsByCriteriaRequest" type="R23:GetAttachmentsByCriteriaRequest"
+				minOccurs="0" />
+			<xs:element name="GetFilesByAttachmentUIDRequest" type="R25:GetFilesByAttachmentUIDRequest"
+				minOccurs="0" />
+			<xs:element name="PayResponse" type="R26:PayResponse"
+				minOccurs="0" />
+			<xs:element name="GetNomenclatureByCodeRequest" type="R27:GetNomenclatureByCodeRequest"
+				minOccurs="0" />
+
+			<xs:element name="SubjectPropLifeTime" type="PROP0:SubjectPropLifeTime"
+				minOccurs="0" />
+			<xs:element name="SubjectPropState" type="PROP1:SubjectPropState"
+				minOccurs="0" />
+			<xs:element name="SubjectPropScopeOfActivity" type="PROP2:SubjectPropScopeOfActivity"
+				minOccurs="0" />
+			<xs:element name="SubjectPropActivityKID2008" type="PROP3:SubjectPropActivityKID2008"
+				minOccurs="0" />
+			<xs:element name="SubjectPropActivityKID2003" type="PROP4:SubjectPropActivityKID2003"
+				minOccurs="0" />
+			<xs:element name="SubjectPropInstallments" type="PROP5:SubjectPropInstallments"
+				minOccurs="0" />
+			<xs:element name="SubjectPropRepresentationType" type="PROP6:SubjectPropRepresentationType"
+				minOccurs="0" />
+			<xs:element name="SubjectPropFundingSource" type="PROP7:SubjectPropFundingSource"
+				minOccurs="0" />
+			<xs:element name="SubjectPropOwnershipForm" type="PROP8:SubjectPropOwnershipForm"
+				minOccurs="0" />
+			<xs:element name="SubjectPropAccountingRecordForm" type="PROP9:SubjectPropAccountingRecordForm"
+				minOccurs="0" />
+			<xs:element name="SubjectPropActivityDate" type="PROP10:SubjectPropActivityDate"
+				minOccurs="0" />
+			<xs:element name="SubjectPropProfession" type="PROP11:SubjectPropProfession"
+				minOccurs="0" />
+			<xs:element name="SubjectPropCollectiveBody" type="PROP12:SubjectPropCollectiveBody"
+				minOccurs="0" />
+
+			<xs:element name="SubjectRelPartner" type="REL0:SubjectRelPartner"
+				minOccurs="0" />
+			<xs:element name="SubjectRelManager" type="REL1:SubjectRelManager"
+				minOccurs="0" />
+			<xs:element name="SubjectRelBelonging" type="REL2:SubjectRelBelonging"
+				minOccurs="0" />
+			<xs:element name="SubjectRelAssignee" type="REL3:SubjectRelAssignee"
+				minOccurs="0" />
+
+			<xs:element name="MetaDefinition" type="T0:MetaDefinition"
+				minOccurs="0" />
+			<xs:element name="NomenclatureElement" type="T1:NomenclatureElement"
+				minOccurs="0" />
+			<xs:element name="Nomenclature" type="T2:Nomenclature"
+				minOccurs="0" />
+			<xs:element name="NomenclatureEntry" type="T3:NomenclatureEntry"
+				minOccurs="0" />
+			<xs:element name="LogicalListElement" type="T4:LogicalListElement"
+				minOccurs="0" />
+			<xs:element name="LogicalList" type="T5:LogicalList"
+				minOccurs="0" />
+			<xs:element name="TRCompanyInfo" type="T6:TRCompanyInfo"
+				minOccurs="0" />
+			<xs:element name="Employee" type="T7:Employee" minOccurs="0" />
+			<xs:element name="Address" type="T8:Address" minOccurs="0" />
+			<xs:element name="Application" type="T9:Application"
+				minOccurs="0" />
+			<xs:element name="StateOfPlay" type="T10:StateOfPlay"
+				minOccurs="0" />
+			<xs:element name="Attachment" type="T11:Attachment"
+				minOccurs="0" />
+			<xs:element name="PaymentOrderPartition" type="T12:PaymentOrderPartition"
+				minOccurs="0" />
+			<xs:element name="File" type="T13:File" minOccurs="0" />
+			<xs:element name="PaymentOrder" type="T14:PaymentOrder"
+				minOccurs="0" />
+			<xs:element name="Document" type="T17:Document" minOccurs="0" />
+			<xs:element name="Event" type="T18:Event" minOccurs="0" />
+			<xs:element name="Applicant" type="T21:Applicant"
+				minOccurs="0" />
+			<xs:element name="LegalEntity" type="T22:LegalEntity"
+				minOccurs="0" />
+			<xs:element name="NaturalPerson" type="T23:NaturalPerson"
+				minOccurs="0" />
+			<xs:element name="Subject" type="T24:Subject" minOccurs="0" />
+			<xs:element name="UIC" type="T25:UIC" minOccurs="0" />
+			<xs:element name="Case" type="T27:Case" minOccurs="0" />
+			<xs:element name="Communication" type="T28:Communication"
+				minOccurs="0" />
+			<xs:element name="IdentificationDoc" type="T29:IdentificationDoc"
+				minOccurs="0" />
+			<xs:element name="ApplicationData" type="T30:ApplicationData"
+				minOccurs="0" />
+			<xs:element name="Instruction" type="T31:Instruction"
+				minOccurs="0" />
+			<xs:element name="Refusal" type="T32:Refusal" minOccurs="0" />
+			<xs:element name="PostApplication" type="T33:PostApplication"
+				minOccurs="0" />
+			<xs:element name="TreeElement" type="T34:TreeElement"
+				minOccurs="0" />
+			<xs:element name="Court" type="T35:Court" minOccurs="0" />
+			<xs:element name="GetApplicationByUICRequest" type="T36:GetApplicationByUICRequest"
+				minOccurs="0" />
+			<xs:element name="ExportedData" type="T37:ExportedData"
+				minOccurs="0" />
+			<xs:element name="Nomenclatures" type="T38:Nomenclatures"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

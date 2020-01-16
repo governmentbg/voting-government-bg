@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Court" xmlns:tns="http://www.bulstat.bg/Court"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:complexType name="Court">
+		<xs:annotation>
+			<xs:documentation>Окръжен Съд</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EIK" maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>ЕИК на окръжен съд</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="13" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Name" maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Име на окръжен съд</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

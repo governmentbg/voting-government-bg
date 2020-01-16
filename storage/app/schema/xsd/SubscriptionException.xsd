@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI (http://jax-ws.java.net). 
+	RI's version is JAX-WS RI 2.2.10 svn-revision#919b322c92f13ad085a933e8dd6dd35d4947364b. -->
+<xs:schema xmlns:ns1="http://www.bulstat.bg/SubscriptionService"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
+	targetNamespace="http://www.bulstat.bg/SubscriptionException">
+
+	<xs:import namespace="http://www.bulstat.bg/SubscriptionService"
+		schemaLocation="SubscriptionService.xsd"></xs:import>
+
+	<xs:element name="SubscriptionException" type="ns1:SubscriptionException"></xs:element>
+
+</xs:schema>

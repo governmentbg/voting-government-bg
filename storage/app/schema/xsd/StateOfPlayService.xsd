@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI (http://jax-ws.java.net). 
+	RI's version is JAX-WS RI 2.2.10 svn-revision#919b322c92f13ad085a933e8dd6dd35d4947364b. -->
+<xs:schema xmlns:tns="http://www.bulstat.bg/StateOfPlayService"
+	xmlns:ns22="http://www.bulstat.bg/Nomenclatures" xmlns:ns21="http://www.bulstat.bg/StateOfPlay"
+	xmlns:ns20="http://www.bulstat.bg/SubjectPropProfession" xmlns:ns19="http://www.bulstat.bg/SubjectPropActivityDate"
+	xmlns:ns18="http://www.bulstat.bg/SubjectPropCollectiveBody"
+	xmlns:ns17="http://www.bulstat.bg/SubjectRelBelonging" xmlns:ns16="http://www.bulstat.bg/SubjectRelAssignee"
+	xmlns:ns15="http://www.bulstat.bg/SubjectRelPartner" xmlns:ns14="http://www.bulstat.bg/SubjectRelManager"
+	xmlns:ns13="http://www.bulstat.bg/SubjectPropState" xmlns:ns12="http://www.bulstat.bg/SubjectPropFundingSource"
+	xmlns:ns11="http://www.bulstat.bg/SubjectPropOwnershipForm" xmlns:ns10="http://www.bulstat.bg/SubjectPropAccountingRecordForm"
+	xmlns:ns9="http://www.bulstat.bg/SubjectPropLifeTime" xmlns:ns8="http://www.bulstat.bg/SubjectPropInstallments"
+	xmlns:ns7="http://www.bulstat.bg/SubjectPropActivityKID2003" xmlns:ns6="http://www.bulstat.bg/SubjectPropActivityKID2008"
+	xmlns:ns5="http://www.bulstat.bg/SubjectPropScopeOfActivity" xmlns:ns4="http://www.bulstat.bg/SubjectPropRepresentationType"
+	xmlns:ns3="http://www.bulstat.bg/Event" xmlns:ns2="http://www.bulstat.bg/Subject"
+	xmlns:ns1="http://www.bulstat.bg/GetStateOfPlayRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	version="1.0" targetNamespace="http://www.bulstat.bg/StateOfPlayService">
+
+	<xs:import namespace="http://www.bulstat.bg/GetStateOfPlayRequest"
+		schemaLocation="GetStateOfPlayRequest.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/Subject"
+		schemaLocation="Subject.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/Event"
+		schemaLocation="Event.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropRepresentationType"
+		schemaLocation="SubjectPropRepresentationType.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropScopeOfActivity"
+		schemaLocation="SubjectPropScopeOfActivity.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropActivityKID2008"
+		schemaLocation="SubjectPropActivityKID2008.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropActivityKID2003"
+		schemaLocation="SubjectPropActivityKID2003.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropInstallments"
+		schemaLocation="SubjectPropInstallments.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropLifeTime"
+		schemaLocation="SubjectPropLifeTime.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropAccountingRecordForm"
+		schemaLocation="SubjectPropAccountingRecordForm.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropOwnershipForm"
+		schemaLocation="SubjectPropOwnershipForm.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropFundingSource"
+		schemaLocation="SubjectPropFundingSource.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropState"
+		schemaLocation="SubjectPropState.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelManager"
+		schemaLocation="SubjectRelManager.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelPartner"
+		schemaLocation="SubjectRelPartner.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelAssignee"
+		schemaLocation="SubjectRelAssignee.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectRelBelonging"
+		schemaLocation="SubjectRelBelonging.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropCollectiveBody"
+		schemaLocation="SubjectPropCollectiveBody.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropActivityDate"
+		schemaLocation="SubjectPropActivityDate.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/SubjectPropProfession"
+		schemaLocation="SubjectPropProfession.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/StateOfPlay"
+		schemaLocation="StateOfPlay.xsd"></xs:import>
+
+	<xs:import namespace="http://www.bulstat.bg/Nomenclatures"
+		schemaLocation="Nomenclatures.xsd"></xs:import>
+
+	<xs:element name="GetStateOfPlay" type="tns:GetStateOfPlay"></xs:element>
+	<xs:element name="GetStateOfPlayResponse" type="tns:GetStateOfPlayResponse"></xs:element>
+
+	<xs:element name="FetchNomenclatures" type="tns:FetchNomenclatures"></xs:element>
+	<xs:element name="FetchNomenclaturesResponse" type="tns:FetchNomenclaturesResponse"></xs:element>
+
+	<xs:complexType name="GetStateOfPlay">
+		<xs:sequence>
+			<xs:element ref="ns1:GetStateOfPlayRequest" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GetStateOfPlayResponse">
+		<xs:sequence>
+			<xs:element ref="ns21:StateOfPlay" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FetchNomenclatures">
+		<xs:sequence />
+	</xs:complexType>
+	<xs:complexType name="FetchNomenclaturesResponse">
+		<xs:sequence>
+			<xs:element ref="ns22:Nomenclatures" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TradeRegister extends Model
 {
+    const PREDEFINED_LIST_TYPE = 2;
+
     protected $table = 'tr_predefined_list';
 
     protected $guarded = [];
@@ -20,9 +22,17 @@ class TradeRegister extends Model
     * @var string
     */
     protected $keyType = 'string';
+
     const STATUSES = ['E', 'C', 'L', 'N'];
     // N - Нова
     // Е - Пререгистрирана фирма по Булстат
     // L - Пререгистрирана фирма по Булстат затворена
     // C - Нова партида затворена
+
+    public static function getType()
+    {
+        return [
+            self::PREDEFINED_LIST_TYPE => __('custom.predefined_list_type_tr')
+        ];
+    }
 }

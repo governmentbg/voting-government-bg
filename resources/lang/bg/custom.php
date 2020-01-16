@@ -318,5 +318,11 @@ return [
     'internal_server_error'            => 'Сървърна грешка',
     'to_login_please_use'              => 'За вход в Платформата, моля следвайте линка:',
     'vote_successful_ballotage_msg'    => 'Вашият вот в процедурата за балотаж беше регистриран.',
-    'for'                              => 'за'
+    'for'                              => 'за',
+    'predefined_list_type'             => 'ЦРЮЛНЦ към Министерство на правосъдието',
+    'predefined_list_type_tr'          => 'ТРРЮЛНЦ',
+    'predefined_list_type_bul'         => 'Регистър БУЛСТАТ',
+    'update_predefined_list_fail'      => 'Грешка при обновяване на данните на организация в зададения предварителен списък',
+    'predefined_list_org_not_found'    => 'Oрганизацията не е намерена в зададения предварителен списък',
+    'type_list_not_found'              => 'Не е открит списък с типове',
 ];

@@ -64,6 +64,10 @@ Route::middleware(['api'])->group(function () {
 
     Route::post('file/getData', 'Api\FileController@getData');
 
+    Route::post('predefinedList/update', 'Api\PredefinedList@update');
+    Route::post('predefinedList/getData', 'Api\PredefinedList@getData');
+    Route::post('predefinedList/listTypes', 'Api\PredefinedList@listTypes');
+
 });
 
 Route::any('{catchall}', 'ApiController@handleMissingRoutes')->where('catchall', '(.*)');

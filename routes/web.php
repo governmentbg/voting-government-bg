@@ -29,7 +29,7 @@ Route::get('/publicLists/rankingAjax', 'PublicController@listRankingAjax');
 
 Route::group(['middleware' => ['guest', 'guest:backend']], function () {
     Route::get('/register', 'OrganisationController@register')->name('organisation.register');
-    Route::post('/predefinedData', 'PredefinedOrganisationController@readData');
+    Route::post('/predefinedData', 'PredefinedListController@readData');
     Route::post('/organisations', 'OrganisationController@store')->name('organisation.store');
 });
 

@@ -34,6 +34,16 @@ class UpdateBulstatRegister implements ShouldQueue
      */
     public function handle()
     {
+        if($this->serviceHasErrors()){
+            //if previous subcription request were not parsed correctly don't parse current one
+            $requestRec = SubscriptionRequest::where('UID', $this->data->UID)->first();
+            if($requestRec){
+                //set ERROR status
+                $requestRec->update(['status' => SubscriptionRequest::STATUS_ERROR]);
+            }
+            return;
+        }
+
         if(isset($this->data->SendSubscriptionRequest)){
             $parser = new XMLParserBulstat();
             foreach((array)$this->data->SendSubscriptionRequest->SubjectUICs as $subjectUIC)
@@ -70,5 +80,14 @@ class UpdateBulstatRegister implements ShouldQueue
         if($requestRec){
             $requestRec->update(['status' => SubscriptionRequest::STATUS_ERROR]);
         }
+    }
+
+    /**
+     * Check if there are erros in the past 5 subscription requests.
+     * @return boolean
+     */
+    private function serviceHasErrors()
+    {
+        return SubscriptionRequest::orderBy('created_at', 'desc')->take(5)->max('status');
     }
 }

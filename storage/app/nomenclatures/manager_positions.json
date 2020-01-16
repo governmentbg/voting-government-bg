@@ -1,0 +1,374 @@
+[
+  {
+    "MANAGER_POSITION_ID": 649,
+    "CODE": "sobstvenik",
+    "NAME": "Собственик",
+    "ABC": 1
+  },
+  {
+    "MANAGER_POSITION_ID": 635,
+    "CODE": "upravitel",
+    "NAME": "Управител",
+    "ABC": 2
+  },
+  {
+    "MANAGER_POSITION_ID": 636,
+    "CODE": "predsedatel",
+    "NAME": "Председател",
+    "ABC": 3
+  },
+  {
+    "MANAGER_POSITION_ID": 638,
+    "CODE": "izpalnitelen_direktor",
+    "NAME": "Изпълнителен директор",
+    "ABC": 4
+  },
+  {
+    "MANAGER_POSITION_ID": 639,
+    "CODE": "glaven_direktor",
+    "NAME": "Главен директор",
+    "ABC": 5
+  },
+  {
+    "MANAGER_POSITION_ID": 642,
+    "CODE": "predstavitel",
+    "NAME": "Представител",
+    "ABC": 6
+  },
+  {
+    "MANAGER_POSITION_ID": 644,
+    "CODE": "sindik",
+    "NAME": "Синдик",
+    "ABC": 7
+  },
+  {
+    "MANAGER_POSITION_ID": 1306,
+    "CODE": "zam_izp_direktor",
+    "NAME": "Зам. изпълнителен директор",
+    "ABC": 8
+  },
+  {
+    "MANAGER_POSITION_ID": 645,
+    "CODE": "vremenen_sindik",
+    "NAME": "Временен синдик",
+    "ABC": 9
+  },
+  {
+    "MANAGER_POSITION_ID": 641,
+    "CODE": "prokurist",
+    "NAME": "Прокурист",
+    "ABC": 10
+  },
+  {
+    "MANAGER_POSITION_ID": 643,
+    "CODE": "likvidator",
+    "NAME": "Ликвидатор",
+    "ABC": 11
+  },
+  {
+    "MANAGER_POSITION_ID": 653,
+    "CODE": "podkvestor",
+    "NAME": "Подквестор",
+    "ABC": 12
+  },
+  {
+    "MANAGER_POSITION_ID": 1257,
+    "CODE": "gl_izp_direktor",
+    "NAME": "Главен изпълнителен директор",
+    "ABC": 13
+  },
+  {
+    "MANAGER_POSITION_ID": 650,
+    "CODE": "kvestor",
+    "NAME": "Квестор",
+    "ABC": 14
+  },
+  {
+    "MANAGER_POSITION_ID": 633,
+    "CODE": "prezident",
+    "NAME": "Президент",
+    "ABC": 15
+  },
+  {
+    "MANAGER_POSITION_ID": 634,
+    "CODE": "ministar",
+    "NAME": "Министър",
+    "ABC": 16
+  },
+  {
+    "MANAGER_POSITION_ID": 651,
+    "CODE": "ministar_predsedatel",
+    "NAME": "Министър-председател",
+    "ABC": 17
+  },
+  {
+    "MANAGER_POSITION_ID": 652,
+    "CODE": "flaven_sekretar",
+    "NAME": "Главен секретар",
+    "ABC": 18
+  },
+  {
+    "MANAGER_POSITION_ID": 654,
+    "CODE": "glaven_prokuror",
+    "NAME": "Главен прокурор",
+    "ABC": 19
+  },
+  {
+    "MANAGER_POSITION_ID": 658,
+    "CODE": "nachalnik",
+    "NAME": "Началник",
+    "ABC": 20
+  },
+  {
+    "MANAGER_POSITION_ID": 655,
+    "CODE": "prokuror",
+    "NAME": "Прокурор",
+    "ABC": 21
+  },
+  {
+    "MANAGER_POSITION_ID": 661,
+    "CODE": "poslannik",
+    "NAME": "Посланик",
+    "ABC": 22
+  },
+  {
+    "MANAGER_POSITION_ID": 662,
+    "CODE": "konsul",
+    "NAME": "Консул",
+    "ABC": 23
+  },
+  {
+    "MANAGER_POSITION_ID": 663,
+    "CODE": "generalen_konsul",
+    "NAME": "Генерален консул",
+    "ABC": 24
+  },
+  {
+    "MANAGER_POSITION_ID": 664,
+    "CODE": "palnomosten_ministar",
+    "NAME": "Пълномощен министър",
+    "ABC": 25
+  },
+  {
+    "MANAGER_POSITION_ID": 665,
+    "CODE": "vremenno_upravliavast",
+    "NAME": "Временно управляващ",
+    "ABC": 26
+  },
+  {
+    "MANAGER_POSITION_ID": 1535,
+    "CODE": "zam_generalen_direktor",
+    "NAME": "Зам. генерален директор",
+    "ABC": 27
+  },
+  {
+    "MANAGER_POSITION_ID": 666,
+    "CODE": "postoianen_predstavitel",
+    "NAME": "Постоянен представител",
+    "ABC": 28
+  },
+  {
+    "MANAGER_POSITION_ID": 1314,
+    "CODE": "sekretar",
+    "NAME": "Секретар",
+    "ABC": 29
+  },
+  {
+    "MANAGER_POSITION_ID": 1568,
+    "CODE": "pulnomostnik",
+    "NAME": "Пълномощник",
+    "ABC": 30
+  },
+  {
+    "MANAGER_POSITION_ID": 667,
+    "CODE": "savetnik",
+    "NAME": "Съветник",
+    "ABC": 31
+  },
+  {
+    "MANAGER_POSITION_ID": 501,
+    "CODE": "oblasten_upravitel",
+    "NAME": "Областен управител",
+    "ABC": 32
+  },
+  {
+    "MANAGER_POSITION_ID": 646,
+    "CODE": "kmet",
+    "NAME": "Кмет",
+    "ABC": 33
+  },
+  {
+    "MANAGER_POSITION_ID": 647,
+    "CODE": "rektor",
+    "NAME": "Ректор",
+    "ABC": 34
+  },
+  {
+    "MANAGER_POSITION_ID": 648,
+    "CODE": "dekan",
+    "NAME": "Декан",
+    "ABC": 35
+  },
+  {
+    "MANAGER_POSITION_ID": 640,
+    "CODE": "direktor",
+    "NAME": "Директор",
+    "ABC": 36
+  },
+  {
+    "MANAGER_POSITION_ID": 637,
+    "CODE": "generalen_direktor",
+    "NAME": "Генерален директор",
+    "ABC": 37
+  },
+  {
+    "MANAGER_POSITION_ID": 669,
+    "CODE": "rakovoditel",
+    "NAME": "Ръководител",
+    "ABC": 38
+  },
+  {
+    "MANAGER_POSITION_ID": 671,
+    "CODE": "mitropolit",
+    "NAME": "Митрополит",
+    "ABC": 39
+  },
+  {
+    "MANAGER_POSITION_ID": 672,
+    "CODE": "igumen",
+    "NAME": "Игумен",
+    "ABC": 40
+  },
+  {
+    "MANAGER_POSITION_ID": 1206,
+    "CODE": "zam_predsedatel",
+    "NAME": "Зам. председател",
+    "ABC": 41
+  },
+  {
+    "MANAGER_POSITION_ID": 656,
+    "CODE": "komandir",
+    "NAME": "Командир",
+    "ABC": 42
+  },
+  {
+    "MANAGER_POSITION_ID": 1077,
+    "CODE": "chlen",
+    "NAME": "Член",
+    "ABC": 43
+  },
+  {
+    "MANAGER_POSITION_ID": 657,
+    "CODE": "komandvast",
+    "NAME": "Командващ",
+    "ABC": 44
+  },
+  {
+    "MANAGER_POSITION_ID": 1347,
+    "CODE": "podglasnik",
+    "NAME": "Подгласник",
+    "ABC": 45
+  },
+  {
+    "MANAGER_POSITION_ID": 659,
+    "CODE": "nachalnik_glavn_st_ba",
+    "NAME": "Началник на Генералния щаб на Българската армия",
+    "ABC": 46
+  },
+  {
+    "MANAGER_POSITION_ID": 660,
+    "CODE": "nachalnik_gen_st",
+    "NAME": "Началник на Главния щаб",
+    "ABC": 47
+  },
+  {
+    "MANAGER_POSITION_ID": 673,
+    "CODE": "zam_gl_prokuror_vs",
+    "NAME": "Зам. главен прокурор и прокурор на Въоръжените сили",
+    "ABC": 48
+  },
+  {
+    "MANAGER_POSITION_ID": 674,
+    "CODE": "voenno_apelativen_prokuror",
+    "NAME": "Военно-апелативен прокурор",
+    "ABC": 49
+  },
+  {
+    "MANAGER_POSITION_ID": 675,
+    "CODE": "voenno_okrajen_prokuror",
+    "NAME": "Военно-окръжен прокурор",
+    "ABC": 50
+  },
+  {
+    "MANAGER_POSITION_ID": 676,
+    "CODE": "glaven_inspektor",
+    "NAME": "Главен инспектор",
+    "ABC": 51
+  },
+  {
+    "MANAGER_POSITION_ID": 677,
+    "CODE": "inspektor",
+    "NAME": "Инспектор",
+    "ABC": 52
+  },
+  {
+    "MANAGER_POSITION_ID": 1517,
+    "CODE": "patriarh_blg_mitropolit_sof",
+    "NAME": "Патриарх Български и Митрополит Софийски",
+    "ABC": 53
+  },
+  {
+    "MANAGER_POSITION_ID": 678,
+    "CODE": "druga_dlajnost",
+    "NAME": "Друга длъжност",
+    "ABC": 54
+  },
+  {
+    "MANAGER_POSITION_ID": 1299,
+    "CODE": "glaven_lekar",
+    "NAME": "Главен лекар",
+    "ABC": 55
+  },
+  {
+    "MANAGER_POSITION_ID": 1338,
+    "CODE": "zam_nachalnik",
+    "NAME": "Зам. началник",
+    "ABC": 56
+  },
+  {
+    "MANAGER_POSITION_ID": 1327,
+    "CODE": "komendant",
+    "NAME": "Комендант",
+    "ABC": 57
+  },
+  {
+    "MANAGER_POSITION_ID": 1511,
+    "CODE": "maistor",
+    "NAME": "Майстор",
+    "ABC": 58
+  },
+  {
+    "MANAGER_POSITION_ID": 1514,
+    "CODE": "episkop",
+    "NAME": "Епископ",
+    "ABC": 59
+  },
+  {
+    "MANAGER_POSITION_ID": 1518,
+    "CODE": "podupravitel",
+    "NAME": "Подуправител",
+    "ABC": 60
+  },
+  {
+    "MANAGER_POSITION_ID": 1548,
+    "CODE": "pocheten_konsul",
+    "NAME": "Почетен консул",
+    "ABC": 61
+  },
+  {
+    "MANAGER_POSITION_ID": 1595,
+    "CODE": "kmetski namestnik",
+    "NAME": "Кметски наместник",
+    "ABC": 62
+  }
+]

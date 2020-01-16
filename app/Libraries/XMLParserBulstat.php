@@ -9,15 +9,26 @@ use Illuminate\Support\Facades\Storage;
  */
 class XMLParserBulstat implements IXMLParser
 {
-    const LEGAL_FORMS = ['Сдружение'/*'ASSOC', 'FOUND', 'CC', 'BFLE'*/]; //todo check forms
+    //    - Фондация – 485
+    //    - Сдружение – 486
+    //    - Клон на чуждестранно юридическо лице с нестопаска цел - 1307
+    //    - Народно читалище – 488
+    //    - Читалищно сдружение – 1586
+    const LEGAL_FORMS = ['485' , '486', '488', '1307', '1586'];
+
+    //435 - юридическо лице
+    const LEGAL_STATUTE = 435;
 
     private $data;
 
     private $ekatte;
 
+    private $managerPostitions;
+
     public function __construct()
     {
         $this->loadEkatte();
+        $this->loadManagerPositions();
     }
 
     /**
@@ -101,9 +112,17 @@ class XMLParserBulstat implements IXMLParser
         }
 
         $orgArray['representative'] = '';
+        $notFirst = false;
         foreach($org->Managers as $key => $manager) {
             if(isset($manager->RelatedSubject->NaturalPersonSubject)){
-                $orgArray['representative'] = (string)$manager->RelatedSubject->NaturalPersonSubject->CyrillicName;
+                if($notFirst){
+                    $orgArray['representative'] .= ', ';
+                }
+                if(isset($manager->Position)){
+                    $orgArray['representative'] .= $this->getManagerPostion((string)$manager->Position->Code) . ': ';
+                }
+                $orgArray['representative'] .= (string)$manager->RelatedSubject->NaturalPersonSubject->CyrillicName;
+                $notFirst = true;
             }
         }
 
@@ -139,9 +158,10 @@ class XMLParserBulstat implements IXMLParser
 
     private function isOrgRelevant($org)
     {
-        //dump($org->MainActivity2008->KID2008->Code);
-        return true;
-        return isset($org->Subject->LegalEntitySubject) && in_array($org->Subject->LegalEntitySubject->LegalForm, self::LEGAL_FORMS);
+        return isset($org->Subject->LegalEntitySubject->LegalForm) && 
+            in_array((string)$org->Subject->LegalEntitySubject->LegalForm->Code, self::LEGAL_FORMS) &&
+            (isset($org->Subject->LegalEntitySubject->LegalStatute) ?
+            $org->Subject->LegalEntitySubject->LegalStatute->Code == self::LEGAL_STATUTE : true);
     }
 
     private function getCityName($ekatte)
@@ -163,5 +183,26 @@ class XMLParserBulstat implements IXMLParser
     {
         $json = Storage::disk('local')->get('/nomenclatures/ekatte.json');
         $this->ekatte = json_decode($json, true);
+    }
+
+    private function loadManagerPositions()
+    {
+        $json = Storage::disk('local')->get('/nomenclatures/manager_positions.json');
+        $this->managerPostitions = json_decode($json, true);
+    }
+
+    private function getManagerPostion($code)
+    {
+        if(empty($code)){
+            return '';
+        }
+
+        foreach($this->managerPostitions as $key => $obj) {
+            if($code == $obj['MANAGER_POSITION_ID']){
+                return $obj['NAME'];
+            }           
+        }
+
+        return '';
     }
 }

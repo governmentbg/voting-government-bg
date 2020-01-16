@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use App\Http\Controllers\ApiController;
 use App\PredefinedOrganisation;
 use App\TradeRegister;
-//use App\BulstatRegister;
+use App\BulstatRegister;
 
 class PredefinedList extends ApiController
 {
@@ -125,6 +125,9 @@ class PredefinedList extends ApiController
                 $orgData = $model::select($fields)->where('eik', $data['eik'])->first();
 
                 if ($orgData) {
+                    // add type in the result
+                    $orgData->type = $data['type'];
+
                     return $this->successResponse($orgData);
                 }
             } catch (\Exception $e) {
@@ -165,7 +168,7 @@ class PredefinedList extends ApiController
 
     private function getTypes()
     {
-        $types = /*BulstatRegister::getType() + */TradeRegister::getType() + PredefinedOrganisation::getType();
+        $types = BulstatRegister::getType() + TradeRegister::getType() + PredefinedOrganisation::getType();
 
         return $types;
     }
@@ -173,16 +176,16 @@ class PredefinedList extends ApiController
     private function getEditableTypes()
     {
         return [
-            //BulstatRegister::PREDEFINED_LIST_TYPE,
+            BulstatRegister::PREDEFINED_LIST_TYPE,
             TradeRegister::PREDEFINED_LIST_TYPE,
         ];
     }
 
     private function getModelByType($type)
     {
-        /*if ($type == BulstatRegister::PREDEFINED_LIST_TYPE) {
+        if ($type == BulstatRegister::PREDEFINED_LIST_TYPE) {
             $model = BulstatRegister::class;
-        } else*/if ($type == TradeRegister::PREDEFINED_LIST_TYPE) {
+        } elseif ($type == TradeRegister::PREDEFINED_LIST_TYPE) {
             $model = TradeRegister::class;
         } else {
             $model = PredefinedOrganisation::class;

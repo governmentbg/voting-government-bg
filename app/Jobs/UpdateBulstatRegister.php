@@ -45,8 +45,8 @@ class UpdateBulstatRegister implements ShouldQueue
                     $data = XMLParserBulstat::getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
 
                     if(!empty($data) && $data){
-                        $eik = $subjectUIC->UIC;
-                        //$eik = $data['eik'];
+                        //$eik = $subjectUIC->UIC;
+                        $eik = $data['eik'];
                         unset($data['eik']);
                         BulstatRegister::updateOrCreate(['eik' => $eik], $data);
                     }

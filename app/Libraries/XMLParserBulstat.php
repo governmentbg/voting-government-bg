@@ -36,6 +36,26 @@ class XMLParserBulstat implements IXMLParser
     }
 
     /**
+     * Tries to parse XML file from a given string.
+     * @param  string  $xmlData
+     * @return boolean
+     */
+    public function loadString($xmlData)
+    {
+        $this->data = simplexml_load_string($xmlData);   //load xml to get namespaces
+        if($this->data === false) {
+            return false;
+        }
+
+        //strip namespaces
+        $xml = str_replace(array_map(function($e) { return empty($e)? '' : "$e:"; }, array_keys($this->data->getDocNamespaces())), array(), $xmlData);
+
+        $this->data = simplexml_load_string($xml);
+
+        return $this->data === false ? false : true;
+    }
+
+    /**
      * Return parsed data as array.
      * @param  string $path
      * @return array
@@ -87,10 +107,10 @@ class XMLParserBulstat implements IXMLParser
 
         if (isset($org->Subject->Communications)) {
             foreach ($org->Subject->Communications as $key => $communication) {
-                if ($communication->Type->Code == 721) { //todo Code
+                if ($communication->Type->Code == 721) { 
                     $orgArray['phone'] = (string) (isset($communication->Value) ? $communication->Value : '');
                 }
-                if ($communication->Type == 'имейл') { //todo Code
+                if ($communication->Type->Code == 723) { 
                     $orgArray['email'] = (string) (isset($communication->Value) ? $communication->Value : '');
                 }
             }

@@ -9,7 +9,7 @@ use App\PredefinedOrganisation;
 use App\TradeRegister;
 use App\BulstatRegister;
 
-class PredefinedList extends ApiController
+class PredefinedListController extends ApiController
 {
     /**
      * Update predefined list record

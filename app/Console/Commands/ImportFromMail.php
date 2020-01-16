@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Libraries\XMLParser;
 use App\SubscriptionRequest;
 use App\TradeRegister;
+use App\ActionsHistory;
 
 use Carbon\Carbon;
 use \jamesiarmes\PhpEws\Client;
@@ -65,6 +66,7 @@ class ImportFromMail extends Command
     public function handle()
     {
         $attachmentsArray = [];
+        $success = false;
 
         try {
             $this->info('Connecting to email and reading files. Please wait.');
@@ -271,10 +273,30 @@ class ImportFromMail extends Command
 
                 $this->info('');
                 $this->info('Finished.');
+                $success = true;
             }
         } catch (\Exception $e) {
             \DB::rollback();
             $this->error($e->getMessage());
+        }
+
+        if ($success) {
+            ActionsHistory::create([
+                'action'      => ActionsHistory::TYPE_IMPORT_SUCCESS,
+                'module'      => ActionsHistory::IMPORTS,
+                'user_id'     => \App\User::where('username', 'system')->first()->id,
+                'occurrence'  => date('Y-m-d H:i:s'),
+                'ip_address'  => '::1',
+            ]);
+
+        } else {
+            ActionsHistory::create([
+                'action'      => ActionsHistory::TYPE_IMPORT_FAILURE,
+                'module'      => ActionsHistory::IMPORTS,
+                'user_id'     => \App\User::where('username', 'system')->first()->id,
+                'occurrence'  => date('Y-m-d H:i:s'),
+                'ip_address'  => '::1',
+            ]);
         }
     }
 

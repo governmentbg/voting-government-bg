@@ -21,6 +21,8 @@ class ActionsHistory extends Model
     const TYPE_CHANGED_PASSWORD = 7;
     const TYPE_RANKED = 8;
     const TYPE_CANCELLED_TOUR = 9;
+    const TYPE_IMPORT_SUCCESS = 10;
+    const TYPE_IMPORT_FAILURE = 11;
 
     /*
      * Modules
@@ -34,6 +36,7 @@ class ActionsHistory extends Model
     const VOTES = 7;
     const ORGANISATION_MESSAGES = 8;
     const ORGANISATIONS_FILES = 9;
+    const IMPORTS = 10;
 
     const DEFAULT_ORDER_FIELD = 'id';
     const DEFAULT_ORDER_TYPE = 'DESC';
@@ -87,6 +90,8 @@ class ActionsHistory extends Model
             self::TYPE_CHANGED_PASSWORD => __('custom.changed_password'),
             self::TYPE_RANKED           => __('custom.ranked'),
             self::TYPE_CANCELLED_TOUR   => __('custom.cancelled_tour'),
+            self::TYPE_IMPORT_SUCCESS   => __('custom.import_success'),
+            self::TYPE_IMPORT_FAILURE   => __('custom.import_failure'),
         ];
     }
 
@@ -107,6 +112,7 @@ class ActionsHistory extends Model
             self::VOTES                 => __('custom.votingmenu'),
             self::ORGANISATION_MESSAGES => __('custom.organisation_messages'),
             self::ORGANISATIONS_FILES   => __('custom.organisation_files'),
+            self::IMPORTS               => __('custom.imports'),
         ];
     }
 

@@ -6,9 +6,13 @@ use App\Vote;
 use App\VotingTour;
 use App\Organisation;
 use App\ActionsHistory;
+use App\PredefinedOrganisation;
+use App\BulstatRegister;
+use App\TradeRegister;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
+use App\Http\Controllers\Api\PredefinedListController as ApiPredefined;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Http\Controllers\Api\MessageController as ApiMessage;
 use App\Http\Controllers\Api\VoteController as ApiVote;
@@ -168,6 +172,12 @@ class OrganisationController extends BaseAdminController
         $id = $request->offsetGet('id');
         list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
 
+        list($orgDataPred, $orgErrorsPred) = api_result(ApiPredefined::class, 'getData', ['type' => array_keys(PredefinedOrganisation::getType())[0], 'eik' => $orgData->eik]);
+
+        list($orgDataPredBul, $orgErrorsPredBul) = api_result(ApiPredefined::class, 'getData', ['type' => array_keys(BulstatRegister::getType())[0], 'eik' => $orgData->eik]);
+
+        list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefined::class, 'getData', ['type' => array_keys(TradeRegister::getType())[0], 'eik' => $orgData->eik]);
+
         if (empty($orgData) || empty($this->votingTour)) {
             return back();
         }
@@ -225,7 +235,10 @@ class OrganisationController extends BaseAdminController
             'statuses'         => $statuses,
             'files'            => $files,
             'messages'         => $messages,
-            'disabledStatuses' => $disabledStatuses
+            'disabledStatuses' => $disabledStatuses,
+            'orgDataPred'      => $orgDataPred,
+            'orgDataPredBul'   => $orgDataPredBul,
+            'orgDataPredTrade' => $orgDataPredTrade
         ])->withErrors($errors);
     }
 

@@ -9,7 +9,7 @@ use App\PredefinedOrganisation;
 use App\TradeRegister;
 use App\BulstatRegister;
 
-class PredefinedList extends ApiController
+class PredefinedListController extends ApiController
 {
     /**
      * Update predefined list record
@@ -17,18 +17,18 @@ class PredefinedList extends ApiController
      * @param integer type - required
      * @param array data - required
      * @param big integer data[eik] - required
-     * @param big integer data[reg_number] - required
-     * @param datetime data[reg_date] - required
+     * @param big integer data[reg_number] - optional
+     * @param datetime data[reg_date] - optional
      * @param string data[name] - required
-     * @param string data[city] - required
-     * @param string data[address] - required
-     * @param string data[phone] - required
-     * @param string data[status] - required
+     * @param string data[city] - optional
+     * @param string data[address] - optional
+     * @param string data[phone] - optional
+     * @param string data[status] - optional
      * @param datetime data[status_date] - optional
-     * @param string data[email] - required
-     * @param string data[goals] - required
-     * @param string data[tools] - required
-     * @param string data[description] - required
+     * @param string data[email] - optional
+     * @param string data[goals] - optional
+     * @param string data[tools] - optional
+     * @param string data[description] - optional
      * @param bool data[public_benefits] - optional
      *
      * @return json - response with status code and success or errors
@@ -49,18 +49,18 @@ class PredefinedList extends ApiController
 
         $rules = [
             'eik'             => 'required|digits_between:1,19',
-            'reg_number'      => 'required|digits_between:1,19',
-            'reg_date'        => 'required',
+            'reg_number'      => 'nullable|digits_between:1,19',
+            'reg_date'        => 'nullable',
             'name'            => 'required|string|max:255',
-            'city'            => 'required|string|max:255',
-            'address'         => 'required|string|max:512',
-            'phone'           => 'required|string|max:40',
-            'status'          => 'required|string|max:30',
+            'city'            => 'nullable|string|max:255',
+            'address'         => 'nullable|string|max:512',
+            'phone'           => 'nullable|string|max:40',
+            'status'          => 'nullable|string|max:30',
             'status_date'     => 'nullable',
-            'email'           => 'string|min:0|email',
-            'goals'           => 'string|min:0|max:8000',
-            'tools'           => 'string|min:0|max:8000',
-            'description'     => 'string|min:0|max:8000',
+            'email'           => 'nullable|string|email',
+            'goals'           => 'nullable|string|max:8000',
+            'tools'           => 'nullable|string|max:8000',
+            'description'     => 'nullable|string|max:8000',
             'public_benefits' => 'required|bool',
         ];
 

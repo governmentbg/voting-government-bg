@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/SubjectPropScopeOfActivity"
+	xmlns:tns="http://www.bulstat.bg/SubjectPropScopeOfActivity"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:complexType name="SubjectPropScopeOfActivity">
+		<xs:annotation>
+			<xs:documentation>Предмет на дейност</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="Description" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Предмет на дейност
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="1000" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

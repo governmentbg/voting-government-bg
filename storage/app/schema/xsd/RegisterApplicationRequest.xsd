@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RegisterApplicationRequest"
+	xmlns:tns="http://www.bulstat.bg/RegisterApplicationRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T9="http://www.bulstat.bg/Application" xmlns:T7="http://www.bulstat.bg/Employee">
+
+	<xs:import schemaLocation="Application.xsd" namespace="http://www.bulstat.bg/Application" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+
+	<xs:complexType name="RegisterApplicationRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за вписване на заявление</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Employee" minOccurs="0" maxOccurs="1"
+				type="T7:Employee">
+				<xs:annotation>
+					<xs:documentation>Служител, вписал заявлението и структура, от
+						чието име работи
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Application" minOccurs="1" maxOccurs="1"
+				type="T9:Application">
+				<xs:annotation>
+					<xs:documentation>Заявление
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

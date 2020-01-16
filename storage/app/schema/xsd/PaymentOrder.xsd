@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/PaymentOrder" xmlns:tns="http://www.bulstat.bg/PaymentOrder"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:complexType name="PaymentOrder">
+		<xs:annotation>
+			<xs:documentation>Платежно нареждане</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="UID" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Уникален идентификатор на платежно нареждане
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="50" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DebtorUIC" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Код по булстат на задълженото лице
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="13" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DebtorNames" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Име на задължено лице/фирма
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="100" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="PaymentDate" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Дата на плащане във формат (yyyy-MM-dd)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:date">
+								<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+								<xs:minInclusive value="0001-01-01" />
+								<xs:maxInclusive value="9999-12-31" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Amount" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Сума в платежното нареждане
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="2" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="AvailableAmount" maxOccurs="1"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Неусвоена сума от платежното нареждане
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="2" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="PayerIBAN" maxOccurs="1" minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>IBAN на наредителя</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="40" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="PayerNames" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Имена на наредителя
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="100" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="PayerBank" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Банка на наредителя
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="100" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+
+					<xs:element name="PaymentDetails" maxOccurs="1"
+						minOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Основание за плащане
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="FurtherDetails" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Допълнителни пояснения
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

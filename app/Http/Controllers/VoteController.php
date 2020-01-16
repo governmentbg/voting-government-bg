@@ -137,7 +137,9 @@ class VoteController extends BaseFrontendController
             if (!empty($loggedOrgErrors)) {
                 $mailResult = false;
             } else {
-                $mailResult = sendEmail('emails/vote_confirmation', ['name' => $loggedOrg->name], $loggedOrg->email, __('custom.vote_successful'));
+                $subject = $this->votingTour->status == VotingTour::STATUS_BALLOTAGE ? uptrans('custom.vote_successful_ballotage') : uptrans('custom.vote_successful');
+                $template = $this->votingTour->status == VotingTour::STATUS_BALLOTAGE ? 'emails/vote_ballotage_confirmation' : 'emails/vote_confirmation';
+                $mailResult = sendEmail($template, ['name' => $loggedOrg->name], $loggedOrg->email, $subject);
             }
 
             if (!$mailResult) {

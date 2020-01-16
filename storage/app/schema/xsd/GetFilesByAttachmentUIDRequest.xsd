@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetFilesByAttachmentUIDRequest"
+	xmlns:tns="http://www.bulstat.bg/GetFilesByAttachmentUIDRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:complexType name="GetFilesByAttachmentUIDRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на файлово съдържание
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UID" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Уникален идентификатор на приложение
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

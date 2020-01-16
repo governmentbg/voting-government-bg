@@ -15,7 +15,7 @@ class exportOrgsToJSON extends Command
      *
      * @var string
      */
-    protected $signature = 'exportOrg:json {path : Path to xml files.}';
+    protected $signature = 'parseTrXML:json {path : Path to xml files.}';
 
     /**
      * The console command description.

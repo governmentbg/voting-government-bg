@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/StateOfPlay" xmlns:tns="http://www.bulstat.bg/StateOfPlay"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T22="http://www.bulstat.bg/LegalEntity" xmlns:T23="http://www.bulstat.bg/NaturalPerson"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T18="http://www.bulstat.bg/Event"
+	xmlns:T25="http://www.bulstat.bg/Subject" xmlns:PROP0="http://www.bulstat.bg/SubjectPropLifeTime"
+	xmlns:PROP1="http://www.bulstat.bg/SubjectPropState" xmlns:PROP2="http://www.bulstat.bg/SubjectPropScopeOfActivity"
+	xmlns:PROP3="http://www.bulstat.bg/SubjectPropActivityKID2008"
+	xmlns:PROP4="http://www.bulstat.bg/SubjectPropActivityKID2003"
+	xmlns:PROP5="http://www.bulstat.bg/SubjectPropInstallments"
+	xmlns:PROP6="http://www.bulstat.bg/SubjectPropRepresentationType"
+	xmlns:PROP7="http://www.bulstat.bg/SubjectPropFundingSource"
+	xmlns:PROP8="http://www.bulstat.bg/SubjectPropOwnershipForm"
+	xmlns:PROP9="http://www.bulstat.bg/SubjectPropAccountingRecordForm"
+	xmlns:PROP10="http://www.bulstat.bg/SubjectPropActivityDate"
+	xmlns:PROP11="http://www.bulstat.bg/SubjectPropProfession" xmlns:REL0="http://www.bulstat.bg/SubjectRelPartner"
+	xmlns:REL1="http://www.bulstat.bg/SubjectRelManager" xmlns:REL2="http://www.bulstat.bg/SubjectRelBelonging"
+	xmlns:REL3="http://www.bulstat.bg/SubjectRelAssignee" xmlns:PROP12="http://www.bulstat.bg/SubjectPropCollectiveBody"
+	xmlns:IS1="http://www.bulstat.bg/RealOwners" >
+
+	<xs:import schemaLocation="LegalEntity.xsd" namespace="http://www.bulstat.bg/LegalEntity" />
+	<xs:import schemaLocation="NaturalPerson.xsd"
+		namespace="http://www.bulstat.bg/NaturalPerson" />
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Event.xsd" namespace="http://www.bulstat.bg/Event" />
+	<xs:import schemaLocation="Subject.xsd" namespace="http://www.bulstat.bg/Subject" />
+
+	<xs:import schemaLocation="SubjectPropLifeTime.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropLifeTime" />
+	<xs:import schemaLocation="SubjectPropState.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropState" />
+	<xs:import schemaLocation="SubjectPropScopeOfActivity.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropScopeOfActivity" />
+	<xs:import schemaLocation="SubjectPropActivityKID2008.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropActivityKID2008" />
+	<xs:import schemaLocation="SubjectPropActivityKID2003.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropActivityKID2003" />
+	<xs:import schemaLocation="SubjectPropInstallments.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropInstallments" />
+	<xs:import schemaLocation="SubjectPropRepresentationType.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropRepresentationType" />
+	<xs:import schemaLocation="SubjectPropFundingSource.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropFundingSource" />
+	<xs:import schemaLocation="SubjectPropOwnershipForm.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropOwnershipForm" />
+	<xs:import schemaLocation="SubjectPropAccountingRecordForm.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropAccountingRecordForm" />
+	<xs:import schemaLocation="SubjectPropActivityDate.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropActivityDate" />
+	<xs:import schemaLocation="SubjectPropProfession.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropProfession" />
+
+	<xs:import schemaLocation="SubjectRelPartner.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelPartner" />
+	<xs:import schemaLocation="SubjectRelManager.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelManager" />
+	<xs:import schemaLocation="SubjectRelBelonging.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelBelonging" />
+	<xs:import schemaLocation="SubjectRelAssignee.xsd"
+		namespace="http://www.bulstat.bg/SubjectRelAssignee" />
+	<xs:import schemaLocation="SubjectPropCollectiveBody.xsd"
+		namespace="http://www.bulstat.bg/SubjectPropCollectiveBody" />
+
+	<xs:import schemaLocation="RealOwners.xsd"		namespace="http://www.bulstat.bg/RealOwners" />
+
+	<xs:element name="StateOfPlay" type="tns:StateOfPlay" />
+
+	<xs:complexType name="StateOfPlay">
+		<xs:annotation>
+			<xs:documentation>Актуално състояние</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Subject" minOccurs="1" maxOccurs="1"
+				type="T25:Subject">
+				<xs:annotation>
+					<xs:documentation>Субект на БУЛСТАТ
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Event" minOccurs="0" maxOccurs="1"
+				type="T18:Event">
+				<xs:annotation>
+					<xs:documentation>Събитие
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<!-- Характеристики на НФЛ -->
+			<xs:element name="RepresentationType" minOccurs="0"
+				maxOccurs="1" type="PROP6:SubjectPropRepresentationType">
+				<xs:annotation>
+					<xs:documentation>Начин на представляване
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ScopeOfActivity" minOccurs="0"
+				maxOccurs="1" type="PROP2:SubjectPropScopeOfActivity">
+				<xs:annotation>
+					<xs:documentation>Предмет на дейност
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MainActivity2008" minOccurs="0"
+				maxOccurs="1" type="PROP3:SubjectPropActivityKID2008">
+				<xs:annotation>
+					<xs:documentation>Основна дейност (КИД2008)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MainActivity2003" minOccurs="0"
+				maxOccurs="1" type="PROP4:SubjectPropActivityKID2003">
+				<xs:annotation>
+					<xs:documentation>Основна дейност (НКИД2003)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Installments" minOccurs="0" maxOccurs="unbounded"
+				type="PROP5:SubjectPropInstallments">
+				<xs:annotation>
+					<xs:documentation>Вноски
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LifeTime" minOccurs="0" maxOccurs="1"
+				type="PROP0:SubjectPropLifeTime">
+				<xs:annotation>
+					<xs:documentation>Срок на същестуване
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccountingRecordForm" minOccurs="0"
+				maxOccurs="1" type="PROP9:SubjectPropAccountingRecordForm">
+				<xs:annotation>
+					<xs:documentation>Форма на счетоводно записване
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OwnershipForms" minOccurs="0" maxOccurs="unbounded"
+				type="PROP8:SubjectPropOwnershipForm">
+				<xs:annotation>
+					<xs:documentation>Форма на собственост (списък)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FundingSources" minOccurs="0" maxOccurs="unbounded"
+				type="PROP7:SubjectPropFundingSource">
+				<xs:annotation>
+					<xs:documentation>Източници на финансиране (списък)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="State" minOccurs="0" maxOccurs="1"
+				type="PROP1:SubjectPropState">
+				<xs:annotation>
+					<xs:documentation>Състояние на субект
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Managers" minOccurs="0" maxOccurs="unbounded"
+				type="REL1:SubjectRelManager">
+				<xs:annotation>
+					<xs:documentation>Управители
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Partners" minOccurs="0" maxOccurs="unbounded"
+				type="REL0:SubjectRelPartner">
+				<xs:annotation>
+					<xs:documentation>Собственици/ съдружници
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Assignee" minOccurs="0" maxOccurs="1"
+				type="REL3:SubjectRelAssignee">
+				<xs:annotation>
+					<xs:documentation>Правоприемство
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Belonging" minOccurs="0" maxOccurs="1"
+				type="REL2:SubjectRelBelonging">
+				<xs:annotation>
+					<xs:documentation>Принадлежност
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RealOwner" minOccurs="0" maxOccurs="unbounded"  type="IS1:RealOwner">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+			<xs:element name="CollectiveBodies" minOccurs="0"
+				maxOccurs="unbounded" type="PROP12:SubjectPropCollectiveBody">
+				<xs:annotation>
+					<xs:documentation>Колективни органи
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<!-- Специфични характеристики за ФЗЛ -->
+			<xs:element name="ActivityDate" minOccurs="0" maxOccurs="1"
+				type="PROP10:SubjectPropActivityDate">
+				<xs:annotation>
+					<xs:documentation>Дата на започване/ спиране/ възобновяване на
+						дейността
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalActivities2008" minOccurs="0"
+				maxOccurs="unbounded" type="PROP3:SubjectPropActivityKID2008">
+				<xs:annotation>
+					<xs:documentation>Допълнителни дейности по КИД2008 (списък)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Professions" minOccurs="0" maxOccurs="unbounded"
+				type="PROP11:SubjectPropProfession">
+				<xs:annotation>
+					<xs:documentation>Професии
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

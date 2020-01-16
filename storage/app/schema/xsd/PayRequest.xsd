@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/PayRequest" xmlns:tns="http://www.bulstat.bg/PayRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T7="http://www.bulstat.bg/Employee" xmlns:T12="http://www.bulstat.bg/PaymentOrderPartition">
+
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+	<xs:import schemaLocation="PaymentOrderPartition.xsd"
+		namespace="http://www.bulstat.bg/PaymentOrderPartition" />
+
+	<xs:complexType name="PayRequest">
+		<xs:annotation>
+			<xs:documentation>Усвояване на плащане по заявление
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IncNumber" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Входящ номер</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PaymentOrderPartition" minOccurs="1"
+				maxOccurs="unbounded" type="T12:PaymentOrderPartition">
+				<xs:annotation>
+					<xs:documentation>Усвоени части от платежни нареждания
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

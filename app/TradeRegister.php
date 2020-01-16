@@ -8,6 +8,12 @@ class TradeRegister extends Model
 {
     const PREDEFINED_LIST_TYPE = 2;
 
+    const STATUSES = ['E', 'C', 'L', 'N'];
+    // N - Нова
+    // Е - Пререгистрирана фирма по Булстат
+    // L - Пререгистрирана фирма по Булстат затворена
+    // C - Нова партида затворена
+
     protected $table = 'tr_predefined_list';
 
     protected $guarded = [];

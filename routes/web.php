@@ -13,6 +13,9 @@
 
 Auth::routes();
 
+Route::match(['get', 'post'], '/SubscriptionService/SendSubscription', 'SubscriptionServiceController@sendSubscription')->name('SendSubscription');
+Route::match(['get', 'post'], '/SubscriptionService/test', 'SubscriptionServiceController@test');
+
 Route::get('/','PublicController@index')->name('home');
 
 Route::get('/publicLists/registered', 'PublicController@listRegistered')->name('list.registered');

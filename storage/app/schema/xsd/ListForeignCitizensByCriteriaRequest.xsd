@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/ListForeignCitizensByCriteriaRequest"
+	xmlns:tns="http://www.bulstat.bg/ListForeignCitizensByCriteriaRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="ListForeignCitizensByCriteriaRequest">
+		<xs:annotation>
+			<xs:documentation>Извличане на списък от чуждестранни граждани
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Citizenship" minOccurs="0" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Гражданство
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthDate" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Дата на раждане във формат
+						(yyyy-MM-dd)
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:date">
+						<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+						<xs:minInclusive value="0001-01-01" />
+						<xs:maxInclusive value="9999-12-31" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CyrillicName" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Име на кирилица
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="LatinName" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Име на латиница
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

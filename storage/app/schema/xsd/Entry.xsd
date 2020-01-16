@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Entry" xmlns:tns="http://www.bulstat.bg/Entry"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="Entry">
+		<xs:annotation>
+			<xs:documentation>Запис</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntryTime" type="xs:dateTime" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Време на въвеждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

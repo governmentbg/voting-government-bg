@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/ExportedData" xmlns:tns="http://www.bulstat.bg/ExportedData"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T10="http://www.bulstat.bg/StateOfPlay">
+	<xs:import schemaLocation="StateOfPlay.xsd" namespace="http://www.bulstat.bg/StateOfPlay" />
+	<xs:complexType name="ExportedData">
+		<xs:annotation>
+			<xs:documentation>Експорт на данни от Регистър БУЛСТАТ
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ExportDate" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Дата на генериране на файла във формат
+						(yyyy-MM-dd)
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:date">
+						<xs:pattern value="\p{Nd}{4}-\p{Nd}{2}-\p{Nd}{2}" />
+						<xs:minInclusive value="0001-01-01" />
+						<xs:maxInclusive value="9999-12-31" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="StateOfPlay" minOccurs="1" maxOccurs="unbounded"
+				type="T10:StateOfPlay">
+				<xs:annotation>
+					<xs:documentation>Актуално състояние на субект на БУЛСТАТ - списък
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

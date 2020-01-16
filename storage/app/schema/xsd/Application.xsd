@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/Application" xmlns:tns="http://www.bulstat.bg/Application"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T7="http://www.bulstat.bg/Employee"
+	xmlns:T21="http://www.bulstat.bg/Applicant" xmlns:T11="http://www.bulstat.bg/Attachment"
+	xmlns:T12="http://www.bulstat.bg/PaymentOrderPartition" xmlns:T8="http://www.bulstat.bg/Address"
+	xmlns:T10="http://www.bulstat.bg/StateOfPlay" xmlns:T30="http://www.bulstat.bg/ApplicationData">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+	<xs:import schemaLocation="Applicant.xsd" namespace="http://www.bulstat.bg/Applicant" />
+	<xs:import schemaLocation="Attachment.xsd" namespace="http://www.bulstat.bg/Attachment" />
+	<xs:import schemaLocation="PaymentOrderPartition.xsd"
+		namespace="http://www.bulstat.bg/PaymentOrderPartition" />
+	<xs:import schemaLocation="Address.xsd" namespace="http://www.bulstat.bg/Address" />
+	<xs:import schemaLocation="StateOfPlay.xsd" namespace="http://www.bulstat.bg/StateOfPlay" />
+	<xs:import schemaLocation="ApplicationData.xsd"
+		namespace="http://www.bulstat.bg/ApplicationData" />
+
+	<xs:complexType name="Application">
+		<xs:annotation>
+			<xs:documentation>
+				1)Заявление за вписване на
+				обстоятелства, относно
+				субекти по чл. 3 ал. 1 т. 1-8
+				и ал. 2 от ЗРБ;
+				2)Заявление за вписване
+				на обстоятелствата, относно
+				физическо лице по
+				чл. 3, ал. 1, т.9 или
+				осигурител по чл. 3, ал. 1, т.
+				11 от ЗРБ;
+				3)Заявление за вписване на
+				обстоятелствата, относно лицата
+				по чл. 3,
+				ал. 1, т.10 от ЗРБ, от
+				чуждестранно физическо лице, което
+				не
+				притежава ЕГН/ЛНЧ ЗРБ;
+				4)Заявление за изпълнение на указанията
+				5)Искане за изправяне на грешки и непълноти
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T30:ApplicationData">
+				<xs:sequence>
+					<xs:element name="EntryType" minOccurs="1" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид на вписването (първоначално/промяна в
+								обстоятелствата и др.)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SubmittedThroughInternet" maxOccurs="1"
+						minOccurs="1" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Подадено по интернет
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ApplicationStatus" minOccurs="0"
+						maxOccurs="1" type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Статус на заявление
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RegType" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Тип на регистрацията (служебна/ заявление)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Remark" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Забележки
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Applicants" minOccurs="1" maxOccurs="unbounded"
+						type="T21:Applicant">
+						<xs:annotation>
+							<xs:documentation>Заявители
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="StateOfPlay" minOccurs="1" maxOccurs="1"
+						type="T10:StateOfPlay">
+						<xs:annotation>
+							<xs:documentation>Актуално състояние
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="OnlineRefusal" maxOccurs="1"
+						minOccurs="1" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Съгласие за получаване на отказ онлайн
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RefusalEmail" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Ел. адрес, на който да бъде изпратен отказа
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="100" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="RefusalAddresseeNames" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Име/фирма/наименование на адресата, до който се
+								изпраща отказа (Име на получател)
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="RefusalAddress" minOccurs="0"
+						maxOccurs="1" type="T8:Address">
+						<xs:annotation>
+							<xs:documentation>Адрес, на който да бъде изпратен отказа
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Attachments" minOccurs="0" maxOccurs="unbounded"
+						type="T11:Attachment">
+						<xs:annotation>
+							<xs:documentation>Приложения</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="TotalPrice" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Цена/ Стойност/ Сума за плащане
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="2" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="PaidAmount" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Платена сума
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="2" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="PaidOnline" maxOccurs="1" minOccurs="0"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Платено по интернет
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AdditionalApplicationsCount"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Брой допълнителни заявления</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="0" />
+								<xs:maxInclusive value="9999" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Erasure" maxOccurs="1" minOccurs="0"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>Заличаване (да/не)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="MainApplication" minOccurs="0"
+						maxOccurs="1" type="T30:ApplicationData">
+						<xs:annotation>
+							<xs:documentation>Основно заявление (попълва се за Заявления за
+								изп. на наказанията/ Уведомления за техн. грешка)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/SendSubscriptionRequest"
+	xmlns:tns="http://www.bulstat.bg/SendSubscriptionRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T18="http://www.bulstat.bg/Event" xmlns:T10="http://www.bulstat.bg/StateOfPlay"
+	xmlns:T11="http://www.bulstat.bg/Attachment" xmlns:T25="http://www.bulstat.bg/UIC">
+
+	<xs:import schemaLocation="UIC.xsd" namespace="http://www.bulstat.bg/UIC" />
+	<xs:import schemaLocation="Event.xsd" namespace="http://www.bulstat.bg/Event" />
+	<xs:import schemaLocation="StateOfPlay.xsd" namespace="http://www.bulstat.bg/StateOfPlay" />
+	<xs:import schemaLocation="Attachment.xsd" namespace="http://www.bulstat.bg/Attachment" />
+
+	<xs:element name="SendSubscriptionRequest" type="tns:SendSubscriptionRequest" />
+
+	<xs:complexType name="SendSubscriptionRequest">
+		<xs:annotation>
+			<xs:documentation>Входни данни за получаване на абонамент
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="MessageTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Време на генериране на пакета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Operation" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Действие</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="REGISTER_EVENT">
+							<xs:annotation>
+								<xs:documentation>Регистриране на събитие</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="CORRECT_EVENT">
+							<xs:annotation>
+								<xs:documentation>Корекция на събитие</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="DELETE_EVENT">
+							<xs:annotation>
+								<xs:documentation>Изтриване на събитие</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="DELETE_SUBJECT">
+							<xs:annotation>
+								<xs:documentation>Изтриване на субект</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SubjectUICs" minOccurs="0" maxOccurs="unbounded"
+				type="tns:SubjectUIC">
+				<xs:annotation>
+					<xs:documentation>Списък с ЕИК-та на субект на БУЛСТАТ
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Event" minOccurs="1" maxOccurs="1"
+				type="T18:Event">
+				<xs:annotation>
+					<xs:documentation>Събитие
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StateOfPlay" minOccurs="1" maxOccurs="1"
+				type="T10:StateOfPlay">
+				<xs:annotation>
+					<xs:documentation>Актуално състояние
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attachments" minOccurs="0" maxOccurs="unbounded"
+				type="T11:Attachment">
+				<xs:annotation>
+					<xs:documentation>Приложения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SubjectUIC">
+		<xs:annotation>
+			<xs:documentation>ЕИК на субект на БУЛСТАТ
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UIC" minOccurs="1" maxOccurs="1" type="T25:UIC">
+				<xs:annotation>
+					<xs:documentation>Код по БУЛСТАТ
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Status" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Статус</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Y">
+							<xs:annotation>
+								<xs:documentation>Актуален код
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="N">
+							<xs:annotation>
+								<xs:documentation>Неактуален код
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="D">
+							<xs:annotation>
+								<xs:documentation>Изтрит код
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

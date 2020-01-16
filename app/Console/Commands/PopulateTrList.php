@@ -32,9 +32,6 @@ class PopulateTrList extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->handler = new \XMLReader();
-
-        //TODO add s_quest, s_guest_st to $tables
     }
 
     /**

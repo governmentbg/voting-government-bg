@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/ApplicationData" xmlns:tns="http://www.bulstat.bg/ApplicationData"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:complexType name="ApplicationData">
+		<xs:annotation>
+			<xs:documentation>
+				Идентификационни данни на заявление
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="ApplicationType" minOccurs="1"
+						maxOccurs="1" type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид заявление
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="IncNumber" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Входящ номер</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="20" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="RegNumber" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Номер на вписване
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="20" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

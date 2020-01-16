@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/LogicalListElement" xmlns:tns="http://www.bulstat.bg/LogicalListElement"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="LogicalListElement">
+		<xs:annotation>
+			<xs:documentation>Елемент от ЛС</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FirstElement" minOccurs="1" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Номенклатурна стойност от водещата номенклатура
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SecondElement" minOccurs="1" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Номенклатурна стойност от подчинената
+						номенклатура
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

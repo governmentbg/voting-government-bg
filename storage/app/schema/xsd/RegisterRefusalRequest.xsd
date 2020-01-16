@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RegisterRefusalRequest"
+	xmlns:tns="http://www.bulstat.bg/RegisterRefusalRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T32="http://www.bulstat.bg/Refusal" xmlns:T7="http://www.bulstat.bg/Employee">
+
+	<xs:import schemaLocation="Refusal.xsd" namespace="http://www.bulstat.bg/Refusal" />
+	<xs:import schemaLocation="Employee.xsd" namespace="http://www.bulstat.bg/Employee" />
+
+	<xs:complexType name="RegisterRefusalRequest">
+		<xs:annotation>
+			<xs:documentation>Регистриране на отказ</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Employee" minOccurs="0" maxOccurs="1"
+				type="T7:Employee">
+				<xs:annotation>
+					<xs:documentation>Служител, който регистрира отказа
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Refusal" minOccurs="1" maxOccurs="1"
+				type="T32:Refusal">
+				<xs:annotation>
+					<xs:documentation>Отказ
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

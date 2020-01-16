@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/SubjectRelPartner" xmlns:tns="http://www.bulstat.bg/SubjectRelPartner"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T25="http://www.bulstat.bg/Subject"
+	xmlns:T40="http://www.bulstat.bg/SubscriptionElement">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Subject.xsd" namespace="http://www.bulstat.bg/Subject" />
+	<xs:import schemaLocation="SubscriptionElement.xsd"
+		namespace="http://www.bulstat.bg/SubscriptionElement" />
+
+	<xs:complexType name="SubjectRelPartner">
+		<xs:annotation>
+			<xs:documentation>Собственици / съдружници</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T40:SubscriptionElement">
+				<xs:sequence>
+					<xs:element name="RelatedSubject" minOccurs="0"
+						maxOccurs="1" type="T25:Subject">
+						<xs:annotation>
+							<xs:documentation>Свързан субект (собственик/ съдружник)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Role" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Роля в разпределението на собствеността
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Percent" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Процент разпределение на собств. без капитал
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="3" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Amount" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Вноска/ дял
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:decimal">
+								<xs:fractionDigits value="2" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

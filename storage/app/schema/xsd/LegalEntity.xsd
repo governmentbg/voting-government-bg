@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/LegalEntity" xmlns:tns="http://www.bulstat.bg/LegalEntity"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="LegalEntity">
+		<xs:annotation>
+			<xs:documentation>Юридическо лице</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="Country" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Държава
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LegalForm" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Правна форма
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LegalStatute" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Юридически статут
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SubjectGroup" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Група субекти
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CyrillicFullName" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Пълно наименование на кирилица
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="CyrillicShortName" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Кратко наименование на кирилица
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="64" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="LatinFullName" maxOccurs="1"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Пълно наименование, изписано на латиница
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="SubordinateLevel" minOccurs="0"
+						maxOccurs="1" type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Ниво на подчиненост
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="TRStatus" maxOccurs="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Статус от Търговския регистър
+							</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/SubjectRelAssignee" xmlns:tns="http://www.bulstat.bg/SubjectRelAssignee"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry" xmlns:T25="http://www.bulstat.bg/Subject"
+	xmlns:T40="http://www.bulstat.bg/SubscriptionElement">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+	<xs:import schemaLocation="Subject.xsd" namespace="http://www.bulstat.bg/Subject" />
+	<xs:import schemaLocation="SubscriptionElement.xsd"
+		namespace="http://www.bulstat.bg/SubscriptionElement" />
+
+	<xs:complexType name="SubjectRelAssignee">
+		<xs:annotation>
+			<xs:documentation>Правоприемство</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T40:SubscriptionElement">
+				<xs:sequence>
+					<xs:element name="RelatedSubjects" minOccurs="0"
+						maxOccurs="unbounded" type="T25:Subject">
+						<xs:annotation>
+							<xs:documentation>Свързан субект (правоприемник)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Type" minOccurs="0" maxOccurs="1"
+						type="T3:NomenclatureEntry">
+						<xs:annotation>
+							<xs:documentation>Вид правоприемство
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

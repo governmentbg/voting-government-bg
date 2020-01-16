@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetLegalEntitiesByCriteriaRequest"
+	xmlns:tns="http://www.bulstat.bg/GetLegalEntitiesByCriteriaRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/NomenclatureEntry">
+
+	<xs:import schemaLocation="NomenclatureEntry.xsd"
+		namespace="http://www.bulstat.bg/NomenclatureEntry" />
+
+	<xs:complexType name="GetLegalEntitiesByCriteriaRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на списък от юридически лица по
+				подадени критерии
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Country" minOccurs="0" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Държава
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="LegalForm" minOccurs="0" maxOccurs="1"
+				type="T3:NomenclatureEntry">
+				<xs:annotation>
+					<xs:documentation>Правна форма
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element name="CyrillicFullName" maxOccurs="1"
+				minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Пълно наименование на кирилица
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255" />
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

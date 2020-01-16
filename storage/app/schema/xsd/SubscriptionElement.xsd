@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/SubscriptionElement" xmlns:tns="http://www.bulstat.bg/SubscriptionElement"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:E="http://www.bulstat.bg/Entry">
+	<xs:import schemaLocation="Entry.xsd" namespace="http://www.bulstat.bg/Entry" />
+
+	<xs:complexType name="SubscriptionElement">
+		<xs:annotation>
+			<xs:documentation>Елемент, който подлежи на вписване или заличаване.
+				Използва се за подаване на промени по абонамент.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="E:Entry">
+				<xs:sequence>
+					<xs:element name="OperationType" minOccurs="0"
+						maxOccurs="1">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="register">
+									<xs:annotation>
+										<xs:documentation>Операция "Вписване"
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+								<xs:enumeration value="erase">
+									<xs:annotation>
+										<xs:documentation>Операция "Заличаване"
+										</xs:documentation>
+									</xs:annotation>
+								</xs:enumeration>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

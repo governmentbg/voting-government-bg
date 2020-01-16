@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/GetNomenclatureByCodeRequest"
+	xmlns:tns="http://www.bulstat.bg/GetNomenclatureByCodeRequest"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T3="http://www.bulstat.bg/WSRequest">
+
+	<xs:import schemaLocation="WSRequest.xsd"
+		namespace="http://www.bulstat.bg/WSRequest" />
+
+	<xs:complexType name="GetNomenclatureByCodeRequest">
+		<xs:annotation>
+			<xs:documentation>Заявка за извличане на съдържание на ном.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="T3:WSRequest">
+				<xs:sequence>
+					<xs:element name="NomCode" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>Kод на номенклатура</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="50" />
+								<xs:minLength value="1" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

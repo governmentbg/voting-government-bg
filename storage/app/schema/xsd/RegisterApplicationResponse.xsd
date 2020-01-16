@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.bulstat.bg/RegisterApplicationResponse"
+	xmlns:tns="http://www.bulstat.bg/RegisterApplicationResponse"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:T9="http://www.bulstat.bg/Application" xmlns:R15="http://www.bulstat.bg/WSResponse">
+
+	<xs:import schemaLocation="Application.xsd" namespace="http://www.bulstat.bg/Application" />
+	<xs:import schemaLocation="WSResponse.xsd" namespace="http://www.bulstat.bg/WSResponse" />
+
+	<xs:complexType name="RegisterApplicationResponse">
+		<xs:annotation>
+			<xs:documentation>Резултат от операцията
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="R15:WSResponse">
+				<xs:sequence>
+					<xs:element name="Application" minOccurs="1" maxOccurs="1"
+						type="T9:Application">
+						<xs:annotation>
+							<xs:documentation>Заявление
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

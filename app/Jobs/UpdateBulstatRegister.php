@@ -35,6 +35,7 @@ class UpdateBulstatRegister implements ShouldQueue
     public function handle()
     {
         if(isset($this->data->SendSubscriptionRequest)){
+            $parser = new XMLParserBulstat();
             foreach((array)$this->data->SendSubscriptionRequest->SubjectUICs as $subjectUIC)
             {
                 if($subjectUIC->Status == BulstatRegister::STATUS_INACTIVE || $subjectUIC->Status == BulstatRegister::STATUS_DELETED){
@@ -42,7 +43,7 @@ class UpdateBulstatRegister implements ShouldQueue
                 }
 
                 if($subjectUIC->Status == BulstatRegister::STATUS_ACTIVE){
-                    $data = XMLParserBulstat::getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
+                    $data = $parser->getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
 
                     if(!empty($data) && $data){
                         //$eik = $subjectUIC->UIC;

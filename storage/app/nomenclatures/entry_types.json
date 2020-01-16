@@ -1,0 +1,20 @@
+[
+  {
+    "ENTRY_TYPE_ID": 756,
+    "CODE": "initially",
+    "NAME": "първоначално вписване",
+    "ABC": 1
+  },
+  {
+    "ENTRY_TYPE_ID": 757,
+    "CODE": "change_in_circumstances",
+    "NAME": "промяна в обстоятелствата",
+    "ABC": 2
+  },
+  {
+    "ENTRY_TYPE_ID": 758,
+    "CODE": "deletion",
+    "NAME": "заличаване",
+    "ABC": 3
+  }
+]

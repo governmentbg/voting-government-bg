@@ -1,0 +1,1154 @@
+[
+  {
+    "LEGAL_FORM_ID": 15,
+    "CODE": "tr_unfl_EAD_spec_inv_cel",
+    "NAME": "Еднолично акционерно дружество със специална инвестиционна цел",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 15
+  },
+  {
+    "LEGAL_FORM_ID": 16,
+    "CODE": "tr_unfl_EUIE",
+    "NAME": "Европейско обединение по икономически интереси",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 16
+  },
+  {
+    "LEGAL_FORM_ID": 17,
+    "CODE": "tr_unfl_DEUIE",
+    "NAME": "Поделение на ЕОИИ",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 17
+  },
+  {
+    "LEGAL_FORM_ID": 18,
+    "CODE": "tr_unfl_ED",
+    "NAME": "Европейско дружество",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 18
+  },
+  {
+    "LEGAL_FORM_ID": 19,
+    "CODE": "tr_unfl_EKoD",
+    "NAME": "Европейско кооперативно дружество",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 19
+  },
+  {
+    "LEGAL_FORM_ID": 20,
+    "CODE": "tr_unfl_LEKD",
+    "NAME": "Европейско кооперативно дружество с ограничена отговорност",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 20
+  },
+  {
+    "LEGAL_FORM_ID": 21,
+    "CODE": "tr_unfl_pref_dan_rejim",
+    "NAME": "Дружество регистрирано в юрисдикция с преференциален данъчен режим",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 21
+  },
+  {
+    "LEGAL_FORM_ID": 229,
+    "CODE": "subekt_na_SRB_jur",
+    "NAME": "Субект на СРБ - юридическо лице",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 230,
+    "CODE": "subekt_na_SRB",
+    "NAME": "Субект на СРБ - неюридическо лице",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 455,
+    "CODE": "sabiratelno_d",
+    "NAME": "Събирателно дружество",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 2
+  },
+  {
+    "LEGAL_FORM_ID": 456,
+    "CODE": "d_ogranichena_otgovornost",
+    "NAME": "Дружество с ограничена отговорност",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 4
+  },
+  {
+    "LEGAL_FORM_ID": 457,
+    "CODE": "ednolichno_d_ ogranichena_otgovornost",
+    "NAME": "Еднолично дружество с ограничена отговорност",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 10
+  },
+  {
+    "LEGAL_FORM_ID": 458,
+    "CODE": "akcionerno_d",
+    "NAME": "Акционерно дружество",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 5
+  },
+  {
+    "LEGAL_FORM_ID": 459,
+    "CODE": "ednolichno_ akcionerno_d",
+    "NAME": "Еднолично акционерно дружество",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 11
+  },
+  {
+    "LEGAL_FORM_ID": 460,
+    "CODE": "komanditno_d",
+    "NAME": "Командитно дружество",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 3
+  },
+  {
+    "LEGAL_FORM_ID": 461,
+    "CODE": "komanditno_d_akcii",
+    "NAME": "Командитно дружество с акции",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 6
+  },
+  {
+    "LEGAL_FORM_ID": 462,
+    "CODE": "ednolichen_targovec",
+    "NAME": "Едноличен търговец",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 1
+  },
+  {
+    "LEGAL_FORM_ID": 463,
+    "CODE": "darjavna_firma",
+    "NAME": "Държавна фирма",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 464,
+    "CODE": "obstinska_firma",
+    "NAME": "Общинска фирма",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 465,
+    "CODE": "dasterna_firma",
+    "NAME": "Дъщерна фирма",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 466,
+    "CODE": "kooperacia",
+    "NAME": "Кооперация",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 7
+  },
+  {
+    "LEGAL_FORM_ID": 467,
+    "CODE": "kooperativen_saus",
+    "NAME": "Кооперативен съюз",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 468,
+    "CODE": "kooperativna_fedaracia",
+    "NAME": "Кооперативна федерация",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 469,
+    "CODE": "kooperativna_predpriatie",
+    "NAME": "Кооперативно предприятие",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 470,
+    "CODE": "mejdukooperativno_predpriatie",
+    "NAME": "Междукооперативно предприятие",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 471,
+    "CODE": "jilistno_stroitelna_kooperacia",
+    "NAME": "Жилищностроителна кооперация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 472,
+    "CODE": "d_zzd",
+    "NAME": "Дружество по ЗЗД",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 473,
+    "CODE": "prepriatie",
+    "NAME": "Предприятие (по ПМС 50/68)",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 474,
+    "CODE": "publichno_predpriatie_osben_zakon",
+    "NAME": "Публично предприятие, създадено с спец закон",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 475,
+    "CODE": "klon_chujdestranno_lice",
+    "NAME": "Клон на чуждестранен търговец",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 8
+  },
+  {
+    "LEGAL_FORM_ID": 476,
+    "CODE": "tp_ chujdestranno_lice",
+    "NAME": "Търговско представителство",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 477,
+    "CODE": "predstavitelstvo_mejdunarodna_organ",
+    "NAME": "Представителство на международна организация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 478,
+    "CODE": "diplomatichesko_predstavitelstvo",
+    "NAME": "Дипломатическо представителство",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 479,
+    "CODE": "konsulsko_ predstavitelstvo",
+    "NAME": "Консулско представителство",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 480,
+    "CODE": "predstavitelstvo_chujd_radio_televisia",
+    "NAME": "Представителство на чуждестранно радио/телевизия",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 481,
+    "CODE": "predstavitelstvo_chujd_agencii_pechat",
+    "NAME": "Представителство на чуждестранна агенция по печат",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 482,
+    "CODE": "predstavitelstvo_chujd_aviokompanii",
+    "NAME": "Представителство на чуждестранна авиокомпания",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 483,
+    "CODE": "predstavitelstvo_drugo_chujd_lice",
+    "NAME": "Представителство на друго чуждестранно лице",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 484,
+    "CODE": "kulturen_centar_druga_darjava",
+    "NAME": "Културен център на друга държава",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 485,
+    "CODE": "fondacia",
+    "NAME": "Фондация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 486,
+    "CODE": "sdrujenie",
+    "NAME": "Сдружение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 487,
+    "CODE": "sindikalna_organizacia",
+    "NAME": "Синдикална организация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 488,
+    "CODE": "chitaliste",
+    "NAME": "Народно читалище",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 489,
+    "CODE": "politicheska_organizacia",
+    "NAME": "Политическа организация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 490,
+    "CODE": "religiozna_organizacia",
+    "NAME": "Религиозна организация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 491,
+    "CODE": "advokatska_kolegia",
+    "NAME": "Адвокатска колегия",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 492,
+    "CODE": "notarialna_kamara",
+    "NAME": "Нотариална камара",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 493,
+    "CODE": "nepravitelstvena_organ_nar_osnov",
+    "NAME": "Неправителствена организация, създадена с нарочно основание",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 494,
+    "CODE": "kancelaria_prezidenta",
+    "NAME": "Администрация на президента на РБългария",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 495,
+    "CODE": "narodno_sabranie",
+    "NAME": "Народно събрание",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 496,
+    "CODE": "institucia_sazdadena_osoben_zakon",
+    "NAME": "Институция, създадена със специален закон",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 497,
+    "CODE": "ministreski_savet",
+    "NAME": "Министерски съвет",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 498,
+    "CODE": "ministerstvo",
+    "NAME": "Министерство",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 499,
+    "CODE": "komitet",
+    "NAME": "Комитет",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 500,
+    "CODE": "agencia",
+    "NAME": "Агенция",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 501,
+    "CODE": "oblasten_upravitel",
+    "NAME": "Областен управител",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 502,
+    "CODE": "sad",
+    "NAME": "Съд",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 503,
+    "CODE": "prokuratura",
+    "NAME": "Прокуратура",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 504,
+    "CODE": "sledstvena_slujba",
+    "NAME": "Следствена служба",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 505,
+    "CODE": "obstinata",
+    "NAME": "Община",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 506,
+    "CODE": "kmetstvo",
+    "NAME": "Кметство",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 507,
+    "CODE": "teatar",
+    "NAME": "Театър",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 508,
+    "CODE": "opera",
+    "NAME": "Опера",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 509,
+    "CODE": "muzei_galeria",
+    "NAME": "Музей, галерия",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 510,
+    "CODE": "filharmonia",
+    "NAME": "Филхармония",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 511,
+    "CODE": "ansambal",
+    "NAME": "Ансамбъл",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 512,
+    "CODE": "cirk",
+    "NAME": "Цирк",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 513,
+    "CODE": "kino",
+    "NAME": "Кино",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 514,
+    "CODE": "biblioteka",
+    "NAME": "Библиотека",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 515,
+    "CODE": "nauchna_organizacia_osoben_zakon",
+    "NAME": "Научна организация, създадена с спец  закон",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 516,
+    "CODE": "nauchen_institut",
+    "NAME": "Научен институт",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 517,
+    "CODE": "vishe_uchiliste",
+    "NAME": "Висше училище",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 518,
+    "CODE": "organizacia_v_sastava_vu",
+    "NAME": "Организация в състава на ВУ",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 519,
+    "CODE": "kolej_izvan_vu",
+    "NAME": "Колеж извън състава на ВУ",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 520,
+    "CODE": "kolej_v_vu",
+    "NAME": "Колеж в състава на ВУ",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 521,
+    "CODE": "uchiliste",
+    "NAME": "Училище",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 522,
+    "CODE": "detska_gradina",
+    "NAME": "Детска градина",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 523,
+    "CODE": "ambulatorno_poliklinichno_zavedenie",
+    "NAME": "Амбулаторно-поликлинично заведение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 524,
+    "CODE": "bolnicno_zavedenie",
+    "NAME": "Болнично заведение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 525,
+    "CODE": "dispanser",
+    "NAME": "Диспансер",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 526,
+    "CODE": "zdravno_zavedenie_majka",
+    "NAME": "Здравно заведение за опазване здравето на майката и детето",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 527,
+    "CODE": "zdravno_zavedenie_obst_zdrave",
+    "NAME": "Национален център за опазване на общественото здраве",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 528,
+    "CODE": "sanitaro_kurortno_ozdr_zavedenie",
+    "NAME": "Санaтoрно-курортно и лечебно-оздравително заведение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 529,
+    "CODE": "klon",
+    "NAME": "Клон",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 530,
+    "CODE": "podelenie",
+    "NAME": "Поделение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 531,
+    "CODE": "obstinsko_predpriatie",
+    "NAME": "Общинско предприятие",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 532,
+    "CODE": "osiguritel",
+    "NAME": "Физическо лице - субект на Булстат",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 533,
+    "CODE": "jurid_lice_kam_inst_darj_vlast",
+    "NAME": "Юридическо лице в сферата на държавната власт",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 534,
+    "CODE": "drug_vid_subekt",
+    "NAME": "Друг вид субект",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 535,
+    "CODE": "chujdestranno_lice_neregistrirano_v_bg",
+    "NAME": "Чуждестранно лице, нерегистрирано в България",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 536,
+    "CODE": "drug_vid_nef_lice_bez_pravo_eik",
+    "NAME": "друг вид нефизическо лице без право на ЕИК",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1003,
+    "CODE": "centralna_banka",
+    "NAME": "Централна банка",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1185,
+    "CODE": "dsk",
+    "NAME": "Държавна спестовна каса",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1186,
+    "CODE": "dzi",
+    "NAME": "Държавeн застрахователен институт",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1187,
+    "CODE": "obl_administracia",
+    "NAME": "Областна администрация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1188,
+    "CODE": "pol_institut",
+    "NAME": "Полувисш институт",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1189,
+    "CODE": "zatwor",
+    "NAME": "Място за лишаване от свобода",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1190,
+    "CODE": "wz_kasa",
+    "NAME": "Взаимноспомагателна каса",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1191,
+    "CODE": "dr_kult_inst",
+    "NAME": "Юридическо лице към културна институция",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1192,
+    "CODE": "dr_lice_nauka",
+    "NAME": "Юридическо лице към научна организация",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1193,
+    "CODE": "dr_lice_w_obraz",
+    "NAME": "Обслужващо звено в системата на образованието",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1200,
+    "CODE": "raionna_kolegia",
+    "NAME": "Районна колегия",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1215,
+    "CODE": "nac_zdravna_osig_kasa",
+    "NAME": "Национална здравно-осигурителна каса",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1216,
+    "CODE": "darjavna_agencia",
+    "NAME": "Държавна агенция",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1217,
+    "CODE": "darjavna_komisia",
+    "NAME": "Държавна комисия",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1218,
+    "CODE": "izpalnitelna_agencia",
+    "NAME": "Изпълнителна агенция",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1219,
+    "CODE": "lech_zav_izvanbolnich_pomost",
+    "NAME": "Лечебно заведение за извънболнична помощ",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1220,
+    "CODE": "lech_zav_bolnich_pomost",
+    "NAME": "Лечебно заведение за болнична помощ",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1221,
+    "CODE": "drugo_lech_zavedenie",
+    "NAME": "Друго лечебно заведение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1222,
+    "CODE": "h_e_i",
+    "NAME": "Хигиенно-епидемиологична инспекция",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1223,
+    "CODE": "kulturen_institut",
+    "NAME": "Културен институт",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1234,
+    "CODE": "shujdo_nefiz_lice",
+    "NAME": "Чуждестранно нефизическо лице с място на стопанска дейност в страната",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1249,
+    "CODE": "chujdo_nefl_naemodatel",
+    "NAME": "Чуждестранно нефизическо лице - наемодател",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1300,
+    "CODE": "pensionen_fond",
+    "NAME": "Пенсионен фонд",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1307,
+    "CODE": "klon_na_cujd_urid_lice_s_nestop_cel",
+    "NAME": "Клон на чуждестранно юридическо лице с нестопанска цел",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1317,
+    "CODE": "Sdrujenie_za_napoiavane",
+    "NAME": "Сдружение за напояване",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1322,
+    "CODE": "firma_obsh_org",
+    "NAME": "Фирма на обществена организация",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1324,
+    "CODE": "darjavno_predpr",
+    "NAME": "Държавно предприятие",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 13
+  },
+  {
+    "LEGAL_FORM_ID": 1329,
+    "CODE": "chujdestranno_lice_pritejavasho_imot",
+    "NAME": "Чуждестранно юридическо лице, притежаващо имущество в страната",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1342,
+    "CODE": "religiozna_institucia",
+    "NAME": "Религиозна институция",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1348,
+    "CODE": "mestno_podelenie_ul",
+    "NAME": "Местно поделение (ЮЛ)",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1509,
+    "CODE": "zanaiatchiisko_predpriatie",
+    "NAME": "Занаятчийско предприятие",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1515,
+    "CODE": "Religiozna_institucia_BPC",
+    "NAME": "Религиозна институция (БПЦ)",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1516,
+    "CODE": "Mestno_podelenie_na_BPC",
+    "NAME": "Местно поделение на БПЦ (ЮЛ)",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1533,
+    "CODE": "advokatsko_drujestvo",
+    "NAME": "Адвокатско дружество",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1534,
+    "CODE": "advokatsko_sadrujie",
+    "NAME": "Адвокатско съдружие",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1537,
+    "CODE": "kompemsacionen_fond",
+    "NAME": "Компенсационен фонд",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1540,
+    "CODE": "AD_sas_specialna_investicionna_cel",
+    "NAME": "Акционерно дружество със специална инвестиционна цел",
+    "ABC": 1,
+    "BULSTAT": 0,
+    "TR_CODE": 12
+  },
+  {
+    "LEGAL_FORM_ID": 1559,
+    "CODE": "Dogovoren_fond",
+    "NAME": "Договорен фонд",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1566,
+    "CODE": "cul_efektivno_upr",
+    "NAME": "Чуждестранно юридическо лице с ефективно управление",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1575,
+    "CODE": "nefizichesko_lice_osiguritel",
+    "NAME": "Нефизическо лице - осигурител",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1579,
+    "CODE": "cl_reg_po_zdds",
+    "NAME": "Чуждестранно лице регистрирано по ЗДДС",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1586,
+    "CODE": "chitalishtno_sdrujenie",
+    "NAME": "Читалищно сдружение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1587,
+    "CODE": "sauz_chitalishta",
+    "NAME": "Съюз на народните читалища",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1588,
+    "CODE": "klon_chujd_advokatsko_drujestvo",
+    "NAME": "Клон на Чуждестранно Адвокатско дружество",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1590,
+    "CODE": "regionalno_sdrujenie",
+    "NAME": "Регионално сдружение",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1592,
+    "CODE": "sdrujenie_na_sobstvenicite",
+    "NAME": "Сдружение на собствениците",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1598,
+    "CODE": "chujd_nfl - osiguritel",
+    "NAME": "Чужд. НФЛ - осигурител",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 1600,
+    "CODE": "chujd_lice_3_2",
+    "NAME": "Чужд. лице по чл. 3 ал. 2 от ЗРБ",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 2010,
+    "CODE": "",
+    "NAME": "Орг. за управление на туристически район",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 2002,
+    "CODE": "",
+    "NAME": "Център за подкрепа за личностно развитие",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 2003,
+    "CODE": "",
+    "NAME": "Специализирано обслужващо звено",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 2011,
+    "CODE": "",
+    "NAME": "Център за спец. Образователна подкрепа",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  },
+  {
+    "LEGAL_FORM_ID": 2014,
+    "CODE": "",
+    "NAME": "Чуждестранно юридическо лице - залогодател",
+    "ABC": 1,
+    "BULSTAT": 1,
+    "TR_CODE": ""
+  }
+]

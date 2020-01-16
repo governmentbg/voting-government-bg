@@ -2,6 +2,8 @@
 
 namespace App\Libraries;
 
+use Illuminate\Support\Facades\Storage;
+
 /**
  * XML parser specific for Bulstat register xml files format
  */
@@ -11,8 +13,11 @@ class XMLParserBulstat implements IXMLParser
 
     private $data;
 
+    private $ekatte;
+
     public function __construct()
     {
+        $this->loadEkatte();
     }
 
     /**
@@ -79,7 +84,7 @@ class XMLParserBulstat implements IXMLParser
         return $result;
     }
 
-    public static function getRelevantFields($org)
+    public function getRelevantFields($org)
     {
         $orgArray = [];
 
@@ -95,9 +100,16 @@ class XMLParserBulstat implements IXMLParser
             return false;
         }
 
+        $orgArray['representative'] = '';
+        foreach($org->Managers as $key => $manager) {
+            if(isset($manager->RelatedSubject->NaturalPersonSubject)){
+                $orgArray['representative'] = (string)$manager->RelatedSubject->NaturalPersonSubject->CyrillicName;
+            }
+        }
+
         $orgArray['address'] = '';
         foreach ($org->Subject->Addresses as $key => $address) {
-            $orgArray['city'] = (string) (isset($address->Location) ? $address->Location : '');
+            $orgArray['city'] = (isset($address->Location) ? $this->getCityName((string)$address->Location->Code) : '');
             $orgArray['address'] .= (string) (isset($address->AddressType) ? $address->AddressType : '') . ': ' . (string) (isset($address->Street) ? $address->Street : '') . ' ' .
                         ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
                         ((isset($address->Entrance) && !empty((string) $address->Entrance) ? ' вх. ' . (string) $address->Entrance : '')) .
@@ -116,19 +128,40 @@ class XMLParserBulstat implements IXMLParser
             }
         }
 
-        $orgArray['public_benefits'] = 1; //TODO check
+        //$orgArray['public_benefits'] = 1;
         $orgArray['status'] = 'Y';
 
-        //$org->Subject->ScopeOfActivity = 530
-        $orgArray['goals'] = (string) (isset($org->Subject->ScopeOfActivity->Description) ? $org->Subject->ScopeOfActivity->Description : '');
-        $orgArray['tools'] = (string) (isset($org->SubDeed->MeansOfAchievingTheObjectives) ? $org->SubDeed->MeansOfAchievingTheObjectives : ''); //todo
+        $orgArray['goals'] = (string) (isset($org->ScopeOfActivity->Description) ? $org->ScopeOfActivity->Description : '');
+        $orgArray['tools'] = '';
 
         return $orgArray;
     }
 
     private function isOrgRelevant($org)
     {
+        //dump($org->MainActivity2008->KID2008->Code);
         return true;
         return isset($org->Subject->LegalEntitySubject) && in_array($org->Subject->LegalEntitySubject->LegalForm, self::LEGAL_FORMS);
+    }
+
+    private function getCityName($ekatte)
+    {
+        if(empty($ekatte)){
+            return '';
+        }
+        
+        foreach($this->ekatte as $key => $obj) {
+            if($ekatte == $obj['ekatte']){
+                return $obj['t_v_m'] . ' ' . $obj['name'];
+            }
+        }
+
+        return '';
+    }
+
+    private function loadEkatte()
+    {
+        $json = Storage::disk('local')->get('/nomenclatures/ekatte.json');
+        $this->ekatte = json_decode($json, true);
     }
 }

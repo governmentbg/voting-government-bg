@@ -13,8 +13,8 @@
         <div class="p-l-40">
             <h3><b>{{ __('custom.online_voting_system') }}</b></h3>
             <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit non nulla porro ratione ipsam itaque, consequatur, facilis,
-                omnis quisquam maxime cupiditate repellat delectus quasi fugiat inventore qui possimus dolor? Accusantium.
+                {{ __('custom.front_text') }}<br><br>
+                {{ __('custom.front_text_2') }}
             </p>
         </div>
     </div>

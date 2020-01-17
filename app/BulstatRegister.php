@@ -20,10 +20,12 @@ class BulstatRegister extends Model
 
     protected $primaryKey = 'eik';
 
+    protected $keyType = 'string';
+
     public static function getType()
     {
         return [
-            self::PREDEFINED_LIST_TYPE => __('custom.predefined_list_type_bul')
+            self::PREDEFINED_LIST_TYPE => __('custom.predefined_list_type_bul'),
         ];
     }
 }

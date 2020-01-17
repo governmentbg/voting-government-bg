@@ -1,0 +1,51 @@
+[
+  {
+    "ADDR_TYPE_ID": 718,
+    "CODE": "sedaliste",
+    "NAME": "седалище и адрес на управление",
+    "ABC": 1,
+    "ACTIVE": 1
+  },
+  {
+    "ADDR_TYPE_ID": 719,
+    "CODE": "korespondencia",
+    "NAME": "кореспонденция",
+    "ABC": 2,
+    "ACTIVE": 1
+  },
+  {
+    "ADDR_TYPE_ID": 720,
+    "CODE": "mestoizvarshvane",
+    "NAME": "местоизвършване на дейността",
+    "ABC": 3,
+    "ACTIVE": 1
+  },
+  {
+    "ADDR_TYPE_ID": 1,
+    "CODE": "refuse",
+    "NAME": "адрес за връчване на отказ/указания",
+    "ABC": 4,
+    "ACTIVE": 0
+  },
+  {
+    "ADDR_TYPE_ID": 2,
+    "CODE": "permanent_address",
+    "NAME": "постоянен адрес",
+    "ABC": 5,
+    "ACTIVE": 1
+  },
+  {
+    "ADDR_TYPE_ID": 3,
+    "CODE": "current_address",
+    "NAME": "настоящ адрес",
+    "ABC": 6,
+    "ACTIVE": 1
+  },
+  {
+    "ADDR_TYPE_ID": 4,
+    "CODE": "applicant_address",
+    "NAME": "адрес на заявител",
+    "ABC": 7,
+    "ACTIVE": 0
+  }
+]

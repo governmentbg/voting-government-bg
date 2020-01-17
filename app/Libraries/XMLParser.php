@@ -52,6 +52,7 @@ class XMLParser implements IXMLParser
         foreach ($this->data->Body->Deeds[0] as $org) {
             if (isset($org->attributes()['UIC']) && $this->isOrgRelevant($org)) {
                 $parsedOrg = $this->getRelevantFields($org);
+                //dump($parsedOrg);
                 if ($parsedOrg) {
                     $result[] = $parsedOrg;
                 }
@@ -102,6 +103,14 @@ class XMLParser implements IXMLParser
         }
         $orgArray['public_benefits'] = $publicBenefit;
         $orgArray['status'] = (string) $org->attributes()['DeedStatus'];
+
+        $orgArray['representative'] = '';
+        foreach($org->SubDeed->Representatives103 as $key => $representative) {
+            if(isset($representative->Representative103->Person->attributes()['Position'])){
+                $orgArray['representative'] .= ' ' . (string)$representative->Representative103->Person->attributes()['Position'] . ':';
+            }
+            $orgArray['representative'] .= (string)$representative->Representative103->Person->Name;
+        }
 
         $orgArray['goals'] = (string) (isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');
         $orgArray['tools'] = (string) (isset($org->SubDeed->MeansOfAchievingTheObjectives) ? $org->SubDeed->MeansOfAchievingTheObjectives : '');

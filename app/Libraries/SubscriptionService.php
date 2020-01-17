@@ -25,7 +25,11 @@ class SubscriptionService
                 $data = ['uid' => $subscription->UID, 'request_xml' => file_get_contents('php://input')];
                 SubscriptionRequest::create($data);
 
+                //process xml data and update register
                 UpdateBulstatRegister::dispatch($subscription);
+            } else {
+                logger()->error('Bulstat subscription service error: "UID" element not found');
+                return $this->SendSubscriptionResponse(self::STATUS_ERROR, '"UID" element not found');
             }
         } catch (\Exception $ex) {
             logger()->error('Bulstat subscription service error: ' . $ex->getMessage());

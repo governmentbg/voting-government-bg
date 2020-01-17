@@ -22,7 +22,7 @@ class SubscriptionService
                 }
 
                 //backup xml data
-                $data = ['uid' => $subscription->UID, 'request_xml' => file_get_contents('php://input')];
+                $data = ['uid' => $subscription->UID, 'request_xml' => file_get_contents('php://input'), 'type' => SubscriptionRequest::SUB_TYPE_BULSTAT];
                 SubscriptionRequest::create($data);
 
                 //process xml data and update register

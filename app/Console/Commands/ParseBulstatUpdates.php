@@ -40,7 +40,7 @@ class ParseBulstatUpdates extends Command
     public function handle()
     {
         $subscriptionRequest = true;
-        while($subscriptionRequest = SubscriptionRequest::where('status', SubscriptionRequest::STATUS_ERROR)
+        while($subscriptionRequest = SubscriptionRequest::bulstat()->where('status', SubscriptionRequest::STATUS_ERROR)
                     ->orderBy('created_at', 'asc')->first()){
 
             try{

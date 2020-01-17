@@ -21,4 +21,9 @@ class SubscriptionRequest extends Model
 
     const SUB_TYPE_TRADE = 1;
     const SUB_TYPE_BULSTAT = 2;
+
+    public function scopeBulstat($query)
+    {
+        return $query->where('type', self::SUB_TYPE_BULSTAT);
+    }
 }

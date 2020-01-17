@@ -36,7 +36,7 @@ class UpdateBulstatRegister implements ShouldQueue
     {
         if($this->serviceHasErrors()){
             //if previous subcription request were not parsed correctly don't parse current one
-            $requestRec = SubscriptionRequest::where('UID', $this->data->UID)->first();
+            $requestRec = SubscriptionRequest::bulstat()->where('UID', $this->data->UID)->first();
             if($requestRec){
                 //set ERROR status
                 $requestRec->update(['status' => SubscriptionRequest::STATUS_ERROR]);
@@ -76,7 +76,7 @@ class UpdateBulstatRegister implements ShouldQueue
     {
         logger()->error($exception->getMessage() . ' UID: ' . $this->data->UID);
 
-        $requestRec = SubscriptionRequest::where('UID', $this->data->UID)->first();
+        $requestRec = SubscriptionRequest::bulstat()->where('UID', $this->data->UID)->first();
         if($requestRec){
             $requestRec->update(['status' => SubscriptionRequest::STATUS_ERROR]);
         }
@@ -88,6 +88,6 @@ class UpdateBulstatRegister implements ShouldQueue
      */
     private function serviceHasErrors()
     {
-        return SubscriptionRequest::orderBy('created_at', 'desc')->take(5)->max('status');
+        return SubscriptionRequest::bulstat()->orderBy('created_at', 'desc')->take(5)->max('status');
     }
 }

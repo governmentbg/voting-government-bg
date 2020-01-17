@@ -64,7 +64,7 @@ class ParseBulstatXML extends Command
                 $this->info(''); //add new row
             }
 
-            Storage::disk('local')->put('predefined_list.json', json_encode($allData));
+            Storage::disk('local')->put('bulstat_predefined_list.json', json_encode($allData));
         }
         catch(\Exception $e){
             $this->error($e->getMessage());

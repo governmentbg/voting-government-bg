@@ -54,7 +54,7 @@
 	<service name="SubscriptionService">
 		<port name="SubscriptionPort" binding="tns:SubscriptionPortBinding">
 			<soap:address
-				location="http://my.me/SubscriptionService/SendSubscription"></soap:address>
+				location="https://voting.government.bg/SubscriptionService/SendSubscription"></soap:address>
 		</port>
 	</service>
 </definitions>

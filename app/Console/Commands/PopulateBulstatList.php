@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\BulstatRegister;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class PopulateBulstatList extends Command
 {
@@ -12,7 +14,7 @@ class PopulateBulstatList extends Command
      *
      * @var string
      */
-    protected $signature = 'populate:bulstatList {path? : Path to JSON file from TR Register. }';
+    protected $signature = 'populate:bulstatList {path? : Path to JSON file from Bulstat Register. }';
 
     /**
      * The console command description.

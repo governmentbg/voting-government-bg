@@ -481,7 +481,7 @@
                         <div class="form-group row text-left">
                             <label class="col-lg-5 col-xs-12">{{ __('custom.representative') }}:</label>
                             <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->representative) ? $orgDataPredBul->representative : '' }}</label>
+                                <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPred->representative) ? $orgDataPred->representative : '' }}</label>
                             </div>
                         </div>
                         <div class="form-group row text-left">

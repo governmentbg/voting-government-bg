@@ -645,4 +645,31 @@ class OrganisationController extends ApiController
             return $this->errorResponse('custom.status_list_not_found');
         }
     }
+
+    /**
+     * List status hints
+     *
+     * @param none
+     *
+     * @return json - response with status code and list of status hints or errors
+     */
+    public function listStatusHints(Request $request)
+    {
+        $results = [];
+
+        $statusHints = Organisation::getStatusHints();
+
+        foreach ($statusHints as $statusHintId => $statusHintName) {
+            $results[] = [
+                'id'   => $statusHintId,
+                'name' => $statusHintName,
+            ];
+        }
+
+        if ($results) {
+            return $this->successResponse($results);
+        } else {
+            return $this->errorResponse('custom.status_hint_list_not_found');
+        }
+    }
 }

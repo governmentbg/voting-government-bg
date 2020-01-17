@@ -172,11 +172,20 @@ class OrganisationController extends BaseAdminController
         $id = $request->offsetGet('id');
         list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
 
-        list($orgDataPred, $orgErrorsPred) = api_result(ApiPredefined::class, 'getData', ['type' => array_keys(PredefinedOrganisation::getType())[0], 'eik' => $orgData->eik]);
+        list($orgDataPred, $orgErrorsPred) = api_result(ApiPredefined::class, 'getData', ['type' => PredefinedOrganisation::PREDEFINED_LIST_TYPE, 'eik' => $orgData->eik]);
+        if (!empty($orgErrorsPred)) {
+            $errors['pred_list'] = __('custom.get_org_fail') . (is_string($orgErrorsPred) ? ' - '. $orgErrorsPred : '');
+        }
 
-        list($orgDataPredBul, $orgErrorsPredBul) = api_result(ApiPredefined::class, 'getData', ['type' => array_keys(BulstatRegister::getType())[0], 'eik' => $orgData->eik]);
+        list($orgDataPredBul, $orgErrorsPredBul) = api_result(ApiPredefined::class, 'getData', ['type' => BulstatRegister::PREDEFINED_LIST_TYPE, 'eik' => $orgData->eik]);
+        if (!empty($orgErrorsPredBul)) {
+            $errors['pred_list_bul'] = __('custom.get_org_fail') . (is_string($orgErrorsPredBul) ? ' - '. $orgErrorsPredBul : '');
+        }
 
-        list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefined::class, 'getData', ['type' => array_keys(TradeRegister::getType())[0], 'eik' => $orgData->eik]);
+        list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefined::class, 'getData', ['type' => TradeRegister::PREDEFINED_LIST_TYPE, 'eik' => $orgData->eik]);
+        if (!empty($orgErrorsPredTrade)) {
+            $errors['pred_list_trade'] = __('custom.get_org_fail') . (is_string($orgErrorsPredTrade) ? ' - '. $orgErrorsPredTrade : '');
+        }
 
         if (empty($orgData) || empty($this->votingTour)) {
             return back();
@@ -214,6 +223,13 @@ class OrganisationController extends BaseAdminController
         } elseif (!empty($orgData)) {
             list($statuses, $statusErrors) = api_result(ApiOrganisation::class, 'listStatuses');
             $statuses = !empty($statuses) ? collect($statuses)->pluck('name', 'id')->toArray() : [];
+
+            list($statusHints, $statusHintErrors) = api_result(ApiOrganisation::class, 'listStatusHints');
+            $statusHints = !empty($statusHints) ? collect($statusHints)->pluck('name', 'id')->toArray() : [];
+
+            if (isset($orgData->status_hint) && isset($statusHints[$orgData->status_hint])) {
+                $orgData->status_hint = $statusHints[$orgData->status_hint];
+            }
 
             list($files, $filesErrors) = api_result(ApiOrganisation::class, 'getFileList', ['org_id' => $id]);
             if (!empty($filesErrors)) {

@@ -14,6 +14,8 @@ class TradeRegister extends Model
     // L - Пререгистрирана фирма по Булстат затворена
     // C - Нова партида затворена
 
+    const ACTIVE_STATUSES = ['E'];
+
     protected $table = 'tr_predefined_list';
 
     protected $guarded = [];

@@ -22,6 +22,7 @@ class PredefinedListController extends ApiController
      * @param string data[name] - required
      * @param string data[city] - optional
      * @param string data[address] - optional
+     * @param string data[representative] - optional
      * @param string data[phone] - optional
      * @param string data[status] - optional
      * @param datetime data[status_date] - optional
@@ -54,6 +55,7 @@ class PredefinedListController extends ApiController
             'name'            => 'required|string|max:255',
             'city'            => 'nullable|string|max:255',
             'address'         => 'nullable|string|max:512',
+            'representative'  => 'nullable|string|max:512',
             'phone'           => 'nullable|string|max:40',
             'status'          => 'nullable|string|max:30',
             'status_date'     => 'nullable',
@@ -117,7 +119,11 @@ class PredefinedListController extends ApiController
                 $model = $this->getModelByType($data['type']);
 
                 if (isset($data['only_main_fields']) && $data['only_main_fields']) {
-                    $fields = ['name', 'city', 'address', 'phone', 'email'];
+                    $fields = ['name', 'city', 'address', 'phone', 'email', 'status'];
+                    if ($data['type'] != PredefinedOrganisation::PREDEFINED_LIST_TYPE) {
+                        $fields[] = 'representative';
+                        $fields[] = 'public_benefits';
+                    }
                 } else {
                     $fields = '*';
                 }
@@ -128,15 +134,23 @@ class PredefinedListController extends ApiController
                     // add type in the result
                     $orgData->type = $data['type'];
 
-                    return $this->successResponse($orgData);
+                    if ($data['type'] == PredefinedOrganisation::PREDEFINED_LIST_TYPE) {
+                        $orgData->public_benefits = 1;
+                    } elseif ($data['type'] == BulstatRegister::PREDEFINED_LIST_TYPE) {
+                        $orgData->public_benefits = null;
+                    }
+                } else {
+                    $orgData = new $model;
                 }
+
+                return $this->successResponse($orgData);
             } catch (\Exception $e) {
                 logger()->error($e->getMessage());
                 return $this->errorResponse(__('custom.get_org_fail'), __('custom.internal_server_error'));
             }
         }
 
-        return $this->errorResponse(__('custom.predefined_list_org_not_found'), $validator->errors()->messages());
+        return $this->errorResponse(__('custom.validation_error'), $validator->errors()->messages());
     }
 
     /**

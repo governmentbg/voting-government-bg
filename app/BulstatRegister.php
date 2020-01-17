@@ -12,6 +12,8 @@ class BulstatRegister extends Model
     const STATUS_DELETED = 'D'; //D => Изтрит код
     const STATUS_INACTIVE = 'N'; //N => Неактуален код
 
+    const ACTIVE_STATUSES = [self::STATUS_ACTIVE];
+
     protected $table = 'bul_predefined_list';
 
     protected $guarded = [];

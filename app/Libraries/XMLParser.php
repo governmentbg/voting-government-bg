@@ -106,10 +106,11 @@ class XMLParser implements IXMLParser
 
         $orgArray['representative'] = '';
         foreach($org->SubDeed->Representatives103 as $key => $representative) {
-            if(isset($representative->Representative103->Person->attributes()['Position'])){
+            if(isset($representative->Representative103->Person) && isset($representative->Representative103->Person->attributes()['Position'])){
                 $orgArray['representative'] .= ' ' . (string)$representative->Representative103->Person->attributes()['Position'] . ':';
             }
-            $orgArray['representative'] .= (string)$representative->Representative103->Person->Name;
+            
+            $orgArray['representative'] .= isset($representative->Representative103->Person) ? (string)$representative->Representative103->Person->Name : '';
         }
 
         $orgArray['goals'] = (string) (isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');

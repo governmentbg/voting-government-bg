@@ -28,7 +28,6 @@ class CreateTableBulPredefinedList extends Migration
             $table->text('goals')->nullable();
             $table->text('tools')->nullable();
             $table->text('description')->nullable();
-            $table->tinyInteger('public_benefits')->default(0);
         });
     }
 

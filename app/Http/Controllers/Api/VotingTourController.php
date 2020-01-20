@@ -54,7 +54,7 @@ class VotingTourController extends ApiController
             } catch (QueryException $e) {
                 DB::rollback();
                 logger()->error($e->getMessage());
-                return $this->errorResponse(__('custom.error_adding_tour', __('custom.internal_server_error')));
+                return $this->errorResponse(__('custom.error_adding_tour'), __('custom.internal_server_error'));
             }
 
             if (isset($saved)) {
@@ -128,7 +128,7 @@ class VotingTourController extends ApiController
                 } catch (QueryException $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.error_changing_status', __('custom.internal_server_error')));
+                    return $this->errorResponse(__('custom.error_changing_status'), __('custom.internal_server_error'));
                 }
 
                 if (\Auth::user()) {
@@ -179,7 +179,7 @@ class VotingTourController extends ApiController
                 } catch (QueryException $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.error_renaming_tour', __('custom.internal_server_error')));
+                    return $this->errorResponse(__('custom.error_renaming_tour'), __('custom.internal_server_error'));
                 }
 
                 if (\Auth::user()) {

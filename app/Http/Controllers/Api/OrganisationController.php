@@ -253,6 +253,20 @@ class OrganisationController extends ApiController
                     $organisation = Organisation::where('id', $orgId)->where('voting_tour_id', $votingTour->id)->first();
 
                     if ($organisation) {
+                        $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
+
+                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
+                            $description = (array_key_exists('description', $data) ? $data['description'] : $organisation->description);
+                            if (trim($description) == '') {
+                                return $this->errorResponse(__('custom.edit_org_fail'), ['description' => [__('custom.org_descr_required')]]);
+                            }
+
+                            $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
+                            if (trim($references) == '') {
+                                $data['references'] = '';
+                            }
+                        }
+
                         if (isset($data['status']) && $data['status'] != $organisation->status) {
                             if ($organisation->status == Organisation::STATUS_DECLASSED) {
                                 return $this->errorResponse(__('custom.org_status_update_not_allowed'));
@@ -275,15 +289,6 @@ class OrganisationController extends ApiController
                                 in_array($data['status'], Organisation::getRejectionStatuses())
                             ) {
                                 return $this->errorResponse(__('custom.rejection_not_allowed', ['status' => Organisation::getStatuses()[$organisation->status]]));
-                            }
-                        }
-
-                        $isCandidate = (isset($data['is_candidate']) ? $data['is_candidate'] : $organisation->is_candidate);
-
-                        if ($isCandidate == Organisation::IS_CANDIDATE_TRUE) {
-                            $references = (array_key_exists('references', $data) ? $data['references'] : $organisation->references);
-                            if (trim($references) == '') {
-                                $data['references'] = '';
                             }
                         }
 
@@ -349,7 +354,7 @@ class OrganisationController extends ApiController
                 } catch (\Exception $e) {
                     DB::rollback();
                     logger()->error($e->getMessage());
-                    return $this->errorResponse(__('custom.edit_org_fail', __('custom.internal_server_error')));
+                    return $this->errorResponse(__('custom.edit_org_fail'), __('custom.internal_server_error'));
                 }
             }
 

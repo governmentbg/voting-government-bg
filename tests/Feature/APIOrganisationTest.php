@@ -26,7 +26,7 @@ class APIOrganisationTest extends TestCase
      */
     public function testRegisterOrg()
     {
-        $org = factory(\App\Organisation::class)->create();
+        $org = factory(\App\Organisation::class)->make();
         $response = $this->json('POST', '/api/organisation/register', ['org_data' => $org->toArray()]);
 
         $votingTour = \App\VotingTour::getLatestTour();
@@ -134,6 +134,18 @@ class APIOrganisationTest extends TestCase
     public function testListCandidateStatuses()
     {
         $response = $this->json('POST', '/api/organisation/listCandidateStatuses');
+
+        $response->assertStatus(200)->assertJson(['success' => true]);
+    }
+
+    /**
+     * Test list status hints.
+     *
+     * @return void
+     */
+    public function testListStatusHints()
+    {
+        $response = $this->json('POST', '/api/organisation/listStatusHints');
 
         $response->assertStatus(200)->assertJson(['success' => true]);
     }

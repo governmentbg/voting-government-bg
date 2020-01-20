@@ -22,6 +22,10 @@ class Organisation extends Model
     const STATUS_DECLASSED = 6;
 
     const STATUS_HINT_NONE = 0;
+    const STATUS_HINT_BENEFITS = 1;
+    const STATUS_HINT_ACTIVITY = 2;
+    const STATUS_HINT_NOT_FOUND = 3;
+    const STATUS_HINT_ERROR = 4;
 
     const IN_AV_FALSE = 0;
     const IN_AV_TRUE = 1;
@@ -109,7 +113,11 @@ class Organisation extends Model
     public static function getStatusHints()
     {
         return [
-            self::STATUS_HINT_NONE => ''
+            self::STATUS_HINT_NONE      => '',
+            self::STATUS_HINT_BENEFITS  => __('custom.status_hint_benefits'),
+            self::STATUS_HINT_ACTIVITY  => __('custom.status_hint_activity'),
+            self::STATUS_HINT_NOT_FOUND => __('custom.status_hint_not_found'),
+            self::STATUS_HINT_ERROR     => __('custom.status_hint_error'),
         ];
     }
 

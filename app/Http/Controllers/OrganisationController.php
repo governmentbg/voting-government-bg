@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
+use App\Http\Controllers\Api\PredefinedListController as ApiPredefinedList;
 use App\Http\Controllers\Api\UserController as ApiUser;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Http\Controllers\Api\MessageController as ApiMessage;
 use App\Organisation;
 use App\VotingTour;
-use \Validator;
+use App\BulstatRegister;
+use App\PredefinedOrganisation;
+use App\TradeRegister;
 
 class OrganisationController extends BaseFrontendController
 {
@@ -55,6 +58,81 @@ class OrganisationController extends BaseFrontendController
             $orgData = $request->except(['_token', 'terms_accepted', 'files']);
             $orgData['in_av'] = (isset($orgData['in_av']) && $orgData['in_av']) ? 1 : 0;
             $orgData['is_candidate'] = (isset($orgData['is_candidate']) && $orgData['is_candidate']) ? 1 : 0;
+
+            // search organisation in predefined lists
+            $params = ['eik' => $orgData['eik'], 'only_main_fields' => true];
+
+            $params['type'] = BulstatRegister::PREDEFINED_LIST_TYPE;
+            list($orgDataPredBul, $orgErrorsPredBul) = api_result(ApiPredefinedList::class, 'getData', $params);
+
+            $params['type'] = PredefinedOrganisation::PREDEFINED_LIST_TYPE;
+            list($orgDataPred, $orgErrorsPred) = api_result(ApiPredefinedList::class, 'getData', $params);
+
+            $params['type'] = TradeRegister::PREDEFINED_LIST_TYPE;
+            list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefinedList::class, 'getData', $params);
+
+            if (!empty($orgErrorsPredBul) || !empty($orgErrorsPred) || !empty($orgErrorsPredTrade)) {
+                $orgData['status_hint'] = Organisation::STATUS_HINT_ERROR;
+            } else {
+                // set organisation status
+                if (!empty($orgDataPredBul)) {
+                    if (in_array($orgDataPredBul->status, BulstatRegister::ACTIVE_STATUSES)) {
+                        if (!empty($orgDataPred) || (!empty($orgDataPredTrade) && $orgDataPredTrade->public_benefits)) {
+                            if (!$orgData['is_candidate']) {
+                                $orgData['status'] = Organisation::STATUS_PARTICIPANT;
+                            }
+                        } else {
+                            $orgData['status'] = Organisation::STATUS_REJECTED;
+                            $orgData['status_hint'] = Organisation::STATUS_HINT_BENEFITS;
+                        }
+                    } else {
+                        $orgData['status'] = Organisation::STATUS_REJECTED;
+                        $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
+                    }
+                } elseif (!empty($orgDataPred)) {
+                    if (in_array($orgDataPred->status, PredefinedOrganisation::ACTIVE_STATUSES)) {
+                        if (!$orgData['is_candidate']) {
+                            $orgData['status'] = Organisation::STATUS_PARTICIPANT;
+                        }
+                    } else {
+                        if (!empty($orgDataPredTrade)) {
+                            if (in_array($orgDataPredTrade->status, TradeRegister::ACTIVE_STATUSES)) {
+                                if ($orgDataPredTrade->public_benefits) {
+                                    if (!$orgData['is_candidate']) {
+                                        $orgData['status'] = Organisation::STATUS_PARTICIPANT;
+                                    }
+                                } else {
+                                    $orgData['status'] = Organisation::STATUS_REJECTED;
+                                    $orgData['status_hint'] = Organisation::STATUS_HINT_BENEFITS;
+                                }
+                            } else {
+                                $orgData['status'] = Organisation::STATUS_REJECTED;
+                                $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
+                            }
+                        } else {
+                            $orgData['status'] = Organisation::STATUS_REJECTED;
+                            $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
+                        }
+                    }
+                } elseif (!empty($orgDataPredTrade)) {
+                    if (in_array($orgDataPredTrade->status, TradeRegister::ACTIVE_STATUSES)) {
+                        if ($orgDataPredTrade->public_benefits) {
+                            if (!$orgData['is_candidate']) {
+                                $orgData['status'] = Organisation::STATUS_PARTICIPANT;
+                            }
+                        } else {
+                            $orgData['status'] = Organisation::STATUS_REJECTED;
+                            $orgData['status_hint'] = Organisation::STATUS_HINT_BENEFITS;
+                        }
+                    } else {
+                        $orgData['status'] = Organisation::STATUS_REJECTED;
+                        $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
+                    }
+                } else {
+                    $orgData['status'] = Organisation::STATUS_REJECTED;
+                    $orgData['status_hint'] = Organisation::STATUS_HINT_NOT_FOUND;
+                }
+            }
 
             $params = [
                 'org_data' => $orgData

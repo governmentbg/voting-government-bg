@@ -8,6 +8,8 @@ class PredefinedOrganisation extends Model
 {
     const PREDEFINED_LIST_TYPE = 3;
 
+    const ACTIVE_STATUSES = ['Вписано'];
+
     protected $table = 'predefined_list';
 
     protected $guarded = [];

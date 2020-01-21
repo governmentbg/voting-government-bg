@@ -19,6 +19,18 @@ class XMLParserBulstat implements IXMLParser
     //435 - юридическо лице
     const LEGAL_STATUTE = 435;
 
+    //    1199	sobstvenost_na  - клон на
+    //    708	kam_vishestoiast    -	към висшестояща
+    //    710	kam_gorestoiasta    -	към горестояща
+    //    709	kam_priaka_gorestoista  -	към пряка горестояща
+    const VALID_BELONG_TYPES = ['708', '709', '710', '1199'];
+
+    const STATUS_ACTIVE = 571; //развиващ дейност
+    const STATUS_LIQUIDATION = 574; //в ликвидация
+    const STATUS_INACTIVE = 575; //неактивен
+    const STATUS_REREGISTRED = 1; //пререгистриран в ТР
+    const STATUS_ARCHIVED = 2; //архивиран
+
     private $data;
 
     private $ekatte;
@@ -147,8 +159,7 @@ class XMLParserBulstat implements IXMLParser
             }
         }
 
-        //$orgArray['public_benefits'] = 1;
-        $orgArray['status'] = 'Y';
+        $orgArray['status'] = isset($org->State->State->Code) ? (string)$org->State->State->Code : '';
 
         $orgArray['goals'] = (string) (isset($org->ScopeOfActivity->Description) ? $org->ScopeOfActivity->Description : '');
         $orgArray['tools'] = '';
@@ -161,7 +172,15 @@ class XMLParserBulstat implements IXMLParser
         return isset($org->Subject->LegalEntitySubject->LegalForm) && 
             in_array((string)$org->Subject->LegalEntitySubject->LegalForm->Code, self::LEGAL_FORMS) &&
             (isset($org->Subject->LegalEntitySubject->LegalStatute) ?
-            $org->Subject->LegalEntitySubject->LegalStatute->Code == self::LEGAL_STATUTE : true);
+            $org->Subject->LegalEntitySubject->LegalStatute->Code == self::LEGAL_STATUTE : true) ||
+            $this->isAssociationBranch($org);
+    }
+
+    private function isAssociationBranch($org)
+    {
+        return isset($org->Belonging) && isset($org->Belonging->RelatedSubject->LegalEntitySubject) &&
+                $org->Belonging->RelatedSubject->LegalEntitySubject->LegalForm->Code == 486 &&
+                in_array($org->Belonging->Type->Code, self::VALID_BELONG_TYPES);
     }
 
     private function getCityName($ekatte)

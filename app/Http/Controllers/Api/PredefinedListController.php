@@ -63,7 +63,7 @@ class PredefinedListController extends ApiController
             'goals'           => 'nullable|string|max:8000',
             'tools'           => 'nullable|string|max:8000',
             'description'     => 'nullable|string|max:8000',
-            'public_benefits' => 'required|bool',
+            'public_benefits' => 'nullable|bool',
         ];
 
         $data = Arr::only($data, array_keys($rules));
@@ -122,7 +122,9 @@ class PredefinedListController extends ApiController
                     $fields = ['name', 'city', 'address', 'phone', 'email', 'status'];
                     if ($data['type'] != PredefinedOrganisation::PREDEFINED_LIST_TYPE) {
                         $fields[] = 'representative';
-                        $fields[] = 'public_benefits';
+                        if ($data['type'] == TradeRegister::PREDEFINED_LIST_TYPE) {
+                            $fields[] = 'public_benefits';
+                        }
                     }
                 } else {
                     $fields = '*';
@@ -131,14 +133,12 @@ class PredefinedListController extends ApiController
                 $orgData = $model::select($fields)->where('eik', $data['eik'])->first();
 
                 if ($orgData) {
-                    // add type in the result
-                    $orgData->type = $data['type'];
-
                     if ($data['type'] == PredefinedOrganisation::PREDEFINED_LIST_TYPE) {
                         $orgData->public_benefits = 1;
-                    } elseif ($data['type'] == BulstatRegister::PREDEFINED_LIST_TYPE) {
-                        $orgData->public_benefits = null;
                     }
+
+                    // add type in the result
+                    $orgData->type = $data['type'];
                 } else {
                     $orgData = new $model;
                 }

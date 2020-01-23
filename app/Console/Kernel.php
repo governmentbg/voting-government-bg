@@ -27,6 +27,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('validate:blockChain')->hourly()->appendOutputTo(storage_path() .'/logs/blockChainValidation.log');
         
         $schedule->command('cache:ranking')->cron('*/20 * * * *')->withoutOverlapping(); //every 20 minutes
+
+        $schedule->command('import:emailFiles')->twiceDaily(10, 18)->withoutOverlapping(); //10:00 and 18:00
     }
 
     /**

@@ -148,11 +148,14 @@ class XMLParserBulstat implements IXMLParser
             if(!$first){
                 $orgArray['address'] .= ', ';
             }
-            $orgArray['address'] .= (string) (isset($address->AddressType) ? $this->getAddressType((string)$address->AddressType->Code) . ': ' : '') . (string) (isset($address->Street) ? $address->Street : '') . ' ' .
+            $addressType = (string) (isset($address->AddressType) ? $this->getAddressType((string)$address->AddressType->Code) . ': ' : '');
+            $addressString = (string) (isset($address->Street) ? $address->Street : '') . ' ' .
                         ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
                         ((isset($address->Entrance) && !empty((string) $address->Entrance) ? ' вх. ' . (string) $address->Entrance : '')) .
                         ((isset($address->Floor) && !empty((string) $address->Floor) ? ' ет. ' . (string) $address->Floor : '')) .
                         ((isset($address->Apartment) && !empty((string) $address->Apartment) ? ' ап. ' . (string) $address->Apartment : ''));
+
+            $orgArray['address'] .= isset($addressString) && !empty(trim($addressString)) ? $addressType . $addressString : '';
 
             $first = false;
         }

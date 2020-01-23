@@ -150,10 +150,10 @@ class XMLParserBulstat implements IXMLParser
 
         if (isset($org->Subject->Communications)) {
             foreach ($org->Subject->Communications as $key => $communication) {
-                if ($communication->Type->Code == 721) { 
+                if (isset($communication->Type) && $communication->Type->Code == 721) {
                     $orgArray['phone'] = (string) (isset($communication->Value) ? $communication->Value : '');
                 }
-                if ($communication->Type->Code == 723) { 
+                if (isset($communication->Type) && $communication->Type->Code == 723) {
                     $orgArray['email'] = (string) (isset($communication->Value) ? $communication->Value : '');
                 }
             }

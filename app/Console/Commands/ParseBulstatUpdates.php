@@ -68,7 +68,7 @@ class ParseBulstatUpdates extends Command
                 return;
             }
 
-            $subscriptionRequest->update('status', SubscriptionRequest::STATUS_NEW);
+            $subscriptionRequest->update('status', SubscriptionRequest::STATUS_PROCESSED);
         }
     }
 }

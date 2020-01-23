@@ -51,16 +51,18 @@ class UpdateBulstatRegister implements ShouldQueue
                 if($subjectUIC->Status == BulstatRegister::STATUS_INACTIVE || $subjectUIC->Status == BulstatRegister::STATUS_DELETED){
                     BulstatRegister::where('eik', $subjectUIC->UIC)->update(['status' => $subjectUIC->Status, 'status_date' => date('Y-m-d H:i:s')]);
                 }
+            }
 
-                if($subjectUIC->Status == BulstatRegister::STATUS_ACTIVE){
-                    $data = $parser->getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
+            $data = $parser->getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
+            if(!empty($data) && $data){
+                //$eik = $subjectUIC->UIC;
+                $eik = $data['eik'];
+                unset($data['eik']);
+                BulstatRegister::updateOrCreate(['eik' => $eik], $data);
 
-                    if(!empty($data) && $data){
-                        //$eik = $subjectUIC->UIC;
-                        $eik = $data['eik'];
-                        unset($data['eik']);
-                        BulstatRegister::updateOrCreate(['eik' => $eik], $data);
-                    }
+                $requestRec = SubscriptionRequest::bulstat()->where('UID', $this->data->UID)->first();
+                if($requestRec){
+                    $requestRec->update(['status' => SubscriptionRequest::STATUS_PROCESSED]);
                 }
             }
         }
@@ -88,6 +90,6 @@ class UpdateBulstatRegister implements ShouldQueue
      */
     private function serviceHasErrors()
     {
-        return SubscriptionRequest::bulstat()->orderBy('created_at', 'desc')->take(5)->max('status');
+        return SubscriptionRequest::bulstat()->orderBy('created_at', 'desc')->take(5)->max('status') == SubscriptionRequest::STATUS_ERROR;
     }
 }

@@ -9,7 +9,8 @@ class SubscriptionRequest extends Model
     const UPDATED_AT = null;
     
     const STATUS_NEW = 0;
-    const STATUS_ERROR = 1; //D => Изтрит код
+    const STATUS_PROCESSED =1;
+    const STATUS_ERROR = 9;
     
     protected $guarded = [];
 

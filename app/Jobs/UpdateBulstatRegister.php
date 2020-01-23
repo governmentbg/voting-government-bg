@@ -15,6 +15,11 @@ class UpdateBulstatRegister implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    //UIC - statuses
+    const STATUS_ACTIVE = 'Y'; //Y => Актуален код
+    const STATUS_DELETED = 'D'; //D => Изтрит код
+    const STATUS_INACTIVE = 'N'; //N => Неактуален код
+
     private $data;
     
     /**
@@ -48,8 +53,10 @@ class UpdateBulstatRegister implements ShouldQueue
             $parser = new XMLParserBulstat();
             foreach((array)$this->data->SendSubscriptionRequest->SubjectUICs as $subjectUIC)
             {
-                if($subjectUIC->Status == BulstatRegister::STATUS_INACTIVE || $subjectUIC->Status == BulstatRegister::STATUS_DELETED){
-                    BulstatRegister::where('eik', $subjectUIC->UIC)->update(['status' => $subjectUIC->Status, 'status_date' => date('Y-m-d H:i:s')]);
+                //inactive or deleted UICs
+                if($subjectUIC->Status == self::STATUS_INACTIVE || $subjectUIC->Status == self::STATUS_DELETED){
+                    $status = $subjectUIC->Status == self::STATUS_INACTIVE ? BulstatRegister::STATUS_INACTIVE : BulstatRegister::STATUS_ARCHIVED;
+                    BulstatRegister::where('eik', $subjectUIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
                 }
             }
 

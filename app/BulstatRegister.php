@@ -8,9 +8,11 @@ class BulstatRegister extends Model
 {
     const PREDEFINED_LIST_TYPE = 1;
 
-    const STATUS_ACTIVE = 'Y'; //Y => Актуален код
-    const STATUS_DELETED = 'D'; //D => Изтрит код
-    const STATUS_INACTIVE = 'N'; //N => Неактуален код
+    const STATUS_ACTIVE = 571; //развиващ дейност
+    const STATUS_LIQUIDATION = 574; //в ликвидация
+    const STATUS_INACTIVE = 575; //неактивен
+    const STATUS_REREGISTRED = 1; //пререгистриран в ТР
+    const STATUS_ARCHIVED = 2; //архивиран
 
     const ACTIVE_STATUSES = [self::STATUS_ACTIVE];
 

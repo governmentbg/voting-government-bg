@@ -76,7 +76,7 @@ class OrganisationController extends BaseFrontendController
             } else {
                 // set organisation status
                 if (!empty($orgDataPredBul)) {
-                    if (in_array($orgDataPredBul->status, BulstatRegister::ACTIVE_STATUSES)) {
+                    if (in_array($orgDataPredBul->status, BulstatRegister::getActiveStatuses())) {
                         if (!empty($orgDataPred) || (!empty($orgDataPredTrade) && $orgDataPredTrade->public_benefits)) {
                             if (!$orgData['is_candidate']) {
                                 $orgData['status'] = Organisation::STATUS_PARTICIPANT;
@@ -90,13 +90,13 @@ class OrganisationController extends BaseFrontendController
                         $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
                     }
                 } elseif (!empty($orgDataPred)) {
-                    if (in_array($orgDataPred->status, PredefinedOrganisation::ACTIVE_STATUSES)) {
+                    if (in_array($orgDataPred->status, PredefinedOrganisation::getActiveStatuses())) {
                         if (!$orgData['is_candidate']) {
                             $orgData['status'] = Organisation::STATUS_PARTICIPANT;
                         }
                     } else {
                         if (!empty($orgDataPredTrade)) {
-                            if (in_array($orgDataPredTrade->status, TradeRegister::ACTIVE_STATUSES)) {
+                            if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
                                 if ($orgDataPredTrade->public_benefits) {
                                     if (!$orgData['is_candidate']) {
                                         $orgData['status'] = Organisation::STATUS_PARTICIPANT;
@@ -115,7 +115,7 @@ class OrganisationController extends BaseFrontendController
                         }
                     }
                 } elseif (!empty($orgDataPredTrade)) {
-                    if (in_array($orgDataPredTrade->status, TradeRegister::ACTIVE_STATUSES)) {
+                    if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
                         if ($orgDataPredTrade->public_benefits) {
                             if (!$orgData['is_candidate']) {
                                 $orgData['status'] = Organisation::STATUS_PARTICIPANT;

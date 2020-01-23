@@ -137,6 +137,12 @@ class PredefinedListController extends ApiController
                         $orgData->public_benefits = 1;
                     }
 
+                    if (isset($model::getStatuses()[$orgData->status])) {
+                        $orgData->status_name = $model::getStatuses()[$orgData->status];
+                    } else {
+                        $orgData->status_name = null;
+                    }
+
                     // add type in the result
                     $orgData->type = $data['type'];
                 } else {

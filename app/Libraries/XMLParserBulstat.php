@@ -142,10 +142,9 @@ class XMLParserBulstat implements IXMLParser
         }
 
         $orgArray['address'] = '';
-        $first = true;
         foreach ($org->Subject->Addresses as $key => $address) {
             $orgArray['city'] = (isset($address->Location) ? $this->getCityName((string)$address->Location->Code) : '');
-            if(!$first){
+            if(!empty(trim($orgArray['address']))){
                 $orgArray['address'] .= ', ';
             }
             $addressType = (string) (isset($address->AddressType) ? $this->getAddressType((string)$address->AddressType->Code) . ': ' : '');
@@ -156,8 +155,6 @@ class XMLParserBulstat implements IXMLParser
                         ((isset($address->Apartment) && !empty((string) $address->Apartment) ? ' ап. ' . (string) $address->Apartment : ''));
 
             $orgArray['address'] .= isset($addressString) && !empty(trim($addressString)) ? $addressType . $addressString : '';
-
-            $first = false;
         }
 
         if (isset($org->Subject->Communications)) {

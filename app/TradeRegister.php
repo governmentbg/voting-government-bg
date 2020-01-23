@@ -8,13 +8,10 @@ class TradeRegister extends Model
 {
     const PREDEFINED_LIST_TYPE = 2;
 
-    const STATUSES = ['E', 'C', 'L', 'N'];
-    // N - Нова
-    // Е - Пререгистрирана фирма по Булстат
-    // L - Пререгистрирана фирма по Булстат затворена
-    // C - Нова партида затворена
-
-    const ACTIVE_STATUSES = ['E'];
+    const STATUS_NEW = 'N';                 // N - Нова
+    const STATUS_REREGISTERED = 'E';        // E - Пререгистрирана фирма по Булстат
+    const STATUS_REREGISTERED_CLOSED = 'L'; // L - Пререгистрирана фирма по Булстат затворена
+    const STATUS_NEW_BATCH_CLOSED = 'C';    // C - Нова партида затворена
 
     protected $table = 'tr_predefined_list';
 
@@ -35,6 +32,24 @@ class TradeRegister extends Model
     {
         return [
             self::PREDEFINED_LIST_TYPE => __('custom.predefined_list_type_tr')
+        ];
+    }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_NEW                 => __('custom.tr_reg_status_new'),
+            self::STATUS_REREGISTERED        => __('custom.tr_reg_status_reregistered'),
+            self::STATUS_REREGISTERED_CLOSED => __('custom.tr_reg_status_rereg_closed'),
+            self::STATUS_NEW_BATCH_CLOSED    => __('custom.tr_reg_status_new_batch_closed'),
+        ];
+    }
+
+    public static function getActiveStatuses()
+    {
+        return [
+            self::STATUS_NEW,
+            self::STATUS_REREGISTERED,
         ];
     }
 }

@@ -169,7 +169,7 @@
                     <div class="form-group row">
                         <label class="col-lg-4">{{ __('custom.status') }}:</label>
                         <div class="col-lg-8 headerDropdown">
-                            <select name="status" class="ams-dropdown custom-select w-100 edit-status" data-old-status="{{$orgData->status}}">
+                            <select name="status" class="ams-dropdown custom-select w-100 edit-status" data-old-status="{{ $orgData->status }}">
                                 @if (isset($statuses))
                                     @foreach ($statuses as $statusIndex => $status)
                                         <option
@@ -309,7 +309,13 @@
                         <div class="form-group row text-left">
                             <label class="col-lg-5 col-xs-12">{{ __('custom.status') }}:</label>
                             <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->status) ? $orgDataPredBul->status : '' }}</label>
+                                <label class="col-sm-12 col-xs-12">
+                                {{
+                                    isset($orgDataPredBul->status_name)
+                                        ? $orgDataPredBul->status_name
+                                        : (isset($orgDataPredBul->status) ? $orgDataPredBul->status : '')
+                                }}
+                                </label>
                             </div>
                         </div>
                         <div class="form-group row text-left">
@@ -416,7 +422,13 @@
                         <div class="form-group row text-left">
                             <label class="col-lg-5 col-xs-12">{{ __('custom.status') }}:</label>
                             <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->status) ? $orgDataPredTrade->status : '' }}</label>
+                                <label class="col-sm-12 col-xs-12">
+                                {{
+                                    isset($orgDataPredTrade->status_name)
+                                        ? $orgDataPredTrade->status_name
+                                        : (isset($orgDataPredTrade->status) ? $orgDataPredTrade->status : '')
+                                }}
+                                </label>
                             </div>
                         </div>
                         <div class="form-group row text-left">
@@ -523,7 +535,13 @@
                         <div class="form-group row text-left">
                             <label class="col-lg-5 col-xs-12">{{ __('custom.status') }}:</label>
                             <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPred->status) ? $orgDataPred->status : '' }}</label>
+                                <label class="col-sm-12 col-xs-12">
+                                {{
+                                    isset($orgDataPred->status_name)
+                                        ? $orgDataPred->status_name
+                                        : (isset($orgDataPred->status) ? $orgDataPred->status : '')
+                                }}
+                                </label>
                             </div>
                         </div>
                         <div class="form-group row text-left">

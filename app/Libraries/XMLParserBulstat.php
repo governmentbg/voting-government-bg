@@ -37,10 +37,13 @@ class XMLParserBulstat implements IXMLParser
 
     private $managerPostitions;
 
+    private $addressTypes;
+
     public function __construct()
     {
         $this->loadEkatte();
         $this->loadManagerPositions();
+        $this->loadAddressTypes();
     }
 
     /**
@@ -139,13 +142,19 @@ class XMLParserBulstat implements IXMLParser
         }
 
         $orgArray['address'] = '';
+        $first = true;
         foreach ($org->Subject->Addresses as $key => $address) {
             $orgArray['city'] = (isset($address->Location) ? $this->getCityName((string)$address->Location->Code) : '');
-            $orgArray['address'] .= (string) (isset($address->AddressType) ? $address->AddressType : '') . ': ' . (string) (isset($address->Street) ? $address->Street : '') . ' ' .
+            if(!$first){
+                $orgArray['address'] .= ', ';
+            }
+            $orgArray['address'] .= (string) (isset($address->AddressType) ? $this->getAddressType((string)$address->AddressType->Code) . ': ' : '') . (string) (isset($address->Street) ? $address->Street : '') . ' ' .
                         ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
                         ((isset($address->Entrance) && !empty((string) $address->Entrance) ? ' вх. ' . (string) $address->Entrance : '')) .
                         ((isset($address->Floor) && !empty((string) $address->Floor) ? ' ет. ' . (string) $address->Floor : '')) .
                         ((isset($address->Apartment) && !empty((string) $address->Apartment) ? ' ап. ' . (string) $address->Apartment : ''));
+
+            $first = false;
         }
 
         if (isset($org->Subject->Communications)) {
@@ -210,6 +219,12 @@ class XMLParserBulstat implements IXMLParser
         $this->managerPostitions = json_decode($json, true);
     }
 
+    private function loadAddressTypes()
+    {
+        $json = Storage::disk('local')->get('/nomenclatures/addr_types.json');
+        $this->addressTypes = json_decode($json, true);
+    }
+
     private function getManagerPostion($code)
     {
         if(empty($code)){
@@ -220,6 +235,21 @@ class XMLParserBulstat implements IXMLParser
             if($code == $obj['MANAGER_POSITION_ID']){
                 return $obj['NAME'];
             }           
+        }
+
+        return '';
+    }
+
+    private function getAddressType($code)
+    {
+        if(empty($code)){
+            return '';
+        }
+
+        foreach($this->addressTypes as $key => $obj) {
+            if($code == $obj['ADDR_TYPE_ID']){
+                return $obj['NAME'];
+            }
         }
 
         return '';

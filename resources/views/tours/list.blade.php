@@ -20,6 +20,11 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
+                        @if(empty($votingTours))
+                            <tr>
+                                <td colspan="4" class="text-center">{{__('custom.no_info')}}</td>
+                            </tr>
+                        @endif
                         @foreach ($votingTours as $tour)
                             <tr>
                                 <td>

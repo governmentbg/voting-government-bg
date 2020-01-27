@@ -44,8 +44,8 @@ class SendVoteInvite implements ShouldQueue
         $to = $this->org->email;
         $subject = __('custom.vote_invite');
 
-        if($this->status == VotingTour::STATUS_BALLOTAGE){
-            $subject .= __('custom.for') . ultrans('custom.ballotage');
+        if ($this->status == VotingTour::STATUS_BALLOTAGE) {
+            $subject .= ' '. __('custom.for') .' '. ultrans('custom.ballotage');
         }
 
         sendEmail($template, ['name' => $this->org->name ], $to, $subject);

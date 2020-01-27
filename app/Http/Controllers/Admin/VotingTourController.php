@@ -113,7 +113,7 @@ class VotingTourController extends BaseAdminController
 
                 $bulkData = [
                     'sender_user_id'   => $sender,
-                    'subject'          => __('custom.vote_invite') . $addition,
+                    'subject'          => __('custom.vote_invite') .' '. $addition,
                     'body'             => __('custom.use_right_vote', ['name' => $votingTour->name]). '<a href="'. route('organisation.vote').'"> '. __('custom.votingmenu'). '</a>',
                 ];
 

@@ -101,7 +101,7 @@ class ForgotPasswordController extends Controller
     */
     protected function sendResetLinkResponse(Request $request, $response)
     {
-        session()->flash('alert-success', trans($response['status']));
+        session()->put('alert-success', trans($response['status']));
 
         $route = $response['isAdmin'] ? 'admin.index' : 'home';
 

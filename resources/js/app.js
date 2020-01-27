@@ -305,7 +305,7 @@ $(document).on('click', '.additional-info', function() {
             $('#additional_name').text(result.data.name);
             $('#additional_eik').text(result.data.eik);
             $('#additional_address').text(result.data.address);
-            $('#additional_representative').text(result.data.name);
+            $('#additional_representative').text(result.data.representative);
             $('#additional_reg_date').text(result.data.created_at);
             $('.hidetable').css('visibility', 'visible');
         },

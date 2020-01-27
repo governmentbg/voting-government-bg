@@ -13,10 +13,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\PredefinedListController as ApiPredefined;
+use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Http\Controllers\Api\MessageController as ApiMessage;
 use App\Http\Controllers\Api\VoteController as ApiVote;
 use Illuminate\Support\Facades\Cache;
+use App\Jobs\SendResultsInvitation;
 
 class OrganisationController extends BaseAdminController
 {
@@ -275,6 +277,8 @@ class OrganisationController extends BaseAdminController
         $editErrors = [];
 
         $callRanking = false;
+        list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+
         if ($status == Organisation::STATUS_DECLASSED) {
             list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);
 
@@ -305,6 +309,18 @@ class OrganisationController extends BaseAdminController
         $ranking = [];
         if ($callRanking) {
             list($ranking, $rankErrors) = api_result(ApiVote::class, 'ranking', ['status' => Vote::TOUR_ORGANISATION_DECLASSED_RANKING, 'declass_org_id' => $id]);
+
+            $sender = auth()->guard('backend')->user()->id;
+
+            $bulkData = [
+                'sender_user_id'   => $sender,
+                'subject'          => __('custom.results_invite'),
+                'body'             => __('custom.results_from_last_tour', ['name' => $votingTour->name]) .' <a href="'. route('list.ranking').'"> '. __('custom.results'). '</a>',
+            ];
+
+            list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg', $bulkData);
+
+            $this->sendResultsEmails($votingTour);
         }
 
         if (empty($editErrors) && empty($rankErrors)) {
@@ -352,5 +368,15 @@ class OrganisationController extends BaseAdminController
     public function settings(Request $request)
     {
        return view('organisation.settings');
+    }
+
+    private function sendResultsEmails($votingTour)
+    {
+        try {
+            SendResultsInvitation::dispatch($votingTour);
+        } catch (\Exception $e) {
+            logger()->error('Send results invites error: '. $e->getMessage());
+            session()->flash('alert-info', __('custom.send_results_invites_failed'));
+        }
     }
 }

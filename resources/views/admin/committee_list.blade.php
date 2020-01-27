@@ -89,7 +89,7 @@
                                 </tr>
                             @endforeach
                         @else
-                        <tr><td colspan="5">{{ __('custom.no_users_found') }}</tr>
+                        <tr><td colspan="5">{{ __('custom.no_users_found') }}</td></tr>
                         @endif
                     </tbody>
                 </table>

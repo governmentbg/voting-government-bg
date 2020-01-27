@@ -461,3 +461,17 @@ $('.cross-close').click(() => {
     $('.cross-close').hide();
     $('#showRegs').show();
 });
+
+$('.reg-exp').on('focusout', () => {
+    if ($('.reg-exp')[0].value.match(/[a-zA-Z]/)) {
+        $('.reg-exp').css('border', '3px solid #3e7ea9');
+        $('.warning').removeClass('alert-info');
+        $('.warning').addClass('alert-warning');
+        $('.warning').css('font-weight', 'bold');
+    } else {
+        $('.warning').removeClass('alert-warning');
+        $('.warning').addClass('alert-info');
+        $('.reg-exp').css('border', '1px solid #3e7ea9');
+        $('.warning').css('font-weight', 'normal');
+    }
+});

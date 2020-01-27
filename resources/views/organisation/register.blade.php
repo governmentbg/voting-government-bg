@@ -131,10 +131,13 @@
                         </div>
                     </div>
                     <div class="form-group row for_org_candidates {{ old('is_candidate') ? '' : 'd-none' }}">
+                       <div class="col-sm-12 m-b-15">
+                            <span class="alert alert-info warning p-l-none p-t-none p-b-none p-r-none">{{ __('custom.registration_message') }}</span>
+                        </div>
                         <label for="description" class="col-sm-4 col-xs-12 col-form-label">{{ __('custom.experience_info') }}:</label>
-                        <div class="col-sm-8 col-xs-6 p-r-none txt-area-height nano">
+                        <div class="col-sm-8 col-xs-6 p-r-none txt-area-height nano ">
                             <textarea
-                                class="txt-area no-outline p-a-5 nano-content"
+                                class="txt-area no-outline p-a-5 nano-content reg-exp"
                                 name="description"
                                 placeholder="{{ __('custom.experience_info_placeholder') }}"
                                 rows="5"
@@ -142,6 +145,7 @@
                                 maxlength="8000"
                             >{{ old('description') }}</textarea>
                         </div>
+
                         <div class="col-sm-8 col-xs-6 offset-sm-4 p-l-none">
                             <span class="error">{{ $errors->first('description') }}</span>
                         </div>

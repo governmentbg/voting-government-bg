@@ -355,4 +355,5 @@ return [
     'bul_reg_status_inactive'          => 'Неактивен',
     'bul_reg_status_reregistered'      => 'Пререгистриран в ТР',
     'bul_reg_status_archived'          => 'Архивиран',
+    'registration_message'             => 'Общите условия изискват информацията да се попълва на кирилица, с изключение на адреси на интернет страници.',
 ];

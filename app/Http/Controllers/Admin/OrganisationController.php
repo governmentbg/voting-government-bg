@@ -315,7 +315,7 @@ class OrganisationController extends BaseAdminController
             $bulkData = [
                 'sender_user_id'   => $sender,
                 'subject'          => __('custom.results_invite'),
-                'body'             => __('custom.results_from_last_tour', ['name' => $votingTour->name]) .' <a href="'. route('list.ranking').'"> '. __('custom.results'). '</a>',
+                'body'             => __('custom.greetings') .', <br><br>'. __('custom.ranking_for') .' '. $votingTour->name .' '. __('custom.was_done') .'<br>'. __('custom.results_available') .': <a href="'. route('list.ranking') .'">'. uptrans('custom.results') .'</a>'
             ];
 
             list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg', $bulkData);

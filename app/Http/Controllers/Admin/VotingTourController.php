@@ -92,7 +92,7 @@ class VotingTourController extends BaseAdminController
     public function update($id)
     {
         $status = request()->get('status');
-        list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+        $votingTour = !empty($this->votingTour) ? $this->votingTour : [];
         $oldStatus = $votingTour ? $votingTour->status : VotingTour::STATUS_FINISHED;
         $addition = '';
 
@@ -102,7 +102,7 @@ class VotingTourController extends BaseAdminController
             list($data, $errors) = api_result(ApiVotingTour::class, 'changeStatus', ['new_status' => $status]);
         }
 
-        if (empty($errors)) {
+        if (empty($errors) && !empty($votingTour)) {
             if ($oldStatus != $status && ($status == VotingTour::STATUS_VOTING || $status == VotingTour::STATUS_BALLOTAGE)) {
                 // send emails to all orgs - voting is open
                 $sender = auth()->guard('backend')->user()->id;

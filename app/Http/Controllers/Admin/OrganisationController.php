@@ -277,7 +277,7 @@ class OrganisationController extends BaseAdminController
         $editErrors = [];
 
         $callRanking = false;
-        list($votingTour, $errors) = api_result(ApiVotingTour::class, 'getLatestVotingTour');
+        $votingTour = !empty($this->votingTour) ? $this->votingTour : [];
 
         if ($status == Organisation::STATUS_DECLASSED) {
             list($orgData, $orgErrors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $id]);

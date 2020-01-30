@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\SubscriptionRequest;
 use App\Libraries\XMLParserBulstat;
+use App\BulstatRegister;
 
 class ParseBulstatUpdates extends Command
 {

@@ -45,20 +45,19 @@ class ParseBulstatUpdates extends Command
 
             try{
                 $parser = new XMLParserBulstat();
-                $parser->loadString($subscriptionRequest->request_xml);
 
-                dd($parser->getParsedData());
                 if(!$parser->loadString($subscriptionRequest->request_xml)){
                     $this->info('Could not parse xml for Request: ' . $subscriptionRequest->uid);
                     continue;
                 }
-                $this->info($subscriptionRequest->uid);
+                $this->info('Processing subscription service update with UID: ' . $subscriptionRequest->uid);
 
-                $data = $this->parser->getParsedData();
+                $data = $parser->getParsedData();
                 foreach($data as $key => $org) {
                     $eik = $org['eik'];
                     unset($org['eik']);
                     BulstatRegister::updateOrCreate(['eik' => $eik], $org);
+                    $this->info('Update/created record with eik: ' . $subscriptionRequest->uid);
                 }
                 $this->info(''); //add new row
             }
@@ -68,7 +67,7 @@ class ParseBulstatUpdates extends Command
                 return;
             }
 
-            $subscriptionRequest->update('status', SubscriptionRequest::STATUS_PROCESSED);
+            $subscriptionRequest->update(['status' => SubscriptionRequest::STATUS_PROCESSED]);
         }
     }
 }

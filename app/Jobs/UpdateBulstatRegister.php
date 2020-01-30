@@ -54,7 +54,7 @@ class UpdateBulstatRegister implements ShouldQueue
             foreach((array)$this->data->SendSubscriptionRequest->SubjectUICs as $subjectUIC)
             {
                 //inactive or deleted UICs
-                if($subjectUIC->Status == self::STATUS_INACTIVE || $subjectUIC->Status == self::STATUS_DELETED){
+                if(isset($subjectUIC->Status) && ($subjectUIC->Status == self::STATUS_INACTIVE || $subjectUIC->Status == self::STATUS_DELETED)){
                     $status = $subjectUIC->Status == self::STATUS_INACTIVE ? BulstatRegister::STATUS_INACTIVE : BulstatRegister::STATUS_ARCHIVED;
                     BulstatRegister::where('eik', $subjectUIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
                 }

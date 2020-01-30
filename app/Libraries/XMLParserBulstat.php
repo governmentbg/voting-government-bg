@@ -79,9 +79,14 @@ class XMLParserBulstat implements IXMLParser
         }
 
         //strip namespaces
-        $xml = str_replace(array_map(function($e) { return empty($e)? '' : "$e:"; }, array_keys($this->data->getDocNamespaces())), array(), $xmlData);
+        $xml = str_replace(array_map(function($e) { return empty($e)? '' : "$e:"; }, array_keys($this->data->getDocNamespaces(true))), array(), $xmlData);
 
         $this->data = simplexml_load_string($xml);
+
+        if(isset($this->data->Body) && isset($this->data->Body->SendSubscription) && isset($this->data->Body->SendSubscription->SendSubscriptionRequest)){
+            //get corrent node if it is update by subscription service
+            $this->data = $this->data->Body->SendSubscription->SendSubscriptionRequest;
+        }
 
         return $this->data === false ? false : true;
     }

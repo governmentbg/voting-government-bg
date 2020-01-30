@@ -58,7 +58,7 @@ class ParseBulstatUpdates extends Command
                     $eik = $org['eik'];
                     unset($org['eik']);
                     BulstatRegister::updateOrCreate(['eik' => $eik], $org);
-                    $this->info('Update/created record with eik: ' . $subscriptionRequest->uid);
+                    $this->info('Update/created record with eik: ' . $eik);
                 }
                 $this->info(''); //add new row
             }

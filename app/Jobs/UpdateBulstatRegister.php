@@ -62,7 +62,6 @@ class UpdateBulstatRegister implements ShouldQueue
 
             $data = $parser->getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
             if(!empty($data) && $data){
-                logger('eik relevent: ' .$data['eik'] );
                 //$eik = $subjectUIC->UIC;
                 $eik = $data['eik'];
                 unset($data['eik']);

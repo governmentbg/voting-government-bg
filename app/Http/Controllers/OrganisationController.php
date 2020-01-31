@@ -75,9 +75,23 @@ class OrganisationController extends BaseFrontendController
                 $orgData['status_hint'] = Organisation::STATUS_HINT_ERROR;
             } else {
                 // set organisation status
-                if (!empty($orgDataPredBul)) {
+                if (!empty($orgDataPredTrade)) {
+                    if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
+                        if ($orgDataPredTrade->public_benefits) {
+                            if (!$orgData['is_candidate']) {
+                                $orgData['status'] = Organisation::STATUS_PARTICIPANT;
+                            }
+                        } else {
+                            $orgData['status'] = Organisation::STATUS_REJECTED;
+                            $orgData['status_hint'] = Organisation::STATUS_HINT_BENEFITS;
+                        }
+                    } else {
+                        $orgData['status'] = Organisation::STATUS_REJECTED;
+                        $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
+                    }
+                } elseif (!empty($orgDataPredBul)) {
                     if (in_array($orgDataPredBul->status, BulstatRegister::getActiveStatuses())) {
-                        if (!empty($orgDataPred) || (!empty($orgDataPredTrade) && $orgDataPredTrade->public_benefits)) {
+                        if (!empty($orgDataPred)) {
                             if (!$orgData['is_candidate']) {
                                 $orgData['status'] = Organisation::STATUS_PARTICIPANT;
                             }
@@ -93,36 +107,6 @@ class OrganisationController extends BaseFrontendController
                     if (in_array($orgDataPred->status, PredefinedOrganisation::getActiveStatuses())) {
                         if (!$orgData['is_candidate']) {
                             $orgData['status'] = Organisation::STATUS_PARTICIPANT;
-                        }
-                    } else {
-                        if (!empty($orgDataPredTrade)) {
-                            if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
-                                if ($orgDataPredTrade->public_benefits) {
-                                    if (!$orgData['is_candidate']) {
-                                        $orgData['status'] = Organisation::STATUS_PARTICIPANT;
-                                    }
-                                } else {
-                                    $orgData['status'] = Organisation::STATUS_REJECTED;
-                                    $orgData['status_hint'] = Organisation::STATUS_HINT_BENEFITS;
-                                }
-                            } else {
-                                $orgData['status'] = Organisation::STATUS_REJECTED;
-                                $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
-                            }
-                        } else {
-                            $orgData['status'] = Organisation::STATUS_REJECTED;
-                            $orgData['status_hint'] = Organisation::STATUS_HINT_ACTIVITY;
-                        }
-                    }
-                } elseif (!empty($orgDataPredTrade)) {
-                    if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
-                        if ($orgDataPredTrade->public_benefits) {
-                            if (!$orgData['is_candidate']) {
-                                $orgData['status'] = Organisation::STATUS_PARTICIPANT;
-                            }
-                        } else {
-                            $orgData['status'] = Organisation::STATUS_REJECTED;
-                            $orgData['status_hint'] = Organisation::STATUS_HINT_BENEFITS;
                         }
                     } else {
                         $orgData['status'] = Organisation::STATUS_REJECTED;

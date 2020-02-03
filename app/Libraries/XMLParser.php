@@ -2,12 +2,16 @@
 
 namespace App\Libraries;
 
+use App\TradeRegister;
+
 /**
  * XML parser specific for trade register xml files format
  */
 class XMLParser implements IXMLParser
 {
     private $data;
+
+    private $parseBranchesOnly;
 
     const LEGAL_FORMS = ['ASSOC', 'FOUND', 'CC', 'BFLE'];
     //    ASSOC = 24,// Сдружение - юридическо лице с нестопанска цел
@@ -23,6 +27,7 @@ class XMLParser implements IXMLParser
 
     public function __construct()
     {
+        $this->parseBranchesOnly = false;
     }
 
     /**
@@ -52,7 +57,6 @@ class XMLParser implements IXMLParser
         foreach ($this->data->Body->Deeds[0] as $org) {
             if (isset($org->attributes()['UIC']) && $this->isOrgRelevant($org)) {
                 $parsedOrg = $this->getRelevantFields($org);
-                //dump($parsedOrg);
                 if ($parsedOrg) {
                     $result[] = $parsedOrg;
                 }
@@ -65,6 +69,13 @@ class XMLParser implements IXMLParser
     private function getRelevantFields($org)
     {
         $orgArray = [];
+
+        if($org->SubDeed->attributes()['SubUICType'] == 'B2_Branch'){
+            return $this->getBranchData($org);
+        }
+        else if($this->parseBranchesOnly){
+            return false;
+        }
 
         if (isset($org->attributes()['UIC'])) {
             $orgArray['eik'] = (string) $org->attributes()['UIC'];
@@ -129,5 +140,81 @@ class XMLParser implements IXMLParser
     private function isOrgRelevant($org)
     {
         return isset($org->attributes()['LegalForm']) && in_array((string) $org->attributes()['LegalForm'], self::LEGAL_FORMS);
+    }
+
+    private function getBranchData($org)
+    {
+        $orgArray = [];
+
+        if (isset($org->attributes()['UIC'])) {
+            $orgArray['eik'] = (string) $org->attributes()['UIC'];
+            $mainOrg = TradeRegister::find($orgArray['eik']);
+            if(!$mainOrg){
+                logger('Main organisation not found for branch:' . $orgArray['eik'] . ' - ' . (string)$org->SubDeed->attributes()['SubUIC']);
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        if(isset($org->SubDeed->attributes()['SubUIC'])){
+            $orgArray['eik'] .= (string) $org->SubDeed->attributes()['SubUIC'];
+        }
+        else{
+            return false;
+        }
+
+        if (isset($org->SubDeed->BranchFirm)) {
+            $orgArray['name'] = (string) $org->SubDeed->BranchFirm;
+        }
+        else{
+            return false;
+        }
+        
+        if (isset($org->SubDeed->BranchSeat->Address)) {
+            $address = $org->SubDeed->BranchSeat->Address;
+            $orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
+            $orgArray['address'] = (string) (isset($address->Street) ? $address->Street : '') . ' ' .
+                    ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
+                    ((isset($address->Entrance) && !empty((string) $address->Entrance) ? ' вх. ' . (string) $address->Entrance : '')) .
+                    ((isset($address->Floor) && !empty((string) $address->Floor) ? ' ет. ' . (string) $address->Floor : '')) .
+                    ((isset($address->Apartment) && !empty((string) $address->Apartment) ? ' ап. ' . (string) $address->Apartment : ''));
+        }
+
+        if (isset($org->SubDeed->BranchSeat->Contacts)) {
+            $contact = $org->SubDeed->BranchSeat->Contacts;
+            $orgArray['phone'] = (string) (isset($contact->Phone) ? $contact->Phone : '');
+            $orgArray['email'] = (string) (isset($contact->EMail) ? $contact->EMail : '');
+        }
+
+        $orgArray['public_benefits'] = $mainOrg->public_benefits;
+
+        $orgArray['status'] = (string) $org->attributes()['DeedStatus'];
+
+        $orgArray['representative'] = '';
+        foreach($org->SubDeed->BranchManagers as $key => $representative) {
+            if(isset($representative->BranchManager->Person) && isset($representative->BranchManager->Person->attributes()['Position']) &&
+                    !empty($representative->BranchManager->Person->attributes()['Position'])){
+                $orgArray['representative'] .= ' ' . (string)$representative->BranchManager->Person->attributes()['Position'] . ':';
+            }
+
+            $orgArray['representative'] .= isset($representative->BranchManager->Person) ? (string)$representative->BranchManager->Person->Name : '';
+        }
+        if(empty($orgArray['representative'])){
+            unset($orgArray['representative']);
+        }
+ 
+        if(isset($org->SubDeed->BranchSubjectOfActivity)){
+            $orgArray['goals'] = (string)$org->SubDeed->BranchSubjectOfActivity;
+        }
+
+        $orgArray['tools'] = $mainOrg->tools;
+
+        return $orgArray;
+    }
+
+    public function setParseBranchesOnly($parseBranchesOnly)
+    {
+        $this->parseBranchesOnly = $parseBranchesOnly;
     }
 }

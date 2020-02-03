@@ -15,7 +15,7 @@ class exportOrgsToJSON extends Command
      *
      * @var string
      */
-    protected $signature = 'parseTrXML:json {path : Path to xml files.}';
+    protected $signature = 'parseTrXML:json {path : Path to xml files.} {--b|branch}';
 
     /**
      * The console command description.
@@ -56,10 +56,13 @@ class exportOrgsToJSON extends Command
                     $this->info('Could not parse file: ' . $filePath);
                     continue;
                 }
+                if($this->option('branch')){
+                    $this->parser->setParseBranchesOnly(true);
+                }
                 $this->info($filePath);
 
                 $data = $this->parser->getParsedData();
-                
+
                 $bar = $this->output->createProgressBar(count($data));
                 $bar->start();
                 $allData = array_merge($allData, $data);

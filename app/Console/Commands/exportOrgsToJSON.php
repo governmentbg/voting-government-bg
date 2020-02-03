@@ -49,6 +49,7 @@ class exportOrgsToJSON extends Command
             $path = $this->argument('path');
 
             $files = $this->searchFilesDirectory($path);
+            ksort($files);
             $allData = [];
             foreach($files as $key => $filePath) {
                 if(!$this->parser->loadFile($filePath)){
@@ -86,7 +87,8 @@ class exportOrgsToJSON extends Command
         foreach ($fileSystemIterator as $fileInfo){
             $type = $fileInfo->getType(); //directory or file
             if($type == 'file' && $fileInfo->getExtension() == 'xml'){
-                $files[] = $fileInfo->getPathname();
+                $key = preg_replace('/\/(\d)\//', "/0$1/", $fileInfo->getPathname());
+                $files[$key] = $fileInfo->getPathname();
             }
             else if($type == 'dir'){
                 $files = array_merge($files, $this->searchFilesDirectory($fileInfo->getPathname()));

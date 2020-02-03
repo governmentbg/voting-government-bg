@@ -94,14 +94,13 @@ class XMLParser implements IXMLParser
             $orgArray['email'] = (string) (isset($contact->EMail) ? $contact->EMail : '');
         }
 
-        $publicBenefit = 0;
         foreach ($org->SubDeed as $key => $deed) {
             if (isset($deed->attributes()['SubUICType']) && (string) $deed->attributes()['SubUICType'] == 'MainCircumstances') {
-                $publicBenefit += (int) $deed[0]->DesignatedToPerformPublicBenefit;
+                $orgArray['public_benefits'] = (int) $deed[0]->DesignatedToPerformPublicBenefit;
                 break;
             }
         }
-        $orgArray['public_benefits'] = $publicBenefit;
+
         $orgArray['status'] = (string) $org->attributes()['DeedStatus'];
 
         $orgArray['representative'] = '';
@@ -112,9 +111,16 @@ class XMLParser implements IXMLParser
             
             $orgArray['representative'] .= isset($representative->Representative103->Person) ? (string)$representative->Representative103->Person->Name : '';
         }
+        if(empty($orgArray['representative'])){
+            unset($orgArray['representative']);
+        }
 
-        $orgArray['goals'] = (string) (isset($org->SubDeed->Objectives->Text) ? $org->SubDeed->Objectives->Text : '');
-        $orgArray['tools'] = (string) (isset($org->SubDeed->MeansOfAchievingTheObjectives) ? $org->SubDeed->MeansOfAchievingTheObjectives : '');
+        if(isset($org->SubDeed->Objectives->Text)){
+            $orgArray['goals'] = (string)$org->SubDeed->Objectives->Text;
+        }
+        if(isset($org->SubDeed->MeansOfAchievingTheObjectives)){
+            $orgArray['tools'] = (string) $org->SubDeed->MeansOfAchievingTheObjectives;
+        }
 
         return $orgArray;
     }

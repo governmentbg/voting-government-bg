@@ -95,7 +95,8 @@ class XMLParser implements IXMLParser
         }
 
         foreach ($org->SubDeed as $key => $deed) {
-            if (isset($deed->attributes()['SubUICType']) && (string) $deed->attributes()['SubUICType'] == 'MainCircumstances') {
+            if (isset($deed->attributes()['SubUICType']) && (string) $deed->attributes()['SubUICType'] == 'MainCircumstances' &&
+                    isset($deed[0]->DesignatedToPerformPublicBenefit)) {
                 $orgArray['public_benefits'] = (int) $deed[0]->DesignatedToPerformPublicBenefit;
                 break;
             }

@@ -399,7 +399,8 @@ $('.js-org-table').on('scroll', function() {
                 );
 
                 initialPage += 1;
-            }
+            },
+            async: false
         });
     }
 });

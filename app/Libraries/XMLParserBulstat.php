@@ -150,6 +150,29 @@ class XMLParserBulstat implements IXMLParser
             }
         }
 
+        if (isset($org->Event) && isset($org->Event->Case)) {
+            $orgArray['description'] = '';
+            if(isset($org->Event->Case->Number) && !empty((string)$org->Event->Case->Number)){
+                $orgArray['description'] .= 'дело номер: ' . (string)$org->Event->Case->Number;
+            }
+            if(isset($org->Event->Case->Year) && !empty($org->Event->Case->Year)){
+                if(!empty($orgArray['description'])){
+                    $orgArray['description'] .= ', ';
+                }
+                $orgArray['description'] .= 'година: ' . (string)$org->Event->Case->Year;
+            }
+            if(isset($org->Event->Case->Court)){
+                if(!empty($orgArray['description'])){
+                    $orgArray['description'] .= ', ';
+                }
+                $orgArray['description'] .= 'съд(ЕИК): ' . (string)$org->Event->Case->Court->Code;
+            }
+
+            if(empty($orgArray['description'])){
+                unset($orgArray['description']);
+            }
+        }
+
         $orgArray['address'] = '';
         foreach ($org->Subject->Addresses as $key => $address) {
             $orgArray['city'] = (isset($address->Location) ? $this->getCityName((string)$address->Location->Code) : '');

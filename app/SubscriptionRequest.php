@@ -27,4 +27,15 @@ class SubscriptionRequest extends Model
     {
         return $query->where('type', self::SUB_TYPE_BULSTAT);
     }
+
+    public function scopeFilter($query, $filter)
+    {
+        if(isset($filter['status']) && in_array($filter['status'], [self::STATUS_NEW, self::STATUS_PROCESSED, self::STATUS_ERROR])){
+            return $query->where('status', $filter['status']);
+        }
+
+        if(isset($filter['uid'])){
+            return $query->where('uid', '>', $filter['uid']);
+        }
+    }
 }

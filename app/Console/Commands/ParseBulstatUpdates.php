@@ -14,7 +14,7 @@ class ParseBulstatUpdates extends Command
      *
      * @var string
      */
-    protected $signature = 'parse:bulstatUpdates';
+    protected $signature = 'parse:bulstatUpdates {--a|all}';
 
     /**
      * The console command description.
@@ -41,8 +41,16 @@ class ParseBulstatUpdates extends Command
     public function handle()
     {
         $subscriptionRequest = true;
-        while($subscriptionRequest = SubscriptionRequest::bulstat()->where('status', SubscriptionRequest::STATUS_ERROR)
-                    ->orderBy('created_at', 'asc')->first()){
+
+        if($this->option('all')){
+            $filter['uid'] = '0';
+        }
+        else{
+            $filter['status'] = SubscriptionRequest::STATUS_ERROR;
+        }
+
+        while($subscriptionRequest = SubscriptionRequest::bulstat()->filter($filter)
+                    ->orderBy('uid', 'asc')->first()){
 
             try{
                 $parser = new XMLParserBulstat();
@@ -69,6 +77,10 @@ class ParseBulstatUpdates extends Command
             }
 
             $subscriptionRequest->update(['status' => SubscriptionRequest::STATUS_PROCESSED]);
+
+            if($this->option('all')){
+                $filter['uid'] = $subscriptionRequest->uid;
+            }
         }
     }
 }

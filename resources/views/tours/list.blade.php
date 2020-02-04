@@ -35,28 +35,33 @@
                                     <td>
                                         @if ($tour->status == App\VotingTour::STATUS_FINISHED)
                                             <a
-                                                href="{{ route('admin.ranking', ['id' => $tour->id])}}"><img src="{{ asset('img/star.svg') }}" height="30px" width="50px"
-                                                title="{{ __('custom.ranking') }}"
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                            ></a>
+                                                href="{{ route('admin.ranking', ['id' => $tour->id]) }}"
+                                                class="text-decoration-none"
+                                            >
+                                                <img src="{{ asset('img/star.svg') }}" height="30px" width="50px"
+                                                    title="{{ __('custom.ranking') }}"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                >
+                                            </a>
                                         @else
                                             <a
-                                                href="{{route('admin.voting_tour.edit', ['id' => $tour->id])}}"
-                                                title="{{ __('custom.edit') }}"
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                                class="m-r-15"
+                                                href="{{route('admin.voting_tour.edit', ['id' => $tour->id]) }}"
+                                                class="text-decoration-none"
                                             >
-                                                <img src="{{ asset('img/edit.svg') }}" height="30px" width="30px"/>
+                                                <img src="{{ asset('img/edit.svg') }}" height="30px" width="50px"
+                                                    title="{{ __('custom.edit') }}"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                >
                                             </a>
                                         @endif
                                         <a
-                                            href="{{ route('admin.actions_history', ['voting_tour_id' => $tour->id])}}"
+                                            href="{{ route('admin.actions_history', ['voting_tour_id' => $tour->id]) }}"
+                                            class="text-decoration-none"
                                         >
                                             <img
-                                                src="{{ asset('img/clock.png') }}"
-                                                height="30px" width="30px"
+                                                src="{{ asset('img/clock.png') }}" height="30px" width="30px"
                                                 title="{{ __('custom.actions_history') }}"
                                                 data-toggle="tooltip"
                                                 data-placement="top"

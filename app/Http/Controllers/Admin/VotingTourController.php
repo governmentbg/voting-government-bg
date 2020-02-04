@@ -15,7 +15,6 @@ use App\Organisation;
 use App\Vote;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
-use App\ActionsHistory;
 
 class VotingTourController extends BaseAdminController
 {
@@ -94,7 +93,6 @@ class VotingTourController extends BaseAdminController
         $status = request()->get('status');
         $votingTour = !empty($this->votingTour) ? $this->votingTour : [];
         $oldStatus = $votingTour ? $votingTour->status : VotingTour::STATUS_FINISHED;
-        $addition = '';
 
         $cancelTour = ($oldStatus != VotingTour::STATUS_RANKING && $status == VotingTour::STATUS_FINISHED);
 
@@ -107,17 +105,26 @@ class VotingTourController extends BaseAdminController
                 // send emails to all orgs - voting is open
                 $sender = auth()->guard('backend')->user()->id;
 
+                $subject = __('custom.vote_invite');
+
                 if ($status == VotingTour::STATUS_BALLOTAGE) {
-                    $addition = ' - ' . __('custom.ballotage');
+                    $subject .= ' '. __('custom.for') .' '. ultrans('custom.ballotage');
                 }
 
                 $bulkData = [
-                    'sender_user_id'   => $sender,
-                    'subject'          => __('custom.vote_invite') .' '. $addition,
-                    'body'             => __('custom.greetings') .',<br><br>'. __('custom.you_are_registered') .'<br>'. __('custom.to_vote_link') .'<a href="'. route('organisation.vote') .'">'. uptrans('custom.vote') .'</a>',
+                    'sender_user_id'    => $sender,
+                    'recipient_filters' => [
+                        'org_statuses' => Organisation::getApprovedStatuses()
+                    ],
+                    'subject'           => $subject,
+                    'body'              => __('custom.greetings') .', <br><br>'. __('custom.you_are_registered') .'. <br>'. __('custom.to_vote_link') .' <a href="'. route('organisation.vote') .'">'. uptrans('custom.vote') .'</a>',
                 ];
 
                 list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg',  $bulkData);
+
+                if (!empty($errors)) {
+                    session()->flash('alert-info', __('custom.send_bulk_messages_failed'));
+                }
 
                 $this->sendEmails($status);
             }
@@ -153,12 +160,19 @@ class VotingTourController extends BaseAdminController
                     $sender = auth()->guard('backend')->user()->id;
 
                     $bulkData = [
-                        'sender_user_id'   => $sender,
-                        'subject'          => __('custom.results_invite'),
-                        'body'             => __('custom.greetings') .',<br><br>'. __('custom.ranking_for') .' '. $votingTour->name .' '. __('custom.was_done') .'<br>'. __('custom.results_available') .': <a href="'. route('list.ranking') .'">'. uptrans('custom.results') .'</a>'
+                        'sender_user_id'    => $sender,
+                        'recipient_filters' => [
+                            'org_statuses'  => Organisation::getApprovedStatuses()
+                        ],
+                        'subject'           => __('custom.results_invite'),
+                        'body'              => __('custom.greetings') .', <br><br>'. __('custom.ranking_for') .' '. $votingTour->name .' '. __('custom.was_done') .'. <br>'. __('custom.results_available') .': <a href="'. route('list.ranking') .'">'. uptrans('custom.results') .'</a>'
                     ];
 
                     list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg', $bulkData);
+
+                    if (!empty($errors)) {
+                        session()->flash('alert-info', __('custom.send_bulk_messages_failed'));
+                    }
 
                     $this->sendResultsEmails($votingTour);
                 }

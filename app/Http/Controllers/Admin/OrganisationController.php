@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseAdminController;
 use App\Http\Controllers\Api\OrganisationController as ApiOrganisation;
 use App\Http\Controllers\Api\PredefinedListController as ApiPredefined;
-use App\Http\Controllers\Api\VotingTourController as ApiVotingTour;
 use App\Http\Controllers\Api\FileController as ApiFile;
 use App\Http\Controllers\Api\MessageController as ApiMessage;
 use App\Http\Controllers\Api\VoteController as ApiVote;
@@ -313,12 +312,19 @@ class OrganisationController extends BaseAdminController
             $sender = auth()->guard('backend')->user()->id;
 
             $bulkData = [
-                'sender_user_id'   => $sender,
-                'subject'          => __('custom.results_invite'),
-                'body'             => __('custom.greetings') .', <br><br>'. __('custom.ranking_for') .' '. $votingTour->name .' '. __('custom.was_done') .'<br>'. __('custom.results_available') .': <a href="'. route('list.ranking') .'">'. uptrans('custom.results') .'</a>'
+                'sender_user_id'    => $sender,
+                'recipient_filters' => [
+                    'org_statuses'  => Organisation::getApprovedStatuses()
+                ],
+                'subject'           => __('custom.results_invite'),
+                'body'              => __('custom.greetings') .', <br><br>'. __('custom.ranking_for') .' '. $votingTour->name .' '. __('custom.was_done') .'. <br>'. __('custom.results_available') .': <a href="'. route('list.ranking') .'">'. uptrans('custom.results') .'</a>'
             ];
 
             list($sent, $errors) = api_result(ApiMessage::class, 'sendBulkMessagesToOrg', $bulkData);
+
+            if (!empty($errors)) {
+                session()->flash('alert-info', __('custom.send_bulk_messages_failed'));
+            }
 
             $this->sendResultsEmails($votingTour);
         }

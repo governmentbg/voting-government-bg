@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use App\TradeRegister;
+use App\Libraries\CourtNomenclatures;
 
 /**
  * XML parser specific for trade register xml files format
@@ -89,6 +90,33 @@ class XMLParser implements IXMLParser
             return false;
         }
 
+        if (isset($org->SubDeed->LegalForm) && isset($org->SubDeed->LegalForm->attributes()['FieldEntryDate'])) {
+            $orgArray['reg_date'] = date('Y-m-d H:i:s', strtotime((string)$org->SubDeed->LegalForm->attributes()['FieldEntryDate']));           
+        }
+
+        if (isset($org->SubDeed->UIC) && isset($org->SubDeed->UIC->BulstatDeed)) {
+            $orgArray['description'] = '';
+            if(isset($org->SubDeed->UIC->BulstatDeed->Deed) && !empty($org->SubDeed->UIC->BulstatDeed->Deed)){
+                $orgArray['description'] .= 'дело номер: ' . (string)$org->SubDeed->UIC->BulstatDeed->Deed;
+            }
+            if(isset($org->SubDeed->UIC->BulstatDeed->Year) && !empty($org->SubDeed->UIC->BulstatDeed->Year)){
+                if(!empty($orgArray['description'])){
+                    $orgArray['description'] .= ', ';
+                }
+                $orgArray['description'] .= 'година: ' . (string)$org->SubDeed->UIC->BulstatDeed->Year;
+            }
+            if(isset($org->SubDeed->UIC->BulstatDeed->CourtCode) && !empty($org->SubDeed->UIC->BulstatDeed->CourtCode)){
+                if(!empty($orgArray['description'])){
+                    $orgArray['description'] .= ', ';
+                }
+                $orgArray['description'] .= 'съд: ' . CourtNomenclatures::getName((string)$org->SubDeed->UIC->BulstatDeed->CourtCode);
+            }
+
+            if(empty($orgArray['description'])){
+                unset($orgArray['description']);
+            }
+        }
+
         if (isset($org->SubDeed->Seat->Address)) {
             $address = $org->SubDeed->Seat->Address;
             $orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
@@ -169,6 +197,13 @@ class XMLParser implements IXMLParser
         }
         else{
             return false;
+        }
+
+        if (isset($org->SubDeed->BranchSeat) && isset($org->SubDeed->BranchSeat->attributes()['FieldEntryDate'])) {
+            $orgArray['reg_date'] = date('Y-m-d H:i:s', strtotime((string)$org->SubDeed->BranchSeat->attributes()['FieldEntryDate']));
+        }
+        else if(isset($org->SubDeed->BranchManagers[0]) && isset($org->SubDeed->BranchManagers[0]->attributes()['FieldEntryDate'])){
+            $orgArray['reg_date'] = date('Y-m-d H:i:s', strtotime((string)$org->SubDeed->BranchManagers[0]->attributes()['FieldEntryDate']));
         }
         
         if (isset($org->SubDeed->BranchSeat->Address)) {

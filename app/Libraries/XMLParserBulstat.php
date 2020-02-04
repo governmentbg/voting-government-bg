@@ -131,6 +131,10 @@ class XMLParserBulstat implements IXMLParser
             return false;
         }
 
+        if (isset($org->Subject->UIC) && isset($org->Subject->UIC->EntryTime) && !empty((string)$org->Subject->UIC->EntryTime)) {
+            $orgArray['reg_date'] = date('Y-m-d H:i:s', strtotime((string)$org->Subject->UIC->EntryTime));
+        }
+
         $orgArray['representative'] = '';
         $notFirst = false;
         foreach($org->Managers as $key => $manager) {
@@ -193,7 +197,7 @@ class XMLParserBulstat implements IXMLParser
     private function isAssociationBranch($org)
     {
         return isset($org->Belonging) && isset($org->Belonging->RelatedSubject->LegalEntitySubject) &&
-                $org->Belonging->RelatedSubject->LegalEntitySubject->LegalForm->Code == 486 &&
+                in_array($org->Belonging->RelatedSubject->LegalEntitySubject->LegalForm->Code, self::LEGAL_FORMS) &&
                 in_array($org->Belonging->Type->Code, self::VALID_BELONG_TYPES);
     }
 

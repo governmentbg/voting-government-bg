@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class PredefinedOrganisation extends Model
 {
@@ -54,5 +55,33 @@ class PredefinedOrganisation extends Model
         return [
             self::STATUS_ENTERED,
         ];
+    }
+
+    public function setRegDateAttribute($value)
+    {
+        if(empty($value) || !isset($value)){
+            $this->attributes['reg_date'] = null;
+            return;
+        }
+        
+        try{
+            $this->attributes['reg_date'] = Carbon::parse($value)->format('Y-m-d H:i:s');
+        } catch (\Exception $ex) {
+            $this->attributes['reg_date'] = null;
+        }
+    }
+
+    public function setStatusDateAttribute($value)
+    {
+        if(empty($value) || !isset($value)){
+            $this->attributes['status_date'] = null;
+            return;
+        }
+        
+        try{
+            $this->attributes['status_date'] = Carbon::parse($value)->format('Y-m-d H:i:s');
+        } catch (\Exception $ex) {
+            $this->attributes['status_date'] = null;
+        }
     }
 }

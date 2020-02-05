@@ -101,7 +101,12 @@ class PopulateList extends Command
                 
                 foreach($columns as $index => $column) {
                     if(isset($org[$index])){
-                        $predefinedOrg->{$column} = $org[$index];
+                        if($index == 20){ //description column
+                            $predefinedOrg->{$column} = $this->getOrgDescription($org);
+                        }
+                        else{
+                            $predefinedOrg->{$column} = $org[$index];
+                        }
                     }
                 }
                 
@@ -116,8 +121,13 @@ class PopulateList extends Command
                             $existingOrg = PredefinedOrganisation::where('eik', $predefinedOrg->eik)->first(); 
                             if($existingOrg){
                                 foreach($columns as $index2 => $column) {
-                                    if(isset($org[$index])){
-                                        $existingOrg->{$column} = $org[$index2];
+                                    if(isset($org[$index2])){
+                                        if($index2 == 20){ //description column
+                                            $existingOrg->{$column} = $this->getOrgDescription($org);
+                                        }
+                                        else{
+                                            $existingOrg->{$column} = $org[$index2];
+                                        }
                                     }
                                 }
                                 $existingOrg->save();   
@@ -144,5 +154,24 @@ class PopulateList extends Command
             DB::rollback();
             $this->error($e->getMessage());
         }
+    }
+
+    private function getOrgDescription($org)
+    {
+        $desc = '';
+        if(isset($org[14]) && !empty($org[14])){
+            $desc .= 'дело номер:' . $org[14];
+        }
+        if(isset($org[15]) && !empty($org[15])){
+            $desc .= ', година: ' . $org[15];
+        }
+        if(isset($org[13]) && !empty($org[13])){
+            $desc .= ', съд: ' . $org[13];
+        }
+        if(isset($org[20]) && !empty($org[20])){
+            $desc .= ', Наименование на УО: ' .  $org[20];
+        }
+
+        return $desc;
     }
 }

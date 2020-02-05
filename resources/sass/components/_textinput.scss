@@ -6,4 +6,9 @@
     border-radius: 0;
     text-decoration: none;
     width: 100%;
+    height: 30px;
+
+    &::-ms-clear {
+        display: none;
+    }
 }

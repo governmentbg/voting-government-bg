@@ -72,12 +72,10 @@
                     </a>
                 </div>
                 @if (isset($showRegister) && $showRegister)
-                    <div class="form-group row p-t-15">
-                        <div class="col-lg-12">
-                            <a href="mailto:{{ config('mail.mailto') }}">
-                                <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
-                            </a>
-                        </div>
+                    <div class="form-group row p-t-15 m-l-none">
+                        <a href="mailto:{{ config('mail.mailto') }}">
+                            <h3 class="f-s-14">{{ __('custom.contact_committee') }}</h3>
+                        </a>
                     </div>
                 @endif
             </div>

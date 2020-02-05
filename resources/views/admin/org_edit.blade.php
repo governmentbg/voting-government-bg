@@ -62,19 +62,19 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 col-xs-12">{{ __('custom.representative') }}:</label>
-                        <div class="row col-lg-8">
-                            <div class="col-lg-12">
-                                <input
-                                    type="text"
-                                    class="input-box"
+                        <div class="col-lg-8 col-md-12 col-xs-12">
+                            <div class="nano txt-area-height w-95">
+                                <textarea
+                                    class="txt-area no-outline p-a-5 nano-content"
                                     name="representative"
-                                    value="{{ old('representative', $orgData->representative) }}"
+                                    rows="5"
+                                    cols="40"
                                     maxlength="512"
                                     required
                                     title="{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}"
-                                >
-                                <span class="error">{{ $errors->first('representative') }}</span>
+                                >{{ old('representative', $orgData->representative) }}</textarea>
                             </div>
+                            <span class="error">{{ $errors->first('representative') }}</span>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -247,12 +247,6 @@
                             </div>
                         </div>
                         <div class="form-group row text-left">
-                            <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
-                            <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->reg_number) ? $orgDataPredBul->reg_number : '' }}</label>
-                            </div>
-                        </div>
-                        <div class="form-group row text-left">
                             <label class="col-lg-5 col-xs-12">{{ __('custom.city') }}:</label>
                             <div class="row col-lg-7">
                                 <label class="col-sm-12 col-xs-12" >{{ isset($orgDataPredBul->city) ? $orgDataPredBul->city : '' }}</label>
@@ -318,23 +312,6 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group row text-left">
-                            <label class="col-lg-5 col-xs-12">{{ __('custom.status_date') }}:</label>
-                            <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredBul->status_date) ? $orgDataPredBul->status_date : '' }}</label>
-                            </div>
-                        </div>
-                        <div class="form-group row text-left">
-                            <label class="col-lg-5 col-xs-12">{{ __('custom.public_benefits') }}:</label>
-                            <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">
-                                {{ isset($orgDataPredBul->public_benefits)
-                                    ? ($orgDataPredBul->public_benefits ? __('custom.public_benefits_yes') : __('custom.public_benefits_no'))
-                                    : ''
-                                }}
-                                </label>
-                            </div>
-                        </div>
                     @endif
                 </div>
                 <div class="col-lg-1 inline-block"></div>
@@ -357,12 +334,6 @@
                             <label class="col-lg-5 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
                             <div class="row col-lg-7">
                                 <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->eik) ? $orgDataPredTrade->eik : '' }}</label>
-                            </div>
-                        </div>
-                        <div class="form-group row text-left">
-                            <label class="col-lg-5 col-xs-12">{{ __('custom.reg_number') }}:</label>
-                            <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->reg_number) ? $orgDataPredTrade->reg_number : '' }}</label>
                             </div>
                         </div>
                         <div class="form-group row text-left">
@@ -429,12 +400,6 @@
                                         : (isset($orgDataPredTrade->status) ? $orgDataPredTrade->status : '')
                                 }}
                                 </label>
-                            </div>
-                        </div>
-                        <div class="form-group row text-left">
-                            <label class="col-lg-5 col-xs-12">{{ __('custom.status_date') }}:</label>
-                            <div class="row col-lg-7">
-                                <label class="col-sm-12 col-xs-12">{{ isset($orgDataPredTrade->status_date) ? $orgDataPredTrade->status_date : '' }}</label>
                             </div>
                         </div>
                         <div class="form-group row text-left">

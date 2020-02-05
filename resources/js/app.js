@@ -362,6 +362,7 @@ $(function() {
                             input.val(result.data[field]);
                             if (input.val() != '') {
                                 input[0].setCustomValidity('');
+                                input.css('box-shadow', 'none');
                             }
                         });
                     }

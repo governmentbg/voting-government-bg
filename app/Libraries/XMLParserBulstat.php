@@ -16,6 +16,8 @@ class XMLParserBulstat implements IXMLParser
     //    - Читалищно сдружение – 1586
     const LEGAL_FORMS = ['485' , '486', '488', '1307', '1586'];
 
+    const COURT_LEGAL_FORM = 502;
+
     //435 - юридическо лице
     const LEGAL_STATUTE = 435;
 
@@ -39,11 +41,14 @@ class XMLParserBulstat implements IXMLParser
 
     private $addressTypes;
 
+    private $courtNames;
+
     public function __construct()
     {
         $this->loadEkatte();
         $this->loadManagerPositions();
         $this->loadAddressTypes();
+        $this->loadCourtNames();
     }
 
     /**
@@ -115,6 +120,37 @@ class XMLParserBulstat implements IXMLParser
         return $result;
     }
 
+    public function getCourtNomenclatures()
+    {
+        if (!isset($this->data->StateOfPlay)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($this->data->StateOfPlay  as $org) {
+            if (isset($org->Subject) && isset($org->Subject->UIC) && $this->isCourt($org)) {
+                $data = [];
+                if (isset($org->Subject->UIC)) {
+                    $data['eik'] = (string) $org->Subject->UIC->UIC;
+                } else {
+                    continue;
+                }
+
+                if (isset($org->Subject->LegalEntitySubject) && isset($org->Subject->LegalEntitySubject->CyrillicFullName)) {
+                    $data['name'] = (string) $org->Subject->LegalEntitySubject->CyrillicFullName;
+                } else {
+                    continue;
+                }
+             
+                if(!empty($data)){
+                    $result[$data['eik']] = $data;
+                }
+            }
+        }
+
+        return $result;
+    }
+
     public function getRelevantFields($org)
     {
         $orgArray = [];
@@ -165,7 +201,7 @@ class XMLParserBulstat implements IXMLParser
                 if(!empty($orgArray['description'])){
                     $orgArray['description'] .= ', ';
                 }
-                $orgArray['description'] .= 'съд(ЕИК): ' . (string)$org->Event->Case->Court->Code;
+                $orgArray['description'] .= 'съд: ' . $this->getCourtName((string)$org->Event->Case->Court->Code);
             }
 
             if(empty($orgArray['description'])){
@@ -217,6 +253,12 @@ class XMLParserBulstat implements IXMLParser
             $this->isAssociationBranch($org);
     }
 
+    private function isCourt($org)
+    {
+        return isset($org->Subject->LegalEntitySubject->LegalForm) &&
+            (string)$org->Subject->LegalEntitySubject->LegalForm->Code == self::COURT_LEGAL_FORM;
+    }
+
     private function isAssociationBranch($org)
     {
         return isset($org->Belonging) && isset($org->Belonging->RelatedSubject->LegalEntitySubject) &&
@@ -257,6 +299,12 @@ class XMLParserBulstat implements IXMLParser
         $this->addressTypes = json_decode($json, true);
     }
 
+    private function loadCourtNames()
+    {
+        $json = Storage::disk('local')->get('/nomenclatures/court_names.json');
+        $this->courtNames = json_decode($json, true);
+    }
+
     private function getManagerPostion($code)
     {
         if(empty($code)){
@@ -285,5 +333,22 @@ class XMLParserBulstat implements IXMLParser
         }
 
         return '';
+    }
+
+    private function getCourtName($code)
+    {
+        if(empty($code)){
+            return '';
+        }
+
+
+        if(isset($this->courtNames[$code])){
+            return $this->courtNames[$code]['name'];
+        }else{
+            logger('Court name not found. EIK: ' . $code);
+        }
+
+
+        return $code;
     }
 }

@@ -56,7 +56,7 @@ class UpdateBulstatRegister implements ShouldQueue
                 //inactive or deleted UICs
                 if(isset($subjectUIC->Status) && ($subjectUIC->Status == self::STATUS_INACTIVE || $subjectUIC->Status == self::STATUS_DELETED)){
                     $status = (string)$subjectUIC->Status == self::STATUS_INACTIVE ? BulstatRegister::STATUS_INACTIVE : BulstatRegister::STATUS_ARCHIVED;
-                    BulstatRegister::where('eik', (string)$subjectUIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
+                    BulstatRegister::where('eik', (string)$subjectUIC->UIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
                 }
             }
 

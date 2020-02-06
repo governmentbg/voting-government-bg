@@ -330,6 +330,8 @@ $('input[required], textarea[required]').on('invalid', function() {
     if (message) {
         this.setCustomValidity(message);
     }
+    let inset = $(this).is('input') ? '' : 'inset ';
+    $(this).css('box-shadow', inset +'0 0 1.5px 1px red');
 });
 
 $('input[required], textarea[required]').on('input', function() {
@@ -339,7 +341,7 @@ $('input[required], textarea[required]').on('input', function() {
 
 $('input[required], textarea[required]').on('focusout', function() {
     if ($(this).val() == '') {
-        let inset = ($(this).is('input')) ? '' : 'inset ';
+        let inset = $(this).is('input') ? '' : 'inset ';
         $(this).css('box-shadow', inset +'0 0 1.5px 1px red');
     } else {
         $(this).css('box-shadow', 'none');

@@ -6,8 +6,8 @@
 
 @include('components.status')
 @if (!empty($orgData))
-    <div class="row">
-        <div class="col-lg-12 p-l-40 m-b-30"><h3>{{ __('custom.data_for') }} {{ $orgData->name }}</h3></div>
+    <div class="row m-b-1r">
+        <div class="col-lg-12 p-l-40"><h3>{{ __('custom.data_for') }} {{ $orgData->name }}</h3></div>
     </div>
     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.org_update', ['id' => $orgData->id]) }}" class="edit-org">
         <div class="row m-l-5">
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-4" title="{{ __('custom.av_hint') }}">{{ __('custom.in_av') }}:</label>
+                        <label class="col-sm-4 col-xs-12" title="{{ __('custom.av_hint') }}">{{ __('custom.in_av') }}:</label>
                         <div class="col-lg-8">
                             @include('components.checkbox', ['name' => 'in_av', 'checked' => old('in_av', $orgData->in_av)])
                         </div>
@@ -137,8 +137,8 @@
             <div class="col-lg-6">
                 <div class="col-md-10">
                     <div class="form-group row">
-                        <label class="col-lg-4 col-md-6 col-xs-6">{{ __('custom.experience_info') }}:</label>
-                        <div class="col-lg-8 col-md-12 col-xs-12">
+                        <label class="col-sm-4 col-xs-12">{{ __('custom.experience_info') }}:</label>
+                        <div class="col-lg-8 col-md-12 col-xs-12 p-r-none">
                             <div class="nano txt-area-height">
                                 <textarea
                                     class="txt-area no-outline p-a-5 nano-content"
@@ -152,8 +152,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-4 col-md-6 col-xs-6">{{ __('custom.reference_materials') }}:</label>
-                        <div class="col-lg-8 col-md-12 col-xs-12">
+                        <label class="col-sm-4 col-xs-12">{{ __('custom.reference_materials') }}:</label>
+                        <div class="col-lg-8 col-md-12 col-xs-12 p-r-none">
                             <div class="nano txt-area-height">
                                 <textarea
                                     class="txt-area no-outline p-a-5 nano-content"
@@ -167,8 +167,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-4">{{ __('custom.status') }}:</label>
-                        <div class="col-lg-8 headerDropdown">
+                        <label class="col-sm-4 col-xs-12">{{ __('custom.status') }}:</label>
+                        <div class="col-lg-8 p-r-none headerDropdown">
                             <select name="status" class="ams-dropdown custom-select w-100 edit-status" data-old-status="{{ $orgData->status }}">
                                 @if (isset($statuses))
                                     @foreach ($statuses as $statusIndex => $status)

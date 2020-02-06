@@ -11,60 +11,60 @@
     </div>
     <div class="row m-l-5">
         <div class="col-lg-6">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 {{ csrf_field() }}
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.eik_bulstat') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <span>{{ $organisation->eik }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.org_name') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <span>{{ $organisation->name }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.management_address') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <span>{{ $organisation->address }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.representative') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <span>{{ $organisation->representative }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.registered_at') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <label>{{ translate_date(date('d F Y', strtotime($organisation->created_at))) }}</label>
                         <span>{{ date('H:i', strtotime($organisation->created_at)) }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.phone_number') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <span>{{ $organisation->phone }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12" title="{{ __('custom.email_hint') }}">{{ __('custom.email') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         <span>{{ $organisation->email }}</span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12" title="{{ __('custom.av_hint') }}">{{ __('custom.in_av') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->in_av])
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-4 col-xs-12">{{ __('custom.candidate') }}:</label>
-                    <div class="col-sm-8">
+                    <div class="col-lg-8">
                         @include('components.checkbox', ['readonly' => true, 'checked' => $organisation->is_candidate])
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                                 name=""
                                 rows="5"
                                 cols="40"
-                                readonly="true"
+                                readonly="readonly"
                             >{{ $organisation->description }}</textarea>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                                 name=""
                                 rows="5"
                                 cols="40"
-                                readonly="true"
+                                readonly="readonly"
                             >{{ $organisation->references }}</textarea>
                         </div>
                     </div>

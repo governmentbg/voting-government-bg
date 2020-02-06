@@ -55,17 +55,19 @@ class UpdateBulstatRegister implements ShouldQueue
             {
                 //inactive or deleted UICs
                 if(isset($subjectUIC->Status) && ($subjectUIC->Status == self::STATUS_INACTIVE || $subjectUIC->Status == self::STATUS_DELETED)){
-                    $status = $subjectUIC->Status == self::STATUS_INACTIVE ? BulstatRegister::STATUS_INACTIVE : BulstatRegister::STATUS_ARCHIVED;
-                    BulstatRegister::where('eik', $subjectUIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
+                    $status = (string)$subjectUIC->Status == self::STATUS_INACTIVE ? BulstatRegister::STATUS_INACTIVE : BulstatRegister::STATUS_ARCHIVED;
+                    BulstatRegister::where('eik', (string)$subjectUIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
                 }
             }
 
-            $data = $parser->getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
-            if(!empty($data) && $data){
-                //$eik = $subjectUIC->UIC;
-                $eik = $data['eik'];
-                unset($data['eik']);
-                BulstatRegister::updateOrCreate(['eik' => $eik], $data);
+            if($parser->isOrgRelevant($this->data->SendSubscriptionRequest->StateOfPlay)){
+                $data = $parser->getRelevantFields($this->data->SendSubscriptionRequest->StateOfPlay);
+                if(!empty($data) && $data){
+                    //$eik = $subjectUIC->UIC;
+                    $eik = $data['eik'];
+                    unset($data['eik']);
+                    BulstatRegister::updateOrCreate(['eik' => $eik], $data);
+                }
             }
 
             $requestRec = SubscriptionRequest::bulstat()->where('UID', $this->data->UID)->first();

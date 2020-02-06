@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-
-Route::middleware(['api'])->group(function () {
+Route::post('organisation/getData', 'Api\OrganisationController@getData');
+Route::middleware(['auth:api'])->group(function () {
     Route::post('user/add', 'Api\UserController@add');
     Route::post('user/edit', 'Api\UserController@edit');
     Route::post('user/generatePasswordHash', 'Api\UserController@generatePasswordHash');
@@ -53,7 +53,6 @@ Route::middleware(['api'])->group(function () {
     Route::post('organisation/register', 'Api\OrganisationController@register');
     Route::post('organisation/edit', 'Api\OrganisationController@edit');
     Route::post('organisation/search', 'Api\OrganisationController@search');
-    Route::post('organisation/getData', 'Api\OrganisationController@getData');
     Route::post('organisation/getFileList', 'Api\OrganisationController@getFileList');
     Route::post('organisation/listStatuses', 'Api\OrganisationController@listStatuses');
     Route::post('organisation/listCandidateStatuses', 'Api\OrganisationController@listCandidateStatuses');

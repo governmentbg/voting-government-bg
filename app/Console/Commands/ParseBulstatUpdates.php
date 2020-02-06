@@ -9,6 +9,11 @@ use App\BulstatRegister;
 
 class ParseBulstatUpdates extends Command
 {
+    //UIC - statuses
+    const STATUS_ACTIVE = 'Y'; //Y => Актуален код
+    const STATUS_DELETED = 'D'; //D => Изтрит код
+    const STATUS_INACTIVE = 'N'; //N => Неактуален код
+
     /**
      * The name and signature of the console command.
      *
@@ -60,6 +65,15 @@ class ParseBulstatUpdates extends Command
                     continue;
                 }
                 $this->info('Processing subscription service update with UID: ' . $subscriptionRequest->uid);
+
+                foreach((array)$parser->getUicUpdates() as $subjectUIC)
+                {
+                    //inactive or deleted UICs
+                    if(isset($subjectUIC->Status) && ($subjectUIC->Status == self::STATUS_INACTIVE || $subjectUIC->Status == self::STATUS_DELETED)){
+                        $status = (string)$subjectUIC->Status == self::STATUS_INACTIVE ? BulstatRegister::STATUS_INACTIVE : BulstatRegister::STATUS_ARCHIVED;
+                        BulstatRegister::where('eik', (string)$subjectUIC->UIC)->update(['status' => $status, 'status_date' => date('Y-m-d H:i:s')]);
+                    }
+                }
 
                 $data = $parser->getParsedData();
                 foreach($data as $key => $org) {

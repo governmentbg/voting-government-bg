@@ -35,6 +35,8 @@ class XMLParserBulstat implements IXMLParser
 
     private $data;
 
+    private $uicUpdates;
+
     private $ekatte;
 
     private $managerPostitions;
@@ -90,7 +92,11 @@ class XMLParserBulstat implements IXMLParser
 
         if(isset($this->data->Body) && isset($this->data->Body->SendSubscription) && isset($this->data->Body->SendSubscription->SendSubscriptionRequest)){
             //get corrent node if it is update by subscription service
+
             $this->data = $this->data->Body->SendSubscription->SendSubscriptionRequest;
+            if(isset($this->data->Body->SendSubscription->SendSubscriptionRequest->SubjectUICs)){
+                $this->uicUpdates = $this->data->Body->SendSubscription->SendSubscriptionRequest->SubjectUICs;
+            }
         }
 
         return $this->data === false ? false : true;
@@ -244,13 +250,18 @@ class XMLParserBulstat implements IXMLParser
         return $orgArray;
     }
 
-    private function isOrgRelevant($org)
+    public function isOrgRelevant($org)
     {
         return isset($org->Subject->LegalEntitySubject->LegalForm) && 
             in_array((string)$org->Subject->LegalEntitySubject->LegalForm->Code, self::LEGAL_FORMS) &&
             (isset($org->Subject->LegalEntitySubject->LegalStatute) ?
             $org->Subject->LegalEntitySubject->LegalStatute->Code == self::LEGAL_STATUTE : true) ||
             $this->isAssociationBranch($org);
+    }
+
+    public function getUicUpdates()
+    {
+        return $this->uicUpdates;
     }
 
     private function isCourt($org)

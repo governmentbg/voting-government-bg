@@ -59,9 +59,9 @@ class PredefinedListController extends ApiController
             'phone'           => 'nullable|string|max:40',
             'status'          => 'nullable|string|max:30',
             'status_date'     => 'nullable',
-            'email'           => 'nullable|string|email',
-            'goals'           => 'nullable|string|max:8000',
-            'tools'           => 'nullable|string|max:8000',
+            'email'           => 'nullable|string',
+            'goals'           => 'nullable|string',
+            'tools'           => 'nullable|string',
             'description'     => 'nullable|string|max:8000',
             'public_benefits' => 'nullable|bool',
         ];

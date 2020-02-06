@@ -7,6 +7,8 @@ use App\Libraries\XMLParser;
 use App\SubscriptionRequest;
 use App\TradeRegister;
 use App\ActionsHistory;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Api\PredefinedListController as ApiPredefinedList;
 
 use Carbon\Carbon;
 use \jamesiarmes\PhpEws\Client;
@@ -112,7 +114,7 @@ class ImportFromMail extends Command
             $response = $client->FindItem($request);
             $response_messages = $response->ResponseMessages->FindItemResponseMessage;
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             foreach ($response_messages as $response_message) {
                 if ($response_message->ResponseClass != ResponseClassType::SUCCESS) {
@@ -254,17 +256,25 @@ class ImportFromMail extends Command
 
                     foreach ($parsedData as $singleRow) {
                         try {
-                            TradeRegister::updateOrCreate(['eik' => $singleRow['eik']], $singleRow);
+                            //TradeRegister::updateOrCreate(['eik' => $singleRow['eik']], $singleRow);
+                            $params['data'] = $singleRow;
+                            $params['type'] = TradeRegister::PREDEFINED_LIST_TYPE;
+                            list($res, $errors) = api_result(ApiPredefinedList::class, 'update', $params);
+                            if(!empty($errors)){
+                                $this->error(var_export($errors, true));
+                                logger('Trade register update error!' . var_export($errors, true));
+                                break;
+                            }
                         } catch (\Exception $ex) {
                             $this->error($ex->getMessage());
-                            \DB::rollback();
+                            DB::rollback();
                         }
                     }
 
                     $bar->advance();
                 }
 
-                \DB::commit();
+                DB::commit();
 
                 $bar->finish();
 
@@ -276,7 +286,7 @@ class ImportFromMail extends Command
                 $success = true;
             }
         } catch (\Exception $e) {
-            \DB::rollback();
+            DB::rollback();
             $this->error($e->getMessage());
         }
 

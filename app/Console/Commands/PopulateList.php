@@ -122,10 +122,10 @@ class PopulateList extends Command
                             if($existingOrg){
                                 foreach($columns as $index2 => $column) {
                                     if(isset($org[$index2])){
-                                        if($index2 == 20){ //description column
+                                        if($index2 == 20 && !empty($this->getOrgDescription($org))){ //description column
                                             $existingOrg->{$column} = $this->getOrgDescription($org);
                                         }
-                                        else{
+                                        else if(!empty($org[$index2])){
                                             $existingOrg->{$column} = $org[$index2];
                                         }
                                     }

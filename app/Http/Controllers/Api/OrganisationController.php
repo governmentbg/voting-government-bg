@@ -56,7 +56,7 @@ class OrganisationController extends ApiController
                 'name'              => 'required|string|max:255',
                 'address'           => 'required|string|max:512',
                 'representative'    => 'required|string|max:512',
-                'email'             => 'required|email',
+                'email'             => 'required|email|unique:organisations,email,NULL,id,voting_tour_id,' . $votingTour->id,
                 'phone'             => 'required|string|max:40',
                 'in_av'             => 'nullable|bool',
                 'is_candidate'      => 'nullable|bool',

@@ -45,7 +45,7 @@
                 <div class="table-wrapper nano public-table" data-vote-count="{{ $votingCount }}">
                     <div class="tableFixHead nano-content js-org-table">
                         <table
-                            class="table table-striped table-responsive ams-table ranking js-orgs"
+                            class="table table-striped table-responsive ams-table ranking js-orgs {{ isset($fullWidth) && $fullWidth ? '' : 'public' }}"
                             data-ajax-url="{{ isset($ajaxMethod) ? $ajaxMethod : '' }}"
                         >
                             <thead>

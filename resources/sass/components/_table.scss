@@ -16,9 +16,11 @@
     //overflow: hidden;
     margin-bottom: 0;
 
-    th, td {
-        padding-left: 0.50rem;
-        padding-right: 0.50rem;
+    &.public {
+        th, td {
+            padding-left: 0.50rem;
+            padding-right: 0.50rem;
+        }
     }
 
     thead {
@@ -75,9 +77,9 @@
         &.ranking > tbody > tr.for-ballotage ~ tr.for-ballotage > td, &.ranking > tbody > tr.dropped-out ~ tr.dropped-out > td {
             border-top: none;
         }
+    }
 
-        &.public > thead > tr > th, &.ranking > thead > tr > th {
-            border: none;
-        }
+    &.public > thead > tr > th, &.ranking > thead > tr > th {
+        border: none;
     }
 }

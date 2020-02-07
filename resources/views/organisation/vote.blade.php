@@ -7,7 +7,7 @@
 
 @if (!empty($orgList))
     <div class="row p-l-15 p-r-15">
-        <div class="offset-lg-2 offset-md-2 col-lg-10 col-md-10 col-sm-12">
+        <div class="offset-lg-1 offset-md-1 col-lg-11 col-md-11 col-sm-12">
             <div class="row">
                 <h2 class="color-dark"><b>{{ __('custom.voting_title') }}</b></h2>
             </div>
@@ -19,28 +19,33 @@
                 ])
                 {{ csrf_field() }}
                 <div class="row">
-                    <div class="col-md-4 vote-box-outline">
+                    <div class="col-md-5 vote-box-outline">
                         <h3 class="m-t-15">{{ __('custom.registered_participants') }}</h3>
                         <hr class="hr-small">
                         <div class="display-flex m-b-8">
-                            <input type="text" name="org_name" id="filter_org" placeholder="{{__('custom.search')}}" autocomplete="off" class="search-box float-right w-100 no-outline">
+                            <input type="text" name="org_name" id="filter_org" placeholder="{{__('custom.search')}}" autocomplete="off"
+                                class="search-box vote-search-height float-right w-100 no-outline">
                         </div>
                         <div class="nano vote-height m-b-15">
-                        <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box nano-content" size="14">
-                            @if (!empty($orgList))
-                                @foreach ($orgList as $singleOrg)
-                                    @if (!empty($latestVoteData))
-                                        @if (!in_array($singleOrg->id, $latestVoteData))
-                                            <option value="{{ $singleOrg->id }}">{{ $singleOrg->name .' - '. $singleOrg->eik }}</option>
+                            <select name="organisations" multiple="multiple" id="vote_organisations" class="vote-box nano-content" size="14">
+                                @if (!empty($orgList))
+                                    @foreach ($orgList as $singleOrg)
+                                        @if (!empty($latestVoteData))
+                                            @if (!in_array($singleOrg->id, $latestVoteData))
+                                                <option value="{{ $singleOrg->id }}" title="{{ $singleOrg->name .' - '. $singleOrg->eik }}">
+                                                    {{ $singleOrg->name .' - '. $singleOrg->eik }}
+                                                </option>
+                                            @endif
+                                        @else
+                                            <option value="{{ $singleOrg->id }}" title="{{ $singleOrg->name .' - '. $singleOrg->eik }}">
+                                                {{ $singleOrg->name .' - '. $singleOrg->eik }}
+                                            </option>
                                         @endif
-                                    @else
-                                        <option value="{{ $singleOrg->id }}">{{ $singleOrg->name .' - '. $singleOrg->eik }}</option>
-                                    @endif
-                                @endforeach
-                            @else
-                                <option disabled>{{ __('custom.org_list_not_available') }}</option>
-                            @endif
-                        </select>
+                                    @endforeach
+                                @else
+                                    <option disabled>{{ __('custom.org_list_not_available') }}</option>
+                                @endif
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-1 arrows-position">
@@ -51,7 +56,7 @@
                             <img class="arrow-left c-darkBlue c-pointer" src="{{ asset('img/vote_arrow.svg') }}"  id="js-remove-org" height="60px" width="60px" />
                         </div>
                     </div>
-                    <div class="col-md-4 vote-box-outline">
+                    <div class="col-md-5 vote-box-outline">
                         <h3 class="m-t-15">{{ __('custom.selected_participants') }} {{ untrans('custom.max_n', 1, ['count' => $maxVotes]) }}</h3>
                         <hr class="hr-small">
                         <div class="m-t-53 nano vote-height m-b-15">
@@ -59,7 +64,9 @@
                                 @if (!empty($latestVoteData))
                                     @foreach ($orgList as $singleOrg)
                                         @if (in_array($singleOrg->id, $latestVoteData))
-                                            <option value="{{ $singleOrg->id }}">{{ $singleOrg->name .' - '. $singleOrg->eik }}</option>
+                                            <option value="{{ $singleOrg->id }}" title="{{ $singleOrg->name .' - '. $singleOrg->eik }}">
+                                                {{ $singleOrg->name .' - '. $singleOrg->eik }}
+                                            </option>
                                         @endif
                                     @endforeach
                                 @endif
@@ -68,7 +75,7 @@
                     </div>
                 </div>
                 <div class="form-group row mt-2">
-                    <div class="col-lg-9 col-md-9 p-r-none text-center">
+                    <div class="col-lg-11 col-md-11 text-center">
                         @include('components.button', ['buttonLabel' => __('custom.vote'), 'id' => 'votebtn', 'disabled' => true])
                     </div>
                 </div>

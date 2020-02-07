@@ -14,12 +14,18 @@ $('#vote_organisations').dblclick(function() {
     $('#vote_organisations option:selected').remove().appendTo($('#votefor'));
     addRowNumber(selected);
     checkVoteSize();
+
+    // load nanoscroller
+    $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });
 
 $('#votefor').dblclick(function() {
     $('#votefor option:selected').remove().appendTo($('#vote_organisations')).find('span').remove();
     reorderRowNumbers();
     checkVoteSize();
+
+    // load nanoscroller
+    $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });
 
 $('#js-add-org').click(function() {
@@ -27,12 +33,18 @@ $('#js-add-org').click(function() {
     $('#vote_organisations option:selected').remove().appendTo($('#votefor'));
     addRowNumber(selected);
     checkVoteSize();
+
+    // load nanoscroller
+    $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });
 
 $('#js-remove-org').click(function() {
     $('#votefor option:selected').remove().appendTo($('#vote_organisations')).find('span').remove();
     reorderRowNumbers();
     checkVoteSize();
+
+    // load nanoscroller
+    $('.nano').nanoScroller({ sliderMaxHeight: 100 });
 });
 
 $(document).ready(function() {
@@ -62,6 +74,7 @@ function addRowNumber(selectedOrgs) {
     selectedOrgs.each(function(i, org) {
         let orgInList = $('#votefor option[value="'+ $(org).attr('value') +'"]');
         let index = orgInList.index() + 1;
+        $(org).find('span').remove();
         $('#votefor option[value="' + $(org).attr('value') +'"]').html('<span>'+ index +' - </span>' + $(org).text());
     });
 }

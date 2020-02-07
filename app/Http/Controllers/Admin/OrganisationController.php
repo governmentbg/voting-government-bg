@@ -118,6 +118,9 @@ class OrganisationController extends BaseAdminController
             $temp = fopen($tempname, 'w+');
             $path = stream_get_meta_data($temp)['uri'];
 
+            // add bom UTF-8
+            fputs($temp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+
             fputcsv($temp, [
                 __('custom.organisation'),
                 __('custom.eik'),

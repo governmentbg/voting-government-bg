@@ -78,6 +78,9 @@ class PublicController extends BaseFrontendController
                 $temp = fopen($tempname, 'w+');
                 $path = stream_get_meta_data($temp)['uri'];
 
+                // add bom UTF-8
+                fputs($temp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+
                 fputcsv($temp, [
                     __('custom.organisation'),
                     __('custom.candidate'),
@@ -158,6 +161,9 @@ class PublicController extends BaseFrontendController
                 $temp = fopen($tempname, 'w+');
                 $path = stream_get_meta_data($temp)['uri'];
 
+                // add bom UTF-8
+                fputs($temp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+
                 fputcsv($temp, [
                     __('custom.organisation'),
                     __('custom.candidate'),
@@ -231,6 +237,9 @@ class PublicController extends BaseFrontendController
                 $tempname = tempnam(sys_get_temp_dir(), 'csv_');
                 $temp = fopen($tempname, 'w+');
                 $path = stream_get_meta_data($temp)['uri'];
+
+                // add bom UTF-8
+                fputs($temp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
                 fputcsv($temp, [
                     __('custom.organisation'),
@@ -458,6 +467,9 @@ class PublicController extends BaseFrontendController
         $tempname = tempnam(sys_get_temp_dir(), 'csv_');
         $temp = fopen($tempname, 'w+');
         $path = stream_get_meta_data($temp)['uri'];
+
+        // add bom UTF-8
+        fputs($temp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
         $csvRow = [
             __('custom.number'),

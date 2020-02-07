@@ -308,19 +308,24 @@ $(document).on('click', '.additional-info', function() {
     $(this).closest('tr').css('font-weight', 'bold');
 
     $.ajax({
-        type: 'POST',
-        url: '/api/organisation/getData',
+        type: 'GET',
+        url: 'orgDataAjax',
         data: {
-            org_id: $(this).data('org-additional-id')
+            'org_id': $(this).data('org-additional-id')
         },
         success: function(result) {
-            $('#additional_header').text(result.data.name);
-            $('#additional_name').text(result.data.name);
-            $('#additional_eik').text(result.data.eik);
-            $('#additional_address').text(result.data.address);
-            $('#additional_representative').text(result.data.representative);
-            $('#additional_reg_date').text(result.data.created_at);
-            $('.hidetable').css('visibility', 'visible');
+            result = JSON.parse(result);
+            if (jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data)) {
+                $('#additional_header').text(result.data.name);
+                $('#additional_name').text(result.data.name);
+                $('#additional_eik').text(result.data.eik);
+                $('#additional_address').text(result.data.address);
+                $('#additional_representative').text(result.data.representative);
+                $('#additional_reg_date').text(result.data.created_at);
+                $('.hidetable').css('visibility', 'visible');
+            } else{
+                $('.hidetable').css('visibility', 'hidden');
+            }
         },
         fail: function(result) {
             $('.hidetable').css('visibility', 'hidden');

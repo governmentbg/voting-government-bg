@@ -9,6 +9,7 @@ class ApiController extends Controller
 {
     const ERROR_GENERAL = 'custom.general';
     const ERROR_MISSING = 'custom.unknown_error';
+    const ERROR_FORBIDDEN = 'custom.forbidden_error';
 
     /**
      * Handle 404 errors
@@ -18,6 +19,16 @@ class ApiController extends Controller
     public function handleMissingRoutes(Request $request)
     {
         return $this->errorResponse(null, [], 404, self::ERROR_MISSING);
+    }
+
+    /**
+     * Handle 403 errors
+     *
+     * @return json
+     */
+    public function handleForbiddenRoutes(Request $request)
+    {
+        return $this->errorResponse(null, [], 403, self::ERROR_FORBIDDEN);
     }
 
     /**

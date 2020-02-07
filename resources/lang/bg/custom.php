@@ -3,6 +3,7 @@
 return [
     'general'                          => 'Обща грешка',
     'unknown_error'                    => 'Непознат метод',
+    'forbidden_error'                  => 'Неразрешен достъп',
     'error_adding_tour'                => 'Грешка при добавяне на тур',
     'error_changing_status'            => 'Грешка при промяна на статус',
     'error_renaming_tour'              => 'Грешка при промяна на наименование',

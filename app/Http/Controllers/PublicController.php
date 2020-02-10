@@ -462,6 +462,21 @@ class PublicController extends BaseFrontendController
         ]);
     }
 
+    public function getOrgDataAjax(Request $request)
+    {
+        $orgId = $request->get('org_id', null);
+
+        $result = [];
+        if (isset($orgId) && is_numeric($orgId)) {
+            list($data, $errors) = api_result(ApiOrganisation::class, 'getData', ['org_id' => $orgId]);
+            if (!empty($data)) {
+                $result['data'] = (array) $data;
+            }
+        }
+
+        return json_encode($result);
+    }
+
     private function generateCSV($data) {
         $filename = 'voteResults.csv';
         $tempname = tempnam(sys_get_temp_dir(), 'csv_');

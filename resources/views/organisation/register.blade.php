@@ -8,7 +8,7 @@
     @include('components.modal', [
         'class' => 'm-w-1000',
         'title' => __('custom.terms_title'),
-        'bodyInclude'  => 'partials.terms-body'
+        'bodyInclude' => 'partials.terms-body'
     ])
     <form id="registerOrg" method="POST" enctype="multipart/form-data" action="{{ route('organisation.store') }}" class="m-t-lg p-sm">
         <div class="col-lg-12 col-md-11 col-xs-12 col-lg-offset-1 m-t-md">

@@ -11,11 +11,7 @@
     @include('components.status')
     <div class="col-lg-7 p-l-25">
         <div class="p-l-40">
-            <h3><b>{{ __('custom.online_voting_system') }}</b></h3>
-            <p>
-                {{ __('custom.front_text') }}<br><br>
-                {{ __('custom.front_text_2') }}
-            </p>
+            @include('partials.front-page-text')
         </div>
     </div>
     <div class="col-lg-5 p-l-40">

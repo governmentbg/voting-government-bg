@@ -221,7 +221,7 @@ class OrganisationController extends ApiController
                 'name'           => 'nullable|string|max:255',
                 'address'        => 'nullable|string|max:512',
                 'representative' => 'nullable|string|max:512',
-                'email'          => 'nullable|string|email|unique:organisations,email,NULL,id,voting_tour_id,' . $votingTour->id,
+                'email'          => 'nullable|string|email|unique:organisations,email,'. $orgId . ',id,voting_tour_id,' . $votingTour->id,
                 'phone'          => 'nullable|string|max:40',
                 'in_av'          => 'nullable|bool',
                 'is_candidate'   => 'nullable|bool',

@@ -36,6 +36,9 @@ class OrganisationController extends BaseAdminController
         $email = $request->offsetGet('email');
         $name = $request->offsetGet('name');
         $is_candidate = $request->offsetGet('is_candidate');
+        $in_av = $request->offsetGet('in_av');
+        $in_trr = $request->offsetGet('in_trr');
+        $edited = $request->offsetGet('edited');
         $reg_date_from = $request->offsetGet('reg_date_from');
         $reg_date_to = $request->offsetGet('reg_date_to');
 
@@ -56,6 +59,15 @@ class OrganisationController extends BaseAdminController
         }
         if (isset($is_candidate) && $is_candidate != 'all') {
             $allFilters['is_candidate'] = $is_candidate;
+        }
+        if (isset($in_av) && $in_av != 'all') {
+            $allFilters['in_av'] = $in_av;
+        }
+        if (isset($in_trr) && $in_trr != 'all') {
+            $allFilters['in_trr'] = $in_trr;
+        }
+        if (isset($edited) && $edited != 'all') {
+            $allFilters['edited'] = $edited;
         }
         if (isset($reg_date_from)) {
             $allFilters['reg_date_from'] = $reg_date_from;

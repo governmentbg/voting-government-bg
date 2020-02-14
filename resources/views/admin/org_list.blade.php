@@ -14,10 +14,10 @@
             @endif
 
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="row form-group">
                         <label for="status" class="col-form-label col-lg-3">{{ __('custom.status') }}:</label>
-                        <div class="headerDropdown col-lg-8">
+                        <div class="headerDropdown col-lg-7">
                             <select name="status" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>
                                 @if (isset($statuses))
@@ -33,9 +33,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <div class="row form-group">
-                        <label for="eik" class="col-form-label col-lg-3">{{ __('custom.eik') }}:</label>
+                        <label for="eik" class="col-form-label col-lg-4">{{ __('custom.eik') }}:</label>
                         <div class="col-lg-8">
                             <input
                                 type="text"
@@ -47,18 +47,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group row">
+                <div class="col-lg-4">
+                    <div class="offset-lg-1 form-group row">
                         <label for="is_candidate" class="col-form-label col-lg-3" style="min-width: 85px">{{ __('custom.candidate') }}:</label>
-                        <div class="headerDropdown col-lg-8">
+                        <div class="headerDropdown col-lg-7 p-l-none">
                             <select name="is_candidate" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>
                                 @if (isset($candidateStatuses))
-                                    @foreach ($candidateStatuses as $candidateIndex => $candidateStatuses)
+                                    @foreach ($candidateStatuses as $candidateIndex => $candidateStatus)
                                         <option
                                             value="{{$candidateIndex}}"
                                             {{ isset($filters['is_candidate']) && $filters['is_candidate'] == $candidateIndex ? 'selected' : '' }}
-                                        >{{ $candidateStatuses }}</option>
+                                        >{{ $candidateStatus }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -68,9 +68,29 @@
                 </div>
             </div>
             <div class="from-group row">
-                <div class="offset-lg-3 col-lg-5">
+                <div class="col-lg-4">
+                    <div class="row form-group">
+                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.in_av') }}:</label>
+                        <div class="headerDropdown col-lg-7">
+
+                            <select name="in_av" class="ams-dropdown custom-select js-drop-filter p-t-3">
+                                <option value="all">{{ __('custom.all') }}</option>
+                                @if (isset($candidateStatuses))
+                                    @foreach ($candidateStatuses as $statIndex => $statusName)
+                                        <option
+                                            value="{{ $statIndex }}"
+                                            {{ isset($filters['in_av'][0]) && $filters['in_av'][0] == $statIndex ? 'selected' : '' }}
+                                        >{{ $statusName }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
                     <div class="form-group row">
-                        <label for="email" class="col-form-label col-lg-3">{{ __('custom.email') }}:</label>
+                        <label for="email" class="col-form-label col-lg-4   ">{{ __('custom.email') }}:</label>
                         <div class="col-lg-8">
                             <input
                                 type="text"
@@ -84,9 +104,28 @@
                 </div>
             </div>
             <div class="from-group row">
-                <div class="offset-lg-3 col-lg-5">
+            <div class="col-lg-4">
+                    <div class="row form-group m-b-none">
+                        <label for="status" class="col-form-label col-lg-3 p-t-none">{{ __('custom.in_trr') }}:</label>
+                        <div class="headerDropdown col-lg-7">
+                            <select name="in_trr" class="ams-dropdown custom-select js-drop-filter p-t-3">
+                                <option value="all">{{ __('custom.all') }}</option>
+                                @if (isset($candidateStatuses))
+                                    @foreach ($candidateStatuses as $statIndex => $statusName)
+                                        <option
+                                            value="{{ $statIndex }}"
+                                            {{ isset($filters['in_trr'][0]) && $filters['in_trr'][0] == $statIndex ? 'selected' : '' }}
+                                        >{{ $statusName }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
                     <div class="row form-group">
-                        <label for="name" class="col-lg-3 col-form-label">{{ __('custom.org_name') }}:</label>
+                        <label for="name" class="col-lg-4 col-form-label">{{ __('custom.org_name') }}:</label>
                         <div class="col-lg-8">
                             <input
                                 type="text"
@@ -100,9 +139,28 @@
                 </div>
             </div>
             <div class="from-group row m-b-15">
-                <div class="offset-lg-3 col-lg-5">
+                <div class="col-lg-4">
+                    <div class="row form-group">
+                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.edited') }}:</label>
+                        <div class="headerDropdown col-lg-7">
+                            <select name="edited" class="ams-dropdown custom-select js-drop-filter p-t-3">
+                                <option value="all">{{ __('custom.all') }}</option>
+                                @if (isset($candidateStatuses))
+                                    @foreach ($candidateStatuses as $statIndex => $statusName)
+                                        <option
+                                            value="{{ $statIndex }}"
+                                            {{ isset($filters['edited'][0]) && $filters['edited'][0] == $statIndex ? 'selected' : '' }}
+                                        >{{ $statusName }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <i class="caret"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
                     <div class="form-group row p-l-none">
-                        <label for="registered_period" class="col-lg-3 col-form-label">{{ __('custom.registered_period') }}:</label>
+                        <label for="registered_period" class="col-lg-4 col-form-label">{{ __('custom.registered_period') }}:</label>
                         <div class="col-lg-8 display-inherit">
                             <!-- From -->
                             @include('components.datepicker', [
@@ -160,7 +218,7 @@
                 <table class="table table-striped ams-table voting-tours-list" data-toggle="table">
                     <thead>
                         <tr>
-                            <th class="w-30">
+                            <th class="w-21">
                                 <a
                                     class="c-white {{ app('request')->sort == 'name' ? 'sort-active' : '' }}"
                                     href="{{
@@ -175,7 +233,7 @@
                                 >{{ __('custom.organisation') }}<img src="{{ app('request')->sort == 'name' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/>
                                 </a>
                             </th>
-                            <th class="w-10">
+                            <th class="w-5">
                                 <a
                                     class="c-white {{ app('request')->sort == 'eik' ? 'sort-active' : '' }}"
                                     href="{{
@@ -217,7 +275,22 @@
                                     }}"
                                 >{{ __('custom.candidate') }}<img src="{{ app('request')->sort == 'is_candidate' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
-                            <th class="w-15">
+                            <th class="w-5">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'in_av' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'in_av', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.av') }}<img src="{{ app('request')->sort == 'is_candidate' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-5">{{ __('custom.predefined_list_type_tr') }}</th>
+                            <th class="w-12">
                                 <a
                                     class="c-white {{ app('request')->sort == 'created_at' ? 'sort-active' : '' }}"
                                     href="{{
@@ -230,6 +303,20 @@
                                         )
                                     }}"
                                 >{{ __('custom.registered_at') }}<img src="{{ app('request')->sort == 'created_at' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                            </th>
+                            <th class="w-12">
+                                <a
+                                    class="c-white {{ app('request')->sort == 'updated_at' ? 'sort-active' : '' }}"
+                                    href="{{
+                                        action(
+                                            'Admin\OrganisationController@list',
+                                            array_merge(
+                                                array_except(app('request')->input(), ['sort', 'order', 'page']),
+                                                ['sort' => 'updated_at', 'order' => app('request')->order == 'desc' ? 'asc' : 'desc']
+                                            )
+                                        )
+                                    }}"
+                                >{{ __('custom.edited') }}<img src="{{ app('request')->sort == 'updated_at' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
                             <th class="w-15">
                                 <a
@@ -245,14 +332,14 @@
                                     }}"
                                 >{{ __('custom.email') }}<img src="{{ app('request')->sort == 'email' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
-                            <th class="w-10">{{ __('custom.operations') }}</th>
+                            <th class="w-5">{{ __('custom.operations') }}</th>
                         </tr>
                     </thead>
                     <tbody class="text-left">
                         @if (!empty($organisationList))
                             @foreach ($organisationList as $singleOrg)
-                                <tr>
-                                    <td>{{ $singleOrg->name }}</td>
+                                <tr class="{{ $singleOrg->in_trr != \App\Organisation::ORGANISATION_IN_TR ? 'text-danger font-weight-bold' : '' }}">
+                                    <td>{{$singleOrg->in_trr != \App\Organisation::ORGANISATION_IN_TR ? '!' : '' }} {{ $singleOrg->name }}</td>
                                     <td class="text-left eik">{{ $singleOrg->eik }}</td>
                                     <td>{{ isset($statuses[$singleOrg->status]) ? $statuses[$singleOrg->status] : '' }}</td>
                                     <td class="text-center">
@@ -260,7 +347,18 @@
                                             <img src="{{ asset('img/checked.png') }}" height="26px" width="30px"/>
                                         @endif
                                     </td>
+                                    <td class="text-center">
+                                        @if ($singleOrg->in_av == App\Organisation::IN_AV_TRUE)
+                                            <img src="{{ asset('img/checked.png') }}" height="26px" width="30px"/>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($singleOrg->in_trr == \App\Organisation::ORGANISATION_IN_TR)
+                                            <img src="{{ asset('img/checked.png') }}" height="26px" width="30px"/>
+                                        @endif
+                                    </td>
                                     <td>{{ $singleOrg->created_at }}</td>
+                                    <td>{{$singleOrg->updated_at}}</td>
                                     <td>{{ $singleOrg->email }}</td>
                                     <td class="text-center">
                                         <a
@@ -293,6 +391,9 @@
                             'status'        => app('request')->status,
                             'eik'           => app('request')->eik,
                             'is_candidate'  => app('request')->is_candidate,
+                            'in_av'         => app('request')->in_av,
+                            'edited'        => app('request')->edited,
+                            'in_trr'        => app('request')->in_trr,
                             'email'         => app('request')->email,
                             'name'          => app('request')->name,
                             'reg_date_from' => app('request')->reg_date_from,

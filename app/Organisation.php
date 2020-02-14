@@ -32,6 +32,9 @@ class Organisation extends Model
     const IS_CANDIDATE_FALSE = 0;
     const IS_CANDIDATE_TRUE = 1;
 
+    const ORGANISATION_UPDATED = 1;
+    const ORGANISATION_IN_TR = 1;
+
     const DEFAULT_ORDER_FIELD = 'eik';
     const DEFAULT_ORDER_TYPE = 'ASC';
 
@@ -40,11 +43,13 @@ class Organisation extends Model
         'name',
         'email',
         'is_ap',
+        'in_av',
         'is_candidate',
         'status',
         'created_at',
         'updated_at',
     ];
+
     const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
 
     protected $perPage = 20;

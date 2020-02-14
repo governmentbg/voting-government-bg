@@ -481,7 +481,7 @@ class OrganisationController extends ApiController
                 }
 
                 if (isset($filters['in_trr'])) {
-                    if ($filters['in_trr'] == Organisation::ORGANISATION_UPDATED) {
+                    if ($filters['in_trr'] == Organisation::ORGANISATION_IN_TR) {
                         $organisations->whereNotNull('tr_predefined_list.eik');
                     } else {
                         $organisations->whereNull('tr_predefined_list.eik');

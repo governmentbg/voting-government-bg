@@ -415,6 +415,8 @@ class OrganisationController extends ApiController
             'name'             => 'nullable|string|max:255',
             'email'            => 'nullable|string|max:255',
             'in_av'            => 'nullable|bool',
+            'in_trr'           => 'nullable|bool',
+            'edited'           => 'nullable|bool',
             'is_candidate'     => 'nullable|bool',
             'statuses'         => 'nullable|array',
             'statuses.*'       => 'nullable|int|in:'. implode(',', array_keys(Organisation::getStatuses())),
@@ -441,15 +443,19 @@ class OrganisationController extends ApiController
                     $fields = '*';
                 }
 
-                $organisations = Organisation::select($fields)->where('voting_tour_id', $votingTour->id);
+                $organisations = Organisation::select('organisations.'. $fields);
+                $organisations->addSelect(DB::raw('IF(ISNULL(tr_predefined_list.eik), 0, 1) AS in_trr'));
+                $organisations->leftJoin('tr_predefined_list', 'organisations.eik', '=', 'tr_predefined_list.eik');
+
+                $organisations->where('voting_tour_id', $votingTour->id);
                 if (isset($filters['eik'])) {
-                    $organisations->where('eik', $filters['eik']);
+                    $organisations->where('organisations.eik', $filters['eik']);
                 }
                 if (isset($filters['name'])) {
-                    $organisations->where('name', 'LIKE', '%'. trim($filters['name']) .'%');
+                    $organisations->where('organisations.name', 'LIKE', '%'. trim($filters['name']) .'%');
                 }
                 if (isset($filters['email'])) {
-                    $organisations->where('email', 'LIKE', '%'. trim($filters['email']) .'%');
+                    $organisations->where('organisations.email', 'LIKE', '%'. trim($filters['email']) .'%');
                 }
                 if (isset($filters['in_av'])) {
                     $organisations->where('in_av', $filters['in_av']);
@@ -458,7 +464,7 @@ class OrganisationController extends ApiController
                     $organisations->where('is_candidate', $filters['is_candidate']);
                 }
                 if (isset($filters['statuses'])) {
-                    $organisations->whereIn('status', $filters['statuses']);
+                    $organisations->whereIn('organisations.status', $filters['statuses']);
                 }
                 if (isset($filters['reg_date_from'])) {
                     $organisations->where('created_at', '>=', $filters['reg_date_from'] .' 00:00:00');
@@ -466,6 +472,22 @@ class OrganisationController extends ApiController
                 if (isset($filters['reg_date_to'])) {
                     $organisations->where('created_at', '<=', $filters['reg_date_to'] .' 23:59:59');
                 }
+                if (isset($filters['edited'])) {
+                    if ($filters['edited'] == Organisation::ORGANISATION_UPDATED) {
+                        $organisations->whereNotNull('updated_at');
+                    } else {
+                        $organisations->whereNull('updated_at');
+                    }
+                }
+
+                if (isset($filters['in_trr'])) {
+                    if ($filters['in_trr'] == Organisation::ORGANISATION_UPDATED) {
+                        $organisations->whereNotNull('tr_predefined_list.eik');
+                    } else {
+                        $organisations->whereNull('tr_predefined_list.eik');
+                    }
+                }
+
                 $organisations->orderBy($orderField, $orderType);
 
                 if ($withPagination) {

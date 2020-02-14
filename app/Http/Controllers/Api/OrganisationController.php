@@ -438,12 +438,12 @@ class OrganisationController extends ApiController
                 }
 
                 if (isset($filters['only_main_fields']) && $filters['only_main_fields']) {
-                    $fields = ['id', 'eik', 'name', 'is_candidate', 'created_at'];
+                    $fields = ['organisations.id', 'organisations.eik', 'organisations.name', 'organisations.is_candidate', 'organisations.created_at'];
                 } else {
-                    $fields = '*';
+                    $fields = 'organisations.*';
                 }
 
-                $organisations = Organisation::select('organisations.'. $fields);
+                $organisations = Organisation::select($fields);
                 $organisations->addSelect(DB::raw('IF(ISNULL(tr_predefined_list.eik), 0, 1) AS in_trr'));
                 $organisations->leftJoin('tr_predefined_list', 'organisations.eik', '=', 'tr_predefined_list.eik');
 
@@ -487,7 +487,7 @@ class OrganisationController extends ApiController
                         $organisations->whereNull('tr_predefined_list.eik');
                     }
                 }
-
+                dd($organisations->toSql());
                 $organisations->orderBy($orderField, $orderType);
 
                 if ($withPagination) {

@@ -487,7 +487,7 @@ class OrganisationController extends ApiController
                         $organisations->whereNull('tr_predefined_list.eik');
                     }
                 }
-                dd($organisations->toSql());
+
                 $organisations->orderBy($orderField, $orderType);
 
                 if ($withPagination) {

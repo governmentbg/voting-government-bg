@@ -54,6 +54,8 @@ class OrganisationController extends BaseFrontendController
             }
         }
 
+        $checkFields = ['name', 'address', 'representative'];
+
         if (empty($errors)) {
             $orgData = $request->except(['_token', 'terms_accepted', 'files']);
             $orgData['in_av'] = (isset($orgData['in_av']) && $orgData['in_av']) ? 1 : 0;
@@ -71,6 +73,22 @@ class OrganisationController extends BaseFrontendController
             $params['type'] = TradeRegister::PREDEFINED_LIST_TYPE;
             list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefinedList::class, 'getData', $params);
 
+            if (!empty($orgDataPredTrade)) {
+                if (trim($orgDataPredTrade->city) != '') {
+                    $orgDataPredTrade->address = $orgDataPredTrade->city . (trim($orgDataPredTrade->address) != '' ? ', '. $orgDataPredTrade->address : '');
+                }
+
+                foreach ($checkFields as $fieldName) {
+                    if (!empty($orgDataPredTrade->{$fieldName}) && $orgDataPredTrade->{$fieldName} != $orgData[$fieldName]) {
+                        $errors[$fieldName] = __('custom.data_error', ['field' => ultrans('custom.'.$fieldName)]);
+                    }
+                }
+            }
+
+            if (!empty($errors)) {
+                return redirect()->back()->withErrors($errors)->withInput();
+            }
+
             if (!empty($orgErrorsPredBul) || !empty($orgErrorsPred) || !empty($orgErrorsPredTrade)) {
                 $orgData['status_hint'] = Organisation::STATUS_HINT_ERROR;
             } else {
@@ -78,7 +96,13 @@ class OrganisationController extends BaseFrontendController
                 if (!empty($orgDataPredTrade)) {
                     if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
                         if ($orgDataPredTrade->public_benefits) {
-                            if (!$orgData['is_candidate']) {
+                            foreach ($checkFields as $fieldName) {
+                                if (empty($orgDataPredTrade->{$fieldName})) {
+                                    $orgData['status_hint'] = Organisation::STATUS_HINT_EMPTY;
+                                }
+                            }
+
+                            if (!$orgData['is_candidate'] && empty($orgData['status_hint'])) {
                                 $orgData['status'] = Organisation::STATUS_PARTICIPANT;
                             }
                         } else {

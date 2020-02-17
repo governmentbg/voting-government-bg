@@ -287,7 +287,7 @@
                                             )
                                         )
                                     }}"
-                                >{{ __('custom.av') }}<img src="{{ app('request')->sort == 'is_candidate' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
+                                >{{ __('custom.av') }}<img src="{{ app('request')->sort == 'in_av' ? app('request')->order == 'desc' ? asset('img/arrow-down.svg') : asset('img/arrow-up.svg') : '' }}"/></a>
                             </th>
                             <th class="w-5">{{ __('custom.predefined_list_type_tr') }}</th>
                             <th class="w-12">
@@ -374,7 +374,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="7" class="text-center">{{__('custom.no_info')}}</td>
+                                <td colspan="10" class="text-center">{{__('custom.no_info')}}</td>
                             </tr>
                         @endif
                     </tbody>

@@ -18,9 +18,9 @@ class PredefinedListController extends Controller
         if (isset($eik) && is_numeric($eik)) {
             // predefined list types ordered by priority
             $types = [
+                TradeRegister::PREDEFINED_LIST_TYPE,
                 BulstatRegister::PREDEFINED_LIST_TYPE,
-                PredefinedOrganisation::PREDEFINED_LIST_TYPE,
-                TradeRegister::PREDEFINED_LIST_TYPE
+                PredefinedOrganisation::PREDEFINED_LIST_TYPE
             ];
 
             $params = ['eik' => $eik, 'only_main_fields' => true];
@@ -33,6 +33,13 @@ class PredefinedListController extends Controller
 
                 if (!empty($data)) {
                     $result['data'] = (array) $data;
+
+                    if ($type == TradeRegister::PREDEFINED_LIST_TYPE) {
+                        $result['data']['block'] = true;
+                    } else {
+                        $result['data']['block'] = false;
+                    }
+
                     if (trim($data->city) != '') {
                         $result['data']['fullAddress'] = $data->city . (trim($data->address) != '' ? ', '. $data->address : '');
                     } else {

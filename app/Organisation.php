@@ -26,6 +26,7 @@ class Organisation extends Model
     const STATUS_HINT_ACTIVITY = 2;
     const STATUS_HINT_NOT_FOUND = 3;
     const STATUS_HINT_ERROR = 4;
+    const STATUS_HINT_EMPTY = 5;
 
     const IN_AV_FALSE = 0;
     const IN_AV_TRUE = 1;
@@ -123,6 +124,7 @@ class Organisation extends Model
             self::STATUS_HINT_ACTIVITY  => __('custom.status_hint_activity'),
             self::STATUS_HINT_NOT_FOUND => __('custom.status_hint_not_found'),
             self::STATUS_HINT_ERROR     => __('custom.status_hint_error'),
+            self::STATUS_HINT_EMPTY     => __('custom.status_hint_empty')
         ];
     }
 

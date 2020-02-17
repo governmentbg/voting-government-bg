@@ -382,8 +382,10 @@ $(function() {
                             input.val(result.data[field]);
 
                             if (result.data['block'] == true) {
-                                if ((input[0].name != 'phone' && input[0].name != 'email') && input[0].value != '') {
+                                if ((input[0].name != 'phone' && input[0].name != 'email') && jQuery.trim(input[0].value) != '') {
                                     input.attr('readonly', true);
+                                } else {
+                                    input.attr('readonly', false);
                                 }
                             } else {
                                 input.attr('readonly', false);
@@ -394,6 +396,13 @@ $(function() {
                                 input.css('box-shadow', 'none');
                             }
                         });
+                    } else {
+                        ['name', 'address', 'representative', 'phone', 'email'].forEach(function(field) {
+                            var input = $('#registerOrg input[name="'+ field +'"]');
+
+                            input.val('');
+                            input.attr('readonly', false);
+                        });
                     }
 
                     if ((jQuery.type(result.data) !== 'undefined' && !jQuery.isEmptyObject(result.data) && result.data['type'] != 2) || jQuery.type(result.data) == 'undefined') {
@@ -401,6 +410,8 @@ $(function() {
                     } else {
                         $("[name='in_av']").attr('disabled', false);
                     }
+
+                    $('.error').hide();
                 }
             });
         }

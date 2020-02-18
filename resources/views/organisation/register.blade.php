@@ -47,7 +47,7 @@
                                 value="{{ old('name') }}"
                                 maxlength="255"
                                 required
-                                {{ trim($trData->name) != '' ? 'readonly' : '' }}
+                                {{ !empty($trData) && trim($trData->name) != '' ? 'readonly' : '' }}
                                 title="{{ __('custom.required_mgs', ['field' => ultrans('custom.org_name')]) }}"
                             >
                             <span class="error">{{ $errors->first('name') }}</span>
@@ -63,7 +63,7 @@
                                 value="{{ old('address') }}"
                                 maxlength="512"
                                 required
-                                {{ trim($trData->address) != '' ? 'readonly' : '' }}
+                                {{ !empty($trData) && trim($trData->address) != '' ? 'readonly' : '' }}
                                 title="{{ __('custom.required_mgs', ['field' => ultrans('custom.management_address')]) }}"
                             >
                             <span class="error">{{ $errors->first('address') }}</span>
@@ -79,7 +79,7 @@
                                 value="{{ old('representative') }}"
                                 maxlength="512"
                                 required
-                                {{ trim($trData->representative) != '' ? 'readonly' : '' }}
+                                {{ !empty($trData) && trim($trData->representative) != '' ? 'readonly' : '' }}
                                 title="{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}"
                             >
                             <span class="error">{{ $errors->first('representative') }}</span>

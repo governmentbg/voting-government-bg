@@ -394,6 +394,8 @@ $(function() {
                             if (input.val() != '') {
                                 input[0].setCustomValidity('');
                                 input.css('box-shadow', 'none');
+                            } else {
+                                input.css('box-shadow', '0 0 1.5px 1px red');
                             }
                         });
                     } else {

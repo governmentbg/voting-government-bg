@@ -338,8 +338,8 @@
                     <tbody class="text-left">
                         @if (!empty($organisationList))
                             @foreach ($organisationList as $singleOrg)
-                                <tr class="{{ $singleOrg->in_trr != \App\Organisation::ORGANISATION_IN_TR ? 'text-danger font-weight-bold' : '' }}">
-                                    <td>{{$singleOrg->in_trr != \App\Organisation::ORGANISATION_IN_TR ? '!' : '' }} {{ $singleOrg->name }}</td>
+                                <tr class="{{ $singleOrg->in_trr != \App\Organisation::ORGANISATION_IN_TR && $singleOrg->in_av ? 'text-danger font-weight-bold' : '' }}">
+                                    <td>{{ $singleOrg->in_trr != \App\Organisation::ORGANISATION_IN_TR && $singleOrg->in_av ? '!' : '' }} {{ $singleOrg->name }}</td>
                                     <td class="text-left eik">{{ $singleOrg->eik }}</td>
                                     <td>{{ isset($statuses[$singleOrg->status]) ? $statuses[$singleOrg->status] : '' }}</td>
                                     <td class="text-center">

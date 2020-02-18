@@ -41,9 +41,9 @@ class PredefinedListController extends Controller
                     }
 
                     if (trim($data->city) != '') {
-                        $result['data']['fullAddress'] = $data->city . (trim($data->address) != '' ? ', '. $data->address : '');
+                        $result['data']['fullAddress'] = trim($data->city) . (trim($data->address) != '' ? ', '. trim($data->address) : '');
                     } else {
-                        $result['data']['fullAddress'] = $data->address;
+                        $result['data']['fullAddress'] = trim($data->address);
                     }
                     break;
                 }

@@ -56,41 +56,37 @@ class OrganisationController extends BaseFrontendController
 
         $checkFields = ['name', 'address', 'representative'];
 
+        $orgData = $request->except(['_token', 'terms_accepted', 'files']);
+        $orgData['in_av'] = (isset($orgData['in_av']) && $orgData['in_av']) ? 1 : 0;
+        $orgData['is_candidate'] = (isset($orgData['is_candidate']) && $orgData['is_candidate']) ? 1 : 0;
+
+        // search organisation in predefined lists
+        $params = ['eik' => $orgData['eik'], 'only_main_fields' => true];
+
+        $params['type'] = BulstatRegister::PREDEFINED_LIST_TYPE;
+        list($orgDataPredBul, $orgErrorsPredBul) = api_result(ApiPredefinedList::class, 'getData', $params);
+
+        $params['type'] = PredefinedOrganisation::PREDEFINED_LIST_TYPE;
+        list($orgDataPred, $orgErrorsPred) = api_result(ApiPredefinedList::class, 'getData', $params);
+
+        $params['type'] = TradeRegister::PREDEFINED_LIST_TYPE;
+        list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefinedList::class, 'getData', $params);
+
+        if (!empty($orgDataPredTrade)) {
+            if (trim($orgDataPredTrade->city) != '') {
+                $orgDataPredTrade->address = $orgDataPredTrade->city . (trim($orgDataPredTrade->address) != '' ? ', '. $orgDataPredTrade->address : '');
+            }
+
+            session()->put('trData', $orgDataPredTrade);
+
+            foreach ($checkFields as $fieldName) {
+                if (trim($orgDataPredTrade->{$fieldName}) != '' && trim($orgDataPredTrade->{$fieldName}) != trim($orgData[$fieldName])) {
+                    $errors[$fieldName] = __('custom.data_error', ['field' => ultrans('custom.'. $fieldName)]);
+                }
+            }
+        }
+
         if (empty($errors)) {
-            $orgData = $request->except(['_token', 'terms_accepted', 'files']);
-            $orgData['in_av'] = (isset($orgData['in_av']) && $orgData['in_av']) ? 1 : 0;
-            $orgData['is_candidate'] = (isset($orgData['is_candidate']) && $orgData['is_candidate']) ? 1 : 0;
-
-            // search organisation in predefined lists
-            $params = ['eik' => $orgData['eik'], 'only_main_fields' => true];
-
-            $params['type'] = BulstatRegister::PREDEFINED_LIST_TYPE;
-            list($orgDataPredBul, $orgErrorsPredBul) = api_result(ApiPredefinedList::class, 'getData', $params);
-
-            $params['type'] = PredefinedOrganisation::PREDEFINED_LIST_TYPE;
-            list($orgDataPred, $orgErrorsPred) = api_result(ApiPredefinedList::class, 'getData', $params);
-
-            $params['type'] = TradeRegister::PREDEFINED_LIST_TYPE;
-            list($orgDataPredTrade, $orgErrorsPredTrade) = api_result(ApiPredefinedList::class, 'getData', $params);
-
-            if (!empty($orgDataPredTrade)) {
-                if (trim($orgDataPredTrade->city) != '') {
-                    $orgDataPredTrade->address = $orgDataPredTrade->city . (trim($orgDataPredTrade->address) != '' ? ', '. $orgDataPredTrade->address : '');
-                }
-
-                session()->put('trData', $orgDataPredTrade);
-
-                foreach ($checkFields as $fieldName) {
-                    if (trim($orgDataPredTrade->{$fieldName}) != '' && trim($orgDataPredTrade->{$fieldName}) != trim($orgData[$fieldName])) {
-                        $errors[$fieldName] = __('custom.data_error', ['field' => ultrans('custom.'. $fieldName)]);
-                    }
-                }
-            }
-
-            if (!empty($errors)) {
-                return redirect()->back()->withErrors($errors)->withInput();
-            }
-
             if (!empty($orgErrorsPredBul) || !empty($orgErrorsPred) || !empty($orgErrorsPredTrade)) {
                 $orgData['status_hint'] = Organisation::STATUS_HINT_ERROR;
             } else {

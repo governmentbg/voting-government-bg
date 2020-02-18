@@ -95,7 +95,7 @@ class OrganisationController extends BaseFrontendController
                     if (in_array($orgDataPredTrade->status, TradeRegister::getActiveStatuses())) {
                         if ($orgDataPredTrade->public_benefits) {
                             foreach ($checkFields as $fieldName) {
-                                if (empty($orgDataPredTrade->{$fieldName})) {
+                                if (empty(trim($orgDataPredTrade->{$fieldName}))) {
                                     $orgData['status_hint'] = Organisation::STATUS_HINT_EMPTY;
                                 }
                             }

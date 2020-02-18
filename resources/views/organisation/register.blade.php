@@ -3,7 +3,9 @@
 @section('content')
 @include('partials.public-nav-bar')
 @include('components.breadcrumbs')
-
+@php
+    $trData = session()->get('trData');
+@endphp
 <div class="container">
     @include('components.modal', [
         'class' => 'm-w-1000',
@@ -45,6 +47,7 @@
                                 value="{{ old('name') }}"
                                 maxlength="255"
                                 required
+                                {{ trim($trData->name) != '' ? 'readonly' : '' }}
                                 title="{{ __('custom.required_mgs', ['field' => ultrans('custom.org_name')]) }}"
                             >
                             <span class="error">{{ $errors->first('name') }}</span>
@@ -60,6 +63,7 @@
                                 value="{{ old('address') }}"
                                 maxlength="512"
                                 required
+                                {{ trim($trData->address) != '' ? 'readonly' : '' }}
                                 title="{{ __('custom.required_mgs', ['field' => ultrans('custom.management_address')]) }}"
                             >
                             <span class="error">{{ $errors->first('address') }}</span>
@@ -75,6 +79,7 @@
                                 value="{{ old('representative') }}"
                                 maxlength="512"
                                 required
+                                {{ trim($trData->representative) != '' ? 'readonly' : '' }}
                                 title="{{ __('custom.required_mgs', ['field' => ultrans('custom.representative')]) }}"
                             >
                             <span class="error">{{ $errors->first('representative') }}</span>
@@ -214,5 +219,5 @@
         </div>
     </form>
 </div>
-
+@php session()->forget('trData') @endphp
 @endsection

@@ -78,9 +78,11 @@ class OrganisationController extends BaseFrontendController
                     $orgDataPredTrade->address = $orgDataPredTrade->city . (trim($orgDataPredTrade->address) != '' ? ', '. $orgDataPredTrade->address : '');
                 }
 
+                session()->put('trData', $orgDataPredTrade);
+
                 foreach ($checkFields as $fieldName) {
                     if (trim($orgDataPredTrade->{$fieldName}) != '' && trim($orgDataPredTrade->{$fieldName}) != trim($orgData[$fieldName])) {
-                        $errors[$fieldName] = __('custom.data_error', ['field' => ultrans('custom.'.$fieldName)]);
+                        $errors[$fieldName] = __('custom.data_error', ['field' => ultrans('custom.'. $fieldName)]);
                     }
                 }
             }

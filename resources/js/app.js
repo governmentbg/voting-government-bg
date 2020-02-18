@@ -367,7 +367,7 @@ $('input[required], textarea[required]').on('focusout', function() {
 });
 
 $(function() {
-    $('#registerOrg input[name="eik"]').on('focusout', function() {
+    $('#registerOrg input[name="eik"]').on('change', function() {
         if ($.isNumeric(eik = $('#registerOrg input[name="eik"]').val())) {
             $.ajax({
                 type: 'POST',

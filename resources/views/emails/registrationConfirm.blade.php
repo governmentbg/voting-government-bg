@@ -10,7 +10,7 @@
     {{ __('custom.password') }}: {{ $password }}<br><br>
 </b>
 
-<b>{{ __('custom.reg_important') }}</b><br><br>
+{{ __('custom.important_bold') }}<b> {{ __('custom.reg_important') }}</b><br><br>
 
 {{ __('custom.enter_to_see_status') }} :<br><br>
 
@@ -20,7 +20,7 @@
 <b> • {{ '"'. __('custom.org_status_candidate') .'"' }}</b> - {{ __('custom.stat_candidate_explain') }};<br>
 <b> • {{ '"'. __('custom.org_status_rejected') .'"' }}</b> - {{ __('custom.stat_rejected_explain') }}<br><br>
 
-{{ __('custom.public_important_one') }} <b>{{ __('custom.public_important_two') }}</b> {{ __('custom.public_important_three') }}<br><br>
+{{ __('custom.public_important_one') }} {!! __('custom.public_important_two') !!} {{ __('custom.public_important_three') }}<br><br>
 
 {{ __('custom.to_login_please_use') }} <a href="{{ isset($isAdmin) && $isAdmin ? route('admin.index') : route('home') }}"> {{ __('custom.login_into_platform') }}</a>
 

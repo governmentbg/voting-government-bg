@@ -127,7 +127,7 @@
                 <div class="col-md-10">
                     <h5>{{ __('custom.committee_member_request') }}</h5>
                     <div class="form-group row">
-                        <label for="is_candidate" class="col-sm-4 col-xs-12 col-form-label" title="{{ __('custom.candidacy_hint') }}">{{ __('custom.request_for_candidacy') }}:</label>
+                        <label for="is_candidate" class="col-sm-4 col-xs-12 col-form-label p-t-none" title="{{ __('custom.candidacy_hint') }}">{{ __('custom.request_for_candidacy') }}:</label>
                         <div class="col-sm-8 col-xs-6 p-r-none">
                             @include('components.checkbox', ['name' => 'is_candidate'])
                             <span class="error">{{ $errors->first('is_candidate') }}</span>
@@ -173,6 +173,7 @@
                 <div class="col-md-10">
                     <h5>{{ __('custom.applied_files') }} </h5>
                     <p>{{ __('custom.nonav_org') }}</p>
+                    <p>{{ __('custom.reg_second_message') }}</p>
                     <div class="form-group row">
                         <div class="col-lg-12 p-r-none">
                             @include('components.fileinput', ['name' => 'files[]'])

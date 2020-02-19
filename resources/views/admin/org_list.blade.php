@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="row form-group">
-                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.status') }}:</label>
+                        <label for="status" class="col-form-label col-lg-4">{{ __('custom.status') }}:</label>
                         <div class="headerDropdown col-lg-7">
                             <select name="status" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="offset-lg-1 form-group row">
-                        <label for="is_candidate" class="col-form-label col-lg-3" style="min-width: 85px">{{ __('custom.candidate') }}:</label>
+                        <label for="is_candidate" class="col-form-label col-lg-3 p-l-none" style="min-width: 85px">{{ __('custom.candidate') }}:</label>
                         <div class="headerDropdown col-lg-7 p-l-none">
                             <select name="is_candidate" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>
@@ -69,10 +69,9 @@
             </div>
             <div class="from-group row">
                 <div class="col-lg-4">
-                    <div class="row form-group">
-                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.in_av') }}:</label>
+                    <div class="row form-group m-b-none">
+                        <label for="status" class="col-form-label col-lg-4 p-t-none">{{ __('custom.in_av') }}:</label>
                         <div class="headerDropdown col-lg-7">
-
                             <select name="in_av" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>
                                 @if (isset($candidateStatuses))
@@ -106,7 +105,7 @@
             <div class="from-group row">
             <div class="col-lg-4">
                     <div class="row form-group m-b-none">
-                        <label for="status" class="col-form-label col-lg-3 p-t-none">{{ __('custom.in_trr') }}:</label>
+                        <label for="status" class="col-form-label col-lg-4">{{ __('custom.in_trr') }}:</label>
                         <div class="headerDropdown col-lg-7">
                             <select name="in_trr" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>
@@ -141,7 +140,7 @@
             <div class="from-group row m-b-15">
                 <div class="col-lg-4">
                     <div class="row form-group">
-                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.edited') }}:</label>
+                        <label for="status" class="col-form-label col-lg-4">{{ __('custom.edited') }}:</label>
                         <div class="headerDropdown col-lg-7">
                             <select name="edited" class="ams-dropdown custom-select js-drop-filter p-t-3">
                                 <option value="all">{{ __('custom.all') }}</option>

@@ -70,7 +70,7 @@
             <div class="from-group row">
                 <div class="col-lg-4">
                     <div class="row form-group">
-                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.in_av') }}:</label>
+                        <label for="status" class="col-form-label col-lg-3">{{ __('custom.av') }}:</label>
                         <div class="headerDropdown col-lg-7">
 
                             <select name="in_av" class="ams-dropdown custom-select js-drop-filter p-t-3">

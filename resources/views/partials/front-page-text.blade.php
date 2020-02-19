@@ -9,6 +9,6 @@
     {{ __('custom.front_terms_start') }} <span class="c-darkBlue font-weight-bold">{{__('custom.terms')}} </span> {{ __('custom.front_terms_end') }} <span class="font-weight-bold">
         <a href="{{ Storage::url('downloads/Условия за ползване Платформата за избор на СРГО.pdf') }}" target="_blank">ТУК</a>.
     </span><br>
-    <span class="c-darkBlue font-weight-bold">{{ __('custom.coming_soon') }}</span><br>
+    <span class="c-darkBlue font-weight-bold"><a href="{{ Storage::url('downloads/Указания за регистрация на Платформата за избор на СРГО.pdf') }}" target="_blank">ТУК</a>.</span><br>
     {{ __('custom.created_for') }}
 </p>

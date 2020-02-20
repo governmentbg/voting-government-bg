@@ -74,7 +74,7 @@ class OrganisationController extends BaseFrontendController
 
         if (!empty($orgDataPredTrade)) {
             if (trim($orgDataPredTrade->city) != '') {
-                $orgDataPredTrade->address = $orgDataPredTrade->city . (trim($orgDataPredTrade->address) != '' ? ', '. $orgDataPredTrade->address : '');
+                $orgDataPredTrade->address = trim($orgDataPredTrade->city) . (trim($orgDataPredTrade->address) != '' ? ', '. trim($orgDataPredTrade->address) : '');
             }
 
             session()->put('trData', $orgDataPredTrade);

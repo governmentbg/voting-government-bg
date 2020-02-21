@@ -167,13 +167,17 @@ class ImportFromMail extends Command
                         continue;
                     }
 
-                    foreach ($item->Attachments->FileAttachment as $attachment) {
+                    foreach ((array)$item->Attachments->FileAttachment as $attachment) {
                         $attachments[] = $attachment->AttachmentId->Id;
                     }
                 }
 
                 $requestAttachment = new GetAttachmentType();
                 $requestAttachment->AttachmentIds = new NonEmptyArrayOfRequestAttachmentIdsType();
+
+                if(empty($attachments)){
+                    break;
+                }
 
                 foreach ($attachments as $attachment_id) {
                     $id = new RequestAttachmentIdType();

@@ -119,9 +119,18 @@ class XMLParser implements IXMLParser
 
         if (isset($org->SubDeed->Seat->Address)) {
             $address = $org->SubDeed->Seat->Address;
-            $orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
-            $orgArray['address'] = (string) (isset($address->Street) ? $address->Street : '') . ' ' .
-                    ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
+            //$orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
+            $orgArray['city'] = '';
+            $orgArray['address'] =
+                    ((isset($address->District) && !empty((string) $address->District) ? 'област ' . (string) $address->District : '')) .
+                    ((isset($address->Municipality) && !empty((string) $address->Municipality) ? ' община ' . (string) $address->Municipality : '')) .
+                    ((isset($address->Settlement) && !empty((string) $address->Settlement) ? ' ' . (string) $address->Settlement : '')) .
+                    ((isset($address->Area) && !empty((string) $address->Area) ? ' ' . (string) $address->Area : '')) .
+                    ((isset($address->PostCode) && !empty((string) $address->PostCode) ? ' ' . (string) $address->PostCode : '')) .
+                    ((isset($address->HousingEstate) && !empty((string) $address->HousingEstate) ? ' жк ' . (string) $address->HousingEstate : '')) .
+                    (isset($address->Street) ? ' ' . (string)$address->Street : '') . ' ' .
+                    ((isset($address->StreetNumber) ? (string)$address->StreetNumber : '')) .
+                    ((isset($address->Block) && !empty((string) $address->Block) ? ' бл. ' . (string) $address->Block : '')) .
                     ((isset($address->Entrance) && !empty((string) $address->Entrance) ? ' вх. ' . (string) $address->Entrance : '')) .
                     ((isset($address->Floor) && !empty((string) $address->Floor) ? ' ет. ' . (string) $address->Floor : '')) .
                     ((isset($address->Apartment) && !empty((string) $address->Apartment) ? ' ап. ' . (string) $address->Apartment : ''));
@@ -208,9 +217,18 @@ class XMLParser implements IXMLParser
         
         if (isset($org->SubDeed->BranchSeat->Address)) {
             $address = $org->SubDeed->BranchSeat->Address;
-            $orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
-            $orgArray['address'] = (string) (isset($address->Street) ? $address->Street : '') . ' ' .
-                    ((isset($address->StreetNumber) ? $address->StreetNumber : '')) .
+            //$orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
+            $orgArray['city'] = '';
+            $orgArray['address'] = 
+                    ((isset($address->District) && !empty((string) $address->District) ? 'област ' . (string) $address->District : '')) .
+                    ((isset($address->Municipality) && !empty((string) $address->Municipality) ? ' община ' . (string) $address->Municipality : '')) .
+                    ((isset($address->Settlement) && !empty((string) $address->Settlement) ? ' ' . (string) $address->Settlement : '')) .
+                    ((isset($address->Area) && !empty((string) $address->Area) ? ' ' . (string) $address->Area : '')) .
+                    ((isset($address->PostCode) && !empty((string) $address->PostCode) ? ' ' . (string) $address->PostCode : '')) .
+                    ((isset($address->HousingEstate) && !empty((string) $address->HousingEstate) ? ' жк ' . (string) $address->HousingEstate : '')) .
+                    (isset($address->Street) ? ' ' . (string)$address->Street : '') . ' ' .
+                    ((isset($address->StreetNumber) ? (string)$address->StreetNumber : '')) .
+                    ((isset($address->Block) && !empty((string) $address->Block) ? ' бл. ' . (string) $address->Block : '')) .
                     ((isset($address->Entrance) && !empty((string) $address->Entrance) ? ' вх. ' . (string) $address->Entrance : '')) .
                     ((isset($address->Floor) && !empty((string) $address->Floor) ? ' ет. ' . (string) $address->Floor : '')) .
                     ((isset($address->Apartment) && !empty((string) $address->Apartment) ? ' ап. ' . (string) $address->Apartment : ''));

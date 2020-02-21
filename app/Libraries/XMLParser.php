@@ -154,7 +154,8 @@ class XMLParser implements IXMLParser
 
         $orgArray['representative'] = '';
         foreach($org->SubDeed->Representatives103 as $key => $representative) {
-            if(isset($representative->Representative103->Person) && isset($representative->Representative103->Person->attributes()['Position'])){
+            if(isset($representative->Representative103->Person) && isset($representative->Representative103->Person->attributes()['Position'])
+                    && !empty(trim((string)$representative->Representative103->Person->attributes()['Position']))){
                 $orgArray['representative'] .= ' ' . (string)$representative->Representative103->Person->attributes()['Position'] . ':';
             }
             

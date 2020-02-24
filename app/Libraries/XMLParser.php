@@ -117,7 +117,7 @@ class XMLParser implements IXMLParser
             }
         }
 
-        if (isset($org->SubDeed->Seat->Address)) {
+        if (isset($org->SubDeed->Seat->Address) && ((string)$org->SubDeed->Seat->Address->IsForeign == 'false')) {
             $address = $org->SubDeed->Seat->Address;
             //$orgArray['city'] = (string) (isset($address->Settlement) ? $address->Settlement : '');
             $orgArray['city'] = '';

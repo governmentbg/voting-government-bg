@@ -118,7 +118,7 @@
                     <div class="form-group row">
                         <label for="in_av" class="col-sm-4 col-xs-12 col-form-label" title="{{ __('custom.av_hint') }}"> {{ __('custom.in_av') }}:</label>
                         <div class="col-sm-8">
-                            @include('components.checkbox', ['name' => 'in_av'])
+                            @include('components.checkbox', ['name' => 'in_av', 'readonly' => empty($trData) ? true : false ])
                             <span class="error">{{ $errors->first('in_av') }}</span>
                         </div>
                     </div>

@@ -535,3 +535,30 @@ $('.reg-exp').on('focusout', () => {
         $('.warning').css('font-weight', 'normal');
     }
 });
+
+function validateFileSize(input)
+{
+    var sizeError = false;
+
+    $.each($(input).prop('files'), function( index, file ){
+        if(file.size > 16777216){
+            sizeError = true;
+        }
+    });
+
+    $('.file-size-error').toggleClass('display-none', !sizeError);
+    $('.file-size-error').toggle(sizeError);
+
+    return sizeError;
+}
+
+$('#registerOrg [name="files[]"]').change(function(){
+    validateFileSize(this);
+});
+
+$('#registerOrg').submit(function(e){
+    var error = validateFileSize($('#registerOrg [name="files[]"]'));
+    if(error){
+        e.preventDefault();
+    }
+});

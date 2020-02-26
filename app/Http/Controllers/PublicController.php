@@ -111,6 +111,8 @@ class PublicController extends BaseFrontendController
             return redirect('/');
         }
 
+        session()->put('ajaxMethod', 'registeredAjax');
+
         return view('home.index', [
             'showLinks'  => $showLinks,
             'listTitle'  => __('custom.registered'),
@@ -194,6 +196,8 @@ class PublicController extends BaseFrontendController
             return redirect('/');
         }
 
+        session()->put('ajaxMethod', 'candidatesAjax');
+
         return view('home.index', [
             'showLinks'  => $showLinks,
             'listTitle'  => __('custom.candidates'),
@@ -270,6 +274,8 @@ class PublicController extends BaseFrontendController
         } else {
             return redirect('/');
         }
+
+        session()->put('ajaxMethod', 'votedAjax');
 
         return view('home.index', [
             'showLinks'  => $showLinks,
@@ -355,6 +361,8 @@ class PublicController extends BaseFrontendController
         } else {
             return redirect('/');
         }
+
+        session()->put('ajaxMethod', 'rankingAjax');
 
         return view('home.index', [
             'showLinks'     => $showLinks,

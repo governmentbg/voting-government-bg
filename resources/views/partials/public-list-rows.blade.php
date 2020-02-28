@@ -1,7 +1,3 @@
-@php
-    $showCandidateCol = session()->get('ajaxMethod') == 'candidatesAjax' ? true : false;
-@endphp
-
 @foreach ($listData as $organisation)
     <tr>
         <td class="text-right">{{ ++$counter }}</td>

@@ -40,9 +40,6 @@
                 <div>{{ __('custom.no_info') }}</div>
             @endif
             @if (!empty($listData))
-                @php
-                    $showCandidateCol = session()->get('ajaxMethod') == 'candidatesAjax' ? true : false;
-                @endphp
                 <div class="table-wrapper nano public-table">
                     <div class="tableFixHead nano-content js-org-table">
                         <table
@@ -60,7 +57,7 @@
                                 </tr>
                             </thead>
                             <tbody class="text-left">
-                                @include('partials.public-list-rows', ['counter' => 0])
+                                @include('partials.public-list-rows', ['counter' => 0, 'showCandidateCol' => $showCandidateCol])
                             </tbody>
                         </table>
                     </div>

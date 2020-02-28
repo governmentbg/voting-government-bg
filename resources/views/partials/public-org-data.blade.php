@@ -1,7 +1,7 @@
 <div class="col-lg-5 hidetable display-inline">
     <div class="col-lg-12">
         <div class="pt-3">
-            <div class="pt-3">
+            <div class="pt-3 p-b-60">
                 <table class="w-100 js-var">
                     <thead>
                         <tr>

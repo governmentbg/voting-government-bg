@@ -48,16 +48,16 @@
                         >
                             <thead>
                                 <tr>
-                                    <th class="w-5">{{ __('custom.number') }}</th>
-                                    <th class="w-5">&nbsp;</th>
-                                    <th class="w-40">{{ __('custom.organisation') }}</th>
-                                    <th class="w-5">{{ __('custom.candidate') }}</th>
-                                    <th class="w-10">{{ __('custom.eik') }}</th>
-                                    <th class="w-15">{{ __('custom.registered_at') }}</th>
+                                    <th class="w-1">{{ __('custom.number') }}</th>
+                                    <th class="w-1">&nbsp;</th>
+                                    <th class="w-15">{{ __('custom.organisation') }}</th>
+                                    @if ($showCandidateCol) <th class="w-1">{{ __('custom.candidate') }}</th> @endif
+                                    <th class="w-1">{{ __('custom.eik') }}</th>
+                                    <th class="w-1">{{ __('custom.registered_at') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="text-left">
-                                @include('partials.public-list-rows', ['counter' => 0])
+                                @include('partials.public-list-rows', ['counter' => 0, 'showCandidateCol' => $showCandidateCol])
                             </tbody>
                         </table>
                     </div>

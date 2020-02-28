@@ -117,7 +117,8 @@ class PublicController extends BaseFrontendController
             'listData'   => $listData,
             'eik'        => $eik,
             'route'      => 'list.registered',
-            'ajaxMethod' => 'registeredAjax'
+            'ajaxMethod' => 'registeredAjax',
+            'showCandidateCol' => false
         ])->withErrors($errors);
     }
 
@@ -200,7 +201,8 @@ class PublicController extends BaseFrontendController
             'listData'   => $listData,
             'eik'        => $eik,
             'route'      => 'list.candidates',
-            'ajaxMethod' => 'candidatesAjax'
+            'ajaxMethod' => 'candidatesAjax',
+            'showCandidateCol' => true
         ])->withErrors($errors);
     }
 
@@ -277,7 +279,8 @@ class PublicController extends BaseFrontendController
             'listData'   => $listData,
             'eik'        => $eik,
             'route'      => 'list.voted',
-            'ajaxMethod' => 'votedAjax'
+            'ajaxMethod' => 'votedAjax',
+            'showCandidateCol' => false
         ])->withErrors($errors);
     }
 
@@ -356,6 +359,8 @@ class PublicController extends BaseFrontendController
             return redirect('/');
         }
 
+        session()->put('ajaxMethod', 'rankingAjax');
+
         return view('home.index', [
             'showLinks'     => $showLinks,
             'listTitle'     => __('custom.ranking'),
@@ -391,7 +396,8 @@ class PublicController extends BaseFrontendController
 
         return view('partials.public-list-rows', [
             'listData' => $listData,
-            'counter'  => $request->offsetGet('consecNum')
+            'counter'  => $request->offsetGet('consecNum'),
+            'showCandidateCol' => false
         ]);
     }
 
@@ -417,7 +423,8 @@ class PublicController extends BaseFrontendController
 
         return view('partials.public-list-rows', [
             'listData' => $listData,
-            'counter'  => $request->offsetGet('consecNum')
+            'counter'  => $request->offsetGet('consecNum'),
+            'showCandidateCol' => true
         ]);
     }
 
@@ -435,7 +442,8 @@ class PublicController extends BaseFrontendController
 
         return view('partials.public-list-rows', [
             'listData' => $listData,
-            'counter'  => $request->offsetGet('consecNum')
+            'counter'  => $request->offsetGet('consecNum'),
+            'showCandidateCol' => false
         ]);
     }
 

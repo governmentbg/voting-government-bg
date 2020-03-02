@@ -111,7 +111,11 @@ class OrganisationController extends BaseAdminController
             ]);
 
             if (!empty($errors)) {
-                $request->session()->flash('alert-danger', __('custom.list_org_fail'));
+                if (isset($errors->eik) && is_array($errors->eik) && !empty($errors->eik)) {
+                    $request->session()->flash('alert-danger', head($errors->eik));
+                } else {
+                    $request->session()->flash('alert-danger', __('custom.list_org_fail'));
+                }
             } else {
                 $exportOrgs = $organisations;
                 $organisations = !empty($organisations->data) ? $this->paginate($organisations) : [];

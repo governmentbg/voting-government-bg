@@ -103,7 +103,11 @@ class PublicController extends BaseFrontendController
             }
 
             if (!empty($listErrors)) {
-                $errors['message'] = __('custom.list_reg_org_fail');
+                if (isset($listErrors->eik) && is_array($listErrors->eik) && !empty($listErrors->eik)) {
+                    $errors['message'] = head($listErrors->eik);
+                } else {
+                    $errors['message'] = __('custom.list_reg_org_fail');
+                }
             } else {
                 $listData = !empty($listData->data) ? $this->paginate($listData) : [];
             }
@@ -187,7 +191,11 @@ class PublicController extends BaseFrontendController
             }
 
             if (!empty($listErrors)) {
-                $errors['message'] = __('custom.list_candidates_fail');
+                if (isset($listErrors->eik) && is_array($listErrors->eik) && !empty($listErrors->eik)) {
+                    $errors['message'] = head($listErrors->eik);
+                } else {
+                    $errors['message'] = __('custom.list_candidates_fail');
+                }
             } else {
                 $listData = !empty($listData->data) ? $this->paginate($listData) : [];
             }
@@ -265,7 +273,11 @@ class PublicController extends BaseFrontendController
             }
 
             if (!empty($listErrors)) {
-                $errors['message'] = __('custom.list_voted_org_fail');
+                if (isset($listErrors->eik) && is_array($listErrors->eik) && !empty($listErrors->eik)) {
+                    $errors['message'] = head($listErrors->eik);
+                } else {
+                    $errors['message'] = __('custom.list_voted_org_fail');
+                }
             } else {
                 $listData = !empty($listData->data) ? $this->paginate($listData) : [];
             }

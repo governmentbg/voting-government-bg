@@ -199,6 +199,7 @@
                             @if ($errors->has('reattach_files') && !$filesErr)
                                 <span class="error">{{ $errors->first('reattach_files') }}</span>
                             @endif
+                            <span class="error file-size-error display-none">{{ __('custom.files_size') }}</span>
                         </div>
                     </div>
                     <div class="form-group row">

@@ -53,7 +53,7 @@ class Organisation extends Model
 
     const ALLOWED_ORDER_TYPES = ['ASC', 'DESC'];
 
-    protected $perPage = 500;
+    protected $perPage = 20;
 
     /**
      * The attributes that aren't mass assignable.

@@ -442,7 +442,7 @@ $('.ams-dropdown').on('blur', function() {
 var initialPage = 2;
 
 $('.js-org-table').on('scroll', function() {
-    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 5) {
         var lastEntryNumber = parseInt($('.js-orgs tr:last-child > td:first-child').text());
 
         $.ajax({

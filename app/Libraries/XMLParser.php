@@ -148,6 +148,11 @@ class XMLParser implements IXMLParser
                 $orgArray['public_benefits'] = (int) $deed[0]->DesignatedToPerformPublicBenefit;
                 break;
             }
+            else if (isset($deed->attributes()['SubUICType']) && (string) $deed->attributes()['SubUICType'] == 'MainCircumstances' &&
+                    isset($deed[0]->RestorationOfStatusInPublicBenefit)) {
+                $orgArray['public_benefits'] = (int) $deed[0]->RestorationOfStatusInPublicBenefit;
+                break;
+            }
         }
 
         $orgArray['status'] = (string) $org->attributes()['DeedStatus'];

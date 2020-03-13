@@ -33,6 +33,10 @@ class MessagesController extends BaseAdminController
         $field = request('orderBy', 'created_at');
         $orderType = request('order', 'DESC');
 
+        if (isset($filters['status']) && $filters['status'] == 'all') {
+            $filters['status'] = 0;
+        }
+
         if (!empty($this->votingTour)) {
             list($messages, $msgErrors) = api_result(ApiMessages::class, 'search', [
                 'filters'     => $filters,

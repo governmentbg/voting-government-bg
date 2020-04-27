@@ -1,8 +1,11 @@
 <h3><b>{{ __('custom.online_voting_system') }}</b></h3>
 <span class="font-weight-bold text-danger">{{ __('custom.platform_state') }}</span>
 <p>
-    {{ __('custom.front_text') }}<br><br>
+    {{ __('custom.front_text') }}<br>
     {{ __('custom.front_text_2') }}<br>
+    <span class="c-darkBlue font-weight-bold">{{__('custom.information')}} </span>{{ __('custom.front_info_vote') }} <span class="font-weight-bold">
+        <a href="{{ Storage::url('downloads/Информация за гласуването за членове на Съвета.pdf') }}" target="_blank">ТУК</a>.
+    </span><br>
     <span class="c-darkBlue font-weight-bold">{{__('custom.information')}} </span>{{ __('custom.front_info') }} <span class="font-weight-bold">
         <a href="{{ Storage::url('downloads/Инфо за СРГО.pdf') }}" target="_blank">ТУК</a>.
     </span><br>

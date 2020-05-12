@@ -24,11 +24,14 @@ class PasswordBroker extends \Illuminate\Auth\Passwords\PasswordBroker  implemen
             'username' => $credentials['username'],
             'email' => $credentials['email']
         ], 'hash');
-        
-        if(!empty($errors)){
-            return (array)$errors;
+
+        if (!empty($errors)) {
+            if (is_string($errors)) {
+                $errors = ['message' => $errors];
+            }
+            return (array) $errors;
         }
-        
+
         unset($credentials['email']);
         $user = $this->getUser($credentials);
 
@@ -36,7 +39,9 @@ class PasswordBroker extends \Illuminate\Auth\Passwords\PasswordBroker  implemen
             return static::INVALID_USER;
         }
 
-        $user->sendPasswordResetNotification($hash);
+        if (!$user->sendPasswordResetNotification($hash)) {
+            return 'passwords.sent_failed';
+        }
 
         return ['status' => static::RESET_LINK_SENT, 'isAdmin' => $user->isAdmin()];
     }

@@ -14,13 +14,13 @@ trait CanResetPassword
      */
     public function getEmailForPasswordReset()
     {
-        if(!$this->email){
+        if (!$this->email) {
             return $this->organisation->email;
         }
-        
+
         return $this->email;
     }
-    
+
     /**
      * Send the password reset notification.
      *
@@ -30,7 +30,14 @@ trait CanResetPassword
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordNotification($token));
+        try {
+            $this->notify(new ResetPasswordNotification($token));
+        } catch (\Exception $e) {
+            logger()->error('Send password reset email error: '. $e->getMessage());
+            return false;
+        }
+
+        return true;
     }
 }
 

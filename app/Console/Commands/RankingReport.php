@@ -28,7 +28,7 @@ class RankingReport extends Command
      *
      * @var string
      */
-    protected $description = 'Generates ranking report containing information about voted organisations and store it in csv file';
+    protected $description = 'Generates ranking report containing information about voted organisations and stores it in CSV file';
 
     /**
      * Create a new command instance.

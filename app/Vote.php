@@ -172,6 +172,50 @@ class Vote extends Model
         return $limits;
     }
 
+    public static function getVotersByOrg($tourId, $votingIndex, $orgId) {
+        // get ids of ranking records
+        $rankingIds = self::getRankingIds($tourId);
+
+        // get vote limits
+        $voteLimits = self::getVoteLimits($tourId, $votingIndex, $rankingIds);
+
+        $limitVoteCounting = '';
+        if (isset($voteLimits['minId'])) {
+            $limitVoteCounting .= 'AND votes.id > '. $voteLimits['minId'] .' ';
+        }
+        if (isset($voteLimits['maxId'])) {
+            $limitVoteCounting .= 'AND votes.id < '. $voteLimits['maxId'] .' ';
+        }
+
+        $voters = self::select('organisations.name', 'organisations.eik', 'votes.vote_time')
+            ->join(\DB::raw(
+                '(SELECT voter_id, MAX(vote_time) AS voteTime '.
+                'FROM votes '.
+                'WHERE voting_tour_id = '. $tourId .' '.
+                'AND tour_status = '. $voteLimits['status'] .' '.
+                $limitVoteCounting .
+                'GROUP BY voter_id) innerv'
+            ), 'votes.voter_id', '=', 'innerv.voter_id')
+            ->join('organisations', 'organisations.id', '=', 'votes.voter_id')
+            ->whereIn('organisations.status', Organisation::getApprovedStatuses())
+            ->where('votes.voting_tour_id', $tourId)
+            ->where('votes.tour_status', $voteLimits['status'])
+            ->whereRaw('votes.vote_time = innerv.voteTime')
+            ->where('votes.id', '!=', Vote::GENESIS_RECORD)
+            ->where(function($query) use ($orgId) {
+                $query->where('votes.vote_data', $orgId)
+                      ->orWhere('votes.vote_data', 'like', $orgId .',%')
+                      ->orWhere('votes.vote_data', 'like', '%,'. $orgId)
+                      ->orWhere('votes.vote_data', 'like', '%,'. $orgId .',%');
+            })
+            ->groupBy('votes.voter_id')
+            ->orderBy('organisations.eik')
+            ->get()
+            ->toArray();
+
+        return $voters;
+    }
+
     public function organisation()
     {
         return $this->belongsTo('App\Organisation', 'voter_id');

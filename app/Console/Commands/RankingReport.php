@@ -20,7 +20,7 @@ class RankingReport extends Command
     protected $signature = 'generate:rankingReport'.
                            ' {--votingTour= : Voting tour id (default value: latest voting tour)}'.
                            ' {--votingIndex=0 : 0 - main voting, 1 - first balotage, 2 - second balotage, etc.}'.
-                           ' {--orgsCount=14 : Number of the organisations to be included in the result strating from the most voted one}'.
+                           ' {--orgsCount=14 : Number of the organisations to be included in the result starting from the most voted one}'.
                            ' {--show : Display CSV file contents on the screen}';
 
     /**

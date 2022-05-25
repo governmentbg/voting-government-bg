@@ -24,7 +24,7 @@
     },
     "dependencies": {
         "bootstrap-datepicker": "^1.8.0",
-        "bootstrap-table": "^1.14.2",
+        "bootstrap-table": "^1.20.2",
         "nanoscroller": "^0.8.7"
     }
 }
